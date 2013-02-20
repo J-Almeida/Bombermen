@@ -13,6 +13,7 @@ public class Grid<T> {
 	
 	public static char Seperator = ' ';
 	
+	@SuppressWarnings("unchecked")
 	public Grid(int width, int height, T obj_init)
 	{
 		_cells = (Cell<T>[][])Array.newInstance( Cell[].class, width);
