@@ -3,9 +3,6 @@
  */
 package pg1;
 
-import java.lang.reflect.Array;
-import java.util.Random;
-
 /**
  * @author miguel
  *
@@ -19,11 +16,12 @@ public class Grid<T> {
 	public final int Width;
 	public final int Height;
 	
+	
 	@SuppressWarnings("unchecked")
 	public Grid(int width, int height, T obj_init)
 	{
-		_cells = (Cell<T>[][]) new Cell<?>[height][width];
-		
+		_cells = new Cell[height][width];
+
 		for (int j = 0; j < _cells.length; j++)
 		{
 			for (int i = 0; i < _cells[j].length; i++)
@@ -67,15 +65,4 @@ public class Grid<T> {
 	}
 	
 	private Cell<T> [][]_cells;
-	
-	public static void main (String [] args)
-	{
-		Grid<Integer> g = new Grid<Integer>(20, 10, 0);
-		
-		for (int i = 0; i < g.Width; i++)
-			for (int j = 0; j < g.Height; j++)
-				g.SetCell(i, j, i * g.Height + j + 1);
-		
-		System.out.print(g);
-	}
 }
