@@ -26,6 +26,20 @@ public class Pair<T> {
 		return this.first == other.first && this.second == other.second;
 	}
 	
+	@Override
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("(");
+		sb.append(this.first);
+		sb.append(", ");
+		sb.append(this.second);
+		sb.append(")");
+		
+		return sb.toString();
+	}
+	
 	public T first;
 	public T second;
 }

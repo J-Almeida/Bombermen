@@ -34,6 +34,7 @@ public class Game {
 		_maze = new Maze(10, 10, cells);
 
 		_maze.SetHeroPosition(new Pair<Integer>(1, 1));
+		_maze.SetSwordPosition(new Pair<Integer>(1, 8));
 		_maze.SetExit(new Pair<Integer>(9, 5));
 		
 		while (!_maze.IsFinished())
