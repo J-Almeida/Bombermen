@@ -22,14 +22,13 @@ public class Grid<T> {
 	@SuppressWarnings("unchecked")
 	public Grid(int width, int height, T obj_init)
 	{
-		_cells = (Cell<T>[][])Array.newInstance( Cell[].class, height);
+		_cells = (Cell<T>[][]) new Cell<?>[height][width];
 		
-		for (int i = 0; i < _cells.length; i++)
-			_cells[i] = (Cell<T>[])Array.newInstance(Cell.class, width);
-		
-		for (int i = 0; i < _cells.length; i++)
-			for (int j = 0; j < _cells[i].length; j++)
-				_cells[i][j] = new Cell<T>(obj_init);
+		for (int j = 0; j < _cells.length; j++)
+		{
+			for (int i = 0; i < _cells[j].length; i++)
+				_cells[j][i] = new Cell<T>(obj_init);
+		}
 		
 		Width = width;
 		Height = height;
@@ -53,42 +52,29 @@ public class Grid<T> {
 		return s.toString();
 	}
 	
-	public T GetCell(int i, int j)
+	public T GetCell(int column, int line)
 	{
-		if (i >= 0 && i < _cells.length && j >= 0 && j < _cells[i].length)
-			return _cells[i][j].GetValue();
+		if (line >= 0 && line < _cells.length && column >= 0 && column < _cells[line].length)
+			return _cells[line][column].GetValue();
 		
 		return null;
 	}
 
-	public void SetCell(int i, int j, T val)
+	public void SetCell(int column, int line, T val)
 	{
-		if (i >= 0 && i < _cells.length && j >= 0 && j < _cells[i].length)
-			_cells[i][j].SetValue(val);	
+		if (line >= 0 && line < _cells.length && column >= 0 && column < _cells[line].length)
+			_cells[line][column].SetValue(val);	
 	}
 	
 	private Cell<T> [][]_cells;
 	
 	public static void main (String [] args)
 	{
-		Grid<Character> g = new Grid<Character>(20, 10, ' ');
+		Grid<Integer> g = new Grid<Integer>(20, 10, 0);
 		
 		for (int i = 0; i < g.Width; i++)
-		{
-			g.SetCell(i, 0, 'X');
-			g.SetCell(i, g.Width-1, 'X');
-			g.SetCell(0, i, 'X');
-			g.SetCell(g.Height - 1, i, 'X');
-		}
-		
-		Random r = new Random();
-		
-		for (int i = 1; i < g.Height - 1; i++)
-			for (int j = 1; j < g.Width - 1; j++)
-			{
-				if (r.nextBoolean())
-					g.SetCell(i, j, 'X');
-			}
+			for (int j = 0; j < g.Height; j++)
+				g.SetCell(i, j, i * g.Height + j + 1);
 		
 		System.out.print(g);
 	}
