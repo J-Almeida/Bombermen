@@ -28,54 +28,36 @@ public class Maze {
 				if (c != 'X' && c != ' ')
 					c = ' ';
 				
-				_board.SetCell(i, j, c);
+				_board.SetCell(new Pair<Integer>(i, j), c);
 			}
 	}
 	
 	@Override
-	public String toString() { return _board.toString(); }
+	public String toString() 
+	{ 
+		_board.SetCell(_heroPosition, IsHeroArmed() ? 'A' : 'H');
+		_board.SetCell(_exitPosition, 'S');
+		if (_swordPosition.equals(_dragonPosition))
+			_board.SetCell(_swordPosition, 'F');
+		else
+		{
+			_board.SetCell(_swordPosition, 'E');
+			_board.SetCell(_dragonPosition, 'D');
+		}
+		
+		String res = _board.toString(); 
+		
+		_board.SetCell(_heroPosition, ' ');
+		_board.SetCell(_exitPosition, ' ');
+		_board.SetCell(_swordPosition, ' ');
+		_board.SetCell(_dragonPosition, ' ');
+		
+		return res;
+	}
 	
 	private boolean isValidPosition(Pair<Integer> pos) 
 	{
 		return (pos.first >= 0) && (pos.second >= 0) && (pos.first < _board.Width) && (pos.second < _board.Height);
-	}
-	
-	public boolean SetHeroPosition(Pair<Integer> pos)
-	{
-		if (!isValidPosition(pos))
-			return false;
-		
-		char prevCell = _board.GetCell(pos.first, pos.second);
-		if (prevCell == 'X' )
-			return false;
-		
-		if (pos.equals(_exitPosition))
-		{
-			if (IsHeroArmed())
-				_finished = true;
-			else
-				return false;
-		}
-		
-		if (pos.equals(_swordPosition))
-			_swordPosition = DEFAULT_POSITION;
-		
-		if (isAdjacent(pos, _dragonPosition) || pos.equals(_dragonPosition))
-		{
-			if (IsHeroArmed())
-				SetDragonPosition(DEFAULT_POSITION);
-			else
-				_heroAlive = false;
-		}
-		
-		_board.SetCell(pos.first, pos.second, IsHeroArmed() ? 'A' : 'H');
-	
-		if (!_heroPosition.equals(DEFAULT_POSITION))
-			_board.SetCell(_heroPosition.first, _heroPosition.second, ' ');
-		
-		_heroPosition = pos;
-		
-		return true;
 	}
 	
 	private boolean isAdjacent(Pair<Integer> pos1, Pair<Integer> pos2) {
@@ -135,14 +117,42 @@ public class Maze {
 		return result;
 	}
 	
-	public boolean SetExit(Pair<Integer> pos)
+	public boolean SetHeroPosition(Pair<Integer> pos)
 	{
 		if (!isValidPosition(pos))
 			return false;
 		
-		_board.SetCell(pos.first, pos.second, 'S');
-		if (!_exitPosition.equals(DEFAULT_POSITION))
-			_board.SetCell(_exitPosition.first, _exitPosition.second, ' ');
+		char prevCell = _board.GetCell(pos);
+		if (prevCell == 'X' )
+			return false;
+		
+		if (pos.equals(_exitPosition))
+		{
+			if (IsHeroArmed())
+				_finished = true;
+			else
+				return false;
+		}
+		
+		if (pos.equals(_swordPosition))
+			_swordPosition = DEFAULT_POSITION;
+		
+		if (isAdjacent(pos, _dragonPosition) || pos.equals(_dragonPosition))
+		{
+			if (IsHeroArmed())
+				SetDragonPosition(DEFAULT_POSITION);
+			else
+				_heroAlive = false;
+		}
+		_heroPosition = pos;
+		
+		return true;
+	}
+	
+	public boolean SetExit(Pair<Integer> pos)
+	{
+		if (!isValidPosition(pos))
+			return false;
 		
 		_exitPosition = pos;
 		
@@ -154,14 +164,6 @@ public class Maze {
 		if (!isValidPosition(pos) && !pos.equals(DEFAULT_POSITION))
 			return false;
 		
-		if (!pos.equals(DEFAULT_POSITION))
-			_board.SetCell(pos.first, pos.second, pos.equals(_dragonPosition) ? 'F' : 'E');
-		
-		if (!_swordPosition.equals(DEFAULT_POSITION))
-			_board.SetCell(_swordPosition.first, _swordPosition.second, _swordPosition.equals(_dragonPosition) ? 'D' : ' ');
-		else
-			_board.SetCell(_heroPosition.first, _heroPosition.second, 'H');
-		
 		_swordPosition = pos;
 		
 		return true;
@@ -172,14 +174,16 @@ public class Maze {
 		if (!isValidPosition(pos) && !pos.equals(DEFAULT_POSITION))
 			return false;
 		
-		if (!pos.equals(DEFAULT_POSITION) && _board.GetCell(pos.first, pos.second) == 'X' )
+		if (!pos.equals(DEFAULT_POSITION) && _board.GetCell(pos) == 'X' )
 			return false;
 		
-		if (!pos.equals(DEFAULT_POSITION))
-			_board.SetCell(pos.first, pos.second, pos.equals(_swordPosition) ? 'F' : 'D');
-		
-		if (!_dragonPosition.equals(DEFAULT_POSITION))
-			_board.SetCell(_dragonPosition.first, _dragonPosition.second, _dragonPosition.equals(_swordPosition) ? 'E' : ' ');
+		if (isAdjacent(_heroPosition, pos) || pos.equals(_heroPosition))
+		{
+			if (IsHeroArmed())
+				SetDragonPosition(DEFAULT_POSITION);
+			else
+				_heroAlive = false;
+		}
 		
 		_dragonPosition = pos;
 		

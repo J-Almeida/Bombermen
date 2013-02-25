@@ -50,16 +50,20 @@ public class Grid<T> {
 		return s.toString();
 	}
 	
-	public T GetCell(int column, int line)
+	public T GetCell(utils.Pair<Integer> pos)
 	{
+		int column = pos.first;
+		int line = pos.second;
 		if (line >= 0 && line < _cells.length && column >= 0 && column < _cells[line].length)
 			return _cells[line][column].GetValue();
 		
 		return null;
 	}
 
-	public void SetCell(int column, int line, T val)
+	public void SetCell(utils.Pair<Integer> pos, T val)
 	{
+		int column = pos.first;
+		int line = pos.second;
 		if (line >= 0 && line < _cells.length && column >= 0 && column < _cells[line].length)
 			_cells[line][column].SetValue(val);	
 	}
