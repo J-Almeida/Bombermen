@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.Random;
 
 import utils.Pair;
+import utils.Utilities;
 
 public class Maze
 {
-    private static final Pair<Integer> DEFAULT_POSITION = new Pair<Integer>(-1, -1);
+    private static final Pair<Integer> DEFAULT_POSITION = Pair.IntN(-1, -1);
     public Maze(int width, int height) // empty maze
     {
         _board = new Grid<Character>(width, height, ' ');
@@ -20,11 +21,11 @@ public class Maze
         cp.Cell.SetValue(' ');
         List<Pair<CellPos>> nbrs = GetNeighbors(cp.Position);
 
-        RandElement<Pair<CellPos>> nb;
+        Utilities.RandElement<Pair<CellPos>> nb;
 
         do
         {
-            nb = RandomElement(r, nbrs);
+            nb = Utilities.RandomElement(r, nbrs);
             if (!nb.Element.first.Cell.WasVisited())
             {
                 if (nb.Element.first.Position.first == 0 || nb.Element.first.Position.second == 0 || nb.Element.first.Position.first == _board.Width - 1 || nb.Element.first.Position.second == _board.Height - 1)
@@ -51,8 +52,7 @@ public class Maze
     {
         _board = new Grid<Character>(size, size, 'X');
 
-
-        Pair<Integer> initialPos = Pair.IntN(RandomBetween(r, 1, _board.Width - 2), RandomBetween(r, 1, _board.Height - 2));
+        Pair<Integer> initialPos = Utilities.RandomPairI(r, 1, _board.Width - 2, 1, _board.Height - 2);
 
         VisitDFS(r, new CellPos(_board.GetCell(initialPos), initialPos));
 
@@ -60,10 +60,10 @@ public class Maze
         SetRandomSwordPosition(r);
         SetRandomDragonPosition(r);
         SetRandomExitPosition(r);
-
     }
 
-    private void SetRandomExitPosition(Random r) {
+    private void SetRandomExitPosition(Random r)
+    {
         List<CellPos> whitelst = new LinkedList<CellPos>();
 
         for (int x = 1; x < _board.Width - 1; x++)
@@ -92,10 +92,11 @@ public class Maze
                 whitelst.add(new CellPos(_board.GetCell(Pair.IntN(x+1, y)), Pair.IntN(x+1, y)));
         }
 
-        SetExitPosition(RandomElement(r, whitelst).Element.Position);
+        SetExitPosition(Utilities.RandomElement(r, whitelst).Element.Position);
     }
 
-    private void SetRandomDragonPosition(Random r) {
+    private void SetRandomDragonPosition(Random r)
+    {
         boolean success;
         List<Pair<CellPos>> lst = GetNeighbors(_heroPosition);
         List<Pair<Integer>> lstn = new LinkedList<Pair<Integer>>();
@@ -108,7 +109,7 @@ public class Maze
         
         do
         {
-            Pair<Integer> p = Pair.IntN(RandomBetween(r, 1, _board.Width - 2), RandomBetween(r, 1, _board.Height - 2));
+        	Pair<Integer> p = Utilities.RandomPairI(r, 1, _board.Width - 2, 1, _board.Height - 2);
             
             success = !lstn.contains(p);
             
@@ -117,15 +118,16 @@ public class Maze
         } while (!success);
     }
 
-    private void SetRandomSwordPosition(Random r) {
+    private void SetRandomSwordPosition(Random r)
+    {
         boolean success;
         do
         {
-            success = SetSwordPosition(Pair.IntN(RandomBetween(r, 1, _board.Width - 2), RandomBetween(r, 1, _board.Height - 2)));
+        	success = SetSwordPosition(Utilities.RandomPairI(r, 1, _board.Width - 2, 1, _board.Height - 2));
         } while (!success);
     }
 
-    public static class CellPos
+    private static class CellPos
     {
         CellPos(Cell<Character> c, Pair<Integer> pos)
         {
@@ -152,45 +154,21 @@ public class Maze
 
         if (x >= 2)
             l.add(new Pair<CellPos>(
-                    new CellPos(_board.GetCell(Pair.IntN(x - 2, y    )), Pair.IntN(x - 2, y    )),
-                    new CellPos(_board.GetCell(Pair.IntN(x - 1, y    )), Pair.IntN(x - 1, y    ))));
+                    new CellPos(_board.GetCell(Pair.IntN(x - 2, y)), Pair.IntN(x - 2, y)),
+                    new CellPos(_board.GetCell(Pair.IntN(x - 1, y)), Pair.IntN(x - 1, y))));
 
         if (x <= (w - 2))
             l.add(new Pair<CellPos>(
-                    new CellPos(_board.GetCell(Pair.IntN(x + 2, y    )), Pair.IntN(x + 2, y    )),
-                    new CellPos(_board.GetCell(Pair.IntN(x + 1, y    )), Pair.IntN(x + 1, y    ))));
+                    new CellPos(_board.GetCell(Pair.IntN(x + 2, y)), Pair.IntN(x + 2, y)),
+                    new CellPos(_board.GetCell(Pair.IntN(x + 1, y)), Pair.IntN(x + 1, y))));
 
         if (y <= (w - 2))
             l.add(new Pair<CellPos>(
-                    new CellPos(_board.GetCell(Pair.IntN(x    , y + 2)), Pair.IntN(x    , y + 2)),
-                    new CellPos(_board.GetCell(Pair.IntN(x    , y + 1)), Pair.IntN(x    , y + 1))));
+                    new CellPos(_board.GetCell(Pair.IntN(x, y + 2)), Pair.IntN(x, y + 2)),
+                    new CellPos(_board.GetCell(Pair.IntN(x, y + 1)), Pair.IntN(x, y + 1))));
 
 
         return l;
-    }
-
-    // @TODO: move me
-    public static int RandomBetween(Random r, int min, int max)
-    {
-        return r.nextInt(max - min + 1) + min;
-    }
-
-    public static class RandElement<T>
-    {
-        RandElement(int pos, T ele)
-        {
-            Position = pos;
-            Element = ele;
-        }
-        int Position;
-        T Element;
-    }
-
-    // @TODO: move me
-    public static <T> RandElement<T> RandomElement(Random r, List<T> l)
-    {
-        int i = r.nextInt(l.size());
-        return new RandElement<T>(i, l.get(i));
     }
 
     public Maze(int width, int height, String[] cells) // maze defined with list of strings
@@ -238,10 +216,10 @@ public class Maze
 
     private boolean isAdjacent(Pair<Integer> pos1, Pair<Integer> pos2)
     {
-        return (pos1.equals(new Pair<Integer>(pos2.first + 1, pos2.second))) ||
-               (pos1.equals(new Pair<Integer>(pos2.first - 1, pos2.second))) ||
-               (pos1.equals(new Pair<Integer>(pos2.first, pos2.second + 1))) ||
-               (pos1.equals(new Pair<Integer>(pos2.first, pos2.second - 1)));
+        return (pos1.equals(Pair.IntN(pos2.first + 1, pos2.second))) ||
+               (pos1.equals(Pair.IntN(pos2.first - 1, pos2.second))) ||
+               (pos1.equals(Pair.IntN(pos2.first, pos2.second + 1))) ||
+               (pos1.equals(Pair.IntN(pos2.first, pos2.second - 1)));
     }
 
     public boolean MoveHero(utils.Key direction)
@@ -251,16 +229,16 @@ public class Maze
         switch (direction)
         {
         case UP:
-            result = SetHeroPosition(new Pair<Integer>(_heroPosition.first, _heroPosition.second - 1));
+            result = SetHeroPosition(Pair.IntN(_heroPosition.first, _heroPosition.second - 1));
             break;
         case DOWN:
-            result = SetHeroPosition(new Pair<Integer>(_heroPosition.first, _heroPosition.second + 1));
+            result = SetHeroPosition(Pair.IntN(_heroPosition.first, _heroPosition.second + 1));
             break;
         case LEFT:
-            result = SetHeroPosition(new Pair<Integer>(_heroPosition.first - 1, _heroPosition.second));
+            result = SetHeroPosition(Pair.IntN(_heroPosition.first - 1, _heroPosition.second));
             break;
         case RIGHT:
-            result = SetHeroPosition(new Pair<Integer>(_heroPosition.first + 1, _heroPosition.second));
+            result = SetHeroPosition(Pair.IntN(_heroPosition.first + 1, _heroPosition.second));
             break;
         }
 
@@ -278,16 +256,16 @@ public class Maze
         switch (direction)
         {
         case UP:
-            result = SetDragonPosition(new Pair<Integer>(_dragonPosition.first, _dragonPosition.second - 1));
+            result = SetDragonPosition(Pair.IntN(_dragonPosition.first, _dragonPosition.second - 1));
             break;
         case DOWN:
-            result = SetDragonPosition(new Pair<Integer>(_dragonPosition.first, _dragonPosition.second + 1));
+            result = SetDragonPosition(Pair.IntN(_dragonPosition.first, _dragonPosition.second + 1));
             break;
         case LEFT:
-            result = SetDragonPosition(new Pair<Integer>(_dragonPosition.first - 1, _dragonPosition.second));
+            result = SetDragonPosition(Pair.IntN(_dragonPosition.first - 1, _dragonPosition.second));
             break;
         case RIGHT:
-            result = SetDragonPosition(new Pair<Integer>(_dragonPosition.first + 1, _dragonPosition.second));
+            result = SetDragonPosition(Pair.IntN(_dragonPosition.first + 1, _dragonPosition.second));
             break;
         }
 
