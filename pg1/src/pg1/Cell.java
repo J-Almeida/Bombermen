@@ -18,7 +18,7 @@ public class Cell<T>
     }
 
     public boolean WasVisited() { return _visited; }
-    public void SetVisited() { _visited = true; }
+    public void Visit() { _visited = true; }
 
     private T _value;
     private boolean _visited;

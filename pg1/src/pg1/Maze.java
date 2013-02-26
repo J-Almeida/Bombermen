@@ -14,60 +14,54 @@ public class Maze
         _board = new Grid<Character>(width, height, ' ');
     }
 
+    public void VisitDFS(Random r, CellPos cp)
+    {
+        System.out.println(toString()); // debug
+        System.out.println();
+
+        cp.Cell.Visit();
+        List<Pair<CellPos>> nbrs = GetNeighbors(cp.Position);
+        Pair<CellPos> nb = RandomElement(r, nbrs).Element;
+
+        if (!nb.first.Cell.WasVisited())
+        {
+            nb.second.Cell.SetValue(' ');
+            VisitDFS(r, nb.first);
+        }
+    }
+
     public Maze(int width, int height, Random r) // random maze
     {
         this(width, width);
 
         assert width == height : "square maze is required for random generation";
 
-        // 1. Start with a grid full of walls.
-        for (int i = 0; i < width; i++)
+        for (int x = 0; x < width; x++)
         {
-            for (int j = 0; j < height; j++)
+            for (int y = 0; y < width; y++)
             {
-                _board.SetCell(Pair.IntN(i, j), 'X');
-            }
-        }
-
-        List<CellPos> walls = new LinkedList<CellPos>();
-
-        // 2. Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
-        Pair<Integer> initP = Pair.IntN(RandomBetween(r, 1, width - 2), RandomBetween(r, 1, width - 2));
-        Cell<Character> initialCell = _board.GetCell(initP);
-        initialCell.SetValue(' ');
-        walls.addAll(GetWallsOfCell(initP.first, initP.second));
-
-        System.out.println(toString()); // debug
-
-        // 3. While there are walls in the list
-        while (!walls.isEmpty())
-        {
-            System.out.println(toString()); // debug
-
-            // 3.1. Pick a random wall from the list
-            RandElement<CellPos> w = RandomElement(r, walls);
-
-            if (w.Element.Position.second != 1)
-            {
-                // 3.1. If the cell on the opposite (????) side isn't in the maze yet:
-                Cell<Character> currentCell = _board.GetCell(Pair.IntN(w.Element.Position.first, w.Element.Position.second - 1));
-                if (currentCell.GetValue() != ' ')
-                {
-                    // 3.1.1. Make the wall a passage and mark the cell on the opposite side as part of the maze.
-                    w.Element.Cell.SetValue(' ');
-                    currentCell.SetValue(' ');
-
-                    // 3.1.2. Add the neighboring walls of the cell to the wall list.
-                    List<CellPos> nbs = GetWallsOfCell(w.Element.Position.first, w.Element.Position.second - 1);
-                    for (CellPos cp : nbs)
-                        if (!walls.contains(cp))
-                            walls.add(cp);
-                }
-                // 3.2 If the cell on the opposite side already was in the maze, remove the wall from the list.
+                /* checkboard
+                if ((x == 0 || y == 0 || x == width - 1 || y == width - 1) ||
+                        ((x % 2) != 0 && (y % 2) == 0) ||
+                        ((x % 2) == 0 && (y % 2) != 0))
+                    _board.SetCell(Pair.IntN(x, y), 'X');
                 else
-                    walls.remove(w.Position);
+                    _board.SetCell(Pair.IntN(x, y), ' ');
+                */
+                if ((x == 0 || y == 0 || x == width - 1 || y == width - 1) ||
+                        ((x % 2) == 0 || (y % 2) == 0))
+                    _board.SetCell(Pair.IntN(x, y), 'X');
+                else
+                    _board.SetCell(Pair.IntN(x, y), ' ');
             }
         }
+
+        Pair<Integer> exitPos = Pair.IntN(1, 1);
+        Cell<Character> exitCell = _board.GetCell(exitPos);
+
+        CellPos exit = new CellPos(exitCell, exitPos);
+
+        VisitDFS(r, exit);
     }
 
     public static class CellPos
@@ -82,20 +76,27 @@ public class Maze
         Pair<Integer> Position;
     }
 
-    public List<CellPos> GetWallsOfCell(int x, int y)
+    // 1s - "cell", 2nd - "wall"
+    public List<Pair<CellPos>> GetNeighbors(Pair<Integer> pos)
     {
-        List<CellPos> l = new LinkedList<CellPos>();
-
+        List<Pair<CellPos>> l = new LinkedList<Pair<CellPos>>();
         int w = _board.Width;
+        int x = pos.first;
+        int y = pos.second;
 
-      //if (x != 1       && y != 1       && _board.GetCellT(Pair.IntN(x - 1, y - 1)) == 'X') l.add(new CellPos(_board.GetCell(Pair.IntN(x - 1, y - 1)), Pair.IntN(x - 1, y - 1)));
-          if (y != 1                       && _board.GetCellT(Pair.IntN(x    , y - 1)) == 'X') l.add(new CellPos(_board.GetCell(Pair.IntN(x    , y - 1)), Pair.IntN(x    , y - 1)));
-      //if (x != (w - 1) && y != 1       && _board.GetCellT(Pair.IntN(x + 1, y - 1)) == 'X') l.add(new CellPos(_board.GetCell(Pair.IntN(x + 1, y - 1)), Pair.IntN(x + 1, y - 1)));
-          if (x != 1                       && _board.GetCellT(Pair.IntN(x - 1, y    )) == 'X') l.add(new CellPos(_board.GetCell(Pair.IntN(x - 1, y    )), Pair.IntN(x - 1, y    )));
-          if (x != (w - 1)                 && _board.GetCellT(Pair.IntN(x + 1, y    )) == 'X') l.add(new CellPos(_board.GetCell(Pair.IntN(x + 1, y    )), Pair.IntN(x + 1, y    )));
-      //if (x != 1       && y != (w - 1) && _board.GetCellT(Pair.IntN(x - 1, y + 1)) == 'X') l.add(new CellPos(_board.GetCell(Pair.IntN(x - 1, y + 1)), Pair.IntN(x - 1, y + 1)));
-          if (y != (w - 1)                 && _board.GetCellT(Pair.IntN(x    , y + 1)) == 'X') l.add(new CellPos(_board.GetCell(Pair.IntN(x    , y + 1)), Pair.IntN(x    , y + 1)));
-      //if (x != (w - 1) && y != (w - 1) && _board.GetCellT(Pair.IntN(x + 1, y + 1)) == 'X') l.add(new CellPos(_board.GetCell(Pair.IntN(x + 1, y + 1)), Pair.IntN(x + 1, y + 1)));
+        if (y != 2 && y != 1)             l.add(new Pair<CellPos>(new CellPos(_board.GetCell(Pair.IntN(x    , y - 2)), Pair.IntN(x    , y - 2)), new CellPos(_board.GetCell(Pair.IntN(x    , y - 1)), Pair.IntN(x    , y - 1))));
+        if (x != 2 && x != 1)             l.add(new Pair<CellPos>(new CellPos(_board.GetCell(Pair.IntN(x - 2, y    )), Pair.IntN(x - 2, y    )), new CellPos(_board.GetCell(Pair.IntN(x - 1, y    )), Pair.IntN(x - 1, y    ))));
+        if (x != (w - 2) && x != (w - 1)) l.add(new Pair<CellPos>(new CellPos(_board.GetCell(Pair.IntN(x + 2, y    )), Pair.IntN(x + 2, y    )), new CellPos(_board.GetCell(Pair.IntN(x + 1, y    )), Pair.IntN(x + 1, y    ))));
+        if (y != (w - 2) && y != (w - 1)) l.add(new Pair<CellPos>(new CellPos(_board.GetCell(Pair.IntN(x    , y + 2)), Pair.IntN(x    , y + 2)), new CellPos(_board.GetCell(Pair.IntN(x    , y + 1)), Pair.IntN(x    , y + 1))));
+
+        for (int i = 0; i < l.size(); )
+        {
+            if (l.get(i).first.Cell.GetValue() != ' ')
+                l.remove(i);
+            else
+                i++;
+        }
+
         return l;
     }
 
@@ -123,22 +124,12 @@ public class Maze
         return new RandElement<T>(i, l.get(i));
     }
 
-  //public static Cell<Character> RandomWall(Random r, List<Cell<Character>> l)
-  //{
-  //     while (true) // mhmmm....
-  //     {
-  //         Cell<Character> c = RandomElement(r, l);
-  //         if (c.GetValue() == ' ')
-  //             return c;
-  //     }
-  //}
-
     public Maze(int width, int height, String[] cells) // maze defined with list of strings
     {
         this(width, height);
 
-        for (int i = 0; i < width; i++)            // Para cada coluna
-            for (int j = 0; j < height; j++)    // Para cada linha
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
             {
                 char c = cells[j].charAt(i);
                 if (c != 'X' && c != ' ')
