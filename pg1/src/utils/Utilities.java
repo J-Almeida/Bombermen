@@ -32,5 +32,4 @@ public abstract class Utilities
 	    int i = r.nextInt(l.size());
 	    return new RandElement<T>(i, l.get(i));
 	}
-
 }

@@ -1,4 +1,4 @@
-package pg1;
+package model;
 
 public class Cell<T>
 {

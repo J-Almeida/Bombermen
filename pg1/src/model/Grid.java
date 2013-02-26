@@ -1,4 +1,5 @@
-package pg1;
+package model;
+
 
 public class Grid<T>
 {

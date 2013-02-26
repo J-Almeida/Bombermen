@@ -1,9 +1,11 @@
-package pg1;
+package logic;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import model.Cell;
+import model.Grid;
 import utils.Pair;
 import utils.Utilities;
 
@@ -176,6 +178,7 @@ public class Maze
         this(width, height);
 
         for (int i = 0; i < width; i++)
+        {
             for (int j = 0; j < height; j++)
             {
                 char c = cells[j].charAt(i);
@@ -184,6 +187,7 @@ public class Maze
 
                 _board.SetCell(Pair.IntN(i, j), c);
             }
+        }
     }
 
     @Override

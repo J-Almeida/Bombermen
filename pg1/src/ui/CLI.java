@@ -1,11 +1,12 @@
-package pg1;
+package ui;
 
 import java.util.Random;
 import java.util.Scanner;
 
+import logic.Maze;
 import utils.Key;
 
-public class Game
+public class CLI
 {
     private static Maze _maze;
     private static Scanner _sc = new Scanner(System.in);
@@ -61,6 +62,5 @@ public class Game
             System.out.println("You Won!");
         else
             System.out.println("You Lost!");
-
     }
 }
