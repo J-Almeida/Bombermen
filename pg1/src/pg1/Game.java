@@ -52,7 +52,7 @@ public class Game
                 Key dir = Key.toEnum(r.nextInt(5));
                 success = (dir == null) || _maze.MoveDragon(dir);
             }
-            
+
             _maze.Update();
         }
 
