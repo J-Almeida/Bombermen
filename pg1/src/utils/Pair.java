@@ -2,6 +2,16 @@ package utils;
 
 public class Pair<T>
 {
+    public static Pair<Integer> IntN(int fst, int snd)
+    {
+        return new Pair<Integer>(fst, snd);
+    }
+
+    public static Pair<Double> DoubleN(double fst, double snd)
+    {
+        return new Pair<Double>(fst, snd);
+    }
+
     public Pair(T fst, T snd)
     {
         this.first = fst;

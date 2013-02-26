@@ -13,18 +13,7 @@ public class Game
 
     public static void main(String[] args)
     {
-        String[] cells = {  "XXXXXXXXXX",
-                            "XH       X",
-                            "X XX X X X",
-                            "XDXX X X X",
-                            "X XX X X X",
-                            "X      X S",
-                            "X XX X X X",
-                            "X XX X X X",
-                            "XEXX     X",
-                            "XXXXXXXXXX" };
-
-        _maze = new Maze(10, 10, cells);
+        _maze = new Maze(20, 20, new Random());
 
         _maze.SetHeroPosition(new Pair<Integer>(1, 1));
         _maze.SetSwordPosition(new Pair<Integer>(1, 8));

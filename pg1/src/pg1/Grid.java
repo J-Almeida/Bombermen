@@ -42,14 +42,22 @@ public class Grid<T>
         return s.toString();
     }
 
-    public T GetCell(utils.Pair<Integer> pos)
+    public Cell<T> GetCell(utils.Pair<Integer> pos)
     {
         int column = pos.first;
         int line = pos.second;
-        if (line >= 0 && line < _cells.length && column >= 0 && column < _cells[line].length)
-            return _cells[line][column].GetValue();
 
+        if (line >= 0 && line < _cells.length && column >= 0 && column < _cells[line].length)
+            return _cells[line][column];
         return null;
+    }
+
+    public T GetCellT(utils.Pair<Integer> pos)
+    {
+        Cell<T> c = GetCell(pos);
+        if (c == null)
+            return null;
+        return c.GetValue();
     }
 
     public void SetCell(utils.Pair<Integer> pos, T val)
