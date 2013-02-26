@@ -4,7 +4,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 import utils.Key;
-import utils.Pair;
 
 public class Game
 {
@@ -13,12 +12,7 @@ public class Game
 
     public static void main(String[] args)
     {
-        _maze = new Maze(20, 20, new Random());
-
-        _maze.SetHeroPosition(new Pair<Integer>(1, 1));
-        _maze.SetSwordPosition(new Pair<Integer>(1, 8));
-        _maze.SetDragonPosition(new Pair<Integer>(1, 3));
-        _maze.SetExit(new Pair<Integer>(9, 5));
+        _maze = new Maze(10, new Random());
 
         while (!_maze.IsFinished())
         {
@@ -58,6 +52,8 @@ public class Game
                 Key dir = Key.toEnum(r.nextInt(5));
                 success = (dir == null) || _maze.MoveDragon(dir);
             }
+            
+            _maze.Update();
         }
 
         System.out.println(_maze);

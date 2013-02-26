@@ -16,53 +16,114 @@ public class Maze
 
     public void VisitDFS(Random r, CellPos cp)
     {
-        System.out.println(toString()); // debug
-        System.out.println();
-
         cp.Cell.Visit();
+        cp.Cell.SetValue(' ');
         List<Pair<CellPos>> nbrs = GetNeighbors(cp.Position);
-        Pair<CellPos> nb = RandomElement(r, nbrs).Element;
-
-        if (!nb.first.Cell.WasVisited())
+        
+        RandElement<Pair<CellPos>> nb;
+        
+        do
         {
-            nb.second.Cell.SetValue(' ');
-            VisitDFS(r, nb.first);
-        }
+        	nb = RandomElement(r, nbrs);
+        	if (!nb.Element.first.Cell.WasVisited())
+        	{
+        		if (nb.Element.first.Position.first == 0 || nb.Element.first.Position.second == 0 || nb.Element.first.Position.first == _board.Width - 1 || nb.Element.first.Position.second == _board.Height - 1)
+        		{
+        			int i = r.nextInt(4);
+        			if (i > 0)
+        			{
+        				nb.Element.second.Cell.SetValue(' ');
+    	                nb.Element.second.Cell.Visit();
+        			}
+        		}
+        		else
+        		{
+	        		nb.Element.second.Cell.SetValue(' ');
+	                nb.Element.second.Cell.Visit();
+	                VisitDFS(r, nb.Element.first);
+        		}
+        	}
+        	nbrs.remove(nb.Position);
+        } while(!nbrs.isEmpty());
     }
 
-    public Maze(int width, int height, Random r) // random maze
+    public Maze(int size, Random r) // random maze
     {
-        this(width, width);
+        _board = new Grid<Character>(size, size, 'X');
 
-        assert width == height : "square maze is required for random generation";
 
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < width; y++)
-            {
-                /* checkboard
-                if ((x == 0 || y == 0 || x == width - 1 || y == width - 1) ||
-                        ((x % 2) != 0 && (y % 2) == 0) ||
-                        ((x % 2) == 0 && (y % 2) != 0))
-                    _board.SetCell(Pair.IntN(x, y), 'X');
-                else
-                    _board.SetCell(Pair.IntN(x, y), ' ');
-                */
-                if ((x == 0 || y == 0 || x == width - 1 || y == width - 1) ||
-                        ((x % 2) == 0 || (y % 2) == 0))
-                    _board.SetCell(Pair.IntN(x, y), 'X');
-                else
-                    _board.SetCell(Pair.IntN(x, y), ' ');
-            }
-        }
+        Pair<Integer> initialPos = Pair.IntN(RandomBetween(r, 1, _board.Width - 2), RandomBetween(r, 1, _board.Height - 2));
 
-        Pair<Integer> exitPos = Pair.IntN(1, 1);
-        Cell<Character> exitCell = _board.GetCell(exitPos);
-
-        CellPos exit = new CellPos(exitCell, exitPos);
-
-        VisitDFS(r, exit);
+        VisitDFS(r, new CellPos(_board.GetCell(initialPos), initialPos));
+        
+        SetHeroPosition(initialPos);
+		SetRandomSwordPosition(r);
+        SetRandomDragonPosition(r);
+        SetRandomExitPosition(r);
+        
     }
+
+	private void SetRandomExitPosition(Random r) {
+		List<CellPos> whitelst = new LinkedList<CellPos>();
+        
+        for (int x = 1; x < _board.Width - 1; x++)
+        {
+        	int y = 1;
+        	Cell<Character> cell = _board.GetCell(Pair.IntN(x, y));
+        	if (cell.GetValue() == ' ')
+        		whitelst.add(new CellPos(_board.GetCell(Pair.IntN(x, y-1)), Pair.IntN(x, y-1)));
+        	
+        	y = _board.Height - 2;
+        	cell = _board.GetCell(Pair.IntN(x, y));
+        	if (cell.GetValue() == ' ')
+        		whitelst.add(new CellPos(_board.GetCell(Pair.IntN(x, y+1)), Pair.IntN(x, y+1)));
+        }
+        
+        for (int y = 2; y < _board.Height - 2; y++)
+        {
+        	int x = 1;
+        	Cell<Character> cell = _board.GetCell(Pair.IntN(x, y));
+        	if (cell.GetValue() == ' ')
+        		whitelst.add(new CellPos(_board.GetCell(Pair.IntN(x-1, y)), Pair.IntN(x-1, y)));
+        	
+        	x = _board.Width - 2;
+        	cell = _board.GetCell(Pair.IntN(x, y));
+        	if (cell.GetValue() == ' ')
+        		whitelst.add(new CellPos(_board.GetCell(Pair.IntN(x+1, y)), Pair.IntN(x+1, y)));
+        }
+        
+        SetExitPosition(RandomElement(r, whitelst).Element.Position);
+	}
+
+	private void SetRandomDragonPosition(Random r) {
+		boolean success;
+		List<Pair<CellPos>> lst = GetNeighbors(_heroPosition);
+		List<Pair<Integer>> lstn = new LinkedList<Pair<Integer>>();
+		
+		for (Pair<CellPos> ele : lst)
+		{
+			lstn.add(ele.first.Position);
+			lstn.add(ele.second.Position);
+		}
+		
+        do
+        {
+        	Pair<Integer> p = Pair.IntN(RandomBetween(r, 1, _board.Width - 2), RandomBetween(r, 1, _board.Height - 2));
+        	
+        	success = !lstn.contains(p);
+        	
+        	if (success)
+	        	success = SetDragonPosition(p);
+        } while (!success);
+	}
+
+	private void SetRandomSwordPosition(Random r) {
+		boolean success;
+        do
+        {
+        	success = SetSwordPosition(Pair.IntN(RandomBetween(r, 1, _board.Width - 2), RandomBetween(r, 1, _board.Height - 2)));
+        } while (!success);
+	}
 
     public static class CellPos
     {
@@ -80,22 +141,30 @@ public class Maze
     public List<Pair<CellPos>> GetNeighbors(Pair<Integer> pos)
     {
         List<Pair<CellPos>> l = new LinkedList<Pair<CellPos>>();
-        int w = _board.Width;
+        int w = _board.Width - 1;
         int x = pos.first;
         int y = pos.second;
 
-        if (y != 2 && y != 1)             l.add(new Pair<CellPos>(new CellPos(_board.GetCell(Pair.IntN(x    , y - 2)), Pair.IntN(x    , y - 2)), new CellPos(_board.GetCell(Pair.IntN(x    , y - 1)), Pair.IntN(x    , y - 1))));
-        if (x != 2 && x != 1)             l.add(new Pair<CellPos>(new CellPos(_board.GetCell(Pair.IntN(x - 2, y    )), Pair.IntN(x - 2, y    )), new CellPos(_board.GetCell(Pair.IntN(x - 1, y    )), Pair.IntN(x - 1, y    ))));
-        if (x != (w - 2) && x != (w - 1)) l.add(new Pair<CellPos>(new CellPos(_board.GetCell(Pair.IntN(x + 2, y    )), Pair.IntN(x + 2, y    )), new CellPos(_board.GetCell(Pair.IntN(x + 1, y    )), Pair.IntN(x + 1, y    ))));
-        if (y != (w - 2) && y != (w - 1)) l.add(new Pair<CellPos>(new CellPos(_board.GetCell(Pair.IntN(x    , y + 2)), Pair.IntN(x    , y + 2)), new CellPos(_board.GetCell(Pair.IntN(x    , y + 1)), Pair.IntN(x    , y + 1))));
-
-        for (int i = 0; i < l.size(); )
-        {
-            if (l.get(i).first.Cell.GetValue() != ' ')
-                l.remove(i);
-            else
-                i++;
-        }
+        if (y >= 2)
+        	l.add(new Pair<CellPos>(
+        			new CellPos(_board.GetCell(Pair.IntN(x, y - 2)), Pair.IntN(x, y - 2)),    //Cell
+        			new CellPos(_board.GetCell(Pair.IntN(x, y - 1)), Pair.IntN(x, y - 1))));  //Wall
+        
+        if (x >= 2)
+        	l.add(new Pair<CellPos>(
+        			new CellPos(_board.GetCell(Pair.IntN(x - 2, y    )), Pair.IntN(x - 2, y    )), 
+        			new CellPos(_board.GetCell(Pair.IntN(x - 1, y    )), Pair.IntN(x - 1, y    ))));
+        
+        if (x <= (w - 2))
+        	l.add(new Pair<CellPos>(
+        			new CellPos(_board.GetCell(Pair.IntN(x + 2, y    )), Pair.IntN(x + 2, y    )), 
+        			new CellPos(_board.GetCell(Pair.IntN(x + 1, y    )), Pair.IntN(x + 1, y    ))));
+        
+        if (y <= (w - 2))
+        	l.add(new Pair<CellPos>(
+        			new CellPos(_board.GetCell(Pair.IntN(x    , y + 2)), Pair.IntN(x    , y + 2)), 
+        			new CellPos(_board.GetCell(Pair.IntN(x    , y + 1)), Pair.IntN(x    , y + 1))));
+        
 
         return l;
     }
@@ -167,7 +236,8 @@ public class Maze
         return (pos.first >= 0) && (pos.second >= 0) && (pos.first < _board.Width) && (pos.second < _board.Height);
     }
 
-    private boolean isAdjacent(Pair<Integer> pos1, Pair<Integer> pos2) {
+    private boolean isAdjacent(Pair<Integer> pos1, Pair<Integer> pos2)
+    {
         return (pos1.equals(new Pair<Integer>(pos2.first + 1, pos2.second))) ||
                (pos1.equals(new Pair<Integer>(pos2.first - 1, pos2.second))) ||
                (pos1.equals(new Pair<Integer>(pos2.first, pos2.second + 1))) ||
@@ -226,37 +296,15 @@ public class Maze
 
     public boolean SetHeroPosition(Pair<Integer> pos)
     {
-        if (!isValidPosition(pos))
+        if (!isValidPosition(pos) || _board.GetCellT(pos) == 'X' || (pos.equals(_exitPosition) && !IsHeroArmed()))
             return false;
 
-        char prevCell = _board.GetCellT(pos);
-        if (prevCell == 'X' )
-            return false;
-
-        if (pos.equals(_exitPosition))
-        {
-            if (IsHeroArmed())
-                _finished = true;
-            else
-                return false;
-        }
-
-        if (pos.equals(_swordPosition))
-            _swordPosition = DEFAULT_POSITION;
-
-        if (isAdjacent(pos, _dragonPosition) || pos.equals(_dragonPosition))
-        {
-            if (IsHeroArmed())
-                SetDragonPosition(DEFAULT_POSITION);
-            else
-                _heroAlive = false;
-        }
         _heroPosition = pos;
 
         return true;
     }
 
-    public boolean SetExit(Pair<Integer> pos)
+    public boolean SetExitPosition(Pair<Integer> pos)
     {
         if (!isValidPosition(pos))
             return false;
@@ -278,19 +326,10 @@ public class Maze
 
     public boolean SetDragonPosition(Pair<Integer> pos)
     {
-        if (!isValidPosition(pos) && !pos.equals(DEFAULT_POSITION))
-            return false;
-
-        if (!pos.equals(DEFAULT_POSITION) && _board.GetCellT(pos) == 'X' )
-            return false;
-
-        if (isAdjacent(_heroPosition, pos) || pos.equals(_heroPosition))
-        {
-            if (IsHeroArmed())
-                SetDragonPosition(DEFAULT_POSITION);
-            else
-                _heroAlive = false;
-        }
+    	if ((!isValidPosition(pos) && !pos.equals(DEFAULT_POSITION)) ||
+    		(!pos.equals(DEFAULT_POSITION) && _board.GetCellT(pos) == 'X'))
+    		return false;
+    	
 
         _dragonPosition = pos;
 
@@ -298,6 +337,20 @@ public class Maze
 
     }
 
+    public void Update() 
+    { 
+        if (_heroPosition.equals(_swordPosition))
+            _swordPosition = DEFAULT_POSITION;
+    	
+    	if (isAdjacent(_heroPosition, _dragonPosition) || _dragonPosition.equals(_heroPosition))
+        {
+            if (IsHeroArmed())
+                SetDragonPosition(DEFAULT_POSITION);
+            else
+                _heroAlive = false;
+        }
+    }
+    
     public boolean IsFinished() { return _finished || !_heroAlive; }
     public boolean IsHeroArmed() { return _swordPosition.equals(DEFAULT_POSITION); }
     public boolean IsHeroAlive() { return _heroAlive; }
