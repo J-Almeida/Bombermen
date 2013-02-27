@@ -339,7 +339,8 @@ public class Maze
      */
     public boolean SetSwordPosition(Pair<Integer> pos)
     {
-        if (!isValidPosition(pos) && !pos.equals(DEFAULT_POSITION))
+        if (!isValidPosition(pos) && !pos.equals(DEFAULT_POSITION) ||
+           (!pos.equals(DEFAULT_POSITION) && _board.GetCellT(pos) == 'X'))
             return false;
 
         _sword.SetPosition(pos);
