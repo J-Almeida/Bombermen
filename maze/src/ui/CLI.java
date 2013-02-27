@@ -30,11 +30,19 @@ public class CLI
                 }
 
                 String inputStr = _sc.nextLine();
-                if (inputStr.length() > 1) { success = false; continue; }
+                if (inputStr.isEmpty() || inputStr.length() > 1)
+                {
+                    success = false;
+                    continue;
+                }
 
                 Key input = Key.toEnum(inputStr.toUpperCase().charAt(0));
 
-                if (input == null) { success = false; continue; }
+                if (input == null)
+                {
+                    success = false;
+                    continue;
+                }
 
                 success = _maze.MoveHero(input);
 

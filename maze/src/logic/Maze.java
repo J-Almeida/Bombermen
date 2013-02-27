@@ -12,6 +12,8 @@ public class Maze
 {
     private static final Pair<Integer> DEFAULT_POSITION = Pair.IntN(-1, -1);
 
+    public Random r = new Random();
+
     private Maze(int width, int height)
     {
         _board = new Grid<Character>(width, height, ' ');
