@@ -9,26 +9,59 @@ import model.Cell;
 import utils.Pair;
 import utils.Utilities;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MazeGenerator.
+ */
 public abstract class MazeGenerator
 {
+
+    /**
+     * The Class CellPos.
+     */
     private static class CellPos
     {
+
+        /**
+         * Instantiates a new cell pos.
+         *
+         * @param c the c
+         * @param pos the pos
+         */
         CellPos(Cell<Character> c, Pair<Integer> pos)
         {
             Cell = c;
             Position = pos;
         }
 
+        /** The Cell. */
         Cell<Character> Cell;
+
+        /** The Position. */
         Pair<Integer> Position;
     }
 
+    /**
+     * The Class Helper.
+     */
     private static class Helper
     {
+
+        /** The cp. */
         public CellPos cp;
+
+        /** The nbrs. */
         public List<Pair<CellPos>> nbrs;
     }
 
+    /**
+     * Random maze.
+     *
+     * @param size the size
+     * @param numDragons the num dragons
+     * @param r the r
+     * @return the maze
+     */
     public static Maze RandomMaze(int size, int numDragons, Random r)
     {
         Maze result = new Maze(size, size, numDragons);
@@ -105,6 +138,12 @@ public abstract class MazeGenerator
         return result;
     }
 
+    /**
+     * Sets the random exit position.
+     *
+     * @param m the m
+     * @param r the r
+     */
     private static void SetRandomExitPosition(Maze m, Random r)
     {
         List<CellPos> whitelst = new LinkedList<CellPos>();
@@ -138,6 +177,13 @@ public abstract class MazeGenerator
         m.SetExitPosition(Utilities.RandomElement(r, whitelst).Element.Position);
     }
 
+    /**
+     * Sets the random dragons position.
+     *
+     * @param m the m
+     * @param numDragons the num dragons
+     * @param r the r
+     */
     private static void SetRandomDragonsPosition(Maze m, int numDragons, Random r)
     {
         for (int i = 0; i < numDragons; i++)
@@ -164,6 +210,12 @@ public abstract class MazeGenerator
         }
     }
 
+    /**
+     * Sets the random sword position.
+     *
+     * @param m the m
+     * @param r the r
+     */
     private static void SetRandomSwordPosition(Maze m, Random r)
     {
         boolean success;
@@ -174,6 +226,13 @@ public abstract class MazeGenerator
     }
 
     // 1s - "cell", 2nd - "wall"
+    /**
+     * Gets the neighbors.
+     *
+     * @param m the m
+     * @param pos the pos
+     * @return the list
+     */
     private static List<Pair<CellPos>> GetNeighbors(Maze m, Pair<Integer> pos)
     {
         List<Pair<CellPos>> l = new LinkedList<Pair<CellPos>>();

@@ -1,23 +1,53 @@
 package utils;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Pair.
+ *
+ * @param <T> the generic type
+ */
 public class Pair<T>
 {
+
+    /**
+     * Int n.
+     *
+     * @param fst the fst
+     * @param snd the snd
+     * @return the pair
+     */
     public static Pair<Integer> IntN(int fst, int snd)
     {
         return new Pair<Integer>(fst, snd);
     }
 
+    /**
+     * Double n.
+     *
+     * @param fst the fst
+     * @param snd the snd
+     * @return the pair
+     */
     public static Pair<Double> DoubleN(double fst, double snd)
     {
         return new Pair<Double>(fst, snd);
     }
 
+    /**
+     * Instantiates a new pair.
+     *
+     * @param fst the fst
+     * @param snd the snd
+     */
     public Pair(T fst, T snd)
     {
         this.first = fst;
         this.second = snd;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object rhs)
@@ -30,6 +60,9 @@ public class Pair<T>
         return this.first == other.first && this.second == other.second;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {
@@ -44,6 +77,9 @@ public class Pair<T>
         return sb.toString();
     }
 
+    /** The first. */
     public T first;
+
+    /** The second. */
     public T second;
 }

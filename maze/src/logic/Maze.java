@@ -8,17 +8,37 @@ import model.Grid;
 import utils.Key;
 import utils.Pair;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Maze.
+ */
 public class Maze
 {
+
+    /** The Constant DEFAULT_POSITION. */
     private static final Pair<Integer> DEFAULT_POSITION = Pair.IntN(-1, -1);
 
+    /** The r. */
     public Random r = new Random();
 
+    /**
+     * Instantiates a new maze.
+     *
+     * @param width the width
+     * @param height the height
+     */
     private Maze(int width, int height)
     {
         _board = new Grid<Character>(width, height, ' ');
     }
 
+    /**
+     * Instantiates a new maze.
+     *
+     * @param width the width
+     * @param height the height
+     * @param numDragons the num dragons
+     */
     public Maze(int width, int height, int numDragons) // empty maze
     {
         this(width, height);
@@ -26,16 +46,33 @@ public class Maze
             _dragons.add(new Dragon());
     }
 
+    /**
+     * Gets the width.
+     *
+     * @return the int
+     */
     public int GetWidth()
     {
         return _board.Width;
     }
 
+    /**
+     * Gets the height.
+     *
+     * @return the int
+     */
     public int GetHeight()
     {
         return _board.Height;
     }
 
+    /**
+     * Instantiates a new maze.
+     *
+     * @param width the width
+     * @param height the height
+     * @param cells the cells
+     */
     public Maze(int width, int height, String[] cells) // maze defined with list
                                                        // of strings
     {
@@ -102,6 +139,9 @@ public class Maze
         }
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {
@@ -145,12 +185,25 @@ public class Maze
         return res;
     }
 
+    /**
+     * Checks if is valid position.
+     *
+     * @param pos the pos
+     * @return true, if is valid position
+     */
     private boolean isValidPosition(Pair<Integer> pos)
     {
         return (pos.first >= 0) && (pos.second >= 0)
                 && (pos.first < _board.Width) && (pos.second < _board.Height);
     }
 
+    /**
+     * Checks if is adjacent.
+     *
+     * @param pos1 the pos1
+     * @param pos2 the pos2
+     * @return true, if is adjacent
+     */
     private boolean isAdjacent(Pair<Integer> pos1, Pair<Integer> pos2)
     {
         return (pos1.equals(Pair.IntN(pos2.first + 1, pos2.second)))
@@ -159,6 +212,12 @@ public class Maze
                 || (pos1.equals(Pair.IntN(pos2.first, pos2.second - 1)));
     }
 
+    /**
+     * Move hero.
+     *
+     * @param direction the direction
+     * @return true, if successful
+     */
     public boolean MoveHero(utils.Key direction)
     {
         boolean result = false;
@@ -188,6 +247,13 @@ public class Maze
         return result;
     }
 
+    /**
+     * Move dragon.
+     *
+     * @param index the index
+     * @param direction the direction
+     * @return true, if successful
+     */
     public boolean MoveDragon(int index, utils.Key direction)
     {
         boolean result = false;
@@ -222,11 +288,22 @@ public class Maze
         return result;
     }
 
+    /**
+     * Gets the hero position.
+     *
+     * @return the pair
+     */
     public Pair<Integer> GetHeroPosition()
     {
         return _hero.GetPosition();
     }
 
+    /**
+     * Sets the hero position.
+     *
+     * @param pos the pos
+     * @return true, if successful
+     */
     public boolean SetHeroPosition(Pair<Integer> pos)
     {
         if (!isValidPosition(pos) || _board.GetCellT(pos) == 'X'
@@ -238,6 +315,12 @@ public class Maze
         return true;
     }
 
+    /**
+     * Sets the exit position.
+     *
+     * @param pos the pos
+     * @return true, if successful
+     */
     public boolean SetExitPosition(Pair<Integer> pos)
     {
         if (!isValidPosition(pos))
@@ -248,6 +331,12 @@ public class Maze
         return true;
     }
 
+    /**
+     * Sets the sword position.
+     *
+     * @param pos the pos
+     * @return true, if successful
+     */
     public boolean SetSwordPosition(Pair<Integer> pos)
     {
         if (!isValidPosition(pos) && !pos.equals(DEFAULT_POSITION))
@@ -258,6 +347,13 @@ public class Maze
         return true;
     }
 
+    /**
+     * Sets the dragon position.
+     *
+     * @param index the index
+     * @param pos the pos
+     * @return true, if successful
+     */
     public boolean SetDragonPosition(int index, Pair<Integer> pos)
     {
         if ((!isValidPosition(pos) && !pos.equals(DEFAULT_POSITION))
@@ -271,6 +367,9 @@ public class Maze
 
     }
 
+    /**
+     * Update.
+     */
     public void Update()
     {
         for (int i = 0; i < _dragons.size(); i++)
@@ -304,38 +403,73 @@ public class Maze
         }
     }
 
+    /**
+     * Gets the cell.
+     *
+     * @param pos the pos
+     * @return the cell
+     */
     public Cell<Character> GetCell(Pair<Integer> pos)
     {
         return _board.GetCell(pos);
     }
 
+    /**
+     * Checks if is finished.
+     *
+     * @return true, if successful
+     */
     public boolean IsFinished()
     {
         return _finished || !IsHeroAlive();
     }
 
+    /**
+     * Checks if is hero armed.
+     *
+     * @return true, if successful
+     */
     public boolean IsHeroArmed()
     {
         return _hero.IsArmed();
     }
 
+    /**
+     * Checks if is hero alive.
+     *
+     * @return true, if successful
+     */
     public boolean IsHeroAlive()
     {
         return _hero.IsAlive();
     }
 
+    /**
+     * Checks if is dragon alive.
+     *
+     * @param index the index
+     * @return true, if successful
+     */
     public boolean IsDragonAlive(int index)
     {
         return _dragons.get(index).IsAlive();
     }
 
+    /** The _board. */
     private Grid<Character> _board;
 
+    /** The _exit position. */
     private Pair<Integer> _exitPosition = DEFAULT_POSITION;
 
+    /** The _hero. */
     private Hero _hero = new Hero();
+
+    /** The _sword. */
     private Sword _sword = new Sword();
+
+    /** The _dragons. */
     private ArrayList<Dragon> _dragons = new ArrayList<Dragon>();
 
+    /** The _finished. */
     private boolean _finished = false;
 }

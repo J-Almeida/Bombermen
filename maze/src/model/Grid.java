@@ -1,15 +1,34 @@
 package model;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Grid.
+ *
+ * @param <T> the generic type
+ */
 public class Grid<T>
 {
+
+    /** The Constant DEFAULT_SEPARATOR. */
     private static final char DEFAULT_SEPARATOR = ' ';
 
+    /** The Seperator. */
     public char Seperator = DEFAULT_SEPARATOR;
 
+    /** The Width. */
     public final int Width;
+
+    /** The Height. */
     public final int Height;
 
+    /**
+     * Instantiates a new grid.
+     *
+     * @param width the width
+     * @param height the height
+     * @param obj_init the obj_init
+     */
     @SuppressWarnings("unchecked")
     public Grid(int width, int height, T obj_init)
     {
@@ -25,6 +44,9 @@ public class Grid<T>
         Height = height;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {
@@ -43,6 +65,12 @@ public class Grid<T>
         return s.toString();
     }
 
+    /**
+     * Gets the cell.
+     *
+     * @param pos the pos
+     * @return the cell
+     */
     public Cell<T> GetCell(utils.Pair<Integer> pos)
     {
         int column = pos.first;
@@ -53,6 +81,12 @@ public class Grid<T>
         return null;
     }
 
+    /**
+     * Gets the cell t.
+     *
+     * @param pos the pos
+     * @return the t
+     */
     public T GetCellT(utils.Pair<Integer> pos)
     {
         Cell<T> c = GetCell(pos);
@@ -61,6 +95,12 @@ public class Grid<T>
         return c.GetValue();
     }
 
+    /**
+     * Sets the cell.
+     *
+     * @param pos the pos
+     * @param val the val
+     */
     public void SetCell(utils.Pair<Integer> pos, T val)
     {
         int column = pos.first;
@@ -69,5 +109,6 @@ public class Grid<T>
             _cells[line][column].SetValue(val);
     }
 
+    /** The _cells. */
     private Cell<T> [][]_cells;
 }

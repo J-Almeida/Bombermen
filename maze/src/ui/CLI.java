@@ -7,11 +7,24 @@ import logic.Maze;
 import logic.MazeGenerator;
 import utils.Key;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CLI.
+ */
 public class CLI
 {
+
+    /** The _maze. */
     private static Maze _maze;
+
+    /** The _sc. */
     private static Scanner _sc = new Scanner(System.in);
 
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
     public static void main(String[] args)
     {
         _maze = MazeGenerator.RandomMaze(20, 2, new Random());
