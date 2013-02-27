@@ -42,7 +42,7 @@ public class CLI
 
             System.out.print("\n\n");
 
-            success = false;      
+            success = false;
 
             _maze.Update();
         }

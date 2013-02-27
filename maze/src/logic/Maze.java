@@ -11,14 +11,12 @@ import utils.Pair;
 public class Maze
 {
     private static final Pair<Integer> DEFAULT_POSITION = Pair.IntN(-1, -1);
-    
-    public Random r = new Random();
-    
+
     private Maze(int width, int height)
     {
         _board = new Grid<Character>(width, height, ' ');
     }
-    
+
     public Maze(int width, int height, int numDragons) // empty maze
     {
         this(width, height);
@@ -50,14 +48,14 @@ public class Maze
                 {
                     if (!_hero.GetPosition().equals(Unit.DEFAULT_POSITION))
                         throw new IllegalArgumentException();
-                    
+
                     _hero.SetPosition(Pair.IntN(i, j));
                 }
                 else if (c == 'A')
                 {
                     if (!_sword.GetPosition().equals(Unit.DEFAULT_POSITION) || !_hero.GetPosition().equals(Unit.DEFAULT_POSITION))
                         throw new IllegalArgumentException();
-                    
+
                     _hero.EquipSword();
                     _hero.SetPosition(Pair.IntN(i, j));
                 }
@@ -65,14 +63,14 @@ public class Maze
                 {
                     if (!_sword.GetPosition().equals(Unit.DEFAULT_POSITION) || _hero.IsArmed())
                         throw new IllegalArgumentException();
-                    
+
                     _sword.SetPosition(Pair.IntN(i, j));
                 }
                 else if (c == 'F')
                 {
                     if (!_sword.GetPosition().equals(Unit.DEFAULT_POSITION) || _hero.IsArmed())
                         throw new IllegalArgumentException();
-                    
+
                     _sword.SetPosition(Pair.IntN(i, j));
                     Dragon d = new Dragon();
                     d.SetPosition(Pair.IntN(i, j));
@@ -88,12 +86,12 @@ public class Maze
                 {
                     if (!_exitPosition.equals(Unit.DEFAULT_POSITION))
                         throw new IllegalArgumentException();
-                    
+
                     _exitPosition = Pair.IntN(i, j);
                 }
                 else if (c != 'X' && c != ' ')
                     throw new IllegalArgumentException();
-                
+
                 if (c != 'X' && c != ' ')
                     c = ' ';
 
@@ -106,11 +104,11 @@ public class Maze
     public String toString()
     {
         _board.SetCell(_exitPosition, 'S');
-        
+
         if (_sword.IsAlive())
         {
             boolean placedSword = false;
-            
+
             for (Dragon d: _dragons)
             {
                 if (d.IsAlive() && _sword.GetPosition().equals(d.GetPosition()))
@@ -135,7 +133,7 @@ public class Maze
             _board.SetCell(_hero.GetPosition(), _hero.IsArmed() ? 'A' : 'H');
 
         String res = _board.toString();
-        
+
         _board.SetCell(_exitPosition, ' ');
         if (_hero.IsAlive()) _board.SetCell(_hero.GetPosition(), ' ');
         if (_sword.IsAlive()) _board.SetCell(_sword.GetPosition(), ' ');
@@ -282,7 +280,7 @@ public class Maze
                 success = (dir == null) || this.MoveDragon(i, dir);
             }
         }
-        
+
         if (_hero.GetPosition().equals(_exitPosition))
             _finished = true;
         if (_hero.GetPosition().equals(_sword.GetPosition()))

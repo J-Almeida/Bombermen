@@ -38,7 +38,7 @@ public abstract class MazeGenerator
         for (int i = 0; i < result.GetWidth(); i++)
             for (int j = 0; j < result.GetHeight(); j++)
                 result.GetCell(Pair.IntN(i, j)).SetValue('X');
-        
+
         Helper h = new Helper();
 
         Pair<Integer> initPos = Utilities.RandomPairI(r, 1, size - 2, 1,
@@ -48,16 +48,16 @@ public abstract class MazeGenerator
         h.cp.Cell.Visit();
         h.cp.Cell.SetValue(' ');
         h.nbrs = GetNeighbors(result, h.cp.Position);
-        
+
         do
         {
             boolean success = false;
             Utilities.RandElement<Pair<CellPos>> nb = null;
-            
+
             while (!success && !h.nbrs.isEmpty())
             {
                 nb = Utilities.RandomElement(r, h.nbrs);
-                
+
                 if (!nb.Element.first.Cell.WasVisited())
                 {
                     if (nb.Element.first.Position.first == 0 || nb.Element.first.Position.second == 0 || nb.Element.first.Position.first == result.GetWidth() - 1 || nb.Element.first.Position.second == result.GetHeight() - 1)
@@ -80,7 +80,7 @@ public abstract class MazeGenerator
                 } else { success = false; }
                 h.nbrs.remove(nb.Position);
             }
-            
+
             if (success)
             {
                 h = new Helper();
@@ -96,12 +96,12 @@ public abstract class MazeGenerator
                 h.cp.Cell.SetValue(' ');
             }
         } while (!stk.isEmpty());
-        
+
         result.SetHeroPosition(initPos);
         SetRandomSwordPosition(result, r);
         SetRandomDragonsPosition(result, numDragons, r);
         SetRandomExitPosition(result, r);
-        
+
         return result;
     }
 
@@ -115,7 +115,7 @@ public abstract class MazeGenerator
             Cell<Character> cell = m.GetCell(Pair.IntN(x, y));
             if (cell.GetValue() == ' ')
                 whitelst.add(new CellPos(m.GetCell(Pair.IntN(x, y-1)), Pair.IntN(x, y-1)));
-            
+
             y = m.GetHeight() - 2;
             cell = m.GetCell(Pair.IntN(x, y));
             if (cell.GetValue() == ' ')
@@ -128,7 +128,7 @@ public abstract class MazeGenerator
             Cell<Character> cell = m.GetCell(Pair.IntN(x, y));
             if (cell.GetValue() == ' ')
                 whitelst.add(new CellPos(m.GetCell(Pair.IntN(x-1, y)), Pair.IntN(x-1, y)));
-            
+
             x = m.GetWidth() - 2;
             cell = m.GetCell(Pair.IntN(x, y));
             if (cell.GetValue() == ' ')

@@ -1,5 +1,5 @@
 package logic;
 
 public enum UnitType {
-	Hero, Dragon, Sword
+    Hero, Dragon, Sword
 }
