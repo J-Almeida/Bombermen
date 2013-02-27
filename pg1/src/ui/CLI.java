@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 import logic.Maze;
+import logic.MazeGenerator;
 import utils.Key;
 
 public class CLI
@@ -13,12 +14,11 @@ public class CLI
 
     public static void main(String[] args)
     {
-        _maze = new Maze(10, new Random());
+        _maze = MazeGenerator.RandomMaze(20, 2, new Random());
 
         while (!_maze.IsFinished())
         {
             boolean success = true;
-            boolean dragonAlivePast = _maze.IsDragonAlive();
             System.out.println(_maze);
             System.out.print("Move hero (W, S, A, D): ");
             do
@@ -42,17 +42,7 @@ public class CLI
 
             System.out.print("\n\n");
 
-            success = !_maze.IsDragonAlive();
-
-            if (success && dragonAlivePast)
-                System.out.println("Congratulations you killed the dragon!");
-
-            while (!success)
-            {
-                Random r = new Random();
-                Key dir = Key.toEnum(r.nextInt(5));
-                success = (dir == null) || _maze.MoveDragon(dir);
-            }
+            success = false;      
 
             _maze.Update();
         }

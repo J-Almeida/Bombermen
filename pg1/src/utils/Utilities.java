@@ -29,7 +29,14 @@ public abstract class Utilities
 
 	public static <T> RandElement<T> RandomElement(Random r, List<T> l)
 	{
-	    int i = r.nextInt(l.size());
-	    return new RandElement<T>(i, l.get(i));
+	    if (!l.isEmpty())
+	    {
+	        int i = r.nextInt(l.size());
+	        return new RandElement<T>(i, l.get(i));
+	    }
+	    else
+	    {
+	        return null;
+	    }
 	}
 }
