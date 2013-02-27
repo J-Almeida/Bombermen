@@ -32,6 +32,7 @@ public abstract class MazeGenerator
     public static Maze RandomMaze(int size, int numDragons, Random r)
     {
         Maze result = new Maze(size, size, numDragons);
+        result.r = r;
         Stack<Helper> stk = new Stack<Helper>();
 
         for (int i = 0; i < result.GetWidth(); i++)

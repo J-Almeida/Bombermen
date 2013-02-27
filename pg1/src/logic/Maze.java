@@ -12,6 +12,8 @@ public class Maze
 {
     private static final Pair<Integer> DEFAULT_POSITION = Pair.IntN(-1, -1);
     
+    public Random r = new Random();
+    
     private Maze(int width, int height)
     {
         _board = new Grid<Character>(width, height, ' ');
@@ -276,7 +278,6 @@ public class Maze
             boolean success = false;
             while (!success && _dragons.get(i).IsAlive())
             {
-                Random r = new Random();
                 Key dir = Key.toEnum(r.nextInt(5));
                 success = (dir == null) || this.MoveDragon(i, dir);
             }
