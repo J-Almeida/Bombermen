@@ -11,6 +11,14 @@ public abstract class Unit {
     /** The Constant DEFAULT_POSITION. */
     public final static Pair<Integer> DEFAULT_POSITION = Pair.IntN(-1, -1);
 
+    /** The Type. */
+    public final UnitType Type;
+
+    /** The _alive. */
+    protected boolean _alive;
+
+    /** The _position. */
+    protected Pair<Integer> _position = DEFAULT_POSITION;
 
     /**
      * Instantiates a new unit.
@@ -61,14 +69,6 @@ public abstract class Unit {
         _alive = false;
     }
 
-    /** The Type. */
-    public final UnitType Type;
-
-    /** The _alive. */
-    protected boolean _alive;
-
-    /** The _position. */
-    protected Pair<Integer> _position = DEFAULT_POSITION;
-
-
+    @Override
+    public abstract String toString();
 }

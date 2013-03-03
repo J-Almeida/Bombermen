@@ -3,8 +3,11 @@ package ui;
 import java.util.Random;
 import java.util.Scanner;
 
+import logic.Architect;
+import logic.DragonBehaviour;
 import logic.Maze;
 import logic.MazeGenerator;
+import logic.RandomMazeGenerator;
 import utils.Key;
 
 // TODO: Auto-generated Javadoc
@@ -13,10 +16,6 @@ import utils.Key;
  */
 public class CLI
 {
-
-    /** The _maze. */
-    private static Maze _maze;
-
     /** The _sc. */
     private static Scanner _sc = new Scanner(System.in);
 
@@ -27,12 +26,18 @@ public class CLI
      */
     public static void main(String[] args)
     {
-        _maze = MazeGenerator.RandomMaze(20, 2, new Random());
+        Architect architect = new Architect();
+        MazeGenerator mg = new RandomMazeGenerator();
 
-        while (!_maze.IsFinished())
+        architect.SetMazeGenerator(mg);
+        architect.ConstructMaze(new Random(), 10, 2, DragonBehaviour.Sleepy);
+
+        Maze maze = architect.GetMaze();
+
+        while (!maze.IsFinished())
         {
             boolean success = true;
-            System.out.println(_maze);
+            System.out.println(maze);
             System.out.print("Move hero (W, S, A, D): ");
             do
             {
@@ -57,7 +62,7 @@ public class CLI
                     continue;
                 }
 
-                success = _maze.MoveHero(input);
+                success = maze.MoveHero(input);
 
             } while (!success);
 
@@ -65,11 +70,11 @@ public class CLI
 
             success = false;
 
-            _maze.Update();
+            maze.Update();
         }
 
-        System.out.println(_maze);
-        if (_maze.IsHeroAlive())
+        System.out.println(maze);
+        if (maze.IsHeroAlive())
             System.out.println("You Won!");
         else
             System.out.println("You Lost!");

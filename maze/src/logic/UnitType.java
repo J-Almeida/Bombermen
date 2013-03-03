@@ -1,15 +1,16 @@
 package logic;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Enum UnitType.
+ * The Enum UnitType (RTTI).
  */
-public enum UnitType {
-
+public enum UnitType
+{
     /** The Hero. */
     Hero,
- /** The Dragon. */
- Dragon,
- /** The Sword. */
- Sword
+
+    /** The Dragon. */
+    Dragon,
+
+    /** The Sword. */
+    Sword
 }

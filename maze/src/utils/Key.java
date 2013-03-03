@@ -1,43 +1,41 @@
 package utils;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Enum Key.
+ * Represents a keyboard key.
  */
 public enum Key
 {
-
-    /** The up. */
+    /** Up arrow (W). */
     UP('W', 1),
 
-    /** The down. */
+    /** Down arrow (S). */
     DOWN('S', 2),
 
-    /** The left. */
+    /** Left arrow (A). */
     LEFT('A', 3),
 
-    /** The right. */
+    /** Right arrow (D). */
     RIGHT('D', 4);
 
     /**
      * Instantiates a new key.
      *
-     * @param c the c
-     * @param i the i
+     * @param c the character
+     * @param i the value
      */
     Key(char c, int i) { _val = c;    _num = i; }
 
     /**
      * Gets the value.
      *
-     * @return the char
+     * @return the character
      */
     public char GetValue() { return _val; }
 
     /**
-     * To enum.
+     * Converts character to Key enum.
      *
-     * @param val the val
+     * @param val the character
      * @return the key
      */
     public static Key toEnum(char val)
@@ -50,9 +48,9 @@ public enum Key
     }
 
     /**
-     * To enum.
+     * Converts value to Key enum.
      *
-     * @param num the num
+     * @param num the value
      * @return the key
      */
     public static Key toEnum(int num)
@@ -64,9 +62,9 @@ public enum Key
         return null;
     }
 
-    /** The _val. */
+    /** The character. */
     private char _val;
 
-    /** The _num. */
+    /** The value. */
     private int _num;
 }

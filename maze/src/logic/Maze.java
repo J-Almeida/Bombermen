@@ -14,36 +14,50 @@ import utils.Pair;
  */
 public class Maze
 {
-
     /** The Constant DEFAULT_POSITION. */
     private static final Pair<Integer> DEFAULT_POSITION = Pair.IntN(-1, -1);
 
     /** The r. */
     public Random r = new Random();
 
+    /** The _board. */
+    private Grid<Character> _board;
+
+    /** The _exit position. */
+    private Pair<Integer> _exitPosition = DEFAULT_POSITION;
+
+    /** The _hero. */
+    private Hero _hero = new Hero();
+
+    /** The _sword. */
+    private Sword _sword = new Sword();
+
+    /** The _dragons. */
+    private ArrayList<Dragon> _dragons = new ArrayList<Dragon>();
+
+    /** The _finished. */
+    private boolean _finished = false;
+
     /**
-     * Instantiates a new maze.
+     * Instantiates an empty maze.
      *
      * @param width the width
      * @param height the height
      */
-    private Maze(int width, int height)
+    public Maze(int width, int height)
     {
         _board = new Grid<Character>(width, height, ' ');
     }
 
     /**
-     * Instantiates a new maze.
+     * Adds a new dragon to the maze
      *
-     * @param width the width
-     * @param height the height
-     * @param numDragons the num dragons
+     * @return dragon's index/id
      */
-    public Maze(int width, int height, int numDragons) // empty maze
+    public int AddDragon()
     {
-        this(width, height);
-        for (int i = 0; i < numDragons; i++)
-            _dragons.add(new Dragon());
+        _dragons.add(new Dragon());
+        return _dragons.size() - 1;
     }
 
     /**
@@ -64,79 +78,6 @@ public class Maze
     public int GetHeight()
     {
         return _board.Height;
-    }
-
-    /**
-     * Instantiates a new maze.
-     *
-     * @param width the width
-     * @param height the height
-     * @param cells the cells
-     */
-    public Maze(int width, int height, String[] cells) // maze defined with list
-                                                       // of strings
-    {
-        this(width, height);
-
-        for (int i = 0; i < width; i++)
-        {
-            for (int j = 0; j < height; j++)
-            {
-                char c = cells[j].charAt(i);
-                if (c == 'H')
-                {
-                    if (!_hero.GetPosition().equals(Unit.DEFAULT_POSITION))
-                        throw new IllegalArgumentException();
-
-                    _hero.SetPosition(Pair.IntN(i, j));
-                }
-                else if (c == 'A')
-                {
-                    if (!_sword.GetPosition().equals(Unit.DEFAULT_POSITION) || !_hero.GetPosition().equals(Unit.DEFAULT_POSITION))
-                        throw new IllegalArgumentException();
-
-                    _hero.EquipSword();
-                    _hero.SetPosition(Pair.IntN(i, j));
-                }
-                else if (c == 'E')
-                {
-                    if (!_sword.GetPosition().equals(Unit.DEFAULT_POSITION) || _hero.IsArmed())
-                        throw new IllegalArgumentException();
-
-                    _sword.SetPosition(Pair.IntN(i, j));
-                }
-                else if (c == 'F')
-                {
-                    if (!_sword.GetPosition().equals(Unit.DEFAULT_POSITION) || _hero.IsArmed())
-                        throw new IllegalArgumentException();
-
-                    _sword.SetPosition(Pair.IntN(i, j));
-                    Dragon d = new Dragon();
-                    d.SetPosition(Pair.IntN(i, j));
-                    _dragons.add(d);
-                }
-                else if (c == 'D')
-                {
-                    Dragon d = new Dragon();
-                    d.SetPosition(Pair.IntN(i, j));
-                    _dragons.add(d);
-                }
-                else if (c == 'S')
-                {
-                    if (!_exitPosition.equals(Unit.DEFAULT_POSITION))
-                        throw new IllegalArgumentException();
-
-                    _exitPosition = Pair.IntN(i, j);
-                }
-                else if (c != 'X' && c != ' ')
-                    throw new IllegalArgumentException();
-
-                if (c != 'X' && c != ' ')
-                    c = ' ';
-
-                _board.SetCell(Pair.IntN(i, j), c);
-            }
-        }
     }
 
     /* (non-Javadoc)
@@ -315,6 +256,11 @@ public class Maze
         return true;
     }
 
+    public Pair<Integer> GetExitPosition()
+    {
+        return _exitPosition;
+    }
+
     /**
      * Sets the exit position.
      *
@@ -329,6 +275,11 @@ public class Maze
         _exitPosition = pos;
 
         return true;
+    }
+
+    public Pair<Integer> GetSwordPosition()
+    {
+        return _sword.GetPosition();
     }
 
     /**
@@ -346,6 +297,11 @@ public class Maze
         _sword.SetPosition(pos);
 
         return true;
+    }
+
+    public Pair<Integer> GetDragonPosition(int index)
+    {
+        return _dragons.get(index).GetPosition();
     }
 
     /**
@@ -435,6 +391,11 @@ public class Maze
         return _hero.IsArmed();
     }
 
+    public void HeroEquipSword()
+    {
+        _hero.EquipSword();
+    }
+
     /**
      * Checks if is hero alive.
      *
@@ -456,21 +417,8 @@ public class Maze
         return _dragons.get(index).IsAlive();
     }
 
-    /** The _board. */
-    private Grid<Character> _board;
-
-    /** The _exit position. */
-    private Pair<Integer> _exitPosition = DEFAULT_POSITION;
-
-    /** The _hero. */
-    private Hero _hero = new Hero();
-
-    /** The _sword. */
-    private Sword _sword = new Sword();
-
-    /** The _dragons. */
-    private ArrayList<Dragon> _dragons = new ArrayList<Dragon>();
-
-    /** The _finished. */
-    private boolean _finished = false;
+    public void SetCell(Pair<Integer> pos, Character val)
+    {
+        _board.SetCell(pos, val);
+    }
 }

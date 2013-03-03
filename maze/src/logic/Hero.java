@@ -6,6 +6,8 @@ package logic;
  */
 public class Hero extends Unit
 {
+    /** The _armed. */
+    private boolean _armed;
 
     /**
      * Instantiates a new hero.
@@ -33,6 +35,9 @@ public class Hero extends Unit
         _armed = true;
     }
 
-    /** The _armed. */
-    private boolean _armed;
+    @Override
+    public String toString()
+    {
+        return _armed ? "A" : "H";
+    }
 }

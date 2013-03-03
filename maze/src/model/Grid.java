@@ -9,12 +9,14 @@ package model;
  */
 public class Grid<T>
 {
-
     /** The Constant DEFAULT_SEPARATOR. */
     private static final char DEFAULT_SEPARATOR = ' ';
 
-    /** The Seperator. */
-    public char Seperator = DEFAULT_SEPARATOR;
+    /** The _cells. */
+    private Cell<T>[][] _cells;
+
+    /** The Separator. */
+    public char Separator = DEFAULT_SEPARATOR;
 
     /** The Width. */
     public final int Width;
@@ -57,7 +59,7 @@ public class Grid<T>
             for (int j = 0; j < _cells[i].length; j++)
             {
                 s.append(_cells[i][j].toString());
-                if (j != _cells[i].length - 1) s.append(Seperator);
+                if (j != _cells[i].length - 1) s.append(Separator);
             }
             if (i != _cells.length - 1) s.append("\n");
         }
@@ -108,7 +110,4 @@ public class Grid<T>
         if (line >= 0 && line < _cells.length && column >= 0 && column < _cells[line].length)
             _cells[line][column].SetValue(val);
     }
-
-    /** The _cells. */
-    private Cell<T> [][]_cells;
 }
