@@ -34,6 +34,9 @@ public class Maze
     /** True if Game Over */
     private boolean _finished = false;
 
+    /** The defined Dragon behaviour. */
+    private DragonBehaviour _db = DragonBehaviour.Sleepy;
+
     /**
      * Instantiates an empty maze.
      *
@@ -52,7 +55,7 @@ public class Maze
      */
     public int AddDragon()
     {
-        _dragons.add(new Dragon());
+        _dragons.add(new Dragon(_db));
         return _dragons.size() - 1;
     }
 
@@ -92,11 +95,11 @@ public class Maze
             {
                 if (d.IsAlive() && _sword.GetPosition().equals(d.GetPosition()))
                 {
-                    _board.SetCell(_sword.GetPosition(), 'F');
+                    _board.SetCell(_sword.GetPosition(), d.IsSleeping() ? 'f' : 'F');
                     placedSword = true;
                 }
                 else if (d.IsAlive())
-                    _board.SetCell(d.GetPosition(), 'D');
+                    _board.SetCell(d.GetPosition(), d.IsSleeping() ? 'd' : 'D');
             }
             if (!placedSword)
                 _board.SetCell(_sword.GetPosition(), 'E');
@@ -145,7 +148,7 @@ public class Maze
      * @param pos2 the pos2
      * @return true, if is adjacent
      */
-    private boolean isAdjacent(Pair<Integer> pos1, Pair<Integer> pos2)
+    private boolean IsAdjacent(Pair<Integer> pos1, Pair<Integer> pos2)
     {
         return (pos1.equals(Pair.IntN(pos2.first + 1, pos2.second)))
                 || (pos1.equals(Pair.IntN(pos2.first - 1, pos2.second)))
@@ -330,9 +333,15 @@ public class Maze
     public void Update()
     {
         for (int i = 0; i < _dragons.size(); i++)
+            _dragons.get(i).Update();
+
+        _sword.Update();
+        _hero.Update();
+
+        for (int i = 0; i < _dragons.size(); i++)
         {
             boolean success = false;
-            while (!success && _dragons.get(i).IsAlive())
+            while (!success && _dragons.get(i).IsAlive() && _dragons.get(i).CanMove())
             {
                 Key dir = Key.toEnum(RandomEngine.GetInt(0, 4));
                 success = (dir == null) || this.MoveDragon(i, dir);
@@ -349,12 +358,11 @@ public class Maze
 
         for (Dragon d : _dragons)
         {
-            if (isAdjacent(_hero.GetPosition(), d.GetPosition())
-                    || d.GetPosition().equals(_hero.GetPosition()))
+            if (IsAdjacent(_hero.GetPosition(), d.GetPosition()) || d.GetPosition().equals(_hero.GetPosition()))
             {
                 if (IsHeroArmed())
                     d.Kill();
-                else
+                else if (!d.IsSleeping())
                     _hero.Kill();
             }
         }
@@ -429,5 +437,15 @@ public class Maze
     public void SetCell(Pair<Integer> pos, Character val)
     {
         _board.SetCell(pos, val);
+    }
+
+    /**
+     * Sets the dragon behaviour.
+     *
+     * @param db the Dragon behaviour
+     */
+    public void SetDragonBehaviour(DragonBehaviour db)
+    {
+        _db = db;
     }
 }

@@ -12,12 +12,15 @@ public class Dragon extends Unit
     /** Sleep countdown */
     private int _sleepTimer = 0;
 
+    private DragonBehaviour _db;
+
     /**
      * Instantiates a new dragon.
      */
-    public Dragon()
+    public Dragon(DragonBehaviour db)
     {
         super(UnitType.Dragon);
+        _db = db;
     }
 
     @Override
@@ -61,23 +64,41 @@ public class Dragon extends Unit
      */
     public boolean CanMove()
     {
-        return !_asleep;
+        if (_db == DragonBehaviour.Idle)
+            return false;
+
+        if (_asleep)
+            return false;
+
+        return true;
+    }
+
+    public boolean CanSleep()
+    {
+        if (_db != DragonBehaviour.Sleepy)
+            return false;
+
+        return true;
     }
 
     @Override
     public void Update()
     {
-        if (_alive && _asleep)
+        if (CanSleep())
         {
-            _sleepTimer--;
+            if (_alive && _asleep)
+            {
+                _sleepTimer--;
 
-            if (_sleepTimer == 0)
-                _asleep = false;
-        }
-        else
-        {
-            if (RandomEngine.GetBool(25))
-                SetToSleep(RandomEngine.GetInt(10, 20));
+                if (_sleepTimer == 0)
+                    _asleep = false;
+            }
+            else
+            {
+                // 25% chance of sleeping between 10 and 20 units of time
+                if (RandomEngine.GetBool(25))
+                    SetToSleep(RandomEngine.GetInt(10, 20));
+            }
         }
     }
 }

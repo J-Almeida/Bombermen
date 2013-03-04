@@ -2,7 +2,6 @@ package logic;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import model.Cell;
 import utils.Pair;
@@ -13,16 +12,14 @@ public abstract class MazeGenerator
 {
     protected int _size = 10;
     protected int _dragonCount = 2;
-    protected DragonBehaviour _dragonBehaviour = DragonBehaviour.Sleepy;
     protected Maze _maze;
 
     public Maze GetMaze() { return _maze; }
     public void CreateNewMaze() { _maze = new Maze(_size, _size); }
-    public void CreateNewMaze(Random r) { _maze = new Maze(_size, _size); }
 
     public void SetMazeSize(int size) { _size = size; }
     public void SetNumberOfDragons(int num) { _dragonCount = num; }
-    public void SetDragonsBehaviour(DragonBehaviour db) { _dragonBehaviour = db; }
+    public void SetDragonsBehaviour(DragonBehaviour db) { _maze.SetDragonBehaviour(db); }
 
     public abstract void BuildMaze();
 
