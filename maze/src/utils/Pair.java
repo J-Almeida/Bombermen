@@ -76,12 +76,12 @@ public class Pair<T>
 
         return sb.toString();
     }
-    
+
     @Override
     public Object clone()
     {
-    	Pair<T> other = new Pair<T>(this.first, this.second);
-    	return (Object)other;
+        Pair<T> other = new Pair<T>(this.first, this.second);
+        return (Object)other;
     }
 
     /** The first. */

@@ -3,8 +3,8 @@ package logic;
 /**
  * The Enum EventType (RTTI).
  */
-public enum EventType 
+public enum EventType
 {
-	/** Colision */
-	Colision;
+    /** Colision */
+    Colision;
 }

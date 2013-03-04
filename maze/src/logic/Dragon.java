@@ -9,7 +9,7 @@ public class Dragon extends Unit
 {
     /** Is dragon sleeping? */
     private boolean _asleep = false;
-    
+
     /** Sleep countdown */
     private int _sleepTimer = 0;
 
@@ -97,24 +97,24 @@ public class Dragon extends Unit
             else
             {
                 // 25% chance of sleeping between 10 and 20 units of time
-                if (RandomEngine.GetBool(25))
+                if (RandomEngine.GetBool(15))
                     SetToSleep(RandomEngine.GetInt(10, 20));
             }
         }
-        
+
         while (!_eventQueue.isEmpty())
-    	{
-    		if (_eventQueue.peek().Type == EventType.Colision)
-    		{
-				Colision<?> ev = (Colision<?>) _eventQueue.peek();
-				if (ev.Other.Type == UnitType.Hero)
-				{
-					if (((Hero) ev.Other).IsArmed())
-						this.Kill();
-				}						
-    		}
-    		
-    		_eventQueue.poll();
-    	}
+        {
+            if (_eventQueue.peek().Type == EventType.Colision)
+            {
+                Colision<?> ev = (Colision<?>) _eventQueue.peek();
+                if (ev.Other.Type == UnitType.Hero)
+                {
+                    if (((Hero) ev.Other).IsArmed())
+                        this.Kill();
+                }
+            }
+
+            _eventQueue.poll();
+        }
     }
 }

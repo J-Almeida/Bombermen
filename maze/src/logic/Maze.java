@@ -186,8 +186,8 @@ public class Maze
                         _hero.GetPosition().first + 1,
                         _hero.GetPosition().second));
                 break;
-		default:
-			return false;
+        default:
+            return false;
         }
 
         return result;
@@ -229,8 +229,8 @@ public class Maze
                         _dragons.get(index).GetPosition().first + 1,
                         _dragons.get(index).GetPosition().second));
                 break;
-		default:
-			return false;
+        default:
+            return false;
         }
 
         return result;
@@ -358,11 +358,11 @@ public class Maze
         {
             if (IsAdjacent(_hero.GetPosition(), d.GetPosition()) || d.GetPosition().equals(_hero.GetPosition()))
             {
-            	d.pushEvent(new Colision<Hero>(_hero));
-            	_hero.pushEvent(new Colision<Dragon>(d));
+                d.pushEvent(new Colision<Hero>(_hero));
+                _hero.pushEvent(new Colision<Dragon>(d));
             }
         }
-        
+
         for (int i = 0; i < _dragons.size(); i++)
             _dragons.get(i).Update();
 

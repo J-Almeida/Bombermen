@@ -17,7 +17,7 @@ public enum Key
 
     /** Right arrow (D). */
     RIGHT('D', 4),
-    
+
     /** 1 (1). */
     ONE('1', 5);
 

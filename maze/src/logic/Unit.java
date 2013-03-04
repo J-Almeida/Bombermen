@@ -22,15 +22,15 @@ public abstract class Unit {
 
     /** The _position. */
     protected Pair<Integer> _position = DEFAULT_POSITION;
-    
+
     /** The _eventQueue */
     protected Queue<Event> _eventQueue = new LinkedList<Event>();
-    
+
     public void pushEvent(Event val)
     {
-    	_eventQueue.add(val);
+        _eventQueue.add(val);
     }
-    
+
     /**
      * Instantiates a new unit.
      *
