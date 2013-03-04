@@ -71,4 +71,7 @@ public abstract class Unit {
 
     @Override
     public abstract String toString();
+
+    /** Method called each iteration */
+    public void Update() {};
 }

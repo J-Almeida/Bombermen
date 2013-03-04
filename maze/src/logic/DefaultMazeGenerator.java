@@ -2,7 +2,7 @@ package logic;
 
 import utils.Pair;
 
-/** ConcreteBuilder */
+/** ConcreteBuilder - Default 10x10 maze */
 public class DefaultMazeGenerator extends MazeGenerator
 {
     @Override

@@ -8,7 +8,6 @@ package model;
  */
 public class Cell<T>
 {
-
     /**
      * Instantiates a new cell.
      *

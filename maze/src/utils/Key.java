@@ -1,5 +1,6 @@
 package utils;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents a keyboard key.
  */

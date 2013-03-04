@@ -1,12 +1,11 @@
 package logic;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Hero.
  */
 public class Hero extends Unit
 {
-    /** The _armed. */
+    /** Has sword? */
     private boolean _armed;
 
     /**
@@ -18,9 +17,9 @@ public class Hero extends Unit
     }
 
     /**
-     * Checks if is armed.
+     * Checks if hero is armed.
      *
-     * @return true, if successful
+     * @return true, if hero has sword
      */
     public boolean IsArmed()
     {

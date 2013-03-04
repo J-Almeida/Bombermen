@@ -3,9 +3,10 @@ package logic;
 import java.util.Stack;
 
 import utils.Pair;
+import utils.RandomEngine;
 import utils.Utilities;
 
-/** ConcreteBuilder */
+/** ConcreteBuilder - Randomised NxN maze */
 public class RandomMazeGenerator extends MazeGenerator
 {
     @Override
@@ -19,7 +20,7 @@ public class RandomMazeGenerator extends MazeGenerator
 
         CellNeighbors h = new CellNeighbors();
 
-        Pair<Integer> initPos = Utilities.RandomPairI(_r, 1, _size - 2, 1, _size - 2);
+        Pair<Integer> initPos = Utilities.RandomPairI(1, _size - 2, 1, _size - 2);
 
         h.cp = new CellPos(_maze.GetCell(initPos), initPos);
         h.cp.Cell.Visit();
@@ -33,7 +34,7 @@ public class RandomMazeGenerator extends MazeGenerator
 
             while (!success && !h.nbrs.isEmpty())
             {
-                nb = Utilities.RandomElement(_r, h.nbrs);
+                nb = Utilities.RandomElement(h.nbrs);
 
                 if (!nb.Element.first.Cell.WasVisited())
                 {
@@ -42,8 +43,7 @@ public class RandomMazeGenerator extends MazeGenerator
                             nb.Element.first.Position.first == _maze.GetWidth() - 1 ||
                             nb.Element.first.Position.second == _maze.GetHeight() - 1)
                     {
-                        int i = _r.nextInt(4);
-                        if (i > 0)
+                        if (RandomEngine.GetBool(75))
                         {
                             nb.Element.second.Cell.SetValue(' ');
                             nb.Element.second.Cell.Visit();

@@ -1,7 +1,6 @@
 package utils;
 
 import java.util.List;
-import java.util.Random;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -9,20 +8,6 @@ import java.util.Random;
  */
 public abstract class Utilities
 {
-
-    /**
-     * Random between.
-     *
-     * @param r the r
-     * @param min the min
-     * @param max the max
-     * @return the int
-     */
-    public static int RandomBetween(Random r, int min, int max)
-    {
-        return r.nextInt(max - min + 1) + min;
-    }
-
     /**
      * The Class RandElement.
      *
@@ -30,7 +15,6 @@ public abstract class Utilities
      */
     public static class RandElement<T>
     {
-
         /**
          * Instantiates a new rand element.
          *
@@ -60,9 +44,9 @@ public abstract class Utilities
      * @param max2 the max2
      * @return the pair
      */
-    public static Pair<Integer> RandomPairI(Random r, int min1, int max1, int min2, int max2)
+    public static Pair<Integer> RandomPairI(int min1, int max1, int min2, int max2)
     {
-        return Pair.IntN(RandomBetween(r, min1, max1), RandomBetween(r, min1, max2));
+        return Pair.IntN(RandomEngine.GetInt(min1, max1), RandomEngine.GetInt(min1, max2));
     }
 
     /**
@@ -73,16 +57,12 @@ public abstract class Utilities
      * @param l the l
      * @return the rand element
      */
-    public static <T> RandElement<T> RandomElement(Random r, List<T> l)
+    public static <T> RandElement<T> RandomElement(List<T> l)
     {
-        if (!l.isEmpty())
-        {
-            int i = r.nextInt(l.size());
-            return new RandElement<T>(i, l.get(i));
-        }
-        else
-        {
+        if (l.isEmpty())
             return null;
-        }
+
+        int i = RandomEngine.GetInt(0, l.size() - 1);
+        return new RandElement<T>(i, l.get(i));
     }
 }

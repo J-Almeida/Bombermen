@@ -15,11 +15,10 @@ public abstract class MazeGenerator
     protected int _dragonCount = 2;
     protected DragonBehaviour _dragonBehaviour = DragonBehaviour.Sleepy;
     protected Maze _maze;
-    protected Random _r;
 
     public Maze GetMaze() { return _maze; }
-    public void CreateNewMaze() { _r = new Random(); _maze = new Maze(_size, _size); }
-    public void CreateNewMaze(Random r) { _r = r; _maze = new Maze(_size, _size); }
+    public void CreateNewMaze() { _maze = new Maze(_size, _size); }
+    public void CreateNewMaze(Random r) { _maze = new Maze(_size, _size); }
 
     public void SetMazeSize(int size) { _size = size; }
     public void SetNumberOfDragons(int num) { _dragonCount = num; }
@@ -60,7 +59,7 @@ public abstract class MazeGenerator
                 whitelst.add(new CellPos(_maze.GetCell(Pair.IntN(x+1, y)), Pair.IntN(x+1, y)));
         }
 
-        _maze.SetExitPosition(Utilities.RandomElement(_r, whitelst).Element.Position);
+        _maze.SetExitPosition(Utilities.RandomElement(whitelst).Element.Position);
     }
 
     /**
@@ -83,7 +82,7 @@ public abstract class MazeGenerator
 
             do
             {
-                Pair<Integer> p = Utilities.RandomPairI(_r, 1, _maze.GetWidth() - 2, 1, _maze.GetHeight() - 2);
+                Pair<Integer> p = Utilities.RandomPairI(1, _maze.GetWidth() - 2, 1, _maze.GetHeight() - 2);
 
                 success = !lstn.contains(p);
 
@@ -101,7 +100,7 @@ public abstract class MazeGenerator
         boolean success;
         do
         {
-            success = _maze.SetSwordPosition(Utilities.RandomPairI(_r, 1, _maze.GetWidth() - 2, 1, _maze.GetHeight() - 2));
+            success = _maze.SetSwordPosition(Utilities.RandomPairI(1, _maze.GetWidth() - 2, 1, _maze.GetHeight() - 2));
         } while (!success);
     }
 
@@ -166,7 +165,7 @@ public abstract class MazeGenerator
     }
 
     /**
-     * Helper class to represent a CellPos and its neighbors.
+     * Helper class to represent a CellPos and its neighbours.
      */
     protected static class CellNeighbors
     {
@@ -174,7 +173,7 @@ public abstract class MazeGenerator
         /** The cell-position pair. */
         public CellPos cp;
 
-        /** List of neighbors. */
+        /** List of neighbours. */
         public List<Pair<CellPos>> nbrs;
     }
 }

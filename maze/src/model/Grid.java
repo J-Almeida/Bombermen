@@ -1,11 +1,9 @@
 package model;
 
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class Grid.
  *
- * @param <T> the generic type
+ * @param <T> the underlying Cell type
  */
 public class Grid<T>
 {

@@ -1,18 +1,20 @@
 package logic;
 
-import java.util.Random;
-
-/** Director */
+/** Director - responsible for managing the correct sequence of Maze creation */
 public class Architect
 {
+    /** Underlying MazeGenerator */
     private MazeGenerator _mazeGenerator;
     
+    /** Defines the concrete MazeGenerator */
     public void SetMazeGenerator(MazeGenerator mg) { _mazeGenerator = mg; }
+    /** Returns the concrete MazeGenerator, call after ConstructMaze */
     public Maze GetMaze() { return _mazeGenerator.GetMaze(); }
     
-    public void ConstructMaze(Random r, int size, int dragonCount, DragonBehaviour dragonBehaviour)
+    /** Builds the Maze */
+    public void ConstructMaze(int size, int dragonCount, DragonBehaviour dragonBehaviour)
     {
-        _mazeGenerator.CreateNewMaze(r);
+        _mazeGenerator.CreateNewMaze();
         _mazeGenerator.SetMazeSize(size);
         _mazeGenerator.SetNumberOfDragons(dragonCount);
         _mazeGenerator.SetDragonsBehaviour(dragonBehaviour);

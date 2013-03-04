@@ -1,6 +1,5 @@
 package ui;
 
-import java.util.Random;
 import java.util.Scanner;
 
 import logic.Architect;
@@ -10,7 +9,6 @@ import logic.MazeGenerator;
 import logic.RandomMazeGenerator;
 import utils.Key;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class CLI.
  */
@@ -30,7 +28,7 @@ public class CLI
         MazeGenerator mg = new RandomMazeGenerator();
 
         architect.SetMazeGenerator(mg);
-        architect.ConstructMaze(new Random(), 10, 2, DragonBehaviour.Sleepy);
+        architect.ConstructMaze(10, 2, DragonBehaviour.Sleepy);
 
         Maze maze = architect.GetMaze();
 

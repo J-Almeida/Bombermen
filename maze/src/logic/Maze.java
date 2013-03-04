@@ -1,14 +1,13 @@
 package logic;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import model.Cell;
 import model.Grid;
 import utils.Key;
 import utils.Pair;
+import utils.RandomEngine;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Maze.
  */
@@ -17,25 +16,22 @@ public class Maze
     /** The Constant DEFAULT_POSITION. */
     private static final Pair<Integer> DEFAULT_POSITION = Pair.IntN(-1, -1);
 
-    /** The r. */
-    public Random r = new Random();
-
-    /** The _board. */
+    /** The Grid. */
     private Grid<Character> _board;
 
-    /** The _exit position. */
+    /** The exit position. */
     private Pair<Integer> _exitPosition = DEFAULT_POSITION;
 
-    /** The _hero. */
+    /** The hero. */
     private Hero _hero = new Hero();
 
-    /** The _sword. */
+    /** The sword. */
     private Sword _sword = new Sword();
 
-    /** The _dragons. */
+    /** List of Dragons. */
     private ArrayList<Dragon> _dragons = new ArrayList<Dragon>();
 
-    /** The _finished. */
+    /** True if Game Over */
     private boolean _finished = false;
 
     /**
@@ -109,7 +105,7 @@ public class Maze
         {
             for (Dragon d: _dragons)
                 if (d.IsAlive())
-                    _board.SetCell(d.GetPosition(), 'D');
+                    _board.SetCell(d.GetPosition(), d.IsSleeping() ? 'd' : 'D');
         }
 
         if (_hero.IsAlive())
@@ -117,11 +113,15 @@ public class Maze
 
         String res = _board.toString();
 
+        // reset
         _board.SetCell(_exitPosition, ' ');
-        if (_hero.IsAlive()) _board.SetCell(_hero.GetPosition(), ' ');
-        if (_sword.IsAlive()) _board.SetCell(_sword.GetPosition(), ' ');
+        if (_hero.IsAlive())
+            _board.SetCell(_hero.GetPosition(), ' ');
+        if (_sword.IsAlive())
+            _board.SetCell(_sword.GetPosition(), ' ');
         for (Dragon d : _dragons)
-            if (d.IsAlive()) _board.SetCell(d.GetPosition(), ' ');
+            if (d.IsAlive())
+                _board.SetCell(d.GetPosition(), ' ');
 
         return res;
     }
@@ -132,10 +132,10 @@ public class Maze
      * @param pos the pos
      * @return true, if is valid position
      */
-    private boolean isValidPosition(Pair<Integer> pos)
+    private boolean IsValidPosition(Pair<Integer> pos)
     {
-        return (pos.first >= 0) && (pos.second >= 0)
-                && (pos.first < _board.Width) && (pos.second < _board.Height);
+        return (pos.first >= 0) && (pos.second >= 0) &&
+                (pos.first < _board.Width) && (pos.second < _board.Height);
     }
 
     /**
@@ -247,7 +247,7 @@ public class Maze
      */
     public boolean SetHeroPosition(Pair<Integer> pos)
     {
-        if (!isValidPosition(pos) || _board.GetCellT(pos) == 'X'
+        if (!IsValidPosition(pos) || _board.GetCellT(pos) == 'X'
                 || (pos.equals(_exitPosition) && !IsHeroArmed()))
             return false;
 
@@ -269,7 +269,7 @@ public class Maze
      */
     public boolean SetExitPosition(Pair<Integer> pos)
     {
-        if (!isValidPosition(pos))
+        if (!IsValidPosition(pos))
             return false;
 
         _exitPosition = pos;
@@ -290,7 +290,7 @@ public class Maze
      */
     public boolean SetSwordPosition(Pair<Integer> pos)
     {
-        if (!isValidPosition(pos) && !pos.equals(DEFAULT_POSITION) ||
+        if (!IsValidPosition(pos) && !pos.equals(DEFAULT_POSITION) ||
            (!pos.equals(DEFAULT_POSITION) && _board.GetCellT(pos) == 'X'))
             return false;
 
@@ -313,7 +313,7 @@ public class Maze
      */
     public boolean SetDragonPosition(int index, Pair<Integer> pos)
     {
-        if ((!isValidPosition(pos) && !pos.equals(DEFAULT_POSITION))
+        if ((!IsValidPosition(pos) && !pos.equals(DEFAULT_POSITION))
                 || (!pos.equals(DEFAULT_POSITION) && _board.GetCellT(pos) == 'X')
                 || (!pos.equals(DEFAULT_POSITION) && pos.equals(_exitPosition)))
             return false;
@@ -334,7 +334,7 @@ public class Maze
             boolean success = false;
             while (!success && _dragons.get(i).IsAlive())
             {
-                Key dir = Key.toEnum(r.nextInt(5));
+                Key dir = Key.toEnum(RandomEngine.GetInt(0, 4));
                 success = (dir == null) || this.MoveDragon(i, dir);
             }
         }
@@ -361,17 +361,6 @@ public class Maze
     }
 
     /**
-     * Gets the cell.
-     *
-     * @param pos the pos
-     * @return the cell
-     */
-    public Cell<Character> GetCell(Pair<Integer> pos)
-    {
-        return _board.GetCell(pos);
-    }
-
-    /**
      * Checks if is finished.
      *
      * @return true, if successful
@@ -382,7 +371,7 @@ public class Maze
     }
 
     /**
-     * Checks if is hero armed.
+     * Checks if hero is armed.
      *
      * @return true, if successful
      */
@@ -391,13 +380,16 @@ public class Maze
         return _hero.IsArmed();
     }
 
+    /**
+     * Hero equips sword.
+     */
     public void HeroEquipSword()
     {
         _hero.EquipSword();
     }
 
     /**
-     * Checks if is hero alive.
+     * Checks if hero is alive.
      *
      * @return true, if successful
      */
@@ -407,7 +399,7 @@ public class Maze
     }
 
     /**
-     * Checks if is dragon alive.
+     * Checks if dragon is alive.
      *
      * @param index the index
      * @return true, if successful
@@ -417,6 +409,23 @@ public class Maze
         return _dragons.get(index).IsAlive();
     }
 
+    /**
+     * Gets the underlying cell.
+     *
+     * @param pos the position
+     * @return the cell
+     */
+    public Cell<Character> GetCell(Pair<Integer> pos)
+    {
+        return _board.GetCell(pos);
+    }
+
+    /**
+     * Sets the underlying cell.
+     *
+     * @param pos the position
+     * @param val the character
+     */
     public void SetCell(Pair<Integer> pos, Character val)
     {
         _board.SetCell(pos, val);
