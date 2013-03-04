@@ -10,5 +10,7 @@ public enum UnitType
     /** The Dragon. */
     Dragon,
     /** The Sword. */
-    Sword
+    Sword,
+    /** The Eagle. */
+    Eagle
 }

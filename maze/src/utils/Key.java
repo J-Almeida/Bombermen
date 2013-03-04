@@ -16,7 +16,10 @@ public enum Key
     LEFT('A', 3),
 
     /** Right arrow (D). */
-    RIGHT('D', 4);
+    RIGHT('D', 4),
+    
+    /** 1 (1). */
+    ONE('1', 5);
 
     /**
      * Instantiates a new key.

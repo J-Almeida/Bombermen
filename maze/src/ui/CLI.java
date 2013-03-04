@@ -36,7 +36,7 @@ public class CLI
         {
             boolean success = true;
             System.out.println(maze);
-            System.out.print("Move hero (W, S, A, D): ");
+            System.out.print("Move hero (W, S, A, D, 1): ");
             do
             {
                 if (!success)
