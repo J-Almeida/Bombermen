@@ -17,4 +17,22 @@ public class Sword extends Unit
     public String toString() {
         return "E";
     }
+    
+    @Override
+    public void Update()
+    {
+	    while (!_eventQueue.isEmpty())
+		{
+			if (_eventQueue.peek().Type == EventType.Colision)
+			{
+				Colision<?> ev = (Colision<?>) _eventQueue.peek();
+				if (ev.Other.Type == UnitType.Hero)
+				{
+					this.Kill();
+				}						
+			}
+			
+			_eventQueue.poll();
+		}
+    }
 }

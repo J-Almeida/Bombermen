@@ -39,4 +39,27 @@ public class Hero extends Unit
     {
         return _armed ? "A" : "H";
     }
+    
+    @Override
+    public void Update()
+    {
+    	while (!_eventQueue.isEmpty())
+    	{
+    		if (_eventQueue.peek().Type == EventType.Colision)
+    		{
+				Colision<?> ev = (Colision<?>) _eventQueue.peek();
+				if (ev.Other.Type == UnitType.Sword)
+				{
+					this.EquipSword();
+				}
+				else if (ev.Other.Type == UnitType.Dragon)
+				{
+					if (!((Dragon)ev.Other).IsSleeping() && !this.IsArmed())
+						this.Kill();
+					
+				}						
+			}
+    		_eventQueue.poll();
+    	}
+    }
 }

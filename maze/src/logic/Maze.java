@@ -186,6 +186,8 @@ public class Maze
                         _hero.GetPosition().first + 1,
                         _hero.GetPosition().second));
                 break;
+		default:
+			return false;
         }
 
         return result;
@@ -227,6 +229,8 @@ public class Maze
                         _dragons.get(index).GetPosition().first + 1,
                         _dragons.get(index).GetPosition().second));
                 break;
+		default:
+			return false;
         }
 
         return result;
@@ -333,12 +337,6 @@ public class Maze
     public void Update()
     {
         for (int i = 0; i < _dragons.size(); i++)
-            _dragons.get(i).Update();
-
-        _sword.Update();
-        _hero.Update();
-
-        for (int i = 0; i < _dragons.size(); i++)
         {
             boolean success = false;
             while (!success && _dragons.get(i).IsAlive() && _dragons.get(i).CanMove())
@@ -352,20 +350,24 @@ public class Maze
             _finished = true;
         if (_hero.GetPosition().equals(_sword.GetPosition()))
         {
-            _sword.Kill();
-            _hero.EquipSword();
+            _sword.pushEvent(new Colision<Hero>(_hero));
+            _hero.pushEvent(new Colision<Sword>(_sword));
         }
 
         for (Dragon d : _dragons)
         {
             if (IsAdjacent(_hero.GetPosition(), d.GetPosition()) || d.GetPosition().equals(_hero.GetPosition()))
             {
-                if (IsHeroArmed())
-                    d.Kill();
-                else if (!d.IsSleeping())
-                    _hero.Kill();
+            	d.pushEvent(new Colision<Hero>(_hero));
+            	_hero.pushEvent(new Colision<Dragon>(d));
             }
         }
+        
+        for (int i = 0; i < _dragons.size(); i++)
+            _dragons.get(i).Update();
+
+        _sword.Update();
+        _hero.Update();
     }
 
     /**

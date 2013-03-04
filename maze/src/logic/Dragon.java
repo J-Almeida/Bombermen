@@ -9,6 +9,7 @@ public class Dragon extends Unit
 {
     /** Is dragon sleeping? */
     private boolean _asleep = false;
+    
     /** Sleep countdown */
     private int _sleepTimer = 0;
 
@@ -100,5 +101,20 @@ public class Dragon extends Unit
                     SetToSleep(RandomEngine.GetInt(10, 20));
             }
         }
+        
+        while (!_eventQueue.isEmpty())
+    	{
+    		if (_eventQueue.peek().Type == EventType.Colision)
+    		{
+				Colision<?> ev = (Colision<?>) _eventQueue.peek();
+				if (ev.Other.Type == UnitType.Hero)
+				{
+					if (((Hero) ev.Other).IsArmed())
+						this.Kill();
+				}						
+    		}
+    		
+    		_eventQueue.poll();
+    	}
     }
 }
