@@ -11,12 +11,12 @@ public class DefaultMazeGenerator extends MazeGenerator
         String[] cells = { "XXXXXXXXXX",
                            "XH       X",
                            "X XX X X X",
-                           "X XX X X X",
+                           "XDXX X X X",
                            "X XX X X X",
                            "X      X S",
                            "X XX X X X",
                            "X XX X X X",
-                           "X XX     X",
+                           "XEXX     X",
                            "XXXXXXXXXX" };
         
         for (int x = 0; x < _size; x++) // width

@@ -1,16 +1,10 @@
 package model;
 
-import utils.Pair;
-
 public class Position 
 {
 	public Position() {	}
 	public Position(int x, int y) { X = x; Y = y; }
-	
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @SuppressWarnings("unchecked")
+
     @Override
     public boolean equals(Object rhs)
     {

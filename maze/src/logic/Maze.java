@@ -501,4 +501,9 @@ public class Maze
     {
         _db = db;
     }
+
+    public Hero GetHero()
+    {
+        return _hero;
+    }
 }

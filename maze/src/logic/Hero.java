@@ -33,6 +33,14 @@ public class Hero extends Unit
     {
         _armed = true;
     }
+    
+    /**
+     * Unequip sword.
+     */
+    public void UnequipSword()
+    {
+        _armed = false;
+    }
 
     @Override
     public String toString()
