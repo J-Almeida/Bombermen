@@ -5,6 +5,6 @@ package logic;
  */
 public enum EventType
 {
-    /** Colision */
-    Colision;
+    /** Collision */
+    Collision;
 }

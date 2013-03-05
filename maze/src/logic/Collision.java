@@ -4,7 +4,7 @@ public class Collision extends Event
 {
     public Collision(Unit other)
     {
-        super(EventType.Colision);
+        super(EventType.Collision);
         Other = other;
     }
 
