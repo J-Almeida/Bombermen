@@ -16,10 +16,11 @@ public class Maze
 {
     /** The Constant DEFAULT_POSITION. */
     private static final Pair<Integer> DEFAULT_POSITION = Pair.IntN(-1, -1);
-
+    static final Path PATH = new Path();
+    static final Wall WALL = new Wall();
     /** The Grid. */
-    private Grid<Character> _board;
-
+    private Grid<InanimatedObject> _board;
+   
     /** The exit position. */
     private Pair<Integer> _exitPosition = DEFAULT_POSITION;
 
@@ -49,7 +50,7 @@ public class Maze
      */
     public Maze(int width, int height)
     {
-        _board = new Grid<Character>(width, height, ' ');
+        _board = new Grid<InanimatedObject>(width, height, PATH);
     }
 
     /**
@@ -86,7 +87,9 @@ public class Maze
     @Override
     public String toString()
     {
-        _board.SetCell(_exitPosition, 'S');
+    	char[] result = _board.toString().toCharArray();
+    	
+    	result[_exitPosition.second * (_board.Width * 2) + _exitPosition.first * 2] = 'S';
 
         if (_sword.IsAlive())
         {
@@ -96,28 +99,25 @@ public class Maze
             {
                 if (d.IsAlive() && _sword.GetPosition().equals(d.GetPosition()))
                 {
-                    _board.SetCell(_sword.GetPosition(), d.IsSleeping() ? 'f' : 'F');
+                	result[d.GetPosition().second * (_board.Width * 2) + d.GetPosition().first * 2] = d.IsSleeping() ? 'f' : 'F';
                     placedSword = true;
                 }
                 else if (d.IsAlive())
-                    _board.SetCell(d.GetPosition(), d.IsSleeping() ? 'd' : 'D');
+                    result[d.GetPosition().second * (_board.Width * 2) + d.GetPosition().first * 2] = d.toString().charAt(0);
             }
             if (!placedSword)
-                _board.SetCell(_sword.GetPosition(), 'E');
+            	result[_sword.GetPosition().second * (_board.Width * 2) + _sword.GetPosition().first * 2] = _sword.toString().charAt(0);
         }
         else
         {
             for (Dragon d: _dragons)
                 if (d.IsAlive())
-                    _board.SetCell(d.GetPosition(), d.IsSleeping() ? 'd' : 'D');
+                	result[d.GetPosition().second * (_board.Width * 2) + d.GetPosition().first * 2] = d.toString().charAt(0);
         }
-
-        boolean eagleWasOnWall = false;
 
         if (_eagle.IsAlive() && _eagle.GetState() != EagleState.FollowingHero)
         {
-            eagleWasOnWall = IsWall(_eagle.GetPosition());
-            _board.SetCell(_eagle.GetPosition(), 'V');
+            result[_eagle.GetPosition().second * (_board.Width * 2) + _eagle.GetPosition().first * 2] = _eagle.toString().charAt(0);
         }
 
         if (_hero.IsAlive())
@@ -125,37 +125,21 @@ public class Maze
             char h;
 
             if (_hero.IsArmed() && _eagle.GetState() == EagleState.FollowingHero)
-                h = '£';
+                h = 'Â£';
             else if (_eagle.GetState() == EagleState.FollowingHero)
-                h = '§';
-            else if (_hero.IsArmed())
-                h = 'A';
+                h = 'Â§';
             else
-                h = 'H';
+                h = _hero.toString().charAt(0);
 
-            _board.SetCell(_hero.GetPosition(), h);
+            result[_hero.GetPosition().second * (_board.Width * 2) + _hero.GetPosition().first * 2] = h;
         }
 
-        String res = _board.toString();
-
-        // reset
-        _board.SetCell(_exitPosition, ' ');
-        if (_hero.IsAlive())
-            _board.SetCell(_hero.GetPosition(), ' ');
-        if (_sword.IsAlive())
-            _board.SetCell(_sword.GetPosition(), ' ');
-        if (_eagle.IsAlive())
-            _board.SetCell(_eagle.GetPosition(), eagleWasOnWall ? 'X' : ' ');
-        for (Dragon d : _dragons)
-            if (d.IsAlive())
-                _board.SetCell(d.GetPosition(), ' ');
-
-        return res;
+        return String.copyValueOf(result);
     }
 
     public boolean IsWall(Pair<Integer> pos)
     {
-        return _board.GetCellT(pos) == 'X';
+        return _board.GetCellT(pos).IsWall();
     }
 
     /**
@@ -477,7 +461,7 @@ public class Maze
      * @param pos the position
      * @return the cell
      */
-    public Cell<Character> GetCell(Pair<Integer> pos)
+    public Cell<InanimatedObject> GetCell(Pair<Integer> pos)
     {
         return _board.GetCell(pos);
     }
@@ -488,7 +472,7 @@ public class Maze
      * @param pos the position
      * @param val the character
      */
-    public void SetCell(Pair<Integer> pos, Character val)
+    public void SetCell(Pair<Integer> pos, InanimatedObject val)
     {
         _board.SetCell(pos, val);
     }

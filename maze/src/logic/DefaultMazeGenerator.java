@@ -71,7 +71,7 @@ public class DefaultMazeGenerator extends MazeGenerator
                 if (c != 'X' && c != ' ')
                     c = ' ';
 
-                _maze.SetCell(Pair.IntN(i, j), c);
+                _maze.SetCell(Pair.IntN(i, j), c == ' ' ? Maze.PATH : Maze.WALL);
             }
         }
     }

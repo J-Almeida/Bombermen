@@ -33,26 +33,26 @@ public abstract class MazeGenerator
         for (int x = 1; x < _maze.GetWidth() - 1; x++)
         {
             int y = 1;
-            Cell<Character> cell = _maze.GetCell(Pair.IntN(x, y));
-            if (cell.GetValue() == ' ')
+            Cell<InanimatedObject> cell = _maze.GetCell(Pair.IntN(x, y));
+            if (cell.GetValue().IsPath())
                 whitelst.add(new CellPos(_maze.GetCell(Pair.IntN(x, y-1)), Pair.IntN(x, y-1)));
 
             y = _maze.GetHeight() - 2;
             cell = _maze.GetCell(Pair.IntN(x, y));
-            if (cell.GetValue() == ' ')
+            if (cell.GetValue().IsPath())
                 whitelst.add(new CellPos(_maze.GetCell(Pair.IntN(x, y+1)), Pair.IntN(x, y+1)));
         }
 
         for (int y = 2; y < _maze.GetHeight() - 2; y++)
         {
             int x = 1;
-            Cell<Character> cell = _maze.GetCell(Pair.IntN(x, y));
-            if (cell.GetValue() == ' ')
+            Cell<InanimatedObject> cell = _maze.GetCell(Pair.IntN(x, y));
+            if (cell.GetValue().IsPath())
                 whitelst.add(new CellPos(_maze.GetCell(Pair.IntN(x-1, y)), Pair.IntN(x-1, y)));
 
             x = _maze.GetWidth() - 2;
             cell = _maze.GetCell(Pair.IntN(x, y));
-            if (cell.GetValue() == ' ')
+            if (cell.GetValue().IsPath())
                 whitelst.add(new CellPos(_maze.GetCell(Pair.IntN(x+1, y)), Pair.IntN(x+1, y)));
         }
 
@@ -148,14 +148,14 @@ public abstract class MazeGenerator
          * @param c the cell
          * @param pos the position
          */
-        CellPos(Cell<Character> c, Pair<Integer> pos)
+        CellPos(Cell<InanimatedObject> c, Pair<Integer> pos)
         {
             Cell = c;
             Position = pos;
         }
 
         /** The Cell. */
-        Cell<Character> Cell;
+        Cell<InanimatedObject> Cell;
 
         /** The Position. */
         Pair<Integer> Position;

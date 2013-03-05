@@ -9,13 +9,12 @@ import utils.Pair;
 /**
  * The Class Unit.
  */
-public abstract class Unit {
+public abstract class Unit extends WorldObject{
 
+	public final UnitType Type;
+	
     /** The Constant DEFAULT_POSITION. */
     public final static Pair<Integer> DEFAULT_POSITION = Pair.IntN(-1, -1);
-
-    /** The Type. */
-    public final UnitType Type;
 
     /** The _alive. */
     protected boolean _alive;
@@ -33,6 +32,7 @@ public abstract class Unit {
      */
     public Unit(UnitType type)
     {
+    	super(WorldObjectType.Unit);
         Type = type;
         _alive = true;
     }

@@ -16,7 +16,7 @@ public class RandomMazeGenerator extends MazeGenerator
 
         for (int i = 0; i < _maze.GetWidth(); i++)
             for (int j = 0; j < _maze.GetHeight(); j++)
-                _maze.GetCell(Pair.IntN(i, j)).SetValue('X');
+                _maze.GetCell(Pair.IntN(i, j)).SetValue(Maze.WALL);
 
         CellNeighbors h = new CellNeighbors();
 
@@ -24,7 +24,7 @@ public class RandomMazeGenerator extends MazeGenerator
 
         h.cp = new CellPos(_maze.GetCell(initPos), initPos);
         h.cp.Cell.Visit();
-        h.cp.Cell.SetValue(' ');
+        h.cp.Cell.SetValue(Maze.PATH);
         h.nbrs = GetNeighbors(h.cp.Position);
 
         do
@@ -45,14 +45,14 @@ public class RandomMazeGenerator extends MazeGenerator
                     {
                         if (RandomEngine.GetBool(75))
                         {
-                            nb.Element.second.Cell.SetValue(' ');
+                            nb.Element.second.Cell.SetValue(Maze.PATH);
                             nb.Element.second.Cell.Visit();
                         }
                         success = false;
                     }
                     else
                     {
-                        nb.Element.second.Cell.SetValue(' ');
+                        nb.Element.second.Cell.SetValue(Maze.PATH);
                         nb.Element.second.Cell.Visit();
                         stk.push(h);
                         success = true;
@@ -69,14 +69,14 @@ public class RandomMazeGenerator extends MazeGenerator
                 h = new CellNeighbors();
                 h.cp = nb.Element.first;
                 h.cp.Cell.Visit();
-                h.cp.Cell.SetValue(' ');
+                h.cp.Cell.SetValue(Maze.PATH);
                 h.nbrs = GetNeighbors(h.cp.Position);
             }
             else
             {
                 h = stk.pop();
                 h.cp.Cell.Visit();
-                h.cp.Cell.SetValue(' ');
+                h.cp.Cell.SetValue(Maze.PATH);
             }
         } while (!stk.isEmpty());
 
