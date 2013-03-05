@@ -2,6 +2,7 @@ package logic;
 
 import java.util.Stack;
 
+import model.Position;
 import utils.Pair;
 import utils.RandomEngine;
 import utils.Utilities;
@@ -16,16 +17,16 @@ public class RandomMazeGenerator extends MazeGenerator
 
         for (int i = 0; i < _maze.GetWidth(); i++)
             for (int j = 0; j < _maze.GetHeight(); j++)
-                _maze.GetCell(Pair.IntN(i, j)).SetValue(Maze.WALL);
+                _maze.GetCell(new Position(i, j)).SetValue(Maze.WALL);
 
         CellNeighbors h = new CellNeighbors();
 
-        Pair<Integer> initPos = Utilities.RandomPairI(1, _size - 2, 1, _size - 2);
+        Position initPos = Utilities.RandomPosition(1, _size - 2, 1, _size - 2);
 
         h.cp = new CellPos(_maze.GetCell(initPos), initPos);
         h.cp.Cell.Visit();
         h.cp.Cell.SetValue(Maze.PATH);
-        h.nbrs = GetNeighbors(h.cp.Position);
+        h.nbrs = GetNeighbors(h.cp.Pos);
 
         do
         {
@@ -38,10 +39,10 @@ public class RandomMazeGenerator extends MazeGenerator
 
                 if (!nb.Element.first.Cell.WasVisited())
                 {
-                    if (nb.Element.first.Position.first == 0 ||
-                            nb.Element.first.Position.second == 0 ||
-                            nb.Element.first.Position.first == _maze.GetWidth() - 1 ||
-                            nb.Element.first.Position.second == _maze.GetHeight() - 1)
+                    if (nb.Element.first.Pos.X == 0 ||
+                            nb.Element.first.Pos.Y == 0 ||
+                            nb.Element.first.Pos.X == _maze.GetWidth() - 1 ||
+                            nb.Element.first.Pos.Y == _maze.GetHeight() - 1)
                     {
                         if (RandomEngine.GetBool(75))
                         {
@@ -70,7 +71,7 @@ public class RandomMazeGenerator extends MazeGenerator
                 h.cp = nb.Element.first;
                 h.cp.Cell.Visit();
                 h.cp.Cell.SetValue(Maze.PATH);
-                h.nbrs = GetNeighbors(h.cp.Position);
+                h.nbrs = GetNeighbors(h.cp.Pos);
             }
             else
             {

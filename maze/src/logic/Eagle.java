@@ -2,7 +2,7 @@ package logic;
 
 import java.util.Stack;
 
-import utils.Pair;
+import model.Position;
 
 public class Eagle extends Unit
 {
@@ -50,11 +50,11 @@ public class Eagle extends Unit
         return _armed;
     }
     
-    private Pair<Integer> _initialPosition = null;
-    private Pair<Integer> _swordPosition = null;
-    private Stack<Pair<Integer>> _wayPath = new Stack<Pair<Integer>>();
+    private Position _initialPosition = null;
+    private Position _swordPosition = null;
+    private Stack<Position> _wayPath = new Stack<Position>();
     
-    public void SetSwordPosition(Pair<Integer> pos)
+    public void SetSwordPosition(Position pos)
     {
         _swordPosition = pos;
     }
@@ -71,8 +71,8 @@ public class Eagle extends Unit
             }
             else
             {
-                double deltaX = _swordPosition.first - GetPosition().first;
-                double deltaY = _swordPosition.second - GetPosition().second;
+                double deltaX = _swordPosition.X - GetPosition().X;
+                double deltaY = _swordPosition.Y - GetPosition().Y;
                 
                 double dist = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
                 if (dist > _speed)
@@ -80,9 +80,9 @@ public class Eagle extends Unit
                     double ratio = _speed / dist;
                     double xMove = ratio * deltaX;
                     double yMove = ratio * deltaY;
-                    double newXPos = xMove + GetPosition().first;
-                    double newYPos = yMove + GetPosition().second;
-                    SetPosition(Pair.IntN(Math.round((float)newXPos), Math.round((float)newYPos)));
+                    double newXPos = xMove + GetPosition().X;
+                    double newYPos = yMove + GetPosition().Y;
+                    SetPosition(new Position(Math.round((float)newXPos), Math.round((float)newYPos)));
                 }
                 else
                 {
@@ -130,6 +130,6 @@ public class Eagle extends Unit
     @Override
     public String toString()
     {
-        return "V";
+        return IsArmed() ? "\u00A5"/* Yen */ : "W";
     }
 }

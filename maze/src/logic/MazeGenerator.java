@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import model.Cell;
+import model.Position;
 import utils.Pair;
 import utils.Utilities;
 
@@ -33,30 +34,30 @@ public abstract class MazeGenerator
         for (int x = 1; x < _maze.GetWidth() - 1; x++)
         {
             int y = 1;
-            Cell<InanimatedObject> cell = _maze.GetCell(Pair.IntN(x, y));
+            Cell<InanimatedObject> cell = _maze.GetCell(new Position(x, y));
             if (cell.GetValue().IsPath())
-                whitelst.add(new CellPos(_maze.GetCell(Pair.IntN(x, y-1)), Pair.IntN(x, y-1)));
+                whitelst.add(new CellPos(_maze.GetCell(new Position(x, y-1)), new Position(x, y-1)));
 
             y = _maze.GetHeight() - 2;
-            cell = _maze.GetCell(Pair.IntN(x, y));
+            cell = _maze.GetCell(new Position(x, y));
             if (cell.GetValue().IsPath())
-                whitelst.add(new CellPos(_maze.GetCell(Pair.IntN(x, y+1)), Pair.IntN(x, y+1)));
+                whitelst.add(new CellPos(_maze.GetCell(new Position(x, y+1)), new Position(x, y+1)));
         }
 
         for (int y = 2; y < _maze.GetHeight() - 2; y++)
         {
             int x = 1;
-            Cell<InanimatedObject> cell = _maze.GetCell(Pair.IntN(x, y));
+            Cell<InanimatedObject> cell = _maze.GetCell(new Position(x, y));
             if (cell.GetValue().IsPath())
-                whitelst.add(new CellPos(_maze.GetCell(Pair.IntN(x-1, y)), Pair.IntN(x-1, y)));
+                whitelst.add(new CellPos(_maze.GetCell(new Position(x-1, y)), new Position(x-1, y)));
 
             x = _maze.GetWidth() - 2;
-            cell = _maze.GetCell(Pair.IntN(x, y));
+            cell = _maze.GetCell(new Position(x, y));
             if (cell.GetValue().IsPath())
-                whitelst.add(new CellPos(_maze.GetCell(Pair.IntN(x+1, y)), Pair.IntN(x+1, y)));
+                whitelst.add(new CellPos(_maze.GetCell(new Position(x+1, y)), new Position(x+1, y)));
         }
 
-        _maze.SetExitPosition(Utilities.RandomElement(whitelst).Element.Position);
+        _maze.SetExitPosition(Utilities.RandomElement(whitelst).Element.Pos);
     }
 
     /**
@@ -69,17 +70,17 @@ public abstract class MazeGenerator
             int idx = _maze.AddDragon();
             boolean success;
             List<Pair<CellPos>> lst = GetNeighbors(_maze.GetHeroPosition());
-            List<Pair<Integer>> lstn = new LinkedList<Pair<Integer>>();
+            List<Position> lstn = new LinkedList<Position>();
 
             for (Pair<CellPos> ele : lst)
             {
-                lstn.add(ele.first.Position);
-                lstn.add(ele.second.Position);
+                lstn.add(ele.first.Pos);
+                lstn.add(ele.second.Pos);
             }
 
             do
             {
-                Pair<Integer> p = Utilities.RandomPairI(1, _maze.GetWidth() - 2, 1, _maze.GetHeight() - 2);
+            	Position p = Utilities.RandomPosition(1, _maze.GetWidth() - 2, 1, _maze.GetHeight() - 2);
 
                 success = !lstn.contains(p);
 
@@ -97,7 +98,7 @@ public abstract class MazeGenerator
         boolean success;
         do
         {
-            success = _maze.SetSwordPosition(Utilities.RandomPairI(1, _maze.GetWidth() - 2, 1, _maze.GetHeight() - 2));
+            success = _maze.SetSwordPosition(Utilities.RandomPosition(1, _maze.GetWidth() - 2, 1, _maze.GetHeight() - 2));
         } while (!success);
     }
 
@@ -107,32 +108,32 @@ public abstract class MazeGenerator
      * @param pos the position
      * @return the list of ("cell", 2nd - "wall")s
      */
-    protected List<Pair<CellPos>> GetNeighbors(Pair<Integer> pos)
+    protected List<Pair<CellPos>> GetNeighbors(Position pos)
     {
         List<Pair<CellPos>> l = new LinkedList<Pair<CellPos>>();
         int w = _maze.GetWidth() - 1;
-        int x = pos.first;
-        int y = pos.second;
+        int x = pos.X;
+        int y = pos.Y;
 
         if (y >= 2)
             l.add(new Pair<CellPos>(
-                    new CellPos(_maze.GetCell(Pair.IntN(x, y - 2)), Pair.IntN(x, y - 2)),    //Cell
-                    new CellPos(_maze.GetCell(Pair.IntN(x, y - 1)), Pair.IntN(x, y - 1))));  //Wall
+                    new CellPos(_maze.GetCell(new Position(x, y - 2)), new Position(x, y - 2)),    //Cell
+                    new CellPos(_maze.GetCell(new Position(x, y - 1)), new Position(x, y - 1))));  //Wall
 
         if (x >= 2)
             l.add(new Pair<CellPos>(
-                    new CellPos(_maze.GetCell(Pair.IntN(x - 2, y)), Pair.IntN(x - 2, y)),
-                    new CellPos(_maze.GetCell(Pair.IntN(x - 1, y)), Pair.IntN(x - 1, y))));
+                    new CellPos(_maze.GetCell(new Position(x - 2, y)), new Position(x - 2, y)),
+                    new CellPos(_maze.GetCell(new Position(x - 1, y)), new Position(x - 1, y))));
 
         if (x <= (w - 2))
             l.add(new Pair<CellPos>(
-                    new CellPos(_maze.GetCell(Pair.IntN(x + 2, y)), Pair.IntN(x + 2, y)),
-                    new CellPos(_maze.GetCell(Pair.IntN(x + 1, y)), Pair.IntN(x + 1, y))));
+                    new CellPos(_maze.GetCell(new Position(x + 2, y)), new Position(x + 2, y)),
+                    new CellPos(_maze.GetCell(new Position(x + 1, y)), new Position(x + 1, y))));
 
         if (y <= (w - 2))
             l.add(new Pair<CellPos>(
-                    new CellPos(_maze.GetCell(Pair.IntN(x, y + 2)), Pair.IntN(x, y + 2)),
-                    new CellPos(_maze.GetCell(Pair.IntN(x, y + 1)), Pair.IntN(x, y + 1))));
+                    new CellPos(_maze.GetCell(new Position(x, y + 2)), new Position(x, y + 2)),
+                    new CellPos(_maze.GetCell(new Position(x, y + 1)), new Position(x, y + 1))));
 
         return l;
     }
@@ -148,17 +149,17 @@ public abstract class MazeGenerator
          * @param c the cell
          * @param pos the position
          */
-        CellPos(Cell<InanimatedObject> c, Pair<Integer> pos)
+        CellPos(Cell<InanimatedObject> c, Position pos)
         {
             Cell = c;
-            Position = pos;
+            Pos = pos;
         }
 
         /** The Cell. */
         Cell<InanimatedObject> Cell;
 
         /** The Position. */
-        Pair<Integer> Position;
+        Position Pos;
     }
 
     /**

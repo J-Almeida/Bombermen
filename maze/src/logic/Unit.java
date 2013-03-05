@@ -3,7 +3,7 @@ package logic;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import utils.Pair;
+import model.Position;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -14,13 +14,13 @@ public abstract class Unit extends WorldObject{
 	public final UnitType Type;
 	
     /** The Constant DEFAULT_POSITION. */
-    public final static Pair<Integer> DEFAULT_POSITION = Pair.IntN(-1, -1);
+    public final static Position DEFAULT_POSITION = new Position();
 
     /** The _alive. */
     protected boolean _alive;
 
     /** The _position. */
-    protected Pair<Integer> _position = DEFAULT_POSITION;
+    protected Position _position = DEFAULT_POSITION;
 
     /** The _eventQueue */
     protected Queue<Event> _eventQueue = new LinkedList<Event>();
@@ -42,7 +42,7 @@ public abstract class Unit extends WorldObject{
      *
      * @return the pair
      */
-    public Pair<Integer> GetPosition()
+    public Position GetPosition()
     {
         return _position;
     }
@@ -52,7 +52,7 @@ public abstract class Unit extends WorldObject{
      *
      * @param pos the pos
      */
-    public void SetPosition(Pair<Integer> pos)
+    public void SetPosition(Position pos)
     {
         _position = pos;
     }

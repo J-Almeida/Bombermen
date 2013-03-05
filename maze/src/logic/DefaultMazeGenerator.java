@@ -1,6 +1,6 @@
 package logic;
 
-import utils.Pair;
+import model.Position;
 
 /** ConcreteBuilder - Default 10x10 maze */
 public class DefaultMazeGenerator extends MazeGenerator
@@ -19,17 +19,17 @@ public class DefaultMazeGenerator extends MazeGenerator
                            "X XX     X",
                            "XXXXXXXXXX" };
         
-        for (int i = 0; i < _size; i++) // width
+        for (int x = 0; x < _size; x++) // width
         {
-            for (int j = 0; j < _size; j++) // height
+            for (int y = 0; y < _size; y++) // height
             {
-                char c = cells[j].charAt(i);
+                char c = cells[y].charAt(x);
                 if (c == 'H')
                 {
                     if (!_maze.GetHeroPosition().equals(Unit.DEFAULT_POSITION))
                         throw new IllegalArgumentException();
 
-                    _maze.SetHeroPosition(Pair.IntN(i, j));
+                    _maze.SetHeroPosition(new Position(x, y));
                 }
                 else if (c == 'A')
                 {
@@ -37,33 +37,33 @@ public class DefaultMazeGenerator extends MazeGenerator
                         throw new IllegalArgumentException();
 
                     _maze.HeroEquipSword();
-                    _maze.SetHeroPosition(Pair.IntN(i, j));
+                    _maze.SetHeroPosition(new Position(x, y));
                 }
                 else if (c == 'E')
                 {
                     if (!_maze.GetSwordPosition().equals(Unit.DEFAULT_POSITION) || _maze.IsHeroArmed())
                         throw new IllegalArgumentException();
 
-                    _maze.SetSwordPosition((Pair.IntN(i, j)));
+                    _maze.SetSwordPosition((new Position(x, y)));
                 }
                 else if (c == 'F')
                 {
                     if (!_maze.GetSwordPosition().equals(Unit.DEFAULT_POSITION) || _maze.IsHeroArmed())
                         throw new IllegalArgumentException();
 
-                    _maze.SetSwordPosition(Pair.IntN(i, j));
-                    _maze.SetDragonPosition(_maze.AddDragon(), Pair.IntN(i, j));
+                    _maze.SetSwordPosition(new Position(x, y));
+                    _maze.SetDragonPosition(_maze.AddDragon(), new Position(x, y));
                 }
                 else if (c == 'D')
                 {
-                    _maze.SetDragonPosition(_maze.AddDragon(), Pair.IntN(i, j));
+                    _maze.SetDragonPosition(_maze.AddDragon(), new Position(x, y));
                 }
                 else if (c == 'S')
                 {
                     if (!_maze.GetExitPosition().equals(Unit.DEFAULT_POSITION))
                         throw new IllegalArgumentException();
 
-                    _maze.SetExitPosition(Pair.IntN(i, j));
+                    _maze.SetExitPosition(new Position(x, y));
                 }
                 else if (c != 'X' && c != ' ')
                     throw new IllegalArgumentException();
@@ -71,7 +71,7 @@ public class DefaultMazeGenerator extends MazeGenerator
                 if (c != 'X' && c != ' ')
                     c = ' ';
 
-                _maze.SetCell(Pair.IntN(i, j), c == ' ' ? Maze.PATH : Maze.WALL);
+                _maze.SetCell(new Position(x, y), c == ' ' ? Maze.PATH : Maze.WALL);
             }
         }
     }

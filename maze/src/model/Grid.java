@@ -71,10 +71,10 @@ public class Grid<T>
      * @param pos the pos
      * @return the cell
      */
-    public Cell<T> GetCell(utils.Pair<Integer> pos)
+    public Cell<T> GetCell(Position pos)
     {
-        int column = pos.first;
-        int line = pos.second;
+        int column = pos.X;
+        int line = pos.Y;
 
         if (line >= 0 && line < _cells.length && column >= 0 && column < _cells[line].length)
             return _cells[line][column];
@@ -87,7 +87,7 @@ public class Grid<T>
      * @param pos the pos
      * @return the t
      */
-    public T GetCellT(utils.Pair<Integer> pos)
+    public T GetCellT(Position pos)
     {
         Cell<T> c = GetCell(pos);
         if (c == null)
@@ -101,10 +101,10 @@ public class Grid<T>
      * @param pos the pos
      * @param val the val
      */
-    public void SetCell(utils.Pair<Integer> pos, T val)
+    public void SetCell(Position pos, T val)
     {
-        int column = pos.first;
-        int line = pos.second;
+        int column = pos.X;
+        int line = pos.Y;
         if (line >= 0 && line < _cells.length && column >= 0 && column < _cells[line].length)
             _cells[line][column].SetValue(val);
     }

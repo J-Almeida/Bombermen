@@ -2,6 +2,8 @@ package utils;
 
 import java.util.List;
 
+import model.Position;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Utilities.
@@ -47,6 +49,11 @@ public abstract class Utilities
     public static Pair<Integer> RandomPairI(int min1, int max1, int min2, int max2)
     {
         return Pair.IntN(RandomEngine.GetInt(min1, max1), RandomEngine.GetInt(min1, max2));
+    }
+    
+    public static Position RandomPosition(int min1, int max1, int min2, int max2)
+    {
+    	return new Position(RandomEngine.GetInt(min1, max1), RandomEngine.GetInt(min1, max2));
     }
 
     /**

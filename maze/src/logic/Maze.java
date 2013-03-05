@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import logic.Eagle.EagleState;
 import model.Cell;
 import model.Grid;
+import model.Position;
 import utils.Key;
-import utils.Pair;
 import utils.RandomEngine;
 
 /**
@@ -15,14 +15,14 @@ import utils.RandomEngine;
 public class Maze
 {
     /** The Constant DEFAULT_POSITION. */
-    private static final Pair<Integer> DEFAULT_POSITION = Pair.IntN(-1, -1);
+    private static final Position DEFAULT_POSITION = new Position();
     static final Path PATH = new Path();
     static final Wall WALL = new Wall();
     /** The Grid. */
     private Grid<InanimatedObject> _board;
    
     /** The exit position. */
-    private Pair<Integer> _exitPosition = DEFAULT_POSITION;
+    private Position _exitPosition = DEFAULT_POSITION;
 
     /** The hero. */
     private Hero _hero = new Hero();
@@ -89,7 +89,7 @@ public class Maze
     {
     	char[] result = _board.toString().toCharArray();
     	
-    	result[_exitPosition.second * (_board.Width * 2) + _exitPosition.first * 2] = 'S';
+    	result[_exitPosition.Y * (_board.Width * 2) + _exitPosition.X * 2] = 'S';
 
         if (_sword.IsAlive())
         {
@@ -99,25 +99,25 @@ public class Maze
             {
                 if (d.IsAlive() && _sword.GetPosition().equals(d.GetPosition()))
                 {
-                	result[d.GetPosition().second * (_board.Width * 2) + d.GetPosition().first * 2] = d.IsSleeping() ? 'f' : 'F';
+                	result[d.GetPosition().Y * (_board.Width * 2) + d.GetPosition().X * 2] = d.IsSleeping() ? 'f' : 'F';
                     placedSword = true;
                 }
                 else if (d.IsAlive())
-                    result[d.GetPosition().second * (_board.Width * 2) + d.GetPosition().first * 2] = d.toString().charAt(0);
+                    result[d.GetPosition().Y * (_board.Width * 2) + d.GetPosition().X * 2] = d.toString().charAt(0);
             }
             if (!placedSword)
-            	result[_sword.GetPosition().second * (_board.Width * 2) + _sword.GetPosition().first * 2] = _sword.toString().charAt(0);
+            	result[_sword.GetPosition().Y * (_board.Width * 2) + _sword.GetPosition().X * 2] = _sword.toString().charAt(0);
         }
         else
         {
             for (Dragon d: _dragons)
                 if (d.IsAlive())
-                	result[d.GetPosition().second * (_board.Width * 2) + d.GetPosition().first * 2] = d.toString().charAt(0);
+                	result[d.GetPosition().Y * (_board.Width * 2) + d.GetPosition().X * 2] = d.toString().charAt(0);
         }
 
         if (_eagle.IsAlive() && _eagle.GetState() != EagleState.FollowingHero)
         {
-            result[_eagle.GetPosition().second * (_board.Width * 2) + _eagle.GetPosition().first * 2] = _eagle.toString().charAt(0);
+            result[_eagle.GetPosition().Y * (_board.Width * 2) + _eagle.GetPosition().X * 2] = _eagle.toString().charAt(0);
         }
 
         if (_hero.IsAlive())
@@ -130,13 +130,13 @@ public class Maze
             else
                 h = _hero.toString().charAt(0);
 
-            result[_hero.GetPosition().second * (_board.Width * 2) + _hero.GetPosition().first * 2] = h;
+            result[_hero.GetPosition().Y * (_board.Width * 2) + _hero.GetPosition().X * 2] = h;
         }
 
         return String.copyValueOf(result);
     }
 
-    public boolean IsWall(Pair<Integer> pos)
+    public boolean IsWall(Position pos)
     {
         return _board.GetCellT(pos).IsWall();
     }
@@ -147,10 +147,10 @@ public class Maze
      * @param pos the pos
      * @return true, if is valid position
      */
-    private boolean IsValidPosition(Pair<Integer> pos)
+    private boolean IsValidPosition(Position pos)
     {
-        return (pos.first >= 0) && (pos.second >= 0) &&
-                (pos.first < _board.Width) && (pos.second < _board.Height);
+        return (pos.X >= 0) && (pos.Y >= 0) &&
+                (pos.X < _board.Width) && (pos.Y < _board.Height);
     }
 
     /**
@@ -160,12 +160,12 @@ public class Maze
      * @param pos2 the pos2
      * @return true, if is adjacent
      */
-    private boolean IsAdjacent(Pair<Integer> pos1, Pair<Integer> pos2)
+    private boolean IsAdjacent(Position pos1, Position pos2)
     {
-        return (pos1.equals(Pair.IntN(pos2.first + 1, pos2.second)))
-                || (pos1.equals(Pair.IntN(pos2.first - 1, pos2.second)))
-                || (pos1.equals(Pair.IntN(pos2.first, pos2.second + 1)))
-                || (pos1.equals(Pair.IntN(pos2.first, pos2.second - 1)));
+        return (pos1.equals(new Position(pos2.X + 1, pos2.Y)))
+                || (pos1.equals(new Position(pos2.X - 1, pos2.Y)))
+                || (pos1.equals(new Position(pos2.X, pos2.Y + 1)))
+                || (pos1.equals(new Position(pos2.X, pos2.Y - 1)));
     }
 
     public void SendEagleToSword()
@@ -187,21 +187,21 @@ public class Maze
     {
         boolean result = false;
 
-        Pair<Integer> newPos;
+        Position newPos;
 
         switch (direction)
         {
             case UP:
-                newPos = Pair.IntN(_hero.GetPosition().first, _hero.GetPosition().second - 1);
+                newPos = new Position(_hero.GetPosition().X, _hero.GetPosition().Y - 1);
                 break;
             case DOWN:
-                newPos = Pair.IntN(_hero.GetPosition().first, _hero.GetPosition().second + 1);
+                newPos = new Position(_hero.GetPosition().X, _hero.GetPosition().Y + 1);
                 break;
             case LEFT:
-                newPos = Pair.IntN(_hero.GetPosition().first - 1, _hero.GetPosition().second);
+                newPos = new Position(_hero.GetPosition().X - 1, _hero.GetPosition().Y);
                 break;
             case RIGHT:
-                newPos = Pair.IntN(_hero.GetPosition().first + 1, _hero.GetPosition().second);
+                newPos = new Position(_hero.GetPosition().X + 1, _hero.GetPosition().Y);
                 break;
             default:
                 return false;
@@ -226,22 +226,22 @@ public class Maze
         if (!IsDragonAlive(index))
             return true;
 
-        Pair<Integer> newPos;
+        Position newPos;
         Dragon d = _dragons.get(index);
 
         switch (direction)
         {
             case UP:
-                newPos = Pair.IntN(d.GetPosition().first, d.GetPosition().second - 1);
+                newPos = new Position(d.GetPosition().X, d.GetPosition().Y - 1);
                 break;
             case DOWN:
-                newPos = Pair.IntN(d.GetPosition().first, d.GetPosition().second + 1);
+                newPos = new Position(d.GetPosition().X, d.GetPosition().Y + 1);
                 break;
             case LEFT:
-                newPos = Pair.IntN(d.GetPosition().first - 1, d.GetPosition().second);
+                newPos = new Position(d.GetPosition().X - 1, d.GetPosition().Y);
                 break;
             case RIGHT:
-                newPos = Pair.IntN(d.GetPosition().first + 1, d.GetPosition().second);
+                newPos = new Position(d.GetPosition().X + 1, d.GetPosition().Y);
                 break;
         default:
             return false;
@@ -255,7 +255,7 @@ public class Maze
      *
      * @return the pair
      */
-    public Pair<Integer> GetHeroPosition()
+    public Position GetHeroPosition()
     {
         return _hero.GetPosition();
     }
@@ -266,7 +266,7 @@ public class Maze
      * @param pos the new position
      * @return true, if successful
      */
-    public boolean SetHeroPosition(Pair<Integer> pos)
+    public boolean SetHeroPosition(Position pos)
     {
         if (!IsValidPosition(pos) || IsWall(pos) ||
                 (pos.equals(_exitPosition) && !IsHeroArmed()))
@@ -284,7 +284,7 @@ public class Maze
      * @param force true if should ignore walls
      * @return true, if successful
      */
-    public boolean SetEaglePosition(Pair<Integer> pos, boolean force)
+    public boolean SetEaglePosition(Position pos, boolean force)
     {
         if (!IsValidPosition(pos) || (!force && IsWall(pos)))
             return false;
@@ -294,7 +294,7 @@ public class Maze
         return true;
     }
 
-    public Pair<Integer> GetExitPosition()
+    public Position GetExitPosition()
     {
         return _exitPosition;
     }
@@ -305,7 +305,7 @@ public class Maze
      * @param pos the pos
      * @return true, if successful
      */
-    public boolean SetExitPosition(Pair<Integer> pos)
+    public boolean SetExitPosition(Position pos)
     {
         if (!IsValidPosition(pos))
             return false;
@@ -315,7 +315,7 @@ public class Maze
         return true;
     }
 
-    public Pair<Integer> GetSwordPosition()
+    public Position GetSwordPosition()
     {
         return _sword.GetPosition();
     }
@@ -326,7 +326,7 @@ public class Maze
      * @param pos the pos
      * @return true, if successful
      */
-    public boolean SetSwordPosition(Pair<Integer> pos)
+    public boolean SetSwordPosition(Position pos)
     {
         if (!IsValidPosition(pos) && !pos.equals(DEFAULT_POSITION) ||
            (!pos.equals(DEFAULT_POSITION) && IsWall(pos)))
@@ -337,7 +337,7 @@ public class Maze
         return true;
     }
 
-    public Pair<Integer> GetDragonPosition(int index)
+    public Position GetDragonPosition(int index)
     {
         return _dragons.get(index).GetPosition();
     }
@@ -349,7 +349,7 @@ public class Maze
      * @param pos the pos
      * @return true, if successful
      */
-    public boolean SetDragonPosition(int index, Pair<Integer> pos)
+    public boolean SetDragonPosition(int index, Position pos)
     {
         if ((!IsValidPosition(pos) && !pos.equals(DEFAULT_POSITION))
                 || (!pos.equals(DEFAULT_POSITION) && IsWall(pos)
@@ -476,7 +476,7 @@ public class Maze
      * @param pos the position
      * @return the cell
      */
-    public Cell<InanimatedObject> GetCell(Pair<Integer> pos)
+    public Cell<InanimatedObject> GetCell(Position pos)
     {
         return _board.GetCell(pos);
     }
@@ -487,7 +487,7 @@ public class Maze
      * @param pos the position
      * @param val the character
      */
-    public void SetCell(Pair<Integer> pos, InanimatedObject val)
+    public void SetCell(Position pos, InanimatedObject val)
     {
         _board.SetCell(pos, val);
     }
