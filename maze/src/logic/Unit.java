@@ -26,11 +26,6 @@ public abstract class Unit {
     /** The _eventQueue */
     protected Queue<Event> _eventQueue = new LinkedList<Event>();
 
-    public void pushEvent(Event val)
-    {
-        _eventQueue.add(val);
-    }
-
     /**
      * Instantiates a new unit.
      *
@@ -78,6 +73,16 @@ public abstract class Unit {
     public void Kill()
     {
         _alive = false;
+    }
+
+    /**
+     * Adds event to Unit's queue
+     *
+     * @param val the event
+     */
+    public void PushEvent(Event val)
+    {
+        _eventQueue.add(val);
     }
 
     @Override

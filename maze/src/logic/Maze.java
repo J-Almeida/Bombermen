@@ -2,6 +2,7 @@ package logic;
 
 import java.util.ArrayList;
 
+import logic.Eagle.EagleState;
 import model.Cell;
 import model.Grid;
 import utils.Key;
@@ -24,6 +25,9 @@ public class Maze
 
     /** The hero. */
     private Hero _hero = new Hero();
+
+    /** The eagle. */
+    private Eagle _eagle = new Eagle();
 
     /** The sword. */
     private Sword _sword = new Sword();
@@ -79,9 +83,6 @@ public class Maze
         return _board.Height;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString()
     {
@@ -111,8 +112,29 @@ public class Maze
                     _board.SetCell(d.GetPosition(), d.IsSleeping() ? 'd' : 'D');
         }
 
+        boolean eagleWasOnWall = false;
+
+        if (_eagle.IsAlive() && _eagle.GetState() != EagleState.FollowingHero)
+        {
+            eagleWasOnWall = IsWall(_eagle.GetPosition());
+            _board.SetCell(_eagle.GetPosition(), 'V');
+        }
+
         if (_hero.IsAlive())
-            _board.SetCell(_hero.GetPosition(), _hero.IsArmed() ? 'A' : 'H');
+        {
+            char h;
+
+            if (_hero.IsArmed() && _eagle.GetState() == EagleState.FollowingHero)
+                h = '£';
+            else if (_eagle.GetState() == EagleState.FollowingHero)
+                h = '§';
+            else if (_hero.IsArmed())
+                h = 'A';
+            else
+                h = 'H';
+
+            _board.SetCell(_hero.GetPosition(), h);
+        }
 
         String res = _board.toString();
 
@@ -122,6 +144,8 @@ public class Maze
             _board.SetCell(_hero.GetPosition(), ' ');
         if (_sword.IsAlive())
             _board.SetCell(_sword.GetPosition(), ' ');
+        if (_eagle.IsAlive())
+            _board.SetCell(_eagle.GetPosition(), eagleWasOnWall ? 'X' : ' ');
         for (Dragon d : _dragons)
             if (d.IsAlive())
                 _board.SetCell(d.GetPosition(), ' ');
@@ -129,8 +153,13 @@ public class Maze
         return res;
     }
 
+    public boolean IsWall(Pair<Integer> pos)
+    {
+        return _board.GetCellT(pos) == 'X';
+    }
+
     /**
-     * Checks if is valid position.
+     * Checks if is valid position. Bound checking only!
      *
      * @param pos the pos
      * @return true, if is valid position
@@ -156,6 +185,15 @@ public class Maze
                 || (pos1.equals(Pair.IntN(pos2.first, pos2.second - 1)));
     }
 
+    public void SendEagleToSword()
+    {
+        if (_eagle.GetState() == EagleState.OnFlight)
+            return;
+
+        _eagle.SetState(EagleState.OnFlight);
+        _eagle.SetSwordPosition(_sword.GetPosition());
+    }
+
     /**
      * Move hero.
      *
@@ -166,29 +204,29 @@ public class Maze
     {
         boolean result = false;
 
+        Pair<Integer> newPos;
+
         switch (direction)
         {
             case UP:
-                result = SetHeroPosition(Pair.IntN(_hero.GetPosition().first,
-                        _hero.GetPosition().second - 1));
+                newPos = Pair.IntN(_hero.GetPosition().first, _hero.GetPosition().second - 1);
                 break;
             case DOWN:
-                result = SetHeroPosition(Pair.IntN(_hero.GetPosition().first,
-                        _hero.GetPosition().second + 1));
+                newPos = Pair.IntN(_hero.GetPosition().first, _hero.GetPosition().second + 1);
                 break;
             case LEFT:
-                result = SetHeroPosition(Pair.IntN(
-                        _hero.GetPosition().first - 1,
-                        _hero.GetPosition().second));
+                newPos = Pair.IntN(_hero.GetPosition().first - 1, _hero.GetPosition().second);
                 break;
             case RIGHT:
-                result = SetHeroPosition(Pair.IntN(
-                        _hero.GetPosition().first + 1,
-                        _hero.GetPosition().second));
+                newPos = Pair.IntN(_hero.GetPosition().first + 1, _hero.GetPosition().second);
                 break;
-        default:
-            return false;
+            default:
+                return false;
         }
+
+        result = SetHeroPosition(newPos);
+        if (result && _eagle.GetState() == EagleState.FollowingHero)
+            SetEaglePosition(newPos, false);
 
         return result;
     }
@@ -202,38 +240,31 @@ public class Maze
      */
     public boolean MoveDragon(int index, utils.Key direction)
     {
-        boolean result = false;
-
         if (!IsDragonAlive(index))
             return true;
+
+        Pair<Integer> newPos;
+        Dragon d = _dragons.get(index);
 
         switch (direction)
         {
             case UP:
-                result = SetDragonPosition(index, Pair.IntN(
-                        _dragons.get(index).GetPosition().first,
-                        _dragons.get(index).GetPosition().second - 1));
+                newPos = Pair.IntN(d.GetPosition().first, d.GetPosition().second - 1);
                 break;
             case DOWN:
-                result = SetDragonPosition(index, Pair.IntN(
-                        _dragons.get(index).GetPosition().first,
-                        _dragons.get(index).GetPosition().second + 1));
+                newPos = Pair.IntN(d.GetPosition().first, d.GetPosition().second + 1);
                 break;
             case LEFT:
-                result = SetDragonPosition(index, Pair.IntN(
-                        _dragons.get(index).GetPosition().first - 1,
-                        _dragons.get(index).GetPosition().second));
+                newPos = Pair.IntN(d.GetPosition().first - 1, d.GetPosition().second);
                 break;
             case RIGHT:
-                result = SetDragonPosition(index, Pair.IntN(
-                        _dragons.get(index).GetPosition().first + 1,
-                        _dragons.get(index).GetPosition().second));
+                newPos = Pair.IntN(d.GetPosition().first + 1, d.GetPosition().second);
                 break;
         default:
             return false;
         }
 
-        return result;
+        return SetDragonPosition(index, newPos);
     }
 
     /**
@@ -249,16 +280,33 @@ public class Maze
     /**
      * Sets the hero position.
      *
-     * @param pos the pos
+     * @param pos the new position
      * @return true, if successful
      */
     public boolean SetHeroPosition(Pair<Integer> pos)
     {
-        if (!IsValidPosition(pos) || _board.GetCellT(pos) == 'X'
-                || (pos.equals(_exitPosition) && !IsHeroArmed()))
+        if (!IsValidPosition(pos) || IsWall(pos) ||
+                (pos.equals(_exitPosition) && !IsHeroArmed()))
             return false;
 
         _hero.SetPosition(pos);
+
+        return true;
+    }
+
+    /**
+     * Sets the eagle position.
+     *
+     * @param pos the new position
+     * @param force true if should ignore walls
+     * @return true, if successful
+     */
+    public boolean SetEaglePosition(Pair<Integer> pos, boolean force)
+    {
+        if (!IsValidPosition(pos) || (!force && IsWall(pos)))
+            return false;
+
+        _eagle.SetPosition(pos);
 
         return true;
     }
@@ -298,7 +346,7 @@ public class Maze
     public boolean SetSwordPosition(Pair<Integer> pos)
     {
         if (!IsValidPosition(pos) && !pos.equals(DEFAULT_POSITION) ||
-           (!pos.equals(DEFAULT_POSITION) && _board.GetCellT(pos) == 'X'))
+           (!pos.equals(DEFAULT_POSITION) && IsWall(pos)))
             return false;
 
         _sword.SetPosition(pos);
@@ -321,7 +369,7 @@ public class Maze
     public boolean SetDragonPosition(int index, Pair<Integer> pos)
     {
         if ((!IsValidPosition(pos) && !pos.equals(DEFAULT_POSITION))
-                || (!pos.equals(DEFAULT_POSITION) && _board.GetCellT(pos) == 'X')
+                || (!pos.equals(DEFAULT_POSITION) && IsWall(pos)
                 || (!pos.equals(DEFAULT_POSITION) && pos.equals(_exitPosition)))
             return false;
 
@@ -350,23 +398,27 @@ public class Maze
             _finished = true;
         if (_hero.GetPosition().equals(_sword.GetPosition()))
         {
-            _sword.pushEvent(new Colision<Hero>(_hero));
-            _hero.pushEvent(new Colision<Sword>(_sword));
+            _sword.PushEvent(new Colision<Hero>(_hero));
+            _hero.PushEvent(new Colision<Sword>(_sword));
         }
 
         for (Dragon d : _dragons)
         {
             if (IsAdjacent(_hero.GetPosition(), d.GetPosition()) || d.GetPosition().equals(_hero.GetPosition()))
             {
-                d.pushEvent(new Colision<Hero>(_hero));
-                _hero.pushEvent(new Colision<Dragon>(d));
+                d.PushEvent(new Colision<Hero>(_hero));
+                _hero.PushEvent(new Colision<Dragon>(d));
             }
+
+            //if (IsAdjacent(eagle, dragon) && eagle is on ground)
+            //    pushevent collision for both
         }
 
         for (int i = 0; i < _dragons.size(); i++)
             _dragons.get(i).Update();
 
         _sword.Update();
+        _eagle.Update();
         _hero.Update();
     }
 
@@ -416,7 +468,7 @@ public class Maze
      */
     public boolean IsDragonAlive(int index)
     {
-        return _dragons.get(index).IsAlive();
+        return (_dragons.size() - 1 < index) && _dragons.get(index).IsAlive();
     }
 
     /**

@@ -81,6 +81,7 @@ public class RandomMazeGenerator extends MazeGenerator
         } while (!stk.isEmpty());
 
         _maze.SetHeroPosition(initPos);
+        _maze.SetEaglePosition(initPos, false);
         SetRandomSwordPosition();
         SetRandomDragonsPosition();
         SetRandomExitPosition();

@@ -14,10 +14,12 @@ public class Architect
     /** Builds the Maze */
     public void ConstructMaze(int size, int dragonCount, DragonBehaviour dragonBehaviour)
     {
-        _mazeGenerator.CreateNewMaze();
         _mazeGenerator.SetMazeSize(size);
+        _mazeGenerator.CreateNewMaze();
+
         _mazeGenerator.SetNumberOfDragons(dragonCount);
         _mazeGenerator.SetDragonsBehaviour(dragonBehaviour);
+
         _mazeGenerator.BuildMaze();
     }
 }

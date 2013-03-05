@@ -28,7 +28,7 @@ public class CLI
         MazeGenerator mg = new RandomMazeGenerator();
 
         architect.SetMazeGenerator(mg);
-        architect.ConstructMaze(10, 2, DragonBehaviour.Sleepy);
+        architect.ConstructMaze(30, 2, DragonBehaviour.Sleepy);
 
         Maze maze = architect.GetMaze();
 
@@ -60,7 +60,15 @@ public class CLI
                     continue;
                 }
 
-                success = maze.MoveHero(input);
+                if (input == Key.ONE)
+                {
+                    success = true;
+                    maze.SendEagleToSword();
+                }
+                else
+                {
+                    success = maze.MoveHero(input);
+                }
 
             } while (!success);
 
