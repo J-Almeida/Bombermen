@@ -370,7 +370,7 @@ public class Maze
     {
         if ((!IsValidPosition(pos) && !pos.equals(DEFAULT_POSITION))
                 || (!pos.equals(DEFAULT_POSITION) && IsWall(pos)
-                || (!pos.equals(DEFAULT_POSITION) && pos.equals(_exitPosition)))
+                || (!pos.equals(DEFAULT_POSITION) && pos.equals(_exitPosition))))
             return false;
 
         _dragons.get(index).SetPosition(pos);
