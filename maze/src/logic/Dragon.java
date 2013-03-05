@@ -106,11 +106,15 @@ public class Dragon extends Unit
         {
             if (_eventQueue.peek().Type == EventType.Colision)
             {
-                Colision<?> ev = (Colision<?>) _eventQueue.peek();
+                Collision ev = (Collision) _eventQueue.peek();
                 if (ev.Other.Type == UnitType.Hero)
                 {
-                    if (((Hero) ev.Other).IsArmed())
-                        this.Kill();
+                    if (!((Hero) ev.Other).IsArmed())
+                        ev.Other.Kill();
+                }
+                else if (ev.Other.Type == UnitType.Eagle)
+                {
+                    ev.Other.Kill();
                 }
             }
 

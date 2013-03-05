@@ -47,16 +47,15 @@ public class Hero extends Unit
         {
             if (_eventQueue.peek().Type == EventType.Colision)
             {
-                Colision<?> ev = (Colision<?>) _eventQueue.peek();
-                if (ev.Other.Type == UnitType.Sword)
+                Collision ev = (Collision)_eventQueue.peek();
+                if (ev.Other.Type == UnitType.Sword || (ev.Other.Type == UnitType.Eagle))
                 {
                     this.EquipSword();
                 }
                 else if (ev.Other.Type == UnitType.Dragon)
                 {
-                    if (!((Dragon)ev.Other).IsSleeping() && !this.IsArmed())
-                        this.Kill();
-
+                    if (this.IsArmed())
+                        ev.Other.Kill();
                 }
             }
             _eventQueue.poll();

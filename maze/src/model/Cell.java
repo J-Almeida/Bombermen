@@ -33,9 +33,6 @@ public class Cell<T>
      */
     public void SetValue(T val) { _value = val; }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString()
     {

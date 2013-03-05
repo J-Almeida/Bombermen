@@ -25,8 +25,8 @@ public class Sword extends Unit
         {
             if (_eventQueue.peek().Type == EventType.Colision)
             {
-                Colision<?> ev = (Colision<?>) _eventQueue.peek();
-                if (ev.Other.Type == UnitType.Hero)
+                Collision ev = (Collision)_eventQueue.peek();
+                if (ev.Other.Type == UnitType.Hero || ev.Other.Type == UnitType.Eagle)
                 {
                     this.Kill();
                 }

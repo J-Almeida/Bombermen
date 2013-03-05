@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.Stack;
+
 import utils.Pair;
 
 public class Eagle extends Unit
@@ -38,13 +40,19 @@ public class Eagle extends Unit
         _armed = true;
     }
     
-    public void UnquipSword()
+    public void UnequipSword()
     {
         _armed = false;
     }
     
+    public boolean IsArmed()
+    {
+        return _armed;
+    }
+    
     private Pair<Integer> _initialPosition = null;
     private Pair<Integer> _swordPosition = null;
+    private Stack<Pair<Integer>> _wayPath = new Stack<Pair<Integer>>();
     
     public void SetSwordPosition(Pair<Integer> pos)
     {
@@ -59,6 +67,7 @@ public class Eagle extends Unit
             if (_initialPosition == null) // takeoff
             {
                 _initialPosition = GetPosition();
+                _wayPath.push(_initialPosition);
             }
             else
             {
@@ -82,7 +91,39 @@ public class Eagle extends Unit
                 
                 if (GetPosition().equals(_swordPosition))
                     _state = EagleState.ReachedSword;
+                else
+                    _wayPath.push(GetPosition());
             }
+        }
+        else if (_state == EagleState.OnFlightBack)
+        {
+            if (!_wayPath.isEmpty())
+            {
+                SetPosition(_wayPath.pop());
+            }
+            else
+            {
+                SetState(EagleState.OnFloor);
+            }
+        }
+        
+        while (!_eventQueue.isEmpty())
+        {
+            if (_eventQueue.peek().Type == EventType.Colision)
+            {
+                Collision ev = (Collision)_eventQueue.peek();
+                if (ev.Other.Type == UnitType.Sword)
+                {
+                    this.EquipSword();
+                    SetState(EagleState.OnFlightBack);
+                }
+                else if (ev.Other.Type == UnitType.Hero)
+                {
+                    this.UnequipSword();
+                    SetState(EagleState.FollowingHero);
+                }
+            }
+            _eventQueue.poll();
         }
     }
 

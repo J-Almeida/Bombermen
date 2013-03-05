@@ -123,11 +123,10 @@ public class Maze
         if (_hero.IsAlive())
         {
             char h;
-
             if (_hero.IsArmed() && _eagle.GetState() == EagleState.FollowingHero)
-                h = '£';
+                h = '\u00A3' /* Pound */;
             else if (_eagle.GetState() == EagleState.FollowingHero)
-                h = '§';
+                h = '\u00A7' /* Section */;
             else
                 h = _hero.toString().charAt(0);
 
@@ -382,20 +381,36 @@ public class Maze
             _finished = true;
         if (_hero.GetPosition().equals(_sword.GetPosition()))
         {
-            _sword.PushEvent(new Colision<Hero>(_hero));
-            _hero.PushEvent(new Colision<Sword>(_sword));
+            _sword.PushEvent(new Collision(_hero));
+            _hero.PushEvent(new Collision(_sword));
+        }
+
+        if (_eagle.GetPosition().equals(_sword.GetPosition()))
+        {
+            _sword.PushEvent(new Collision(_eagle));
+            _eagle.PushEvent(new Collision(_sword));
+        }
+        
+        if (_eagle.IsArmed() && _hero.GetPosition().equals(_eagle.GetPosition()))
+        {
+            _hero.PushEvent(new Collision(_eagle));
+            _eagle.PushEvent(new Collision(_hero));
         }
 
         for (Dragon d : _dragons)
         {
             if (IsAdjacent(_hero.GetPosition(), d.GetPosition()) || d.GetPosition().equals(_hero.GetPosition()))
             {
-                d.PushEvent(new Colision<Hero>(_hero));
-                _hero.PushEvent(new Colision<Dragon>(d));
+                d.PushEvent(new Collision(_hero));
+                _hero.PushEvent(new Collision(d));
             }
 
-            //if (IsAdjacent(eagle, dragon) && eagle is on ground)
-            //    pushevent collision for both
+            if ((_eagle.GetState() == EagleState.ReachedSword || _eagle.GetState() == EagleState.OnFloor) &&
+                    IsAdjacent(_eagle.GetPosition(), d.GetPosition()))
+            {
+                d.PushEvent(new Collision(_eagle));
+                _hero.PushEvent(new Collision(d));
+            }
         }
 
         for (int i = 0; i < _dragons.size(); i++)
