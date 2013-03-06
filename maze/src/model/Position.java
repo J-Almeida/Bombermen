@@ -1,9 +1,9 @@
 package model;
 
-public class Position 
+public class Position
 {
-	public Position() {	}
-	public Position(int x, int y) { X = x; Y = y; }
+    public Position() {    }
+    public Position(int x, int y) { X = x; Y = y; }
 
     @Override
     public boolean equals(Object rhs)
@@ -15,8 +15,8 @@ public class Position
 
         return this.X == other.X && this.Y == other.Y;
     }
-	
-	public int X = -1;
-	public int Y = -1;
+
+    public int X = -1;
+    public int Y = -1;
 
 }

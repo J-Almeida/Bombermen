@@ -14,46 +14,46 @@ public class Eagle extends Unit
         ReachedSword,
         OnFlightBack
     }
-    
+
     private EagleState _state;
     private static final double _speed = 1;
     private boolean _armed = false;
-    
+
     public Eagle()
     {
         super(UnitType.Eagle);
         _state = EagleState.FollowingHero;
     }
-    
+
     public void SetState(EagleState state)
     {
         _state = state;
     }
-    
+
     public EagleState GetState()
     {
         return _state;
     }
-    
+
     public void EquipSword()
     {
         _armed = true;
     }
-    
+
     public void UnequipSword()
     {
         _armed = false;
     }
-    
+
     public boolean IsArmed()
     {
         return _armed;
     }
-    
+
     private Position _initialPosition = null;
     private Position _swordPosition = null;
     private Stack<Position> _wayPath = new Stack<Position>();
-    
+
     public void SetSwordPosition(Position pos)
     {
         _swordPosition = pos;
@@ -73,7 +73,7 @@ public class Eagle extends Unit
             {
                 double deltaX = _swordPosition.X - GetPosition().X;
                 double deltaY = _swordPosition.Y - GetPosition().Y;
-                
+
                 double dist = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
                 if (dist > _speed)
                 {
@@ -88,7 +88,7 @@ public class Eagle extends Unit
                 {
                     SetPosition(_swordPosition);
                 }
-                
+
                 if (GetPosition().equals(_swordPosition))
                     _state = EagleState.ReachedSword;
                 else
@@ -106,7 +106,7 @@ public class Eagle extends Unit
                 SetState(EagleState.OnFloor);
             }
         }
-        
+
         while (!_eventQueue.isEmpty())
         {
             if (_eventQueue.peek().Type == EventType.Collision)

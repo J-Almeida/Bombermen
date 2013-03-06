@@ -80,7 +80,7 @@ public abstract class MazeGenerator
 
             do
             {
-            	Position p = Utilities.RandomPosition(1, _maze.GetWidth() - 2, 1, _maze.GetHeight() - 2);
+                Position p = Utilities.RandomPosition(1, _maze.GetWidth() - 2, 1, _maze.GetHeight() - 2);
 
                 success = !lstn.contains(p);
 

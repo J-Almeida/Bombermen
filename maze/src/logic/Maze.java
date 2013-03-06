@@ -20,7 +20,7 @@ public class Maze
     static final Wall WALL = new Wall();
     /** The Grid. */
     private Grid<InanimatedObject> _board;
-   
+
     /** The exit position. */
     private Position _exitPosition = DEFAULT_POSITION;
 
@@ -87,9 +87,9 @@ public class Maze
     @Override
     public String toString()
     {
-    	char[] result = _board.toString().toCharArray();
-    	
-    	result[_exitPosition.Y * (_board.Width * 2) + _exitPosition.X * 2] = 'S';
+        char[] result = _board.toString().toCharArray();
+
+        result[_exitPosition.Y * (_board.Width * 2) + _exitPosition.X * 2] = 'S';
 
         if (_sword.IsAlive())
         {
@@ -99,20 +99,20 @@ public class Maze
             {
                 if (d.IsAlive() && _sword.GetPosition().equals(d.GetPosition()))
                 {
-                	result[d.GetPosition().Y * (_board.Width * 2) + d.GetPosition().X * 2] = d.IsSleeping() ? 'f' : 'F';
+                    result[d.GetPosition().Y * (_board.Width * 2) + d.GetPosition().X * 2] = d.IsSleeping() ? 'f' : 'F';
                     placedSword = true;
                 }
                 else if (d.IsAlive())
                     result[d.GetPosition().Y * (_board.Width * 2) + d.GetPosition().X * 2] = d.toString().charAt(0);
             }
             if (!placedSword)
-            	result[_sword.GetPosition().Y * (_board.Width * 2) + _sword.GetPosition().X * 2] = _sword.toString().charAt(0);
+                result[_sword.GetPosition().Y * (_board.Width * 2) + _sword.GetPosition().X * 2] = _sword.toString().charAt(0);
         }
         else
         {
             for (Dragon d: _dragons)
                 if (d.IsAlive())
-                	result[d.GetPosition().Y * (_board.Width * 2) + d.GetPosition().X * 2] = d.toString().charAt(0);
+                    result[d.GetPosition().Y * (_board.Width * 2) + d.GetPosition().X * 2] = d.toString().charAt(0);
         }
 
         if (_eagle.IsAlive() && _eagle.GetState() != EagleState.FollowingHero)
@@ -390,7 +390,7 @@ public class Maze
             _sword.PushEvent(new Collision(_eagle));
             _eagle.PushEvent(new Collision(_sword));
         }
-        
+
         if (_eagle.IsArmed() && _hero.GetPosition().equals(_eagle.GetPosition()))
         {
             _hero.PushEvent(new Collision(_eagle));
@@ -442,14 +442,6 @@ public class Maze
     }
 
     /**
-     * Hero equips sword.
-     */
-    public void HeroEquipSword()
-    {
-        _hero.EquipSword();
-    }
-
-    /**
      * Checks if hero is alive.
      *
      * @return true, if successful
@@ -467,7 +459,7 @@ public class Maze
      */
     public boolean IsDragonAlive(int index)
     {
-        return (_dragons.size() - 1 < index) && _dragons.get(index).IsAlive();
+        return (_dragons.size() - 1 <= index) && _dragons.get(index).IsAlive();
     }
 
     /**
@@ -502,8 +494,28 @@ public class Maze
         _db = db;
     }
 
-    public Hero GetHero()
+    public void SetEagleState(EagleState es)
     {
-        return _hero;
+        _eagle.SetState(es);
+    }
+
+    public void EquipHero()
+    {
+        _hero.EquipSword();
+    }
+
+    public void EquipEagle()
+    {
+        _eagle.EquipSword();
+    }
+
+    public void UnequipHero()
+    {
+        _hero.UnequipSword();
+    }
+
+    public void UnequipEagle()
+    {
+        _eagle.UnequipSword();
     }
 }

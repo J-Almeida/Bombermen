@@ -33,7 +33,7 @@ public class Hero extends Unit
     {
         _armed = true;
     }
-    
+
     /**
      * Unequip sword.
      */

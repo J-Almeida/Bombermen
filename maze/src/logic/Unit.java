@@ -11,8 +11,8 @@ import model.Position;
  */
 public abstract class Unit extends WorldObject{
 
-	public final UnitType Type;
-	
+    public final UnitType Type;
+
     /** The Constant DEFAULT_POSITION. */
     public final static Position DEFAULT_POSITION = new Position();
 
@@ -32,7 +32,7 @@ public abstract class Unit extends WorldObject{
      */
     public Unit(UnitType type)
     {
-    	super(WorldObjectType.Unit);
+        super(WorldObjectType.Unit);
         Type = type;
         _alive = true;
     }

@@ -50,10 +50,10 @@ public abstract class Utilities
     {
         return Pair.IntN(RandomEngine.GetInt(min1, max1), RandomEngine.GetInt(min1, max2));
     }
-    
+
     public static Position RandomPosition(int min1, int max1, int min2, int max2)
     {
-    	return new Position(RandomEngine.GetInt(min1, max1), RandomEngine.GetInt(min1, max2));
+        return new Position(RandomEngine.GetInt(min1, max1), RandomEngine.GetInt(min1, max2));
     }
 
     /**

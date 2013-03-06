@@ -18,7 +18,7 @@ public class DefaultMazeGenerator extends MazeGenerator
                            "X XX X X X",
                            "XEXX     X",
                            "XXXXXXXXXX" };
-        
+
         for (int x = 0; x < _size; x++) // width
         {
             for (int y = 0; y < _size; y++) // height
@@ -36,7 +36,7 @@ public class DefaultMazeGenerator extends MazeGenerator
                     if (!_maze.GetSwordPosition().equals(Unit.DEFAULT_POSITION) || !_maze.GetHeroPosition().equals(Unit.DEFAULT_POSITION))
                         throw new IllegalArgumentException();
 
-                    _maze.HeroEquipSword();
+                    _maze.EquipHero();
                     _maze.SetHeroPosition(new Position(x, y));
                 }
                 else if (c == 'E')

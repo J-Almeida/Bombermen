@@ -1,6 +1,6 @@
 package logic;
 
-public interface World 
+public interface World
 {
-	
+
 }
