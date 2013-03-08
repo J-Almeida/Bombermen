@@ -30,6 +30,7 @@ public class DefaultMazeGenerator extends MazeGenerator
                         throw new IllegalArgumentException();
 
                     _maze.SetHeroPosition(new Position(x, y));
+                    _maze.SetEaglePosition(new Position(x, y), false);
                 }
                 else if (c == 'A')
                 {

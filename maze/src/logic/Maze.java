@@ -105,7 +105,7 @@ public class Maze
                 else if (d.IsAlive())
                     result[d.GetPosition().Y * (_board.Width * 2) + d.GetPosition().X * 2] = d.toString().charAt(0);
             }
-            if (!placedSword)
+            if (!placedSword && !_sword.GetPosition().equals(DEFAULT_POSITION))
                 result[_sword.GetPosition().Y * (_board.Width * 2) + _sword.GetPosition().X * 2] = _sword.toString().charAt(0);
         }
         else
@@ -442,6 +442,16 @@ public class Maze
     }
 
     /**
+     * Checks if eagle is armed.
+     *
+     * @return true, if successful
+     */
+    public boolean IsEagleArmed()
+    {
+        return _eagle.IsArmed();
+    }
+
+    /**
      * Checks if hero is alive.
      *
      * @return true, if successful
@@ -517,5 +527,15 @@ public class Maze
     public void UnequipEagle()
     {
         _eagle.UnequipSword();
+    }
+
+    public Position GetEaglePosition()
+    {
+        return _eagle.GetPosition();
+    }
+
+    public boolean IsEagleAlive()
+    {
+        return _eagle.IsAlive();
     }
 }
