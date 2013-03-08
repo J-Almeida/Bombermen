@@ -473,6 +473,30 @@ public class Maze
     }
 
     /**
+     * Checks if dragon is sleeping.
+     *
+     * @param index the index
+     * @return true, if successful
+     */
+    public boolean IsDragonSleeping(int index)
+    {
+    	return (_dragons.size() - 1 <= index) && _dragons.get(index).IsSleeping();
+    }
+    
+    /**
+     * Checks if dragon is sleeping.
+     *
+     * @param index the index
+     * @param time  the time that the dragon is going to sleep for
+     * @return true, if successful
+     */
+    public void SetDragonToSleep(int index, int time)
+    {
+    	if (_dragons.size() - 1 <= index) 
+    		_dragons.get(index).SetToSleep(time);
+    }
+    
+    /**
      * Gets the underlying cell.
      *
      * @param pos the position
