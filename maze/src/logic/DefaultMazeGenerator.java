@@ -5,25 +5,39 @@ import model.Position;
 /** ConcreteBuilder - Default 10x10 maze */
 public class DefaultMazeGenerator extends MazeGenerator
 {
+	public DefaultMazeGenerator(String [] cells)
+	{
+		_cells = cells.clone();
+	}
+	
+	public DefaultMazeGenerator()
+	{
+		 this( new String[] { "XXXXXXXXXX",
+				              "XH       X",
+				              "X XX X X X",
+				              "XDXX X X X",
+				              "X XX X X X",
+				              "X      X S",
+				              "X XX X X X",
+				              "X XX X X X",
+				              "XEXX     X",
+				              "XXXXXXXXXX" });
+	}
+	
+	public void SetCells(String[] cells)
+	{
+		_cells = cells.clone();
+	}
+
+	
     @Override
     public void BuildMaze()
     {
-        String[] cells = { "XXXXXXXXXX",
-                           "XH       X",
-                           "X XX X X X",
-                           "XDXX X X X",
-                           "X XX X X X",
-                           "X      X S",
-                           "X XX X X X",
-                           "X XX X X X",
-                           "XEXX     X",
-                           "XXXXXXXXXX" };
-
         for (int x = 0; x < _size; x++) // width
         {
             for (int y = 0; y < _size; y++) // height
             {
-                char c = cells[y].charAt(x);
+                char c = _cells[y].charAt(x);
                 if (c == 'H')
                 {
                     if (!_maze.GetHeroPosition().equals(Unit.DEFAULT_POSITION))
@@ -76,4 +90,6 @@ public class DefaultMazeGenerator extends MazeGenerator
             }
         }
     }
+    
+    private String[] _cells;
 }
