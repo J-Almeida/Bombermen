@@ -480,9 +480,9 @@ public class Maze
      */
     public boolean IsDragonSleeping(int index)
     {
-    	return (_dragons.size() - 1 <= index) && _dragons.get(index).IsSleeping();
+        return (_dragons.size() - 1 <= index) && _dragons.get(index).IsSleeping();
     }
-    
+
     /**
      * Checks if dragon is sleeping.
      *
@@ -492,10 +492,10 @@ public class Maze
      */
     public void SetDragonToSleep(int index, int time)
     {
-    	if (_dragons.size() - 1 <= index) 
-    		_dragons.get(index).SetToSleep(time);
+        if (_dragons.size() - 1 <= index)
+            _dragons.get(index).SetToSleep(time);
     }
-    
+
     /**
      * Gets the underlying cell.
      *
