@@ -1,6 +1,5 @@
 package utils;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Pair.
  *
@@ -8,12 +7,11 @@ package utils;
  */
 public class Pair<T>
 {
-
     /**
-     * Int n.
+     * Builder method for Pair<Integer> (sugar)
      *
-     * @param fst the fst
-     * @param snd the snd
+     * @param fst the first element
+     * @param snd the second element
      * @return the pair
      */
     public static Pair<Integer> IntN(int fst, int snd)
@@ -22,10 +20,10 @@ public class Pair<T>
     }
 
     /**
-     * Double n.
+     * Builder method for Pair<Double> (sugar)
      *
-     * @param fst the fst
-     * @param snd the snd
+     * @param fst the first element
+     * @param snd the second element
      * @return the pair
      */
     public static Pair<Double> DoubleN(double fst, double snd)
@@ -36,8 +34,8 @@ public class Pair<T>
     /**
      * Instantiates a new pair.
      *
-     * @param fst the fst
-     * @param snd the snd
+     * @param fst the first element
+     * @param snd the second element
      */
     public Pair(T fst, T snd)
     {
@@ -45,9 +43,6 @@ public class Pair<T>
         this.second = snd;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object rhs)
@@ -60,9 +55,6 @@ public class Pair<T>
         return this.first == other.first && this.second == other.second;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString()
     {
@@ -84,9 +76,9 @@ public class Pair<T>
         return (Object)other;
     }
 
-    /** The first. */
+    /** The first element. */
     public T first;
 
-    /** The second. */
+    /** The second element. */
     public T second;
 }

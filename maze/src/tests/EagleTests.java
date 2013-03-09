@@ -16,13 +16,21 @@ import org.junit.Test;
 
 import utils.Key;
 
+/**
+ * The Class EagleTests (3.3)
+ */
 public class EagleTests
 {
+    /** The architect. */
     private static Architect _architect;
+    
+    /** The maze. */
     private static Maze _maze;
 
     /**
-     * @throws java.lang.Exception
+     * Sets the up before class.
+     *
+     * @throws Exception the exception
      */
     @BeforeClass
     public static void setUpBeforeClass() throws Exception
@@ -33,6 +41,9 @@ public class EagleTests
         _architect.SetMazeGenerator(mg);
     }
 
+    /**
+     * Sets the up before test.
+     */
     @Before
     public void setUpBeforeTest() /* throws Exception */
     {
@@ -40,6 +51,9 @@ public class EagleTests
         _maze = _architect.GetMaze();
     }
 
+    /**
+     * Eagle initially on hero test.
+     */
     @Test
     public void EagleInitiallyOnHeroTest()
     {
@@ -49,6 +63,9 @@ public class EagleTests
         assertThat(_maze.GetEaglePosition(), is(_maze.GetHeroPosition()));
     }
     
+    /**
+     * Eagle flight test.
+     */
     @Test
     public void EagleFlightTest()
     {
@@ -79,6 +96,9 @@ public class EagleTests
         assertThat(_maze.GetCell(_maze.GetEaglePosition()).GetValue(), is(instanceOf(Wall.class)));
     }
     
+    /**
+     * Eagle reach sword test.
+     */
     @Test
     public void EagleReachSwordTest()
     {
@@ -93,6 +113,9 @@ public class EagleTests
         assertThat(_maze.IsEagleArmed(), is(true));
     }
     
+    /**
+     * Eagle reach unexisting sword test.
+     */
     @Test
     public void EagleReachUnexistingSwordTest()
     {
@@ -112,6 +135,9 @@ public class EagleTests
         assertThat(_maze.IsEagleArmed(), is(false));
     }
     
+    /**
+     * Eagle reach sword with dragon test.
+     */
     @Test
     public void EagleReachSwordWithDragonTest()
     {
@@ -128,6 +154,9 @@ public class EagleTests
         assertThat(_maze.IsEagleAlive(), is(false));
     }
     
+    /**
+     * Eagle flight back test.
+     */
     @Test
     public void EagleFlightBackTest()
     {
@@ -159,6 +188,9 @@ public class EagleTests
         assertThat(_maze.IsHeroArmed(), is(true));
     }
     
+    /**
+     * Eagle flight back catch by hero test.
+     */
     @Test
     public void EagleFlightBackCatchByHeroTest()
     {
@@ -180,6 +212,9 @@ public class EagleTests
         assertThat(_maze.IsHeroArmed(), is(true));
     }
     
+    /**
+     * Eagle flight back with dragon.
+     */
     @Test
     public void EagleFlightBackWithDragon()
     {

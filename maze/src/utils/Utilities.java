@@ -4,7 +4,6 @@ import java.util.List;
 
 import model.Position;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Utilities.
  */
@@ -37,32 +36,27 @@ public abstract class Utilities
     }
 
     /**
-     * Random pair i.
+     * Random position between [min, max] values
      *
-     * @param r the r
-     * @param min1 the min1
-     * @param max1 the max1
-     * @param min2 the min2
-     * @param max2 the max2
-     * @return the pair
+     * @param min1 the minimum X
+     * @param max1 the maximum X
+     * @param min2 the minimum Y
+     * @param max2 the maximum Y
+     * @return the position
      */
-    public static Pair<Integer> RandomPairI(int min1, int max1, int min2, int max2)
-    {
-        return Pair.IntN(RandomEngine.GetInt(min1, max1), RandomEngine.GetInt(min1, max2));
-    }
-
     public static Position RandomPosition(int min1, int max1, int min2, int max2)
     {
         return new Position(RandomEngine.GetInt(min1, max1), RandomEngine.GetInt(min1, max2));
     }
 
     /**
-     * Random element.
+     * Random element of a list.
+     *
+     * Null is returned if list is empty.
      *
      * @param <T> the generic type
-     * @param r the r
-     * @param l the l
-     * @return the rand element
+     * @param l the list
+     * @return the picked random element
      */
     public static <T> RandElement<T> RandomElement(List<T> l)
     {

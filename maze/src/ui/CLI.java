@@ -14,9 +14,6 @@ import utils.Key;
  */
 public class CLI
 {
-    /** The _sc. */
-    private static Scanner _sc = new Scanner(System.in);
-
     /**
      * The main method.
      *
@@ -32,6 +29,8 @@ public class CLI
 
         Maze maze = architect.GetMaze();
 
+        Scanner sc = new Scanner(System.in);
+
         while (!maze.IsFinished())
         {
             boolean success = true;
@@ -45,7 +44,7 @@ public class CLI
                     success = true;
                 }
 
-                String inputStr = _sc.nextLine();
+                String inputStr = sc.nextLine();
                 if (inputStr.isEmpty() || inputStr.length() > 1)
                 {
                     success = false;
@@ -78,6 +77,8 @@ public class CLI
 
             maze.Update();
         }
+
+        sc.close();
 
         System.out.println(maze);
         if (maze.IsHeroAlive())

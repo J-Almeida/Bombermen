@@ -12,18 +12,33 @@ import org.junit.Test;
 
 import utils.Key;
 import utils.RandomEngine;
+import utils.RandomTester;
 
+/**
+ * The Class DragonTests (3.2)
+ */
 public class DragonTests
 {
+    /** The architect. */
     private static Architect _architect;
+
+    /** The maze. */
     private static Maze _maze;
 
+    /**
+     * Sets the up before class.
+     *
+     * @throws Exception the exception
+     */
     @BeforeClass
     public static void setUpBeforeClass() throws Exception
     {
         _architect = new Architect();
     }
 
+    /**
+     * Move dragon success test.
+     */
     @Test
     public void MoveDragonSuccessTest()
     {
@@ -36,6 +51,9 @@ public class DragonTests
         assertEquals(new Position(1, 2), _maze.GetDragonPosition(0));
     }
 
+    /**
+     * Move dragon failure test.
+     */
     @Test
     public void MoveDragonFailureTest()
     {
@@ -48,6 +66,9 @@ public class DragonTests
         assertEquals(new Position(1, 3), _maze.GetDragonPosition(0));
     }
 
+    /**
+     * Dragon sleep test.
+     */
     @Test
     public void DragonSleepTest()
     {
@@ -67,6 +88,9 @@ public class DragonTests
         assertFalse(_maze.IsDragonSleeping(0));
     }
 
+    /**
+     * Dragon random movement test with hero dead at end.
+     */
     @Test
     public void DragonRandomMovementTestWithHeroDeadAtEnd()
     {
@@ -111,6 +135,9 @@ public class DragonTests
         assertTrue(_maze.IsDragonAlive(0));
     }
 
+    /**
+     * Dragon random movement test with hero alive at end.
+     */
     @Test
     public void DragonRandomMovementTestWithHeroAliveAtEnd()
     {
@@ -130,5 +157,4 @@ public class DragonTests
         assertTrue(_maze.IsHeroAlive());
         assertFalse(_maze.IsDragonAlive(0));
     }
-
 }

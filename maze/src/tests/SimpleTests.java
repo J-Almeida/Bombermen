@@ -14,13 +14,21 @@ import org.junit.Test;
 
 import utils.Key;
 
+/**
+ * The Class SimpleTests (3.1)
+ */
 public class SimpleTests
 {
+    /** The architect. */
     private static Architect _architect;
+
+    /** The maze. */
     private static Maze _maze;
 
     /**
-     * @throws java.lang.Exception
+     * Sets the up before class.
+     *
+     * @throws Exception the exception
      */
     @BeforeClass
     public static void setUpBeforeClass() throws Exception
@@ -31,6 +39,9 @@ public class SimpleTests
         _architect.SetMazeGenerator(mg);
     }
 
+    /**
+     * Sets the up before test.
+     */
     @Before
     public void setUpBeforeTest() /* throws Exception */
     {
@@ -38,6 +49,9 @@ public class SimpleTests
         _maze = _architect.GetMaze();
     }
 
+    /**
+     * Move hero success test.
+     */
     @Test
     public void MoveHeroSuccessTest() // i
     {
@@ -46,6 +60,9 @@ public class SimpleTests
         assertEquals(new Position(2, 1), _maze.GetHeroPosition());
     }
 
+    /**
+     * Move hero failure test.
+     */
     @Test
     public void MoveHeroFailureTest() // ii
     {
@@ -54,6 +71,9 @@ public class SimpleTests
         assertEquals(new Position(1, 1), _maze.GetHeroPosition());
     }
 
+    /**
+     * Equip sword test.
+     */
     @Test
     public void EquipSwordTest() // iii
     {
@@ -75,6 +95,9 @@ public class SimpleTests
         assertTrue(_maze.IsHeroArmed());
     }
 
+    /**
+     * Dragon kill hero.
+     */
     @Test
     public void DragonKillHero() // iv
     {
@@ -86,6 +109,9 @@ public class SimpleTests
         assertFalse(_maze.IsHeroAlive());
     }
 
+    /**
+     * Hero kill dragon test.
+     */
     @Test
     public void HeroKillDragonTest() // v
     {
@@ -96,6 +122,9 @@ public class SimpleTests
         assertFalse(_maze.IsDragonAlive(0));
     }
 
+    /**
+     * Equip sword kill dragon and exit test.
+     */
     @Test
     public void EquipSwordKillDragonAndExitTest() // vi
     {
@@ -121,6 +150,9 @@ public class SimpleTests
         assertTrue(_maze.IsFinished());
     }
 
+    /**
+     * Move to exit without dragon killed or sword test.
+     */
     @Test
     public void MoveToExitWithoutDragonKilledOrSwordTest() // vii
     {
