@@ -7,6 +7,11 @@ public class RandomEngine
     /** Underlying Random generator */
     private static Random _r = new Random();
     
+    public static void SetRandom(Random r)
+    {
+    	_r = r;
+    }
+    
     /** Forces the seed for Random generator */
     public static void SetSeed(long seed)
     {
