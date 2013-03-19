@@ -170,6 +170,9 @@ public class Maze
 
     public void SendEagleToSword()
     {
+        if (IsHeroArmed())
+            return;
+
         if (_eagle.GetState() == EagleState.OnFlight)
             return;
 
