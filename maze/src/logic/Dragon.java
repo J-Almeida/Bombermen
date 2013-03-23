@@ -25,9 +25,9 @@ public class Dragon extends Unit
     }
 
     @Override
-    public String toString()
+    public char GetSymbol()
     {
-        return _asleep ? "d" : "D";
+        return _asleep ? 'd' : 'D';
     }
 
     /**

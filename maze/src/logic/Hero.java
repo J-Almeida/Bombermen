@@ -43,9 +43,9 @@ public class Hero extends Unit
     }
 
     @Override
-    public String toString()
+    public char GetSymbol()
     {
-        return _armed ? "A" : "H";
+        return _armed ? 'A' : 'H';
     }
 
     @Override

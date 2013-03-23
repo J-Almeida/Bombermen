@@ -4,10 +4,12 @@ public class Path extends InanimatedObject
 {
     public Path()
     {
-        super(WorldObjectType.Path);
-        // TODO Auto-generated constructor stub
+        super(InanimatedObjectType.Path);
     }
 
     @Override
-    public String toString() { return " "; }
+    public char GetSymbol()
+    {
+        return ' ';
+    }
 }

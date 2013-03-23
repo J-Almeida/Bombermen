@@ -14,8 +14,9 @@ public class Sword extends Unit
     }
 
     @Override
-    public String toString() {
-        return "E";
+    public char GetSymbol()
+    {
+        return 'E';
     }
 
     @Override

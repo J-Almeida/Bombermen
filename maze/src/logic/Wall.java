@@ -1,13 +1,15 @@
 package logic;
 
-public class Wall extends InanimatedObject {
-
+public class Wall extends InanimatedObject
+{
     public Wall()
     {
-        super(WorldObjectType.Wall);
-        // TODO Auto-generated constructor stub
+        super(InanimatedObjectType.Wall);
     }
 
     @Override
-    public String toString() { return "X"; }
+    public char GetSymbol()
+    {
+        return 'X';
+    }
 }

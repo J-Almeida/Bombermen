@@ -128,8 +128,8 @@ public class Eagle extends Unit
     }
 
     @Override
-    public String toString()
+    public char GetSymbol()
     {
-        return IsArmed() ? "\u00A5"/* Yen */ : "W";
+        return IsArmed() ? '\u00A5' /* Yen */ : 'W';
     }
 }

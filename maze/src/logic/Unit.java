@@ -3,8 +3,6 @@ package logic;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import model.Position;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class Unit.
@@ -13,14 +11,8 @@ public abstract class Unit extends WorldObject{
 
     public final UnitType Type;
 
-    /** The Constant DEFAULT_POSITION. */
-    public final static Position DEFAULT_POSITION = new Position();
-
     /** The _alive. */
     protected boolean _alive;
-
-    /** The _position. */
-    protected Position _position = DEFAULT_POSITION;
 
     /** The _eventQueue */
     protected Queue<Event> _eventQueue = new LinkedList<Event>();
@@ -35,26 +27,6 @@ public abstract class Unit extends WorldObject{
         super(WorldObjectType.Unit);
         Type = type;
         _alive = true;
-    }
-
-    /**
-     * Gets the position.
-     *
-     * @return the pair
-     */
-    public Position GetPosition()
-    {
-        return _position;
-    }
-
-    /**
-     * Sets the position.
-     *
-     * @param pos the pos
-     */
-    public void SetPosition(Position pos)
-    {
-        _position = pos;
     }
 
     /**
@@ -85,9 +57,16 @@ public abstract class Unit extends WorldObject{
         _eventQueue.add(val);
     }
 
-    @Override
-    public abstract String toString();
-
     /** Method called each iteration */
     public void Update() {};
+
+    public boolean IsHero() { return Type == UnitType.Hero; }
+    public boolean IsDragon() { return Type == UnitType.Dragon; }
+    public boolean IsSword() { return Type == UnitType.Sword; }
+    public boolean IsEagle() { return Type == UnitType.Eagle; }
+
+    public Hero ToHero() { return IsHero() ? (Hero)this : null; }
+    public Dragon ToDragon() { return IsDragon() ? (Dragon)this : null; }
+    public Sword ToSword() { return IsSword() ? (Sword)this : null; }
+    public Eagle ToEagle() { return IsEagle() ? (Eagle)this : null; }
 }

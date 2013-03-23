@@ -1,7 +1,6 @@
-/**
- *
- */
 package logic;
+
+import model.Position;
 
 /**
  * The WorldObject Unit.
@@ -10,17 +9,27 @@ public abstract class WorldObject
 {
     public final WorldObjectType Type;
 
-    public WorldObject(WorldObjectType type) {
+    public WorldObject(WorldObjectType type)
+    {
         Type = type;
-        // TODO Auto-generated constructor stub
     }
 
-    public boolean IsWall() { return Type == WorldObjectType.Wall; }
-    public boolean IsPath() { return Type == WorldObjectType.Path; }
+    public final static Position DEFAULT_POSITION = new Position();
+    protected Position _position = DEFAULT_POSITION;
+    public Position GetPosition() { return _position; }
+    public void SetPosition(Position pos) { _position = pos; }
+
+    public boolean IsInanimatedObject() { return Type == WorldObjectType.InanimatedObject; }
     public boolean IsUnit() { return Type == WorldObjectType.Unit; }
 
-    public Wall ToWall() { if (IsWall()) return (Wall)this; else return null;};
-    public Path ToPath() { if (IsPath()) return (Path)this; else return null;};
-    public Unit ToUnit() { if (IsUnit()) return (Unit)this; else return null;};
+    public Unit ToUnit() { return IsUnit() ? (Unit)this : null; }
+    public InanimatedObject ToInanimatedObject() { return IsInanimatedObject() ? (InanimatedObject)this : null; }
 
+    public abstract char GetSymbol();
+
+    @Override
+    public final String toString()
+    {
+        return String.valueOf(GetSymbol());
+    }
 }
