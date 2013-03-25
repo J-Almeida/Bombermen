@@ -49,13 +49,13 @@ public class Hero extends Unit
     }
 
     @Override
-    public void Update()
+    public void Update(Maze maze)
     {
         while (!_eventQueue.isEmpty())
         {
             if (_eventQueue.peek().Type == EventType.Collision)
             {
-                Collision ev = (Collision)_eventQueue.peek();
+                CollisionEvent ev = (CollisionEvent)_eventQueue.peek();
                 if (ev.Other.Type == UnitType.Sword || (ev.Other.Type == UnitType.Eagle))
                 {
                     this.EquipSword();

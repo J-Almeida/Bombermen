@@ -1,8 +1,8 @@
 package logic;
 
-public class Collision extends Event
+public class CollisionEvent extends Event
 {
-    public Collision(Unit other)
+    public CollisionEvent(Unit other)
     {
         super(EventType.Collision);
         Other = other;

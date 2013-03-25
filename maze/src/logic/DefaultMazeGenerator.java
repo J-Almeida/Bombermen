@@ -5,14 +5,16 @@ import model.Position;
 /** ConcreteBuilder - Default 10x10 maze */
 public class DefaultMazeGenerator extends MazeGenerator
 {
-    public DefaultMazeGenerator(String [] cells)
+    private String[] _cells;
+
+    public DefaultMazeGenerator(String[] cells)
     {
         _cells = cells.clone();
     }
 
     public DefaultMazeGenerator()
     {
-         this( new String[] { "XXXXXXXXXX",
+         this(new String[] {  "XXXXXXXXXX",
                               "XH       X",
                               "X XX X X X",
                               "XDXX X X X",
@@ -24,12 +26,6 @@ public class DefaultMazeGenerator extends MazeGenerator
                               "XXXXXXXXXX" });
     }
 
-    public void SetCells(String[] cells)
-    {
-        _cells = cells.clone();
-    }
-
-
     @Override
     public void BuildMaze()
     {
@@ -38,58 +34,101 @@ public class DefaultMazeGenerator extends MazeGenerator
             for (int y = 0; y < _size; y++) // height
             {
                 char c = _cells[y].charAt(x);
-                if (c == 'H')
+
+                switch (c)
                 {
-                    if (!_maze.GetHeroPosition().equals(Unit.DEFAULT_POSITION))
+                    case 'H':
+                    {
+                        if (_maze.FindHero() != null)
+                            throw new IllegalArgumentException();
+
+                        Hero h = new Hero();
+                        h.SetPosition(new Position(x, y));
+                        _maze.AddWorldObject(h);
+                        break;
+                    }
+                    case 'A':
+                    {
+                        if (_maze.FindHero() != null || _maze.FindSword() != null)
+                            throw new IllegalArgumentException();
+
+                        Hero h = new Hero();
+                        h.SetPosition(new Position(x, y));
+                        h.EquipSword();
+                        _maze.AddWorldObject(h);
+                        break;
+                    }
+                    case 'E':
+                    {
+                        if (_maze.FindSword() != null)
+                            throw new IllegalArgumentException();
+
+                        if (_maze.FindHero() != null)
+                            if (_maze.FindHero().IsArmed())
+                                throw new IllegalArgumentException();
+
+                        Sword s = new Sword();
+                        s.SetPosition(new Position(x, y));
+                        _maze.AddWorldObject(s);
+                        break;
+                    }
+                    case 'F':
+                    {
+                        if (_maze.FindSword() != null)
+                            throw new IllegalArgumentException();
+
+                        if (_maze.FindHero() != null)
+                            if (_maze.FindHero().IsArmed())
+                                throw new IllegalArgumentException();
+
+                        Dragon d = new Dragon(_dragonBehaviour);
+                        d.SetPosition(new Position(x, y));
+
+                        Sword s = new Sword();
+                        s.SetPosition(new Position(x, y));
+
+                        _maze.AddWorldObject(d);
+                        _maze.AddWorldObject(s);
+                        break;
+                    }
+                    case 'D':
+                    {
+                        if (_maze.FindDragons().size() > _dragonCount)
+                            throw new IllegalArgumentException();
+
+                        Dragon d = new Dragon(_dragonBehaviour);
+                        d.SetPosition(new Position(x, y));
+                        _maze.AddWorldObject(d);
+                        break;
+                    }
+                    case 'S':
+                    {
+                        if (_maze.FindExitPortal() != null)
+                            throw new IllegalArgumentException();
+
+                        ExitPortal e = new ExitPortal();
+                        e.SetPosition(new Position(x, y));
+                        _maze.AddWorldObject(e);
+                        break;
+                    }
+                    case 'X':
+                    {
+                        Wall w = new Wall();
+                        w.SetPosition(new Position(x, y));
+                        _maze.AddWorldObject(w);
+                        break;
+                    }
+                    case ' ':
+                    {
+                        Path p = new Path();
+                        p.SetPosition(new Position(x, y));
+                        _maze.AddWorldObject(p);
+                        break;
+                    }
+                    default:
                         throw new IllegalArgumentException();
-
-                    _maze.SetHeroPosition(new Position(x, y));
-                    _maze.SetEaglePosition(new Position(x, y), false);
                 }
-                else if (c == 'A')
-                {
-                    if (!_maze.GetSwordPosition().equals(Unit.DEFAULT_POSITION) || !_maze.GetHeroPosition().equals(Unit.DEFAULT_POSITION))
-                        throw new IllegalArgumentException();
-
-                    _maze.EquipHero();
-                    _maze.SetHeroPosition(new Position(x, y));
-                }
-                else if (c == 'E')
-                {
-                    if (!_maze.GetSwordPosition().equals(Unit.DEFAULT_POSITION) || _maze.IsHeroArmed())
-                        throw new IllegalArgumentException();
-
-                    _maze.SetSwordPosition((new Position(x, y)));
-                }
-                else if (c == 'F')
-                {
-                    if (!_maze.GetSwordPosition().equals(Unit.DEFAULT_POSITION) || _maze.IsHeroArmed())
-                        throw new IllegalArgumentException();
-
-                    _maze.SetSwordPosition(new Position(x, y));
-                    _maze.SetDragonPosition(_maze.AddDragon(), new Position(x, y));
-                }
-                else if (c == 'D')
-                {
-                    _maze.SetDragonPosition(_maze.AddDragon(), new Position(x, y));
-                }
-                else if (c == 'S')
-                {
-                    if (!_maze.GetExitPosition().equals(Unit.DEFAULT_POSITION))
-                        throw new IllegalArgumentException();
-
-                    _maze.SetExitPosition(new Position(x, y));
-                }
-                else if (c != 'X' && c != ' ')
-                    throw new IllegalArgumentException();
-
-                if (c != 'X' && c != ' ')
-                    c = ' ';
-
-                _maze.SetCell(new Position(x, y), c == ' ' ? Maze.PATH : Maze.WALL);
             }
         }
     }
-
-    private String[] _cells;
 }

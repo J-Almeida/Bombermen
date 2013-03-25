@@ -1,8 +1,11 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import logic.Architect;
 import logic.DefaultMazeGenerator;
+import logic.Direction;
 import logic.DragonBehaviour;
 import logic.Maze;
 import logic.MazeGenerator;
@@ -55,9 +58,9 @@ public class SimpleTests
     @Test
     public void MoveHeroSuccessTest() // i
     {
-        assertEquals(new Position(1, 1), _maze.GetHeroPosition());
-        assertTrue(_maze.MoveHero(Key.RIGHT));
-        assertEquals(new Position(2, 1), _maze.GetHeroPosition());
+        assertEquals(new Position(1, 1), _maze.FindHero().GetPosition());
+        _maze.MoveHero(Direction.FromKey(Key.RIGHT));
+        assertEquals(new Position(2, 1), _maze.FindHero().GetPosition());
     }
 
     /**
@@ -66,9 +69,9 @@ public class SimpleTests
     @Test
     public void MoveHeroFailureTest() // ii
     {
-        assertEquals(new Position(1, 1), _maze.GetHeroPosition());
-        assertFalse(_maze.MoveHero(Key.UP));
-        assertEquals(new Position(1, 1), _maze.GetHeroPosition());
+        assertEquals(new Position(1, 1), _maze.FindHero().GetPosition());
+        _maze.MoveHero(Direction.FromKey(Key.UP));
+        assertEquals(new Position(1, 1), _maze.FindHero().GetPosition());
     }
 
     /**
@@ -77,7 +80,7 @@ public class SimpleTests
     @Test
     public void EquipSwordTest() // iii
     {
-        assertFalse(_maze.IsHeroArmed());
+        assertFalse(_maze.FindHero().IsArmed());
 
         Key[] movements = {
                 Key.RIGHT, Key.RIGHT, Key.RIGHT,
@@ -88,11 +91,11 @@ public class SimpleTests
 
         for (Key k : movements)
         {
-            _maze.MoveHero(k);
+            _maze.MoveHero(Direction.FromKey(k));
             _maze.Update();
         }
 
-        assertTrue(_maze.IsHeroArmed());
+        assertTrue(_maze.FindHero().IsArmed());
     }
 
     /**
@@ -101,12 +104,12 @@ public class SimpleTests
     @Test
     public void DragonKillHero() // iv
     {
-        assertFalse(_maze.IsHeroArmed());
+        assertFalse(_maze.FindHero().IsArmed());
 
-        _maze.MoveHero(Key.DOWN);
+        _maze.MoveHero(Direction.FromKey(Key.DOWN));
         _maze.Update();
 
-        assertFalse(_maze.IsHeroAlive());
+        assertTrue(_maze.FindHero() == null);
     }
 
     /**
@@ -115,11 +118,11 @@ public class SimpleTests
     @Test
     public void HeroKillDragonTest() // v
     {
-        _maze.EquipHero();
-        _maze.MoveHero(Key.DOWN);
+        _maze.FindHero().EquipSword();
+        _maze.MoveHero(Direction.FromKey(Key.DOWN));
         _maze.Update();
 
-        assertFalse(_maze.IsDragonAlive(0));
+        assertTrue(_maze.FindDragons().isEmpty());
     }
 
     /**
@@ -142,11 +145,11 @@ public class SimpleTests
 
         for (Key k : movements)
         {
-            _maze.MoveHero(k);
+            _maze.MoveHero(Direction.FromKey(k));
             _maze.Update();
         }
 
-        assertTrue(_maze.IsHeroAlive());
+        assertTrue(_maze.FindHero().IsAlive());
         assertTrue(_maze.IsFinished());
     }
 
@@ -164,11 +167,11 @@ public class SimpleTests
 
         for (Key k : movements)
         {
-            _maze.MoveHero(k);
+            _maze.MoveHero(Direction.FromKey(k));
             _maze.Update();
         }
 
-        assertTrue(_maze.IsHeroAlive());
+        assertTrue(_maze.FindHero().IsAlive());
         assertFalse(_maze.IsFinished());
     }
 }

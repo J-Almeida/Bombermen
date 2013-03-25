@@ -3,6 +3,7 @@ package ui.cli;
 import java.util.Scanner;
 
 import logic.Architect;
+import logic.Direction;
 import logic.DragonBehaviour;
 import logic.Maze;
 import logic.MazeGenerator;
@@ -66,9 +67,12 @@ public class CLI
                 }
                 else
                 {
-                    success = maze.MoveHero(input);
+                    Direction d = Direction.FromKey(input);
+                    if (d == null)
+                        continue;
+                    maze.MoveHero(d);
+                    success = true;
                 }
-
             } while (!success);
 
             System.out.print("\n\n");
@@ -81,7 +85,7 @@ public class CLI
         sc.close();
 
         System.out.println(maze);
-        if (maze.IsHeroAlive())
+        if (maze.FindHero() != null && maze.FindHero().IsAlive())
             System.out.println("You Won!");
         else
             System.out.println("You Lost!");

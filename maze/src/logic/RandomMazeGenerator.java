@@ -17,13 +17,13 @@ public class RandomMazeGenerator extends MazeGenerator
 
         for (int i = 0; i < _maze.GetWidth(); i++)
             for (int j = 0; j < _maze.GetHeight(); j++)
-                _maze.GetCell(new Position(i, j)).SetValue(Maze.WALL);
+                _maze.GetGrid().GetCell(new Position(i, j)).SetValue(Maze.WALL);
 
         CellNeighbors h = new CellNeighbors();
 
         Position initPos = Utilities.RandomPosition(1, _size - 2, 1, _size - 2);
 
-        h.cp = new CellPos(_maze.GetCell(initPos), initPos);
+        h.cp = new CellPos(_maze.GetGrid().GetCell(initPos), initPos);
         h.cp.Cell.Visit();
         h.cp.Cell.SetValue(Maze.PATH);
         h.nbrs = GetNeighbors(h.cp.Pos);
@@ -81,8 +81,14 @@ public class RandomMazeGenerator extends MazeGenerator
             }
         } while (!stk.isEmpty());
 
-        _maze.SetHeroPosition(initPos);
-        _maze.SetEaglePosition(initPos, false);
+        Hero hero = new Hero();
+        hero.SetPosition(new Position(initPos.X, initPos.Y));
+        _maze.AddWorldObject(hero);
+
+        Eagle eagle = new Eagle();
+        eagle.SetPosition(new Position(initPos.X, initPos.Y));
+        _maze.AddWorldObject(eagle);
+
         SetRandomSwordPosition();
         SetRandomDragonsPosition();
         SetRandomExitPosition();

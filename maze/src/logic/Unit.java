@@ -57,8 +57,9 @@ public abstract class Unit extends WorldObject{
         _eventQueue.add(val);
     }
 
-    /** Method called each iteration */
-    public void Update() {};
+    /** Method called each iteration
+     * @param maze */
+    public abstract void Update(Maze maze);
 
     public boolean IsHero() { return Type == UnitType.Hero; }
     public boolean IsDragon() { return Type == UnitType.Dragon; }

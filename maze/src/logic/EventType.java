@@ -6,5 +6,8 @@ package logic;
 public enum EventType
 {
     /** Collision */
-    Collision;
+    Collision,
+    RequestMovement,
+    Movement,
+    SendEagle
 }

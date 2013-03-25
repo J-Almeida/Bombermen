@@ -14,6 +14,11 @@ public abstract class WorldObject
         Type = type;
     }
 
+    private static int _lastId = 0;
+    private int _id = ++_lastId;
+
+    public int GetId() { return _id; }
+
     public final static Position DEFAULT_POSITION = new Position();
     protected Position _position = DEFAULT_POSITION;
     public Position GetPosition() { return _position; }

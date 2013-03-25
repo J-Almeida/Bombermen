@@ -1,13 +1,18 @@
 package tests;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import logic.Architect;
 import logic.DefaultMazeGenerator;
+import logic.Direction;
+import logic.Dragon;
 import logic.DragonBehaviour;
+import logic.Eagle;
+import logic.Hero;
 import logic.Maze;
 import logic.MazeGenerator;
-import logic.Wall;
 import model.Position;
 
 import org.junit.Before;
@@ -23,7 +28,7 @@ public class EagleTests
 {
     /** The architect. */
     private static Architect _architect;
-    
+
     /** The maze. */
     private static Maze _maze;
 
@@ -45,10 +50,15 @@ public class EagleTests
      * Sets the up before test.
      */
     @Before
-    public void setUpBeforeTest() /* throws Exception */
+    public void setUpBeforeTest()
     {
         _architect.ConstructMaze(10, 1, DragonBehaviour.Idle);
         _maze = _architect.GetMaze();
+
+        Eagle e = new Eagle();
+        Hero h = _maze.FindHero();
+        e.SetPosition(new Position(h.GetPosition().X, h.GetPosition().Y));
+        _maze.AddWorldObject(e);
     }
 
     /**
@@ -58,11 +68,11 @@ public class EagleTests
     public void EagleInitiallyOnHeroTest()
     {
         // inicialmente a águia está poisada no braço do herói e acompanha-o;
-        assertThat(_maze.GetEaglePosition(), is(_maze.GetHeroPosition()));
-        assertThat(_maze.MoveHero(Key.RIGHT), is(true));
-        assertThat(_maze.GetEaglePosition(), is(_maze.GetHeroPosition()));
+        assertThat(_maze.FindEagle().GetPosition(), is(_maze.FindHero().GetPosition()));
+        _maze.MoveHero(Direction.FromKey(Key.RIGHT));
+        assertThat(_maze.FindEagle().GetPosition(), is(_maze.FindHero().GetPosition()));
     }
-    
+
     /**
      * Eagle flight test.
      */
@@ -78,7 +88,7 @@ public class EagleTests
 
         for (Key k : movements1)
         {
-            _maze.MoveHero(k);
+            _maze.MoveHero(Direction.FromKey(k));
             _maze.Update();
         }
 
@@ -86,16 +96,16 @@ public class EagleTests
 
         _maze.Update();
         _maze.Update();
-        
-        assertThat(_maze.GetEaglePosition(), is(not(_maze.GetHeroPosition())));
+
+        assertThat(_maze.FindEagle().GetPosition(), is(not(_maze.FindHero().GetPosition())));
 
         // quando está a voar, a águia pode estar sobre qualquer quadrícula;
         _maze.Update();
         _maze.Update();
 
-        assertThat(_maze.GetCell(_maze.GetEaglePosition()).GetValue(), is(instanceOf(Wall.class)));
+        assertThat(_maze.GetGrid().GetCellT(_maze.FindEagle().GetPosition()).IsWall(), is(true));
     }
-    
+
     /**
      * Eagle reach sword test.
      */
@@ -103,16 +113,16 @@ public class EagleTests
     public void EagleReachSwordTest()
     {
         // quando chega à quadrícula da espada, a águia desce para apanhar a espada (se ainda aí estiver);
-        
+
         _maze.SendEagleToSword();
-        
+
         for (int i = 0; i < 9; ++i)
             _maze.Update();
 
-        assertThat(_maze.IsEagleAlive(), is(true));
-        assertThat(_maze.IsEagleArmed(), is(true));
+        assertThat(_maze.FindEagle().IsAlive(), is(true));
+        assertThat(_maze.FindEagle().IsArmed(), is(true));
     }
-    
+
     /**
      * Eagle reach unexisting sword test.
      */
@@ -120,40 +130,40 @@ public class EagleTests
     public void EagleReachUnexistingSwordTest()
     {
         // quando chega à quadrícula da espada, a águia desce para apanhar a espada (se ainda aí estiver);
-        
+
         _maze.SendEagleToSword();
 
         for (int i = 0; i < 4; ++i)
             _maze.Update();
-        
-        _maze.SetSwordPosition(new Position(-1, -1));
-        
+
+        _maze.FindSword().SetPosition(new Position(-1, -1));
+
         for (int i = 0; i < 5; ++i)
             _maze.Update();
-        
-        assertThat(_maze.IsEagleAlive(), is(true));
-        assertThat(_maze.IsEagleArmed(), is(false));
+
+        assertThat(_maze.FindEagle().IsAlive(), is(true));
+        assertThat(_maze.FindEagle().IsArmed(), is(false));
     }
-    
+
     /**
      * Eagle reach sword with dragon test.
      */
     @Test
     public void EagleReachSwordWithDragonTest()
     {
-        // quando chega à quadrícula da espada, a águia desce para apanhar a espada (se ainda aí estiver); 
+        // quando chega à quadrícula da espada, a águia desce para apanhar a espada (se ainda aí estiver);
         //  se um dragão estive acordado nessa posição ou adjacente, mata a águia;
 
-        _maze.SetDragonPosition(0, new Position(1, 7));
+        _maze.FindDragons().get(0).SetPosition(new Position(1, 7));
 
         _maze.SendEagleToSword();
-        
+
         for (int i = 0; i < 9; ++i)
             _maze.Update();
 
-        assertThat(_maze.IsEagleAlive(), is(false));
+        assertNull(_maze.FindEagle());
     }
-    
+
     /**
      * Eagle flight back test.
      */
@@ -163,77 +173,78 @@ public class EagleTests
         // assim que pega a espada, a águia levanta voo de novo em direção à posição de partida
         //  (onde levantou voo do braço do herói);
 
-        Position takeOffPos = _maze.GetEaglePosition();
-        
+        Position takeOffPos = _maze.FindEagle().GetPosition();
+
         _maze.SendEagleToSword();
-        
+
         //_maze.MoveHero(Key.RIGHT);
-        
+
         for (int i = 0; i < 9; ++i)
             _maze.Update();
 
-        assertThat(_maze.IsEagleAlive(), is(true));
-        assertThat(_maze.IsEagleArmed(), is(true));
-        
+        assertThat(_maze.FindEagle().IsAlive(), is(true));
+        assertThat(_maze.FindEagle().IsArmed(), is(true));
+
         for (int i = 0; i < 7; ++i)
             _maze.Update();
 
-        assertThat(_maze.GetEaglePosition(), is(takeOffPos));
-        assertThat(_maze.IsEagleAlive(), is(true));
-        assertThat(_maze.IsEagleArmed(), is(true));
-        
+        assertThat(_maze.FindEagle().GetPosition(), is(takeOffPos));
+        assertThat(_maze.FindEagle().IsAlive(), is(true));
+        assertThat(_maze.FindEagle().IsArmed(), is(true));
+
         _maze.Update();
-        
-        assertThat(_maze.IsEagleArmed(), is(false));
-        assertThat(_maze.IsHeroArmed(), is(true));
+
+        assertThat(_maze.FindEagle().IsArmed(), is(false));
+        assertThat(_maze.FindHero().IsArmed(), is(true));
     }
-    
+
     /**
      * Eagle flight back catch by hero test.
      */
     @Test
     public void EagleFlightBackCatchByHeroTest()
     {
-        // voltando à posição de partida, se não estiver aí o herói, a águia permanece no solo até o 
+        // voltando à posição de partida, se não estiver aí o herói, a águia permanece no solo até o
         //  herói a apanhar, correndo o risco de ser morta por um dragão.
-        
+
         _maze.SendEagleToSword();
-        
-        _maze.MoveHero(Key.RIGHT);
-        
+
+        _maze.MoveHero(Direction.FromKey(Key.RIGHT));
+
         for (int i = 0; i < 20; ++i)
             _maze.Update();
-        
-        _maze.MoveHero(Key.LEFT);
+
+        _maze.MoveHero(Direction.FromKey(Key.LEFT));
         _maze.Update();
-        
-        assertThat(_maze.IsEagleAlive(), is(true));
-        assertThat(_maze.IsEagleArmed(), is(false));
-        assertThat(_maze.IsHeroArmed(), is(true));
+
+        assertThat(_maze.FindEagle().IsAlive(), is(true));
+        assertThat(_maze.FindEagle().IsArmed(), is(false));
+        assertThat(_maze.FindHero().IsArmed(), is(true));
     }
-    
+
     /**
      * Eagle flight back with dragon.
      */
     @Test
     public void EagleFlightBackWithDragon()
     {
-        // voltando à posição de partida, se não estiver aí o herói, a águia permanece no solo até o 
+        // voltando à posição de partida, se não estiver aí o herói, a águia permanece no solo até o
         //  herói a apanhar, correndo o risco de ser morta por um dragão.
-        
+
         _maze.SendEagleToSword();
-        
-        _maze.MoveHero(Key.RIGHT);
-        _maze.MoveHero(Key.RIGHT);
-        
+
+        _maze.MoveHero(Direction.FromKey(Key.RIGHT));
+        _maze.MoveHero(Direction.FromKey(Key.RIGHT));
+
         for (int i = 0; i < 10; ++i)
             _maze.Update();
-        
-        _maze.MoveDragon(0, Key.UP);
-        
+
+        Dragon d = _maze.FindDragons().get(0);
+        d.SetPosition(new Position(d.GetPosition().X - 1, d.GetPosition().Y));
+
         for (int i = 0; i < 8; ++i)
             _maze.Update();
-        
-        assertThat(_maze.IsEagleAlive(), is(false));
+
+        assertNull(_maze.FindEagle());
     }
 }

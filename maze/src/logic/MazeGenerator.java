@@ -13,6 +13,7 @@ public abstract class MazeGenerator
 {
     protected int _size = 10;
     protected int _dragonCount = 2;
+    protected DragonBehaviour _dragonBehaviour = DragonBehaviour.Sleepy;
     protected Maze _maze;
 
     public Maze GetMaze() { return _maze; }
@@ -20,7 +21,7 @@ public abstract class MazeGenerator
 
     public void SetMazeSize(int size) { _size = size; }
     public void SetNumberOfDragons(int num) { _dragonCount = num; }
-    public void SetDragonsBehaviour(DragonBehaviour db) { _maze.SetDragonBehaviour(db); }
+    public void SetDragonsBehaviour(DragonBehaviour db) { _dragonBehaviour = db; }
 
     public abstract void BuildMaze();
 
@@ -34,30 +35,32 @@ public abstract class MazeGenerator
         for (int x = 1; x < _maze.GetWidth() - 1; x++)
         {
             int y = 1;
-            Cell<InanimatedObject> cell = _maze.GetCell(new Position(x, y));
+            Cell<InanimatedObject> cell = _maze.GetGrid().GetCell(new Position(x, y));
             if (cell.GetValue().IsPath())
-                whitelst.add(new CellPos(_maze.GetCell(new Position(x, y-1)), new Position(x, y-1)));
+                whitelst.add(new CellPos(_maze.GetGrid().GetCell(new Position(x, y-1)), new Position(x, y-1)));
 
             y = _maze.GetHeight() - 2;
-            cell = _maze.GetCell(new Position(x, y));
+            cell = _maze.GetGrid().GetCell(new Position(x, y));
             if (cell.GetValue().IsPath())
-                whitelst.add(new CellPos(_maze.GetCell(new Position(x, y+1)), new Position(x, y+1)));
+                whitelst.add(new CellPos(_maze.GetGrid().GetCell(new Position(x, y+1)), new Position(x, y+1)));
         }
 
         for (int y = 2; y < _maze.GetHeight() - 2; y++)
         {
             int x = 1;
-            Cell<InanimatedObject> cell = _maze.GetCell(new Position(x, y));
+            Cell<InanimatedObject> cell = _maze.GetGrid().GetCell(new Position(x, y));
             if (cell.GetValue().IsPath())
-                whitelst.add(new CellPos(_maze.GetCell(new Position(x-1, y)), new Position(x-1, y)));
+                whitelst.add(new CellPos(_maze.GetGrid().GetCell(new Position(x-1, y)), new Position(x-1, y)));
 
             x = _maze.GetWidth() - 2;
-            cell = _maze.GetCell(new Position(x, y));
+            cell = _maze.GetGrid().GetCell(new Position(x, y));
             if (cell.GetValue().IsPath())
-                whitelst.add(new CellPos(_maze.GetCell(new Position(x+1, y)), new Position(x+1, y)));
+                whitelst.add(new CellPos(_maze.GetGrid().GetCell(new Position(x+1, y)), new Position(x+1, y)));
         }
 
-        _maze.SetExitPosition(Utilities.RandomElement(whitelst).Element.Pos);
+        ExitPortal exit = new ExitPortal();
+        exit.SetPosition(Utilities.RandomElement(whitelst).Element.Pos);
+        _maze.AddWorldObject(exit);
     }
 
     /**
@@ -67,9 +70,9 @@ public abstract class MazeGenerator
     {
         for (int i = 0; i < _dragonCount; i++)
         {
-            int idx = _maze.AddDragon();
+            Dragon d = new Dragon(_dragonBehaviour);
             boolean success;
-            List<Pair<CellPos>> lst = GetNeighbors(_maze.GetHeroPosition());
+            List<Pair<CellPos>> lst = GetNeighbors(_maze.FindHero().GetPosition());
             List<Position> lstn = new LinkedList<Position>();
 
             for (Pair<CellPos> ele : lst)
@@ -85,7 +88,16 @@ public abstract class MazeGenerator
                 success = !lstn.contains(p);
 
                 if (success)
-                    success = _maze.SetDragonPosition(idx, p);
+                {
+                    if (_maze.IsEmptyPosition(p))
+                    {
+                        d.SetPosition(p);
+                        _maze.AddWorldObject(d);
+                        success = true;
+                    }
+                    else
+                        success = false;
+                }
             } while (!success);
         }
     }
@@ -98,7 +110,16 @@ public abstract class MazeGenerator
         boolean success;
         do
         {
-            success = _maze.SetSwordPosition(Utilities.RandomPosition(1, _maze.GetWidth() - 2, 1, _maze.GetHeight() - 2));
+            Position p = Utilities.RandomPosition(1, _maze.GetWidth() - 2, 1, _maze.GetHeight() - 2);
+            if (_maze.IsEmptyPosition(p))
+            {
+                Sword s = new Sword();
+                s.SetPosition(p);
+                _maze.AddWorldObject(s);
+                success = true;
+            }
+            else
+                success = false;
         } while (!success);
     }
 
@@ -117,23 +138,23 @@ public abstract class MazeGenerator
 
         if (y >= 2)
             l.add(new Pair<CellPos>(
-                    new CellPos(_maze.GetCell(new Position(x, y - 2)), new Position(x, y - 2)),    //Cell
-                    new CellPos(_maze.GetCell(new Position(x, y - 1)), new Position(x, y - 1))));  //Wall
+                    new CellPos(_maze.GetGrid().GetCell(new Position(x, y - 2)), new Position(x, y - 2)),    //Cell
+                    new CellPos(_maze.GetGrid().GetCell(new Position(x, y - 1)), new Position(x, y - 1))));  //Wall
 
         if (x >= 2)
             l.add(new Pair<CellPos>(
-                    new CellPos(_maze.GetCell(new Position(x - 2, y)), new Position(x - 2, y)),
-                    new CellPos(_maze.GetCell(new Position(x - 1, y)), new Position(x - 1, y))));
+                    new CellPos(_maze.GetGrid().GetCell(new Position(x - 2, y)), new Position(x - 2, y)),
+                    new CellPos(_maze.GetGrid().GetCell(new Position(x - 1, y)), new Position(x - 1, y))));
 
         if (x <= (w - 2))
             l.add(new Pair<CellPos>(
-                    new CellPos(_maze.GetCell(new Position(x + 2, y)), new Position(x + 2, y)),
-                    new CellPos(_maze.GetCell(new Position(x + 1, y)), new Position(x + 1, y))));
+                    new CellPos(_maze.GetGrid().GetCell(new Position(x + 2, y)), new Position(x + 2, y)),
+                    new CellPos(_maze.GetGrid().GetCell(new Position(x + 1, y)), new Position(x + 1, y))));
 
         if (y <= (w - 2))
             l.add(new Pair<CellPos>(
-                    new CellPos(_maze.GetCell(new Position(x, y + 2)), new Position(x, y + 2)),
-                    new CellPos(_maze.GetCell(new Position(x, y + 1)), new Position(x, y + 1))));
+                    new CellPos(_maze.GetGrid().GetCell(new Position(x, y + 2)), new Position(x, y + 2)),
+                    new CellPos(_maze.GetGrid().GetCell(new Position(x, y + 1)), new Position(x, y + 1))));
 
         return l;
     }

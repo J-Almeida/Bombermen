@@ -19,4 +19,9 @@ public class Position
     public int X = -1;
     public int Y = -1;
 
+    @Override
+    public Position clone()
+    {
+        return new Position(this.X, this.Y);
+    }
 }

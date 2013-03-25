@@ -73,11 +73,13 @@ public class Grid<T>
      */
     public Cell<T> GetCell(Position pos)
     {
-        int column = pos.X;
-        int line = pos.Y;
+        return GetCell(pos.X, pos.Y);
+    }
 
-        if (line >= 0 && line < _cells.length && column >= 0 && column < _cells[line].length)
-            return _cells[line][column];
+    public Cell<T> GetCell(int x, int y)
+    {
+        if (y >= 0 && y < _cells.length && x >= 0 && x < _cells[y].length)
+            return _cells[y][x];
         return null;
     }
 
@@ -89,7 +91,12 @@ public class Grid<T>
      */
     public T GetCellT(Position pos)
     {
-        Cell<T> c = GetCell(pos);
+        return GetCellT(pos.X, pos.Y);
+    }
+
+    public T GetCellT(int x, int y)
+    {
+        Cell<T> c = GetCell(x, y);
         if (c == null)
             return null;
         return c.GetValue();

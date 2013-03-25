@@ -60,7 +60,7 @@ public class Eagle extends Unit
     }
 
     @Override
-    public void Update()
+    public void Update(Maze maze)
     {
         if (_state == EagleState.OnFlight)
         {
@@ -111,7 +111,7 @@ public class Eagle extends Unit
         {
             if (_eventQueue.peek().Type == EventType.Collision)
             {
-                Collision ev = (Collision)_eventQueue.peek();
+                CollisionEvent ev = (CollisionEvent)_eventQueue.peek();
                 if (ev.Other.Type == UnitType.Sword)
                 {
                     this.EquipSword();
