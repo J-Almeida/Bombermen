@@ -24,4 +24,19 @@ public class Position
     {
         return new Position(this.X, this.Y);
     }
+
+    /**
+     * Checks if is adjacent.
+     *
+     * @param pos1 the pos1
+     * @param pos2 the pos2
+     * @return true, if is adjacent
+     */
+    public static boolean IsAdjacent(Position pos1, Position pos2)
+    {
+        return (pos1.equals(new Position(pos2.X + 1, pos2.Y)))
+                || (pos1.equals(new Position(pos2.X - 1, pos2.Y)))
+                || (pos1.equals(new Position(pos2.X, pos2.Y + 1)))
+                || (pos1.equals(new Position(pos2.X, pos2.Y - 1)));
+    }
 }

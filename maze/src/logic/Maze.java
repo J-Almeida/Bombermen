@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import model.Cell;
 import model.Grid;
 import model.Position;
 
@@ -20,6 +21,11 @@ public class Maze
 
     /** True if Game Over */
     private boolean _finished = false;
+
+    public void SetFinished(boolean finish)
+    {
+        _finished = true;
+    }
 
     /**
      * Instantiates an empty maze.
@@ -57,21 +63,46 @@ public class Maze
     public void SendEagleToSword()
     {
         Hero h = FindHero();
+        Sword s = FindSword();
         Eagle e = FindEagle();
 
-        e.PushEvent(new SendEagleEvent(h));
+        e.PushEvent(new SendEagleEvent(h, s));
     }
 
     public void MoveHero(Direction direction)
     {
-        Hero hero = FindHero();
-        hero.PushEvent(new RequestMovementEvent(direction));
+        FindHero().PushEvent(new RequestMovementEvent(direction));
     }
 
     public void Update()
     {
+        // TODO: change this... O(n^2)
+        for (Unit u1 : _livingObjects.values())
+        {
+            for (Unit u2 : _livingObjects.values())
+            {
+                if (u1 != u2)
+                {
+                    if (u1.GetPosition().equals(u2.GetPosition()))
+                    {
+                        u1.OnCollision(u2);
+                        u1.PushEvent(new CollisionEvent(u2));
+                    }
+                }
+            }
+        }
+
+        ArrayList<Unit> toRemove = new ArrayList<Unit>();
+
         for (Unit wo : _livingObjects.values())
             wo.Update(this);
+
+        for (Unit wo : _livingObjects.values())
+            if (!wo.IsAlive())
+                toRemove.add(wo);
+
+        for (Unit wo : toRemove)
+            _livingObjects.remove(wo);
     }
 
     public void AddWorldObject(WorldObject obj)
@@ -136,8 +167,7 @@ public class Maze
 
     public boolean IsEmptyPosition(Position p)
     {
-        InanimatedObject io = _board.GetCellT(p);
-        if (!io.IsPath())
+        if (!IsPathPosition(p))
             return false;
 
         for (Unit u : _livingObjects.values())
@@ -145,5 +175,18 @@ public class Maze
                 return false;
 
         return true;
+    }
+
+    public boolean IsPathPosition(Position p)
+    {
+        Cell<InanimatedObject> c = _board.GetCell(p);
+
+        return c != null ? c.GetValue().IsPath() : null;
+    }
+
+    public void ForwardEventToUnits(Event ev)
+    {
+        for (Unit u : _livingObjects.values())
+            u.PushEvent(ev);
     }
 }

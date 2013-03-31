@@ -10,6 +10,6 @@ public class ExitPortal extends InanimatedObject
     @Override
     public char GetSymbol()
     {
-        return 'E';
+        return 'S';
     }
 }

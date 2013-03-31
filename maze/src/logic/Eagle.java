@@ -109,20 +109,40 @@ public class Eagle extends Unit
 
         while (!_eventQueue.isEmpty())
         {
-            if (_eventQueue.peek().Type == EventType.Collision)
+            Event event = _eventQueue.peek();
+            if (event.IsCollisionEvent())
             {
-                CollisionEvent ev = (CollisionEvent)_eventQueue.peek();
-                if (ev.Other.Type == UnitType.Sword)
+                CollisionEvent ev = event.ToCollisionEvent();
+                if (ev.Other.IsSword())
                 {
                     this.EquipSword();
                     SetState(EagleState.OnFlightBack);
                 }
-                else if (ev.Other.Type == UnitType.Hero)
+                else if (ev.Other.IsHero())
                 {
                     this.UnequipSword();
                     SetState(EagleState.FollowingHero);
                 }
             }
+            else if (event.IsMovementEvent())
+            {
+                MovementEvent ev = event.ToMovementEvent();
+                if (ev.Actor.IsHero() && GetState() == EagleState.FollowingHero)
+                {
+                    _position = ev.Actor.GetPosition().clone();
+                    maze.ForwardEventToUnits(new MovementEvent(this, ev.Direction));
+                }
+            }
+            else if (event.IsSendEagleEvent())
+            {
+                SendEagleEvent ev = event.ToSendEagleEvent();
+                if (!ev.Hero.IsArmed() && _state == EagleState.FollowingHero)
+                {
+                    _swordPosition = ev.Sword.GetPosition().clone();
+                    SetState(EagleState.OnFlight);
+                }
+            }
+
             _eventQueue.poll();
         }
     }

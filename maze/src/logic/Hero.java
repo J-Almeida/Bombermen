@@ -1,5 +1,7 @@
 package logic;
 
+import model.Position;
+
 /**
  * The Class Hero.
  */
@@ -27,19 +29,11 @@ public class Hero extends Unit
     }
 
     /**
-     * Equip sword.
+     * Equip or unequip sword.
      */
-    public void EquipSword()
+    public void EquipSword(boolean equip)
     {
-        _armed = true;
-    }
-
-    /**
-     * Unequip sword.
-     */
-    public void UnequipSword()
-    {
-        _armed = false;
+        _armed = equip;
     }
 
     @Override
@@ -48,25 +42,55 @@ public class Hero extends Unit
         return _armed ? 'A' : 'H';
     }
 
+    private ExitPortal _exitPortal = null; // cached
+
     @Override
     public void Update(Maze maze)
     {
+        if (_exitPortal == null)
+            _exitPortal = maze.FindExitPortal();
+
+        if (_position.equals(_exitPortal.GetPosition()))
+            maze.SetFinished(true);
+
         while (!_eventQueue.isEmpty())
         {
-            if (_eventQueue.peek().Type == EventType.Collision)
+            Event event = _eventQueue.peek();
+            if (event.IsRequestMovementEvent())
             {
-                CollisionEvent ev = (CollisionEvent)_eventQueue.peek();
-                if (ev.Other.Type == UnitType.Sword || (ev.Other.Type == UnitType.Eagle))
+                RequestMovementEvent ev = event.ToRequestMovementEvent();
+
+                Position newPos = _position.clone();
+                Direction.ApplyMovement(newPos, ev.Direction);
+
+                if (maze.IsPathPosition(newPos) || (IsArmed() && _exitPortal.GetPosition().equals(newPos)))
                 {
-                    this.EquipSword();
-                }
-                else if (ev.Other.Type == UnitType.Dragon)
-                {
-                    if (this.IsArmed())
-                        ev.Other.Kill();
+                    _position = newPos;
+                    maze.ForwardEventToUnits(new MovementEvent(this, ev.Direction));
                 }
             }
+
             _eventQueue.poll();
+        }
+    }
+
+    @Override
+    public void OnCollision(Unit other)
+    {
+        if (other.IsSword())
+        {
+            this.EquipSword(true);
+            other.Kill();
+        }
+        else if (other.IsEagle())
+        {
+            if (other.ToEagle().IsArmed())
+                this.EquipSword(true);
+        }
+        else if (other.IsDragon())
+        {
+            if (this.IsArmed())
+                other.Kill();
         }
     }
 }

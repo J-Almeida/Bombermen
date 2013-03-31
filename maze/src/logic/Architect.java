@@ -12,7 +12,7 @@ public class Architect
     public Maze GetMaze() { return _mazeGenerator.GetMaze(); }
 
     /** Builds the Maze */
-    public void ConstructMaze(int size, int dragonCount, DragonBehaviour dragonBehaviour)
+    public void ConstructMaze(int size, int dragonCount, Dragon.Behaviour dragonBehaviour)
     {
         _mazeGenerator.SetMazeSize(size);
         _mazeGenerator.CreateNewMaze();

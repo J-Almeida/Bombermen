@@ -8,7 +8,6 @@ import logic.Architect;
 import logic.DefaultMazeGenerator;
 import logic.Direction;
 import logic.Dragon;
-import logic.DragonBehaviour;
 import logic.Eagle;
 import logic.Hero;
 import logic.Maze;
@@ -52,7 +51,7 @@ public class EagleTests
     @Before
     public void setUpBeforeTest()
     {
-        _architect.ConstructMaze(10, 1, DragonBehaviour.Idle);
+        _architect.ConstructMaze(10, 1, Dragon.Behaviour.Idle);
         _maze = _architect.GetMaze();
 
         Eagle e = new Eagle();

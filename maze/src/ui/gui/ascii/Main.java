@@ -12,12 +12,13 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import logic.Architect;
 import logic.Direction;
-import logic.DragonBehaviour;
+import logic.Dragon;
 import logic.Maze;
 import logic.MazeGenerator;
 import logic.RandomMazeGenerator;
@@ -44,7 +45,7 @@ public class Main extends JPanel implements KeyListener
         frame.setVisible(true);
     }
 
-    private JTextArea _textArea = new JTextArea(30, 30);
+    private JTextArea _textArea = new JTextArea(10, 10);
     private JButton _quitButton = new JButton("Quit");
     private JButton _startButton = new JButton("Start");
     private Maze _maze;
@@ -59,7 +60,7 @@ public class Main extends JPanel implements KeyListener
         MazeGenerator mg = new RandomMazeGenerator();
 
         architect.SetMazeGenerator(mg);
-        architect.ConstructMaze(30, 2, DragonBehaviour.Sleepy);
+        architect.ConstructMaze(10, 2, Dragon.Behaviour.Sleepy);
 
         _maze = architect.GetMaze();
 
@@ -126,7 +127,6 @@ public class Main extends JPanel implements KeyListener
     @Override
     public void keyPressed(KeyEvent e)
     {
-
         repaint();
     }
 
@@ -163,5 +163,11 @@ public class Main extends JPanel implements KeyListener
             _maze.MoveHero(Direction.FromKey(k));
         _maze.Update();
         repaint();
+
+        if (_maze.IsFinished())
+        {
+            JOptionPane.showMessageDialog(this, "Game Over");
+            _gameStarted = false;
+        }
     }
 }

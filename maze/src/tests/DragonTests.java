@@ -8,7 +8,6 @@ import logic.Architect;
 import logic.DefaultMazeGenerator;
 import logic.Direction;
 import logic.Dragon;
-import logic.DragonBehaviour;
 import logic.Maze;
 import logic.RequestMovementEvent;
 import model.Position;
@@ -48,7 +47,7 @@ public class DragonTests
     public void MoveDragonSuccessTest()
     {
         _architect.SetMazeGenerator(new DefaultMazeGenerator());
-        _architect.ConstructMaze(10, 1, DragonBehaviour.Idle);
+        _architect.ConstructMaze(10, 1, Dragon.Behaviour.Idle);
         _maze = _architect.GetMaze();
 
         Dragon d = _maze.FindDragons().get(0);
@@ -67,7 +66,7 @@ public class DragonTests
     public void MoveDragonFailureTest()
     {
         _architect.SetMazeGenerator(new DefaultMazeGenerator());
-        _architect.ConstructMaze(10, 1, DragonBehaviour.Idle);
+        _architect.ConstructMaze(10, 1, Dragon.Behaviour.Idle);
         _maze = _architect.GetMaze();
 
         Dragon d = _maze.FindDragons().get(0);
@@ -87,7 +86,7 @@ public class DragonTests
     {
 
         _architect.SetMazeGenerator(new DefaultMazeGenerator());
-        _architect.ConstructMaze(10, 1, DragonBehaviour.Sleepy);
+        _architect.ConstructMaze(10, 1, Dragon.Behaviour.Sleepy);
         _maze = _architect.GetMaze();
 
         Dragon d = _maze.FindDragons().get(0);
@@ -113,7 +112,7 @@ public class DragonTests
     {
 
         _architect.SetMazeGenerator(new DefaultMazeGenerator());
-        _architect.ConstructMaze(10, 1, DragonBehaviour.RandomMovement);
+        _architect.ConstructMaze(10, 1, Dragon.Behaviour.RandomMovement);
         _maze = _architect.GetMaze();
         RandomTester r = new RandomTester();
         RandomEngine.SetRandom(r);
@@ -161,7 +160,7 @@ public class DragonTests
     public void DragonRandomMovementTestWithHeroAliveAtEnd()
     {
         _architect.SetMazeGenerator(new DefaultMazeGenerator());
-        _architect.ConstructMaze(10, 1, DragonBehaviour.RandomMovement);
+        _architect.ConstructMaze(10, 1, Dragon.Behaviour.RandomMovement);
         _maze = _architect.GetMaze();
         RandomTester r = new RandomTester();
         RandomEngine.SetRandom(r);
@@ -169,7 +168,7 @@ public class DragonTests
         r.PushInt(1);
         Position DragPos = _maze.FindDragons().get(0).GetPosition();
         assertTrue(_maze.FindHero().IsAlive());
-        _maze.FindHero().EquipSword();
+        _maze.FindHero().EquipSword(true);
         assertTrue(_maze.FindHero().IsArmed());
         _maze.Update();
         assertEquals(new Position(DragPos.X, DragPos.Y - 1), _maze.FindDragons().get(0).GetPosition());

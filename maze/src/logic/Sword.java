@@ -24,16 +24,14 @@ public class Sword extends Unit
     {
         while (!_eventQueue.isEmpty())
         {
-            if (_eventQueue.peek().Type == EventType.Collision)
-            {
-                CollisionEvent ev = (CollisionEvent)_eventQueue.peek();
-                if (ev.Other.Type == UnitType.Hero || ev.Other.Type == UnitType.Eagle)
-                {
-                    this.Kill();
-                }
-            }
-
             _eventQueue.poll();
         }
+    }
+
+    @Override
+    public void OnCollision(Unit other)
+    {
+        if (other.IsHero() || other.IsEagle())
+            this.Kill();
     }
 }

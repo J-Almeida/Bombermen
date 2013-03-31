@@ -1,5 +1,6 @@
 package logic;
 
+import model.Position;
 import utils.Key;
 
 public enum Direction
@@ -27,6 +28,41 @@ public enum Direction
                 return Direction.North;
             default:
                 return null;
+        }
+    }
+
+    public static void ApplyMovement(Position p, Direction d)
+    {
+        switch (d)
+        {
+            case East:
+                p.X++;
+                break;
+            case North:
+                p.Y--;
+                break;
+            case Northeast:
+                p.X++;
+                p.Y--;
+                break;
+            case Northwest:
+                p.X--;
+                p.Y--;
+                break;
+            case South:
+                p.Y++;
+                break;
+            case Southeast:
+                p.X++;
+                p.Y++;
+                break;
+            case Southwest:
+                p.X--;
+                p.Y++;
+                break;
+            case West:
+                p.X--;
+                break;
         }
     }
 }

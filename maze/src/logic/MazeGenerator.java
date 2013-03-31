@@ -13,7 +13,7 @@ public abstract class MazeGenerator
 {
     protected int _size = 10;
     protected int _dragonCount = 2;
-    protected DragonBehaviour _dragonBehaviour = DragonBehaviour.Sleepy;
+    protected Dragon.Behaviour _dragonBehaviour = Dragon.Behaviour.Sleepy;
     protected Maze _maze;
 
     public Maze GetMaze() { return _maze; }
@@ -21,7 +21,7 @@ public abstract class MazeGenerator
 
     public void SetMazeSize(int size) { _size = size; }
     public void SetNumberOfDragons(int num) { _dragonCount = num; }
-    public void SetDragonsBehaviour(DragonBehaviour db) { _dragonBehaviour = db; }
+    public void SetDragonsBehaviour(Dragon.Behaviour db) { _dragonBehaviour = db; }
 
     public abstract void BuildMaze();
 

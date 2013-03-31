@@ -54,7 +54,7 @@ public class DefaultMazeGenerator extends MazeGenerator
 
                         Hero h = new Hero();
                         h.SetPosition(new Position(x, y));
-                        h.EquipSword();
+                        h.EquipSword(true);
                         _maze.AddWorldObject(h);
                         break;
                     }

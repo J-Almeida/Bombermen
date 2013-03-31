@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import logic.Architect;
 import logic.Direction;
-import logic.DragonBehaviour;
+import logic.Dragon;
 import logic.Maze;
 import logic.MazeGenerator;
 import logic.RandomMazeGenerator;
@@ -26,7 +26,7 @@ public class CLI
         MazeGenerator mg = new RandomMazeGenerator();
 
         architect.SetMazeGenerator(mg);
-        architect.ConstructMaze(30, 2, DragonBehaviour.Sleepy);
+        architect.ConstructMaze(30, 2, Dragon.Behaviour.Sleepy);
 
         Maze maze = architect.GetMaze();
 

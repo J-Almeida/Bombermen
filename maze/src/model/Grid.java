@@ -97,9 +97,8 @@ public class Grid<T>
     public T GetCellT(int x, int y)
     {
         Cell<T> c = GetCell(x, y);
-        if (c == null)
-            return null;
-        return c.GetValue();
+
+        return c != null ? c.GetValue() : null;
     }
 
     /**

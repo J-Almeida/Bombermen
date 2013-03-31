@@ -61,6 +61,9 @@ public abstract class Unit extends WorldObject{
      * @param maze */
     public abstract void Update(Maze maze);
 
+    public void OnCollision(Unit other) { };
+    public void OnMovement(Unit other, Direction dir) { }
+
     public boolean IsHero() { return Type == UnitType.Hero; }
     public boolean IsDragon() { return Type == UnitType.Dragon; }
     public boolean IsSword() { return Type == UnitType.Sword; }
