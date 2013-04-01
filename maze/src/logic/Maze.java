@@ -1,8 +1,9 @@
 package logic;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
+import java.util.TreeSet;
 
 import model.Cell;
 import model.Grid;
@@ -17,8 +18,8 @@ public class Maze
     static final Wall WALL = new Wall();
     /** The Grid. */
     private Grid<InanimatedObject> _board;
-    private Map<Integer, Unit> _livingObjects;
-
+    private Set<Unit> _livingObjects;
+    
     /** True if Game Over */
     private boolean _finished = false;
 
@@ -36,7 +37,7 @@ public class Maze
     public Maze(int width, int height)
     {
         _board = new Grid<InanimatedObject>(width, height, PATH);
-        _livingObjects = new HashMap<Integer, Unit>();
+        _livingObjects = new TreeSet<Unit>(new UnitComparator());
     }
 
     public int GetWidth() { return _board.Width; }
@@ -44,14 +45,15 @@ public class Maze
     public int GetHeight() { return _board.Height; }
 
     public Grid<InanimatedObject> GetGrid() { return _board; }
-    public Map<Integer, Unit> GetLivingObjects() { return _livingObjects; }
+    public Set<Unit> GetLivingObjects() { return _livingObjects; }
 
     @Override
     public String toString()
     {
         char[] result = _board.toString().toCharArray();
 
-        for (Unit u : _livingObjects.values())
+        
+        for (Unit u : _livingObjects)
         {
             Position p = u.GetPosition();
             result[p.Y * (GetWidth() * 2) + p.X * 2] = u.GetSymbol();
@@ -77,9 +79,9 @@ public class Maze
     public void Update()
     {
         // TODO: change this... O(n^2)
-        for (Unit u1 : _livingObjects.values())
+        for (Unit u1 : _livingObjects)
         {
-            for (Unit u2 : _livingObjects.values())
+            for (Unit u2 : _livingObjects)
             {
                 if (u1 != u2)
                 {
@@ -94,10 +96,10 @@ public class Maze
 
         ArrayList<Unit> toRemove = new ArrayList<Unit>();
 
-        for (Unit wo : _livingObjects.values())
+        for (Unit wo : _livingObjects)
             wo.Update(this);
 
-        for (Unit wo : _livingObjects.values())
+        for (Unit wo : _livingObjects)
             if (!wo.IsAlive())
                 toRemove.add(wo);
 
@@ -110,7 +112,7 @@ public class Maze
         if (obj.IsInanimatedObject())
             _board.SetCell(obj.GetPosition(), obj.ToInanimatedObject());
         else if (obj.IsUnit())
-            _livingObjects.put(obj.GetId(), obj.ToUnit());
+            _livingObjects.add(obj.ToUnit());
     }
 
     public boolean IsFinished()
@@ -120,7 +122,7 @@ public class Maze
 
     public Hero FindHero()
     {
-        for (Unit wo : _livingObjects.values())
+        for (Unit wo : _livingObjects)
             if (wo.IsHero())
                 return wo.ToHero();
         return null;
@@ -128,7 +130,7 @@ public class Maze
 
     public Eagle FindEagle()
     {
-        for (Unit wo : _livingObjects.values())
+        for (Unit wo : _livingObjects)
             if (wo.IsEagle())
                 return wo.ToEagle();
         return null;
@@ -136,7 +138,7 @@ public class Maze
 
     public Sword FindSword()
     {
-        for (Unit wo : _livingObjects.values())
+        for (Unit wo : _livingObjects)
             if (wo.IsSword())
                 return wo.ToSword();
         return null;
@@ -145,7 +147,7 @@ public class Maze
     public ArrayList<Dragon> FindDragons()
     {
         ArrayList<Dragon> r = new ArrayList<Dragon>();
-        for (Unit wo : _livingObjects.values())
+        for (Unit wo : _livingObjects)
             if (wo.IsDragon())
                 r.add(wo.ToDragon());
         return r;
@@ -170,7 +172,7 @@ public class Maze
         if (!IsPathPosition(p))
             return false;
 
-        for (Unit u : _livingObjects.values())
+        for (Unit u : _livingObjects)
             if (u.GetPosition().equals(p))
                 return false;
 
@@ -186,7 +188,7 @@ public class Maze
 
     public void ForwardEventToUnits(Event ev)
     {
-        for (Unit u : _livingObjects.values())
+        for (Unit u : _livingObjects)
             u.PushEvent(ev);
     }
 }

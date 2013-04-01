@@ -5,9 +5,10 @@ package logic;
  */
 public enum EventType
 {
-    /** Collision */
-    Collision,
+    /** Collision */  /* Don't change Order because it is needed for EventComparator */  
     RequestMovement,
+    SendEagle,
     Movement,
-    SendEagle
+    Collision
+    
 }
