@@ -153,6 +153,7 @@ public class SimpleTests
             _maze.MoveHero(Direction.FromKey(k));
             _maze.Update();
         }
+        _maze.Update();
 
         assertTrue(_maze.FindHero().IsAlive());
         assertTrue(_maze.IsFinished());

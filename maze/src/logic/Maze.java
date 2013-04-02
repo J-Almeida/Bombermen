@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TreeSet;
@@ -17,16 +18,9 @@ public class Maze
     static final Path PATH = new Path();
     static final Wall WALL = new Wall();
     /** The Grid. */
-    private Grid<InanimatedObject> _board;
-    private Set<Unit> _livingObjects;
-    
-    /** True if Game Over */
-    private boolean _finished = false;
-
-    public void SetFinished(boolean finish)
-    {
-        _finished = true;
-    }
+    private final Grid<InanimatedObject> _board;
+    private final Set<Unit> _livingObjects;
+    private final PriorityQueue<UnitEvent> _eventQueue;
 
     /**
      * Instantiates an empty maze.
@@ -38,6 +32,7 @@ public class Maze
     {
         _board = new Grid<InanimatedObject>(width, height, PATH);
         _livingObjects = new TreeSet<Unit>(new UnitComparator());
+        _eventQueue = new PriorityQueue<UnitEvent>();
     }
 
     public int GetWidth() { return _board.Width; }
@@ -52,7 +47,6 @@ public class Maze
     {
         char[] result = _board.toString().toCharArray();
 
-        
         for (Unit u : _livingObjects)
         {
             Position p = u.GetPosition();
@@ -68,43 +62,29 @@ public class Maze
         Sword s = FindSword();
         Eagle e = FindEagle();
 
-        e.PushEvent(new SendEagleEvent(h, s));
+        this.PushEvent(e, new SendEagleEvent(h, s));
     }
 
-    public void MoveHero(Direction direction)
+    public void PushEvent(Unit u, Event ev) {
+		_eventQueue.add(new UnitEvent(u, ev));
+	}
+
+	public void MoveHero(Direction direction)
     {
-        FindHero().PushEvent(new RequestMovementEvent(direction));
+		this.PushEvent(FindHero(), new RequestMovementEvent(direction));
     }
 
     public void Update()
     {
-        // TODO: change this... O(n^2)
-        for (Unit u1 : _livingObjects)
-        {
-            for (Unit u2 : _livingObjects)
-            {
-                if (u1 != u2)
-                {
-                    if (u1.GetPosition().equals(u2.GetPosition()))
-                    {
-                        u1.OnCollision(u2);
-                        u1.PushEvent(new CollisionEvent(u2));
-                    }
-                }
-            }
-        }
-
-        ArrayList<Unit> toRemove = new ArrayList<Unit>();
-
         for (Unit wo : _livingObjects)
             wo.Update(this);
 
-        for (Unit wo : _livingObjects)
-            if (!wo.IsAlive())
-                toRemove.add(wo);
+        while (!_eventQueue.isEmpty())
+        	_eventQueue.poll().HandleEvent(this);
 
-        for (Unit wo : toRemove)
-            _livingObjects.remove(wo);
+        for (Iterator<Unit> uit = _livingObjects.iterator(); uit.hasNext();)
+        	if (!uit.next().IsAlive())
+        		uit.remove();
     }
 
     public void AddWorldObject(WorldObject obj)
@@ -117,7 +97,8 @@ public class Maze
 
     public boolean IsFinished()
     {
-        return _finished || (FindHero() == null);
+    	Hero h = FindHero();
+        return h == null || h.GetPosition().equals(FindExitPortal().GetPosition());
     }
 
     public Hero FindHero()
@@ -189,6 +170,11 @@ public class Maze
     public void ForwardEventToUnits(Event ev)
     {
         for (Unit u : _livingObjects)
-            u.PushEvent(ev);
+            this.PushEvent(u, ev);
     }
+
+	public boolean IsExitPosition(Position newPos) {
+		ExitPortal ex = FindExitPortal();
+		return ex != null && newPos != null && newPos.equals(ex.GetPosition());
+	}
 }

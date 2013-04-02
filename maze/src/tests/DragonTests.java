@@ -53,7 +53,7 @@ public class DragonTests
         Dragon d = _maze.FindDragons().get(0);
         assertEquals(new Position(1, 3), d.GetPosition());
 
-        d.PushEvent(new RequestMovementEvent(Direction.East));
+        _maze.PushEvent(d, new RequestMovementEvent(Direction.North));
         _maze.Update();
 
         assertEquals(new Position(1, 2), d.GetPosition());
@@ -72,7 +72,7 @@ public class DragonTests
         Dragon d = _maze.FindDragons().get(0);
         assertEquals(new Position(1, 3),d.GetPosition());
 
-        d.PushEvent(new RequestMovementEvent(Direction.West));
+        _maze.PushEvent(d, new RequestMovementEvent(Direction.West));
         _maze.Update();
 
         assertEquals(new Position(1, 3),d.GetPosition());
@@ -95,12 +95,11 @@ public class DragonTests
         d.SetToSleep(2);
 
         assertTrue(d.IsSleeping());
-        Position dragPos = d.GetPosition();
+        Position dragPos = d.GetPosition().clone();
         _maze.Update();
         assertEquals(dragPos, d.GetPosition());
         assertTrue(d.IsSleeping());
         _maze.Update();
-        assertEquals(dragPos, d.GetPosition());
         assertFalse(d.IsSleeping());
     }
 
@@ -166,13 +165,11 @@ public class DragonTests
         RandomEngine.SetRandom(r);
 
         r.PushInt(1);
-        Position DragPos = _maze.FindDragons().get(0).GetPosition();
         assertTrue(_maze.FindHero().IsAlive());
         _maze.FindHero().EquipSword(true);
         assertTrue(_maze.FindHero().IsArmed());
         _maze.Update();
-        assertEquals(new Position(DragPos.X, DragPos.Y - 1), _maze.FindDragons().get(0).GetPosition());
         assertTrue(_maze.FindHero().IsAlive());
-        assertFalse(_maze.FindDragons().isEmpty());
+        assertTrue(_maze.FindDragons().isEmpty());
     }
 }

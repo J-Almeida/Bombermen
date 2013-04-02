@@ -42,55 +42,52 @@ public class Hero extends Unit
         return _armed ? 'A' : 'H';
     }
 
-    private ExitPortal _exitPortal = null; // cached
-
     @Override
-    public void Update(Maze maze)
-    {
-        if (_exitPortal == null)
-            _exitPortal = maze.FindExitPortal();
-
-        if (_position.equals(_exitPortal.GetPosition()))
-            maze.SetFinished(true);
-
-        while (!_eventQueue.isEmpty())
-        {
-            Event event = _eventQueue.peek();
-            if (event.IsRequestMovementEvent())
-            {
-                RequestMovementEvent ev = event.ToRequestMovementEvent();
-
-                Position newPos = _position.clone();
-                Direction.ApplyMovement(newPos, ev.Direction);
-
-                if (maze.IsPathPosition(newPos) || (IsArmed() && _exitPortal.GetPosition().equals(newPos)))
-                {
-                    _position = newPos;
-                    maze.ForwardEventToUnits(new MovementEvent(this, ev.Direction));
-                }
-            }
-
-            _eventQueue.poll();
-        }
-    }
+    public void Update(Maze maze){ }
 
     @Override
     public void OnCollision(Unit other)
-    {
-        if (other.IsSword())
+    { }
+
+	@Override
+	public void HandleEvent(Maze maze, Event event) {
+        if (event.IsRequestMovementEvent())
         {
-            this.EquipSword(true);
-            other.Kill();
+            RequestMovementEvent ev = event.ToRequestMovementEvent();
+
+            Position newPos = _position.clone();
+            Direction.ApplyMovement(newPos, ev.Direction);
+
+            if (maze.IsPathPosition(newPos) || (IsArmed() && maze.IsExitPosition(newPos)))
+            {
+                _position = newPos;
+                maze.ForwardEventToUnits(new MovementEvent(this, ev.Direction));
+            }
         }
-        else if (other.IsEagle())
+        else if (event.IsMovementEvent())
         {
-            if (other.ToEagle().IsArmed())
-                this.EquipSword(true);
+        	MovementEvent ev = event.ToMovementEvent();
+
+        	if (ev.Actor.IsEagle())
+        	{
+        		if (_position.equals(ev.Actor.GetPosition()))
+				{
+        			if (ev.Actor.ToEagle().IsArmed())
+        				this.EquipSword(true);
+
+				}
+        	}
+        	else if (ev.Actor.IsDragon())
+        	{
+        		if (_position.equals(ev.Actor.GetPosition()) || Position.IsAdjacent(_position, ev.Actor.GetPosition()))
+				{
+    				if (this.IsArmed())
+    					ev.Actor.Kill();
+    				else
+    					this.Kill();
+				}
+        	}
         }
-        else if (other.IsDragon())
-        {
-            if (this.IsArmed())
-                other.Kill();
-        }
-    }
+
+	}
 }

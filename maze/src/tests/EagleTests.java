@@ -85,6 +85,7 @@ public class EagleTests
             Key.RIGHT, Key.RIGHT, Key.RIGHT
         };
 
+
         for (Key k : movements1)
         {
             _maze.MoveHero(Direction.FromKey(k));
@@ -135,10 +136,12 @@ public class EagleTests
         for (int i = 0; i < 4; ++i)
             _maze.Update();
 
-        _maze.FindSword().SetPosition(new Position(-1, -1));
+
+        _maze.FindSword().Kill();
 
         for (int i = 0; i < 5; ++i)
             _maze.Update();
+
 
         assertThat(_maze.FindEagle().IsAlive(), is(true));
         assertThat(_maze.FindEagle().IsArmed(), is(false));
@@ -150,6 +153,7 @@ public class EagleTests
     @Test
     public void EagleReachSwordWithDragonTest()
     {
+
         // quando chega à quadrícula da espada, a águia desce para apanhar a espada (se ainda aí estiver);
         //  se um dragão estive acordado nessa posição ou adjacente, mata a águia;
 
@@ -227,6 +231,7 @@ public class EagleTests
     @Test
     public void EagleFlightBackWithDragon()
     {
+    	System.out.println("EagleFlightBackWithDragon");
         // voltando à posição de partida, se não estiver aí o herói, a águia permanece no solo até o
         //  herói a apanhar, correndo o risco de ser morta por um dragão.
 
@@ -235,14 +240,16 @@ public class EagleTests
         _maze.MoveHero(Direction.FromKey(Key.RIGHT));
         _maze.MoveHero(Direction.FromKey(Key.RIGHT));
 
-        for (int i = 0; i < 10; ++i)
+        for (int i = 0; i < 10; ++i){
             _maze.Update();
+            System.out.println(_maze + "\n\n"); }
 
         Dragon d = _maze.FindDragons().get(0);
         d.SetPosition(new Position(d.GetPosition().X - 1, d.GetPosition().Y));
 
-        for (int i = 0; i < 8; ++i)
+        for (int i = 0; i < 8; ++i){
             _maze.Update();
+            System.out.println(_maze + "\n\n"); }
 
         assertNull(_maze.FindEagle());
     }

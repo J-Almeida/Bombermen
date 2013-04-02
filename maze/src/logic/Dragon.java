@@ -1,5 +1,6 @@
 package logic;
 
+import logic.Eagle.EagleState;
 import model.Position;
 import utils.Key;
 import utils.RandomEngine;
@@ -9,7 +10,7 @@ import utils.RandomEngine;
  */
 public class Dragon extends Unit
 {
-    /** Valid values for dragon behaviour */
+	/** Valid values for dragon behaviour */
     public enum Behaviour
     {
         /** No movement at all */
@@ -26,7 +27,9 @@ public class Dragon extends Unit
     /** Sleep countdown */
     private int _sleepTimer = 0;
 
-    private Behaviour _db;
+    private final Behaviour _db;
+
+	private boolean _onSword = false;
 
     /**
      * Instantiates a new dragon.
@@ -40,7 +43,9 @@ public class Dragon extends Unit
     @Override
     public char GetSymbol()
     {
-        return _asleep ? 'd' : 'D';
+        return _asleep ?
+        			(_onSword ? 'f' : 'd') :
+        			(_onSword ? 'F' : 'D') ;
     }
 
     /**
@@ -117,46 +122,63 @@ public class Dragon extends Unit
 
         if (CanMove())
         {
-            Key dirKey = Key.toEnum(RandomEngine.GetInt(1, 4));
-            Position newPos = _position.clone();
+            Key dirKey = Key.toEnum(RandomEngine.GetInt(0, 4));
 
-            Direction dir = Direction.FromKey(dirKey);
-            Direction.ApplyMovement(newPos, dir);
+            if (dirKey != null)
+            {
+	            Position newPos = _position.clone();
+
+	            Direction dir = Direction.FromKey(dirKey);
+	            Direction.ApplyMovement(newPos, dir);
+
+	            if (maze.IsPathPosition(newPos))
+	            {
+	                _position = newPos;
+	                maze.ForwardEventToUnits(new MovementEvent(this, dir));
+
+	                Sword s = maze.FindSword();
+	                _onSword  = s != null && _position.equals(s.GetPosition());
+	            }
+            }
+        }
+    }
+
+    @Override
+	public void HandleEvent(Maze maze, Event event)
+    {
+        if (event.IsRequestMovementEvent())
+        {
+            RequestMovementEvent ev = event.ToRequestMovementEvent();
+
+            Position newPos = _position.clone();
+            Direction.ApplyMovement(newPos, ev.Direction);
 
             if (maze.IsPathPosition(newPos))
             {
                 _position = newPos;
-                maze.ForwardEventToUnits(new MovementEvent(this, dir));
+                maze.ForwardEventToUnits(new MovementEvent(this, ev.Direction));
             }
         }
-
-        Hero h = maze.FindHero();
-        if (Position.IsAdjacent(_position, h.GetPosition()))
-        {
-            this.OnCollision(h);
-            h.OnCollision(this);
-            h.PushEvent(new CollisionEvent(this));
-            this.PushEvent(new CollisionEvent(h));
-        }
-
-        while (!_eventQueue.isEmpty())
-        {
-            Event event = _eventQueue.peek();
-            if (event.IsCollisionEvent())
-            {
-                CollisionEvent ev = event.ToCollisionEvent();
-                if (ev.Other.IsHero())
-                {
-                    if (!this.IsSleeping() && !ev.Other.ToHero().IsArmed())
-                        ev.Other.Kill();
-                }
-                else if (ev.Other.IsEagle() && !this.IsSleeping())
-                {
-                    ev.Other.Kill();
-                }
-            }
-
-            _eventQueue.poll();
-        }
-    }
+        else if (event.IsMovementEvent() && !this.IsSleeping())
+    	{
+    		MovementEvent ev = event.ToMovementEvent();
+    		if (ev.Actor.IsHero() || ev.Actor.IsEagle())
+    		{
+	    		if (Position.IsAdjacent(_position, ev.Actor.GetPosition()) || _position.equals(ev.Actor.GetPosition()))
+	    		{
+	    			if (ev.Actor.IsEagle() && ev.Actor.ToEagle().GetState() != EagleState.OnFlight && ev.Actor.ToEagle().GetState() != EagleState.OnFlightBack)
+	    			{
+	    				ev.Actor.Kill();
+	    			}
+	    			else if (ev.Actor.IsHero())
+	    			{
+	    				if (ev.Actor.ToHero().IsArmed())
+	    					this.Kill();
+	    				else
+	    					ev.Actor.Kill();
+	    			}
+	    		}
+    		}
+    	}
+	}
 }
