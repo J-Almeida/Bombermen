@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import logic.Architect;
 import logic.Direction;
 import logic.Dragon;
+import logic.Eagle.EagleState;
 import logic.InanimatedObject;
 import logic.Maze;
 import logic.MazeGenerator;
@@ -110,10 +111,18 @@ public class Main extends JPanel implements KeyListener
                     DrawCellAt(g, _sprites.get("dragon").GetTile(iter % 9, u.ToDragon().IsSleeping() ? 11 : 0), u.GetPosition());
                     break;
                 case Eagle:
-                    DrawCellAt(g, _sprites.get("eagle").GetTile(iter % 16, 0), u.GetPosition());
+                    if (u.ToEagle().GetState() == EagleState.OnFloor)
+                        DrawCellAt(g, _sprites.get("eagle").GetTile(16, 0), u.GetPosition());
+                    else if (u.ToEagle().GetState() == EagleState.FollowingHero)
+                        DrawHalfCellAt(g, _sprites.get("eagle").GetTile(iter % 16, 0), u.GetPosition(), false);
+                    else
+                        DrawCellAt(g, _sprites.get("eagle").GetTile(iter % 16, 0), u.GetPosition());
                     break;
                 case Hero:
-                    DrawCellAt(g, _sprites.get("hero").GetTile(iter % 7, u.ToHero().IsArmed() ? 6 : 8), u.GetPosition());
+                    if (_maze.FindEagle() != null && _maze.FindEagle().ToEagle().GetState() == EagleState.FollowingHero)
+                        DrawHalfCellAt(g, _sprites.get("hero").GetTile(iter % 7, u.ToHero().IsArmed() ? 6 : 8), u.GetPosition(), true);
+                    else
+                        DrawCellAt(g, _sprites.get("hero").GetTile(iter % 7, u.ToHero().IsArmed() ? 6 : 8), u.GetPosition());
                     break;
                 case Sword:
                     DrawCellAt(g, _sprites.get("sword").GetTile(0, 0), u.GetPosition());
@@ -131,6 +140,13 @@ public class Main extends JPanel implements KeyListener
     public static void DrawCellAt(Graphics g, Image img, int x, int y)
     {
         g.drawImage(img, x * CELL_WIDTH, y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT, null);
+    }
+
+    public static void DrawHalfCellAt(Graphics g, Image img, Position pos, boolean left) { DrawHalfCellAt(g, img, pos.X, pos.Y, left); }
+
+    public static void DrawHalfCellAt(Graphics g, Image img, int x, int y, boolean left)
+    {
+        g.drawImage(img, x * CELL_WIDTH + (left ? -(CELL_WIDTH / 4) : CELL_WIDTH / 4), y * CELL_HEIGHT + (!left ? 0 : 0), CELL_WIDTH, CELL_HEIGHT, null);
     }
 
     @Override
