@@ -1,6 +1,5 @@
 package ui.gui.graphical;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -43,7 +42,7 @@ public class Main extends JPanel implements KeyListener
         frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         frame.setResizable(false);
 
-        frame.setLayout(new BorderLayout());
+        //frame.setLayout(new BorderLayout());
 
         Main m = new Main();
         frame.getContentPane().add(m);
@@ -79,6 +78,8 @@ public class Main extends JPanel implements KeyListener
         _sprites.put("dark_stone", new TiledImage("resources/dark_stone.png",   96,  96));
     }
 
+    static int iter = 0;
+
     @Override
     public void paintComponent(Graphics g)
     {
@@ -106,13 +107,13 @@ public class Main extends JPanel implements KeyListener
             switch (u.Type)
             {
                 case Dragon:
-                    DrawCellAt(g, _sprites.get("dragon").GetTile(0, u.ToDragon().IsSleeping() ? 11 : 0), u.GetPosition());
+                    DrawCellAt(g, _sprites.get("dragon").GetTile(iter % 9, u.ToDragon().IsSleeping() ? 11 : 0), u.GetPosition());
                     break;
                 case Eagle:
-                    DrawCellAt(g, _sprites.get("eagle").GetTile(0, 0), u.GetPosition());
+                    DrawCellAt(g, _sprites.get("eagle").GetTile(iter % 16, 0), u.GetPosition());
                     break;
                 case Hero:
-                    DrawCellAt(g, _sprites.get("hero").GetTile(0, u.ToHero().IsArmed() ? 6 : 8), u.GetPosition());
+                    DrawCellAt(g, _sprites.get("hero").GetTile(iter % 7, u.ToHero().IsArmed() ? 6 : 8), u.GetPosition());
                     break;
                 case Sword:
                     DrawCellAt(g, _sprites.get("sword").GetTile(0, 0), u.GetPosition());
@@ -121,6 +122,8 @@ public class Main extends JPanel implements KeyListener
                     break;
             }
         }
+
+        iter++;
     }
 
     public static void DrawCellAt(Graphics g, Image img, Position pos) { DrawCellAt(g, img, pos.X, pos.Y); }
@@ -133,12 +136,13 @@ public class Main extends JPanel implements KeyListener
     @Override
     public void keyTyped(KeyEvent e)
     {
-        repaint();
+        //repaint();
     }
 
     @Override
     public void keyPressed(KeyEvent e)
     {
+        _maze.Update();
         repaint();
     }
 
