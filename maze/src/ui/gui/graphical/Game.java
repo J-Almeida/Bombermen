@@ -31,9 +31,9 @@ import logic.Unit;
 import model.Position;
 import utils.Key;
 
-public class Main extends JPanel implements KeyListener
+public class Game extends JPanel implements KeyListener
 {
-	private static Configuration CONFIG = new Configuration("maze.config");
+    private static Configuration CONFIG = new Configuration("maze.config");
 
     private static final long serialVersionUID = 1L;
 
@@ -60,20 +60,21 @@ public class Main extends JPanel implements KeyListener
 
         frame.setLayout(new BorderLayout());
 
-        final Main m = new Main();
+        final Game m = new Game();
 
         final JButton startButton = new JButton("Start");
         final JButton exitButton = new JButton("Quit");
         final JButton settingsButton = new JButton("Settings");
 
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        frame.addWindowListener( new WindowAdapter() {
+        frame.addWindowListener( new WindowAdapter()
+        {
             @Override
             public void windowClosing(WindowEvent we) {
                 CONFIG.TrySaveToFile();
                 System.exit(0);
             }
-        } );
+        });
 
         startButton.addActionListener(new ActionListener()
         {
@@ -90,7 +91,7 @@ public class Main extends JPanel implements KeyListener
             @Override
             public void actionPerformed(ActionEvent e)
             {
-            	frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             }
         });
 
@@ -136,7 +137,7 @@ public class Main extends JPanel implements KeyListener
     private boolean _gameStarted = false;
     private final Map<String, TiledImage> _sprites;
 
-    public Main()
+    public Game()
     {
         addKeyListener(this);
         setFocusable(true);
@@ -251,29 +252,29 @@ public class Main extends JPanel implements KeyListener
 
         Key k = null;
         Action a = CONFIG.GetAction(e.getKeyCode());
-		if (a != null)
-		{
-			switch (a)
-			{
-			case HERO_UP:
-				k = Key.UP;
-				break;
-			case HERO_DOWN:
-				k = Key.DOWN;
-				break;
-			case HERO_RIGHT:
-				k = Key.RIGHT;
-				break;
-			case HERO_LEFT:
-				k = Key.LEFT;
-				break;
-			case SEND_EAGLE:
-				_maze.SendEagleToSword();
-				break;
-			default:
-				return;
-			}
-		}
+        if (a != null)
+        {
+            switch (a)
+            {
+            case HERO_UP:
+                k = Key.UP;
+                break;
+            case HERO_DOWN:
+                k = Key.DOWN;
+                break;
+            case HERO_RIGHT:
+                k = Key.RIGHT;
+                break;
+            case HERO_LEFT:
+                k = Key.LEFT;
+                break;
+            case SEND_EAGLE:
+                _maze.SendEagleToSword();
+                break;
+            default:
+                return;
+            }
+        }
 
         if (k != null)
             _maze.MoveHero(Direction.FromKey(k));

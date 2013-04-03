@@ -19,170 +19,172 @@ import javax.swing.JTable;
 
 import logic.Dragon;
 
-public class SettingsDialog extends JDialog {
+public class SettingsDialog extends JDialog
+{
+    SettingsDialog(JFrame frame, Configuration prevConfig)
+    {
+        super(frame, ModalityType.APPLICATION_MODAL);
+        _prevConfig = prevConfig;
+        _newConfig = _prevConfig;
 
-	SettingsDialog(JFrame frame, Configuration prevConfig)
-	{
-		super(frame, ModalityType.APPLICATION_MODAL);
-		_prevConfig = prevConfig;
-		_newConfig = _prevConfig;
+        initUI();
 
-		initUI();
+        setSize(this.getSize().width + 50, this.getSize().height + 100);
+        setLocation(frame.getLocation().x + frame.getSize().width / 2 - this.getSize().width / 2, frame.getLocation().y + frame.getSize().height / 2 - this.getSize().height / 2);
+    }
 
-		this.setSize(this.getSize().width + 50, this.getSize().height + 100);
+    @SuppressWarnings("serial")
+    private void initUI()
+    {
+        String[] columnNames = { "Action", "Key" };
 
-		this.setLocation(frame.getLocation().x + frame.getSize().width / 2 - this.getSize().width / 2, frame.getLocation().y + frame.getSize().height / 2 - this.getSize().height / 2);
-	}
+        Map<Integer, Action> tempKeys = _prevConfig.GetKeys();
 
-	@SuppressWarnings("serial")
-	private void initUI()
-	{
-		String[] columnNames = { "Action", "Key" };
+        Object[][] columnData = new Object[tempKeys.size()][2];
 
-		Map<Integer, Action> tempKeys = _prevConfig.GetKeys();
+        int i = 0;
+        for (Map.Entry<Integer, Action> elem : tempKeys.entrySet())
+        {
+            keys.put(elem.getValue(),elem.getKey());
+            columnData[i][0] = elem.getValue();
+            columnData[i][1] = KeyEvent.getKeyText(elem.getKey());
+            i++;
+        }
 
-		Object[][] columnData = new Object[tempKeys.size()][2];
+        tblKeys = new JTable(columnData, columnNames)
+        {
+            @Override
+            public boolean isCellEditable(int row, int column)
+            {
+                return false;
+            }
+        };
 
+        tblKeys.enableInputMethods(false);
+        tblKeys.setCellSelectionEnabled(false);
+        tblKeys.setRowSelectionAllowed(true);
 
-		int i = 0;
-		for (Map.Entry<Integer, Action> elem : tempKeys.entrySet())
-		{
-			keys.put(elem.getValue(),elem.getKey());
-			columnData[i][0] = elem.getValue();
-			columnData[i][1] = KeyEvent.getKeyText(elem.getKey());
-			i++;
-		}
+        tblKeys.addKeyListener(new KeyListener()
+        {
+            @Override
+            public void keyTyped(KeyEvent arg0) { }
 
-		tblKeys = new JTable(columnData, columnNames) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-		};
+            @Override
+            public void keyReleased(KeyEvent arg0) { }
 
-		tblKeys.enableInputMethods(false);
-		tblKeys.setCellSelectionEnabled(false);
-		tblKeys.setRowSelectionAllowed(true);
+            @Override
+            public void keyPressed(KeyEvent e)
+            {
+                if (!keys.containsValue(e.getKeyCode()))
+                {
+                    keys.remove(tblKeys.getValueAt(tblKeys.getSelectedRow(), 0));
+                    keys.put((Action)tblKeys.getValueAt(tblKeys.getSelectedRow(), 0), e.getKeyCode());
 
-		tblKeys.addKeyListener(new KeyListener() {
+                    tblKeys.setValueAt(KeyEvent.getKeyText(e.getKeyCode()), tblKeys.getSelectedRow(), 1);
+                }
+            }
+        });
 
-			@Override
-			public void keyTyped(KeyEvent arg0) { }
+        btnOK.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent arg0)
+            {
+                _newConfig = (Configuration) _prevConfig.clone();
+                _newConfig.SetNumberOfDragons((Integer)spnNumberOfDragons.getValue());
+                _newConfig.SetMazeSize((Integer)spnMazeSize.getValue());
+                _newConfig.SetDragonMode((Dragon.Behaviour)cmbDragonMode.getSelectedItem());
+                LinkedHashMap<Integer, Action> newKeys = new LinkedHashMap<Integer, Action>();
 
-			@Override
-			public void keyReleased(KeyEvent arg0) { }
+                for (Map.Entry<Action, Integer> elem : keys.entrySet())
+                    newKeys.put(elem.getValue(), elem.getKey());
 
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (!keys.containsValue(e.getKeyCode())) {
-					keys.remove(tblKeys.getValueAt(tblKeys.getSelectedRow(), 0));
-					keys.put((Action)tblKeys.getValueAt(tblKeys.getSelectedRow(), 0), e.getKeyCode());
+                _newConfig.SetKeys(newKeys);
 
-					tblKeys.setValueAt(KeyEvent.getKeyText(e.getKeyCode()), tblKeys.getSelectedRow(), 1);
-				}
+                setVisible(false);
+            }
+        });
 
-			}
-		});
+        btnCancel.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent arg0)
+            {
+                _newConfig = _prevConfig;
+                setVisible(false);
+            }
+        });
 
-		btnOK.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				_newConfig = (Configuration) _prevConfig.clone();
-				_newConfig.SetNumberOfDragons((Integer)spnNumberOfDragons.getValue());
-				_newConfig.SetMazeSize((Integer)spnMazeSize.getValue());
-				_newConfig.SetDragonMode((Dragon.Behaviour)cmbDragonMode.getSelectedItem());
-				LinkedHashMap<Integer, Action> newKeys = new LinkedHashMap<Integer, Action>();
+        GridBagConstraints c = new GridBagConstraints();
+        GridBagLayout gbl = new GridBagLayout();
 
-				for (Map.Entry<Action, Integer> elem : keys.entrySet())
-					newKeys.put(elem.getValue(), elem.getKey());
+        c.weighty = 4;
 
-				_newConfig.SetKeys(newKeys);
+        this.setLayout(gbl);
 
-				setVisible(false);
-			}
-		});
+        c.fill = GridBagConstraints.HORIZONTAL;
 
-		btnCancel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				_newConfig = _prevConfig;
-				setVisible(false);
-			}
-		});
-		GridBagConstraints c = new GridBagConstraints();
-		GridBagLayout gbl = new GridBagLayout();
+        c.gridx = 0;
+        c.gridy = 0;
+        this.getContentPane().add(new JLabel("Number of Dragons: "), c);
 
-		c.weighty = 4;
+        c.gridx = 1;
+        this.getContentPane().add(spnNumberOfDragons, c);
 
-		this.setLayout(gbl);
+        c.gridx = 0;
+        c.gridy = 1;
+        this.getContentPane().add(new JLabel("Maze Size: "), c);
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-
-		c.gridx = 0;
-		c.gridy = 0;
-		this.getContentPane().add(new JLabel("Number of Dragons: "), c);
-
-		c.gridx = 1;
-		this.getContentPane().add(spnNumberOfDragons, c);
-
-		c.gridx = 0;
-		c.gridy = 1;
-		this.getContentPane().add(new JLabel("Maze Size: "), c);
-
-		c.gridx = 1;
+        c.gridx = 1;
         this.getContentPane().add(spnMazeSize, c);
 
         c.gridx = 0;
-		c.gridy = 2;
+        c.gridy = 2;
         this.getContentPane().add(new JLabel("Dragon Mode: "), c);
 
         c.gridx = 1;
-		this.getContentPane().add(cmbDragonMode, c);
+        this.getContentPane().add(cmbDragonMode, c);
 
+        c.gridwidth = 2;
+        c.gridx = 0;
+        c.gridy = 3;
+        this.getContentPane().add(new JLabel("Keys:"), c);
 
-		c.gridwidth = 2;
-		c.gridx = 0;
-		c.gridy = 3;
-		this.getContentPane().add(new JLabel("Keys:"), c);
+        c.gridy = 4;
+        this.getContentPane().add(tblKeys, c);
 
-		c.gridy = 4;
-		this.getContentPane().add(tblKeys, c);
+        c.gridwidth = 1;
+        c.gridx = 0;
+        c.gridy = 5;
+        this.getContentPane().add(btnOK, c);
 
-		c.gridwidth = 1;
-		c.gridx = 0;
-		c.gridy = 5;
-		this.getContentPane().add(btnOK, c);
+        c.gridx = 1;
+        this.getContentPane().add(btnCancel, c);
 
-		c.gridx = 1;
-		this.getContentPane().add(btnCancel, c);
+        spnNumberOfDragons.setValue(_prevConfig.GetNumberOfDragons());
+        spnMazeSize.setValue(_prevConfig.GetMazeSize());
 
-		spnNumberOfDragons.setValue(_prevConfig.GetNumberOfDragons());
-		spnMazeSize.setValue(_prevConfig.GetMazeSize());
+        for (Dragon.Behaviour db : Dragon.Behaviour.values())
+            cmbDragonMode.addItem(db);
 
-		for (Dragon.Behaviour db : Dragon.Behaviour.values())
-			cmbDragonMode.addItem(db);
+        cmbDragonMode.setSelectedItem(_prevConfig.GetDragonMode());
 
-		cmbDragonMode.setSelectedItem(_prevConfig.GetDragonMode());
+        this.pack();
+    }
 
-		this.pack();
-	}
+    public Configuration GetNewConfiguration() { return _newConfig; }
 
-	public Configuration GetNewConfiguration() { return _newConfig; }
+    private static final long serialVersionUID = 1L;
+    private final Configuration _prevConfig;
+    private Configuration _newConfig = null;
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-	private final Configuration _prevConfig;
-	private Configuration _newConfig = null;
-
-	private final JButton   btnOK 				            = new JButton("OK");
-	private final JButton   btnCancel 			            = new JButton("Cancel");
-	private final JSpinner  spnNumberOfDragons 	            = new JSpinner();
-	private final JSpinner  spnMazeSize 		            = new JSpinner();
-	private final JComboBox<Dragon.Behaviour> cmbDragonMode = new JComboBox<Dragon.Behaviour>();
-	private JTable	tblKeys									; // new JTable();
-	private final Map<Action, Integer> keys						= new LinkedHashMap<Action, Integer>();
+    private final JButton   btnOK                             = new JButton("OK");
+    private final JButton   btnCancel                         = new JButton("Cancel");
+    private final JSpinner  spnNumberOfDragons                 = new JSpinner();
+    private final JSpinner  spnMazeSize                     = new JSpinner();
+    private final JComboBox<Dragon.Behaviour> cmbDragonMode = new JComboBox<Dragon.Behaviour>();
+    private JTable    tblKeys                                    ; // new JTable();
+    private final Map<Action, Integer> keys                    = new LinkedHashMap<Action, Integer>();
 
 
 }

@@ -24,7 +24,7 @@ import logic.MazeGenerator;
 import logic.RandomMazeGenerator;
 import utils.Key;
 
-public class Main extends JPanel implements KeyListener
+public class SimpleGame extends JPanel implements KeyListener
 {
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +39,7 @@ public class Main extends JPanel implements KeyListener
 
         //frame.pack();
 
-        Main m = new Main();
+        SimpleGame m = new SimpleGame();
         frame.getContentPane().add(m);
 
         frame.setVisible(true);
@@ -51,7 +51,7 @@ public class Main extends JPanel implements KeyListener
     private Maze _maze;
     private boolean _gameStarted = false;
 
-    public Main()
+    public SimpleGame()
     {
         addKeyListener(this);
         setFocusable(true);

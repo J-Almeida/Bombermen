@@ -44,18 +44,18 @@ public class Maze implements Serializable
 
     public int GetNumberOfPathCells()
     {
-    	int res = 0;
-    	for (int x = 0; x < _board.Width; x++)
-    		for (int y = 0; y < _board.Height; y++)
-    			if (_board.GetCellT(x, y).equals(PATH))
-    				res++;
+        int res = 0;
+        for (int x = 0; x < _board.Width; x++)
+            for (int y = 0; y < _board.Height; y++)
+                if (_board.GetCellT(x, y).equals(PATH))
+                    res++;
 
-    	return res;
+        return res;
     }
 
     public int GetNumberOfWallCells()
     {
-    	return _board.Width * _board.Height - GetNumberOfPathCells();
+        return _board.Width * _board.Height - GetNumberOfPathCells();
     }
 
     public Grid<InanimatedObject> GetGrid() { return _board; }

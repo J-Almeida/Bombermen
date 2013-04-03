@@ -160,33 +160,33 @@ public class Dragon extends Unit
         }
         else if (event.IsMovementEvent())
         {
-        	MovementEvent ev = event.ToMovementEvent();
-        	if (!this.IsSleeping())
-        	{
-	            if (ev.Actor.IsHero() || ev.Actor.IsEagle())
-	            {
-	                if (Position.IsAdjacent(_position, ev.Actor.GetPosition()) || _position.equals(ev.Actor.GetPosition()))
-	                {
-	                    if (ev.Actor.IsEagle() && ev.Actor.ToEagle().CanBeKilledByDragon())
-	                    {
-	                    	ev.Actor.Kill();
-	                    }
-	                    else if (ev.Actor.IsHero())
-	                    {
-	                        if (ev.Actor.ToHero().IsArmed())
-	                            this.Kill();
-	                        else
-	                            ev.Actor.Kill();
-	                    }
-	                }
-	            }
-        	}
-        	else
-        	{
-        		if (ev.Actor.IsHero() && ev.Actor.ToHero().IsArmed())
-        			if (Position.IsAdjacent(_position, ev.Actor.GetPosition()) || _position.equals(ev.Actor.GetPosition()))
-        				this.Kill();
-        	}
+            MovementEvent ev = event.ToMovementEvent();
+            if (!this.IsSleeping())
+            {
+                if (ev.Actor.IsHero() || ev.Actor.IsEagle())
+                {
+                    if (Position.IsAdjacent(_position, ev.Actor.GetPosition()) || _position.equals(ev.Actor.GetPosition()))
+                    {
+                        if (ev.Actor.IsEagle() && ev.Actor.ToEagle().CanBeKilledByDragon())
+                        {
+                            ev.Actor.Kill();
+                        }
+                        else if (ev.Actor.IsHero())
+                        {
+                            if (ev.Actor.ToHero().IsArmed())
+                                this.Kill();
+                            else
+                                ev.Actor.Kill();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (ev.Actor.IsHero() && ev.Actor.ToHero().IsArmed())
+                    if (Position.IsAdjacent(_position, ev.Actor.GetPosition()) || _position.equals(ev.Actor.GetPosition()))
+                        this.Kill();
+            }
         }
     }
 }

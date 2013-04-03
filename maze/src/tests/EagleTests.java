@@ -173,7 +173,6 @@ public class EagleTests
     @Test
     public void EagleFlightBackTest()
     {
-    	System.out.println("EagleFlightBackTest");
         // assim que pega a espada, a águia levanta voo de novo em direção à posição de partida
         //  (onde levantou voo do braço do herói);
 

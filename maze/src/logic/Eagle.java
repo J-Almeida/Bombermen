@@ -131,15 +131,15 @@ public class Eagle extends Unit
                 else if (_position.equals(ev.Actor.GetPosition()))
                 {
                     this.UnequipSword();
-            		ev.Actor.ToHero().EquipSword(true);
+                    ev.Actor.ToHero().EquipSword(true);
                     SetState(EagleState.FollowingHeroWithSword);
-            	}
-            	else if (ev.Actor.IsDragon())
-            	{
-            		if (_position.equals(ev.Actor.GetPosition()) || Position.IsAdjacent(_position, ev.Actor.GetPosition()))
-    				{
-        				this.Kill();
-    				}
+                }
+                else if (ev.Actor.IsDragon())
+                {
+                    if (_position.equals(ev.Actor.GetPosition()) || Position.IsAdjacent(_position, ev.Actor.GetPosition()))
+                    {
+                        this.Kill();
+                    }
                 }
             }
         }
@@ -156,17 +156,17 @@ public class Eagle extends Unit
 
     public boolean CanBeKilledByDragon()
     {
-    	return _state != EagleState.OnFlight && _state != EagleState.OnFlightBack && _state != EagleState.FollowingHeroWithSword;
+        return _state != EagleState.OnFlight && _state != EagleState.OnFlightBack && _state != EagleState.FollowingHeroWithSword;
     }
 
     public boolean IsFlying()
     {
-    	return _state == EagleState.OnFlight || _state == EagleState.OnFlightBack;
+        return _state == EagleState.OnFlight || _state == EagleState.OnFlightBack;
     }
 
     public boolean IsFollowingHero()
     {
-    	return _state == EagleState.FollowingHero || _state == EagleState.FollowingHeroWithSword;
+        return _state == EagleState.FollowingHero || _state == EagleState.FollowingHeroWithSword;
     }
 
 
