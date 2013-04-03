@@ -109,28 +109,28 @@ public class Eagle extends Unit
         }
         else if (_state == EagleState.ReachedSword)
         {
-			_state = EagleState.OnFlightBack;
+            _state = EagleState.OnFlightBack;
         }
     }
 
     @Override
-	public void HandleEvent(Maze maze, Event event)
+    public void HandleEvent(Maze maze, Event event)
     {
-    	if (event.IsMovementEvent())
+        if (event.IsMovementEvent())
         {
             MovementEvent ev = event.ToMovementEvent();
             if (ev.Actor.IsHero())
             {
-            	if (GetState() == EagleState.FollowingHero)
-            	{
-            		_position = ev.Actor.GetPosition().clone();
-            		maze.ForwardEventToUnits(new MovementEvent(this, ev.Direction));
-            	}
-            	else if (_position.equals(ev.Actor.GetPosition()))
-            	{
-            		this.UnequipSword();
-            		SetState(EagleState.FollowingHero);
-            	}
+                if (GetState() == EagleState.FollowingHero)
+                {
+                    _position = ev.Actor.GetPosition().clone();
+                    maze.ForwardEventToUnits(new MovementEvent(this, ev.Direction));
+                }
+                else if (_position.equals(ev.Actor.GetPosition()))
+                {
+                    this.UnequipSword();
+                    SetState(EagleState.FollowingHero);
+                }
             }
         }
         else if (event.IsSendEagleEvent())
@@ -142,10 +142,10 @@ public class Eagle extends Unit
                 SetState(EagleState.OnFlight);
             }
         }
-	}
+    }
 
 
-	@Override
+    @Override
     public char GetSymbol()
     {
         return IsArmed() ? '\u00A5' /* Yen */ : 'W';

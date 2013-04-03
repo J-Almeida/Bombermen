@@ -157,7 +157,6 @@ public class SimpleTests
 
         assertTrue(_maze.FindHero().IsAlive());
         assertTrue(_maze.IsFinished());
-        //System.out.println(_maze);
     }
 
     /**

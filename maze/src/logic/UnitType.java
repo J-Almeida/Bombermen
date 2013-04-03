@@ -5,7 +5,7 @@ package logic;
  */
 public enum UnitType
 {
-	/* Don't change the order because it is needed for UnitComparator */
+    /* Don't change the order because it is needed for UnitComparator */
     /** The Hero. */
     Hero,
     /** The Eagle. */

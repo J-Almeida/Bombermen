@@ -23,7 +23,7 @@ public class TiledImage
         }
         catch (IOException e)
         {
-            System.out.println("ERROR: Could not load image " + path + ".");
+            System.out.println("ERROR: Could not load image " + path + "."); // TODO: remove this log
         }
 
         _tileWidth = tileWidth;

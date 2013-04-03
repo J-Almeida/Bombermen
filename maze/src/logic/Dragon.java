@@ -10,7 +10,7 @@ import utils.RandomEngine;
  */
 public class Dragon extends Unit
 {
-	/** Valid values for dragon behaviour */
+    /** Valid values for dragon behaviour */
     public enum Behaviour
     {
         /** No movement at all */
@@ -29,7 +29,7 @@ public class Dragon extends Unit
 
     private final Behaviour _db;
 
-	private boolean _onSword = false;
+    private boolean _onSword = false;
 
     /**
      * Instantiates a new dragon.
@@ -44,8 +44,8 @@ public class Dragon extends Unit
     public char GetSymbol()
     {
         return _asleep ?
-        			(_onSword ? 'f' : 'd') :
-        			(_onSword ? 'F' : 'D') ;
+                    (_onSword ? 'f' : 'd') :
+                    (_onSword ? 'F' : 'D') ;
     }
 
     /**
@@ -126,25 +126,25 @@ public class Dragon extends Unit
 
             if (dirKey != null)
             {
-	            Position newPos = _position.clone();
+                Position newPos = _position.clone();
 
-	            Direction dir = Direction.FromKey(dirKey);
-	            Direction.ApplyMovement(newPos, dir);
+                Direction dir = Direction.FromKey(dirKey);
+                Direction.ApplyMovement(newPos, dir);
 
-	            if (maze.IsPathPosition(newPos))
-	            {
-	                _position = newPos;
-	                maze.ForwardEventToUnits(new MovementEvent(this, dir));
+                if (maze.IsPathPosition(newPos))
+                {
+                    _position = newPos;
+                    maze.ForwardEventToUnits(new MovementEvent(this, dir));
 
-	                Sword s = maze.FindSword();
-	                _onSword  = s != null && _position.equals(s.GetPosition());
-	            }
+                    Sword s = maze.FindSword();
+                    _onSword  = s != null && _position.equals(s.GetPosition());
+                }
             }
         }
     }
 
     @Override
-	public void HandleEvent(Maze maze, Event event)
+    public void HandleEvent(Maze maze, Event event)
     {
         if (event.IsRequestMovementEvent())
         {
@@ -160,25 +160,25 @@ public class Dragon extends Unit
             }
         }
         else if (event.IsMovementEvent() && !this.IsSleeping())
-    	{
-    		MovementEvent ev = event.ToMovementEvent();
-    		if (ev.Actor.IsHero() || ev.Actor.IsEagle())
-    		{
-	    		if (Position.IsAdjacent(_position, ev.Actor.GetPosition()) || _position.equals(ev.Actor.GetPosition()))
-	    		{
-	    			if (ev.Actor.IsEagle() && ev.Actor.ToEagle().GetState() != EagleState.OnFlight && ev.Actor.ToEagle().GetState() != EagleState.OnFlightBack)
-	    			{
-	    				ev.Actor.Kill();
-	    			}
-	    			else if (ev.Actor.IsHero())
-	    			{
-	    				if (ev.Actor.ToHero().IsArmed())
-	    					this.Kill();
-	    				else
-	    					ev.Actor.Kill();
-	    			}
-	    		}
-    		}
-    	}
-	}
+        {
+            MovementEvent ev = event.ToMovementEvent();
+            if (ev.Actor.IsHero() || ev.Actor.IsEagle())
+            {
+                if (Position.IsAdjacent(_position, ev.Actor.GetPosition()) || _position.equals(ev.Actor.GetPosition()))
+                {
+                    if (ev.Actor.IsEagle() && ev.Actor.ToEagle().GetState() != EagleState.OnFlight && ev.Actor.ToEagle().GetState() != EagleState.OnFlightBack)
+                    {
+                        ev.Actor.Kill();
+                    }
+                    else if (ev.Actor.IsHero())
+                    {
+                        if (ev.Actor.ToHero().IsArmed())
+                            this.Kill();
+                        else
+                            ev.Actor.Kill();
+                    }
+                }
+            }
+        }
+    }
 }

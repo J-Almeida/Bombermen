@@ -31,20 +31,20 @@ public class Sword extends Unit
 
 
     @Override
-	public void HandleEvent(Maze maze, Event event)
+    public void HandleEvent(Maze maze, Event event)
     {
-    	if (event.IsMovementEvent())
-    	{
-    		MovementEvent ev = event.ToMovementEvent();
-    		if ((ev.Actor.IsHero() || ev.Actor.IsEagle()) && _position.equals(ev.Actor.GetPosition()))
-    		{
-    			this.Kill();
-    			if (ev.Actor.IsHero())
-    				ev.Actor.ToHero().EquipSword(true);
-    			else if (ev.Actor.IsEagle())
-    				ev.Actor.ToEagle().EquipSword();
-    		}
-    	}
+        if (event.IsMovementEvent())
+        {
+            MovementEvent ev = event.ToMovementEvent();
+            if ((ev.Actor.IsHero() || ev.Actor.IsEagle()) && _position.equals(ev.Actor.GetPosition()))
+            {
+                this.Kill();
+                if (ev.Actor.IsHero())
+                    ev.Actor.ToHero().EquipSword(true);
+                else if (ev.Actor.IsEagle())
+                    ev.Actor.ToEagle().EquipSword();
+            }
+        }
 
-	}
+    }
 }

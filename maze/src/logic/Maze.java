@@ -66,12 +66,12 @@ public class Maze
     }
 
     public void PushEvent(Unit u, Event ev) {
-		_eventQueue.add(new UnitEvent(u, ev));
-	}
+        _eventQueue.add(new UnitEvent(u, ev));
+    }
 
-	public void MoveHero(Direction direction)
+    public void MoveHero(Direction direction)
     {
-		this.PushEvent(FindHero(), new RequestMovementEvent(direction));
+        this.PushEvent(FindHero(), new RequestMovementEvent(direction));
     }
 
     public void Update()
@@ -80,11 +80,11 @@ public class Maze
             wo.Update(this);
 
         while (!_eventQueue.isEmpty())
-        	_eventQueue.poll().HandleEvent(this);
+            _eventQueue.poll().HandleEvent(this);
 
         for (Iterator<Unit> uit = _livingObjects.iterator(); uit.hasNext();)
-        	if (!uit.next().IsAlive())
-        		uit.remove();
+            if (!uit.next().IsAlive())
+                uit.remove();
     }
 
     public void AddWorldObject(WorldObject obj)
@@ -97,7 +97,7 @@ public class Maze
 
     public boolean IsFinished()
     {
-    	Hero h = FindHero();
+        Hero h = FindHero();
         return h == null || h.GetPosition().equals(FindExitPortal().GetPosition());
     }
 
@@ -173,8 +173,8 @@ public class Maze
             this.PushEvent(u, ev);
     }
 
-	public boolean IsExitPosition(Position newPos) {
-		ExitPortal ex = FindExitPortal();
-		return ex != null && newPos != null && newPos.equals(ex.GetPosition());
-	}
+    public boolean IsExitPosition(Position newPos) {
+        ExitPortal ex = FindExitPortal();
+        return ex != null && newPos != null && newPos.equals(ex.GetPosition());
+    }
 }

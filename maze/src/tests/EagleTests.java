@@ -231,7 +231,6 @@ public class EagleTests
     @Test
     public void EagleFlightBackWithDragon()
     {
-    	System.out.println("EagleFlightBackWithDragon");
         // voltando à posição de partida, se não estiver aí o herói, a águia permanece no solo até o
         //  herói a apanhar, correndo o risco de ser morta por um dragão.
 
@@ -242,14 +241,12 @@ public class EagleTests
 
         for (int i = 0; i < 10; ++i){
             _maze.Update();
-            System.out.println(_maze + "\n\n"); }
 
         Dragon d = _maze.FindDragons().get(0);
         d.SetPosition(new Position(d.GetPosition().X - 1, d.GetPosition().Y));
 
         for (int i = 0; i < 8; ++i){
             _maze.Update();
-            System.out.println(_maze + "\n\n"); }
 
         assertNull(_maze.FindEagle());
     }

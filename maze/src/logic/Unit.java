@@ -61,5 +61,5 @@ public abstract class Unit extends WorldObject{
     public Sword ToSword() { return IsSword() ? (Sword)this : null; }
     public Eagle ToEagle() { return IsEagle() ? (Eagle)this : null; }
 
-	public abstract void HandleEvent(Maze maze, Event ev);
+    public abstract void HandleEvent(Maze maze, Event ev);
 }

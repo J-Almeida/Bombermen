@@ -15,9 +15,9 @@ public abstract class Event
     public boolean IsSendEagleEvent() { return Type == EventType.SendEagle; }
     public boolean IsSameType(Event other) { return Type == other.Type; }
     public boolean Is(EventType evt) { return Type == evt; }
-    
+
     public CollisionEvent ToCollisionEvent() { return IsCollisionEvent() ? (CollisionEvent)this : null; }
     public RequestMovementEvent ToRequestMovementEvent() { return IsRequestMovementEvent() ? (RequestMovementEvent)this : null; }
     public MovementEvent ToMovementEvent() { return IsMovementEvent() ? (MovementEvent)this : null; }
-    public SendEagleEvent ToSendEagleEvent() { return IsSendEagleEvent() ? (SendEagleEvent)this : null; }   
+    public SendEagleEvent ToSendEagleEvent() { return IsSendEagleEvent() ? (SendEagleEvent)this : null; }
 }

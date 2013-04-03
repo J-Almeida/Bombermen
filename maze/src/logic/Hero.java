@@ -49,8 +49,8 @@ public class Hero extends Unit
     public void OnCollision(Unit other)
     { }
 
-	@Override
-	public void HandleEvent(Maze maze, Event event) {
+    @Override
+    public void HandleEvent(Maze maze, Event event) {
         if (event.IsRequestMovementEvent())
         {
             RequestMovementEvent ev = event.ToRequestMovementEvent();
@@ -66,28 +66,28 @@ public class Hero extends Unit
         }
         else if (event.IsMovementEvent())
         {
-        	MovementEvent ev = event.ToMovementEvent();
+            MovementEvent ev = event.ToMovementEvent();
 
-        	if (ev.Actor.IsEagle())
-        	{
-        		if (_position.equals(ev.Actor.GetPosition()))
-				{
-        			if (ev.Actor.ToEagle().IsArmed())
-        				this.EquipSword(true);
+            if (ev.Actor.IsEagle())
+            {
+                if (_position.equals(ev.Actor.GetPosition()))
+                {
+                    if (ev.Actor.ToEagle().IsArmed())
+                        this.EquipSword(true);
 
-				}
-        	}
-        	else if (ev.Actor.IsDragon())
-        	{
-        		if (_position.equals(ev.Actor.GetPosition()) || Position.IsAdjacent(_position, ev.Actor.GetPosition()))
-				{
-    				if (this.IsArmed())
-    					ev.Actor.Kill();
-    				else
-    					this.Kill();
-				}
-        	}
+                }
+            }
+            else if (ev.Actor.IsDragon())
+            {
+                if (_position.equals(ev.Actor.GetPosition()) || Position.IsAdjacent(_position, ev.Actor.GetPosition()))
+                {
+                    if (this.IsArmed())
+                        ev.Actor.Kill();
+                    else
+                        this.Kill();
+                }
+            }
         }
 
-	}
+    }
 }
