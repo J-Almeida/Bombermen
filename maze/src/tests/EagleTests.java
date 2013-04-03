@@ -183,16 +183,14 @@ public class EagleTests
 
         _maze.MoveHero(Direction.FromKey(Key.RIGHT));
 
-        for (int i = 0; i < 9; ++i) {
+        for (int i = 0; i < 9; ++i)
             _maze.Update();
-        System.out.println(_maze + "\n\n"); }
 
         assertThat(_maze.FindEagle().IsAlive(), is(true));
         assertThat(_maze.FindEagle().IsArmed(), is(true));
 
-        for (int i = 0; i < 7; ++i) {
+        for (int i = 0; i < 7; ++i)
             _maze.Update();
-            System.out.println(_maze + "\n\n"); }
 
         assertThat(_maze.FindEagle().GetPosition(), is(takeOffPos));
         assertThat(_maze.FindEagle().IsAlive(), is(true));
@@ -201,7 +199,6 @@ public class EagleTests
         _maze.MoveHero(Direction.FromKey(Key.LEFT));
 
         _maze.Update();
-        System.out.println(_maze + "\n\n");
 
         assertThat(_maze.FindEagle().IsArmed(), is(false));
         assertThat(_maze.FindHero().IsArmed(), is(true));

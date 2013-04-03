@@ -76,6 +76,7 @@ public class Hero extends Unit
                     {
         				ev.Actor.ToEagle().UnequipSword();
                         this.EquipSword(true);
+                        ev.Actor.ToEagle().SetState(Eagle.EagleState.FollowingHeroWithSword);
         			}
 
                 }

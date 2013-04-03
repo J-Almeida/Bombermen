@@ -12,7 +12,8 @@ public class Eagle extends Unit
         OnFloor,
         FollowingHero,
         ReachedSword,
-        OnFlightBack
+        OnFlightBack,
+        FollowingHeroWithSword
     }
 
     private EagleState _state;
@@ -122,7 +123,7 @@ public class Eagle extends Unit
             MovementEvent ev = event.ToMovementEvent();
             if (ev.Actor.IsHero())
             {
-                if (GetState() == EagleState.FollowingHero)
+                if (IsFollowingHero())
                 {
                     _position = ev.Actor.GetPosition().clone();
                     maze.ForwardEventToUnits(new MovementEvent(this, ev.Direction));
@@ -131,7 +132,7 @@ public class Eagle extends Unit
                 {
                     this.UnequipSword();
             		ev.Actor.ToHero().EquipSword(true);
-                    SetState(EagleState.FollowingHero);
+                    SetState(EagleState.FollowingHeroWithSword);
             	}
             	else if (ev.Actor.IsDragon())
             	{
@@ -151,6 +152,21 @@ public class Eagle extends Unit
                 SetState(EagleState.OnFlight);
             }
         }
+    }
+
+    public boolean CanBeKilledByDragon()
+    {
+    	return _state != EagleState.OnFlight && _state != EagleState.OnFlightBack && _state != EagleState.FollowingHeroWithSword;
+    }
+
+    public boolean IsFlying()
+    {
+    	return _state == EagleState.OnFlight || _state == EagleState.OnFlightBack;
+    }
+
+    public boolean IsFollowingHero()
+    {
+    	return _state == EagleState.FollowingHero || _state == EagleState.FollowingHeroWithSword;
     }
 
 
