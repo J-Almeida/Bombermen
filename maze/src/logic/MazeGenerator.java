@@ -20,7 +20,14 @@ public abstract class MazeGenerator
     public void CreateNewMaze() { _maze = new Maze(_size, _size); }
 
     public void SetMazeSize(int size) { _size = size; }
-    public void SetNumberOfDragons(int num) { _dragonCount = num; }
+    public void SetNumberOfDragons(int num)
+    {
+        final int maxDragons = (int) (0.5 * _size * _size - 1.2463 * _size - 0.5273) - 8; // average number of free cells minus 8 cells around hero that cannot be used
+        if (num > maxDragons)
+            _dragonCount = maxDragons;
+        else
+            _dragonCount = num;
+    }
     public void SetDragonsBehaviour(Dragon.Behaviour db) { _dragonBehaviour = db; }
 
     public abstract void BuildMaze();
@@ -74,6 +81,7 @@ public abstract class MazeGenerator
             boolean success;
             List<Pair<CellPos>> lst = GetNeighbors(_maze.FindHero().GetPosition());
             List<Position> lstn = new LinkedList<Position>();
+            lstn.add(_maze.FindHero().GetPosition());
 
             for (Pair<CellPos> ele : lst)
             {
@@ -89,7 +97,7 @@ public abstract class MazeGenerator
 
                 if (success)
                 {
-                    if (_maze.IsEmptyPosition(p))
+                    if (_maze.IsPathPosition(p))
                     {
                         d.SetPosition(p);
                         _maze.AddWorldObject(d);
