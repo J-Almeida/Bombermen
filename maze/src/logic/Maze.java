@@ -187,6 +187,15 @@ public class Maze implements Serializable
         return c != null ? c.GetValue().IsPath() : null;
     }
 
+    public WorldObject GetPosition(Position p)
+    {
+        for (Unit u : GetLivingObjects())
+            if (u.GetPosition().equals(p))
+                return u;
+
+        return _board.GetCellT(p);
+    }
+
     public void ForwardEventToUnits(Event ev)
     {
         for (Unit u : _livingObjects)

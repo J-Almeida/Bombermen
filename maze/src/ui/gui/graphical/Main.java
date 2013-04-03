@@ -62,8 +62,6 @@ public class Main extends JPanel implements KeyListener
 
         final Main m = new Main();
 
-        //m.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-
         final JButton startButton = new JButton("Start");
         final JButton exitButton = new JButton("Quit");
         final JButton settingsButton = new JButton("Settings");
