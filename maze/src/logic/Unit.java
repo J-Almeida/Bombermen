@@ -5,8 +5,8 @@ package logic;
 /**
  * The Class Unit.
  */
-public abstract class Unit extends WorldObject{
-
+public abstract class Unit extends WorldObject
+{
     public final UnitType Type;
 
     /** The _alive. */
