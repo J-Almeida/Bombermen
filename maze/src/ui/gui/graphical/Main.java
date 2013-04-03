@@ -11,18 +11,18 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import logic.Architect;
 import logic.Direction;
-import logic.Dragon;
 import logic.InanimatedObject;
 import logic.Maze;
 import logic.MazeGenerator;
@@ -33,22 +33,21 @@ import utils.Key;
 
 public class Main extends JPanel implements KeyListener
 {
-    private static final long serialVersionUID = 1L;
+	private static Configuration CONFIG = new Configuration("maze.config");
 
-    private static final int MAZE_SIZE = 20;
-    private static final int DRAGON_COUNT = 2000;
+    private static final long serialVersionUID = 1L;
 
     private static final int WINDOW_WIDTH = 600;
     private static final int WINDOW_HEIGHT = 600;
 
-    private static int CELL_WIDTH = WINDOW_WIDTH / MAZE_SIZE;
-    private static int CELL_HEIGHT = WINDOW_HEIGHT / MAZE_SIZE;
+    private static int CELL_WIDTH = WINDOW_WIDTH / CONFIG.GetMazeSize();
+    private static int CELL_HEIGHT = WINDOW_HEIGHT / CONFIG.GetMazeSize();
 
     private void UpdateMazeSizes()
     {
         int min = Math.min(getWidth(), getHeight());
-        CELL_WIDTH = min / MAZE_SIZE;
-        CELL_HEIGHT = min / MAZE_SIZE;
+        CELL_WIDTH = min / CONFIG.GetMazeSize();
+        CELL_HEIGHT = min / CONFIG.GetMazeSize();
     }
 
     public static void main(String[] args)
@@ -69,6 +68,15 @@ public class Main extends JPanel implements KeyListener
         final JButton exitButton = new JButton("Quit");
         final JButton settingsButton = new JButton("Settings");
 
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener( new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent we) {
+                CONFIG.TrySaveToFile();
+                System.exit(0);
+            }
+        } );
+
         startButton.addActionListener(new ActionListener()
         {
             @Override
@@ -84,7 +92,7 @@ public class Main extends JPanel implements KeyListener
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                System.exit(0);
+            	frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             }
         });
 
@@ -93,10 +101,9 @@ public class Main extends JPanel implements KeyListener
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                JDialog d = new JDialog(frame);
-                d.add(new JButton("Test"));
-                d.pack();
+                SettingsDialog d = new SettingsDialog(frame, CONFIG);
                 d.setVisible(true);
+                CONFIG = d.GetNewConfiguration();
             }
         });
 
@@ -127,9 +134,9 @@ public class Main extends JPanel implements KeyListener
         frame.setVisible(true);
     }
 
-    private Maze _maze;
+    private final Maze _maze;
     private boolean _gameStarted = false;
-    private Map<String, TiledImage> _sprites;
+    private final Map<String, TiledImage> _sprites;
 
     public Main()
     {
@@ -140,7 +147,7 @@ public class Main extends JPanel implements KeyListener
         MazeGenerator mg = new RandomMazeGenerator();
 
         architect.SetMazeGenerator(mg);
-        architect.ConstructMaze(MAZE_SIZE, DRAGON_COUNT, Dragon.Behaviour.Sleepy);
+        architect.ConstructMaze(CONFIG.GetMazeSize(), CONFIG.GetNumberOfDragons(), CONFIG.GetDragonMode());
 
         _maze = architect.GetMaze();
 
@@ -216,14 +223,14 @@ public class Main extends JPanel implements KeyListener
 
     public void DrawCellAt(Graphics g, Image img, int x, int y)
     {
-        g.drawImage(img, (getWidth() - CELL_WIDTH * MAZE_SIZE) / 2 + x * CELL_WIDTH, (getHeight() - CELL_HEIGHT * MAZE_SIZE) / 2 + y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT, null);
+        g.drawImage(img, (getWidth() - CELL_WIDTH * CONFIG.GetMazeSize()) / 2 + x * CELL_WIDTH, (getHeight() - CELL_HEIGHT * CONFIG.GetMazeSize()) / 2 + y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT, null);
     }
 
     public void DrawHalfCellAt(Graphics g, Image img, Position pos, boolean left) { DrawHalfCellAt(g, img, pos.X, pos.Y, left); }
 
     public void DrawHalfCellAt(Graphics g, Image img, int x, int y, boolean left)
     {
-        g.drawImage(img, (getWidth() - CELL_WIDTH * MAZE_SIZE) / 2 + x * CELL_WIDTH + (left ? -(CELL_WIDTH / 4) : CELL_WIDTH / 4), (getHeight() - CELL_HEIGHT * MAZE_SIZE) / 2 + y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT, null);
+        g.drawImage(img, (getWidth() - CELL_WIDTH * CONFIG.GetMazeSize()) / 2 + x * CELL_WIDTH + (left ? -(CELL_WIDTH / 4) : CELL_WIDTH / 4), (getHeight() - CELL_HEIGHT * CONFIG.GetMazeSize()) / 2 + y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT, null);
     }
 
     @Override
@@ -245,27 +252,30 @@ public class Main extends JPanel implements KeyListener
             return;
 
         Key k = null;
-
-        switch (e.getKeyCode())
-        {
-            case KeyEvent.VK_W:
-                k = Key.UP;
-                break;
-            case KeyEvent.VK_S:
-                k = Key.DOWN;
-                break;
-            case KeyEvent.VK_D:
-                k = Key.RIGHT;
-                break;
-            case KeyEvent.VK_A:
-                k = Key.LEFT;
-                break;
-            case KeyEvent.VK_F1:
-                _maze.SendEagleToSword();
-                break;
-            default:
-                return;
-        }
+        Action a = CONFIG.GetAction(e.getKeyCode());
+		if (a != null)
+		{
+			switch (a)
+			{
+			case HERO_UP:
+				k = Key.UP;
+				break;
+			case HERO_DOWN:
+				k = Key.DOWN;
+				break;
+			case HERO_RIGHT:
+				k = Key.RIGHT;
+				break;
+			case HERO_LEFT:
+				k = Key.LEFT;
+				break;
+			case SEND_EAGLE:
+				_maze.SendEagleToSword();
+				break;
+			default:
+				return;
+			}
+		}
 
         if (k != null)
             _maze.MoveHero(Direction.FromKey(k));
