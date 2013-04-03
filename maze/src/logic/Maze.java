@@ -39,6 +39,22 @@ public class Maze
 
     public int GetHeight() { return _board.Height; }
 
+    public int GetNumberOfPathCells()
+    {
+    	int res = 0;
+    	for (int x = 0; x < _board.Width; x++)
+    		for (int y = 0; y < _board.Height; y++)
+    			if (_board.GetCellT(x, y).equals(PATH))
+    				res++;
+
+    	return res;
+    }
+
+    public int GetNumberOfWallCells()
+    {
+    	return _board.Width * _board.Height - GetNumberOfPathCells();
+    }
+
     public Grid<InanimatedObject> GetGrid() { return _board; }
     public Set<Unit> GetLivingObjects() { return _livingObjects; }
 
