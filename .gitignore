@@ -10,6 +10,7 @@
 mt1/*
 
 Thumbs.db
+*.orig
 *.obj
 *.exe
 *.pdb
