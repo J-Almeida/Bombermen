@@ -73,7 +73,9 @@ public class Hero extends Unit
                 if (_position.equals(ev.Actor.GetPosition()))
                 {
                     if (ev.Actor.ToEagle().IsArmed())
+        				ev.Actor.ToEagle().UnequipSword();
                         this.EquipSword(true);
+        			}
 
                 }
             }

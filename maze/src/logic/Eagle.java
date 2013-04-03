@@ -102,7 +102,8 @@ public class Eagle extends Unit
                 SetPosition(_wayPath.pop());
                 maze.ForwardEventToUnits(new MovementEvent(this, null));
             }
-            else
+
+            if (_wayPath.isEmpty())
             {
                 SetState(EagleState.OnFloor);
             }
@@ -129,7 +130,15 @@ public class Eagle extends Unit
                 else if (_position.equals(ev.Actor.GetPosition()))
                 {
                     this.UnequipSword();
+            		ev.Actor.ToHero().EquipSword(true);
                     SetState(EagleState.FollowingHero);
+            	}
+            	else if (ev.Actor.IsDragon())
+            	{
+            		if (_position.equals(ev.Actor.GetPosition()) || Position.IsAdjacent(_position, ev.Actor.GetPosition()))
+    				{
+        				this.Kill();
+    				}
                 }
             }
         }

@@ -173,6 +173,7 @@ public class EagleTests
     @Test
     public void EagleFlightBackTest()
     {
+    	System.out.println("EagleFlightBackTest");
         // assim que pega a espada, a águia levanta voo de novo em direção à posição de partida
         //  (onde levantou voo do braço do herói);
 
@@ -180,22 +181,27 @@ public class EagleTests
 
         _maze.SendEagleToSword();
 
-        //_maze.MoveHero(Key.RIGHT);
+        _maze.MoveHero(Direction.FromKey(Key.RIGHT));
 
-        for (int i = 0; i < 9; ++i)
+        for (int i = 0; i < 9; ++i) {
             _maze.Update();
+        System.out.println(_maze + "\n\n"); }
 
         assertThat(_maze.FindEagle().IsAlive(), is(true));
         assertThat(_maze.FindEagle().IsArmed(), is(true));
 
-        for (int i = 0; i < 7; ++i)
+        for (int i = 0; i < 7; ++i) {
             _maze.Update();
+            System.out.println(_maze + "\n\n"); }
 
         assertThat(_maze.FindEagle().GetPosition(), is(takeOffPos));
         assertThat(_maze.FindEagle().IsAlive(), is(true));
         assertThat(_maze.FindEagle().IsArmed(), is(true));
 
+        _maze.MoveHero(Direction.FromKey(Key.LEFT));
+
         _maze.Update();
+        System.out.println(_maze + "\n\n");
 
         assertThat(_maze.FindEagle().IsArmed(), is(false));
         assertThat(_maze.FindHero().IsArmed(), is(true));
@@ -239,13 +245,13 @@ public class EagleTests
         _maze.MoveHero(Direction.FromKey(Key.RIGHT));
         _maze.MoveHero(Direction.FromKey(Key.RIGHT));
 
-        for (int i = 0; i < 10; ++i){
+        for (int i = 0; i < 10; ++i)
             _maze.Update();
 
         Dragon d = _maze.FindDragons().get(0);
-        d.SetPosition(new Position(d.GetPosition().X - 1, d.GetPosition().Y));
+        d.SetPosition(new Position(d.GetPosition().X, d.GetPosition().Y-1));
 
-        for (int i = 0; i < 8; ++i){
+        for (int i = 0; i < 8; ++i)
             _maze.Update();
 
         assertNull(_maze.FindEagle());
