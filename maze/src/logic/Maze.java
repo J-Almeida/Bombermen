@@ -1,5 +1,6 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.PriorityQueue;
@@ -13,8 +14,10 @@ import model.Position;
 /**
  * The Class Maze.
  */
-public class Maze
+public class Maze implements Serializable
 {
+    private static final long serialVersionUID = 1L; // default
+
     static final Path PATH = new Path();
     static final Wall WALL = new Wall();
     /** The Grid. */
@@ -78,16 +81,17 @@ public class Maze
         Sword s = FindSword();
         Eagle e = FindEagle();
 
-        this.PushEvent(e, new SendEagleEvent(h, s));
+        PushEvent(e, new SendEagleEvent(h, s));
     }
 
-    public void PushEvent(Unit u, Event ev) {
+    public void PushEvent(Unit u, Event ev)
+    {
         _eventQueue.add(new UnitEvent(u, ev));
     }
 
     public void MoveHero(Direction direction)
     {
-        this.PushEvent(FindHero(), new RequestMovementEvent(direction));
+        PushEvent(FindHero(), new RequestMovementEvent(direction));
     }
 
     public void Update()
@@ -186,10 +190,11 @@ public class Maze
     public void ForwardEventToUnits(Event ev)
     {
         for (Unit u : _livingObjects)
-            this.PushEvent(u, ev);
+            PushEvent(u, ev);
     }
 
-    public boolean IsExitPosition(Position newPos) {
+    public boolean IsExitPosition(Position newPos)
+    {
         ExitPortal ex = FindExitPortal();
         return ex != null && newPos != null && newPos.equals(ex.GetPosition());
     }
