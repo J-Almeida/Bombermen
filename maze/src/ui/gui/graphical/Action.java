@@ -10,6 +10,8 @@ public enum Action
     HERO_DOWN    (KeyEvent.VK_S),
     SEND_EAGLE    (KeyEvent.VK_F1);
 
+    public final static Action Actions[] = { HERO_LEFT, HERO_RIGHT, HERO_UP, HERO_DOWN, SEND_EAGLE };
+
     Action(int defaultKey)
     {
         DefaultKey = defaultKey;

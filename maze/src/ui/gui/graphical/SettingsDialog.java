@@ -9,18 +9,28 @@ import java.awt.event.KeyListener;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 
 import logic.Dragon;
 
 public class SettingsDialog extends JDialog
 {
+	private enum State
+	{
+		NORMAL,
+		EDITING
+	}
+
     SettingsDialog(JFrame frame, Configuration prevConfig)
     {
         super(frame, ModalityType.APPLICATION_MODAL);
@@ -31,6 +41,7 @@ public class SettingsDialog extends JDialog
 
         setSize(this.getSize().width + 50, this.getSize().height + 100);
         setLocation(frame.getLocation().x + frame.getSize().width / 2 - this.getSize().width / 2, frame.getLocation().y + frame.getSize().height / 2 - this.getSize().height / 2);
+        this.setTitle("Settings");
     }
 
     @SuppressWarnings("serial")
@@ -64,8 +75,21 @@ public class SettingsDialog extends JDialog
         tblKeys.setCellSelectionEnabled(false);
         tblKeys.setRowSelectionAllowed(true);
 
+        tblKeys.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
+        tblKeys.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "Left");
+        tblKeys.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "Right");
+
+        AbstractAction nothing = new AbstractAction() { @Override public void actionPerformed(ActionEvent ae) {} };
+
+        tblKeys.getActionMap().put("Enter", nothing);
+        tblKeys.getActionMap().put("Left", nothing);
+        tblKeys.getActionMap().put("Right", nothing);
+
         tblKeys.addKeyListener(new KeyListener()
         {
+        	private State _state = State.NORMAL;
+        	private int _rowNumber = -1;
+        	ActionMap _prevActionMap = null;
             @Override
             public void keyTyped(KeyEvent arg0) { }
 
@@ -75,13 +99,44 @@ public class SettingsDialog extends JDialog
             @Override
             public void keyPressed(KeyEvent e)
             {
-                if (!keys.containsValue(e.getKeyCode()))
-                {
-                    keys.remove(tblKeys.getValueAt(tblKeys.getSelectedRow(), 0));
-                    keys.put((Action)tblKeys.getValueAt(tblKeys.getSelectedRow(), 0), e.getKeyCode());
+            	if (_state == State.NORMAL)
+            	{
+            		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            			_state = State.EDITING;
+            			_rowNumber = tblKeys.getSelectedRow();
+            			_prevActionMap = tblKeys.getActionMap();
+            			tblKeys.setActionMap(new ActionMap());
+            			lblMessage.setText("<HTML>Press a key to change the selected<BR>action os ESC to cancel.</HTML>");
+            		}
+            	}
+            	else if (_state == State.EDITING)
+            	{
+            		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            			_state = State.NORMAL;
+            			lblMessage.setText("<HTML>Action Cacelled.<BR>Select an action and press enter to edit.</HTML>");
+            		}
+            		else if (tblKeys.getSelectedRow() != _rowNumber) {
+            			_state = State.NORMAL;
+            			lblMessage.setText("<HTML>Select an action and press enter to edit.</HTML>");
+            		}
+            		else if (!keys.containsValue(e.getKeyCode()))
+	                {
+	                    keys.remove(tblKeys.getValueAt(tblKeys.getSelectedRow(), 0));
+	                    keys.put((Action)tblKeys.getValueAt(tblKeys.getSelectedRow(), 0), e.getKeyCode());
 
-                    tblKeys.setValueAt(KeyEvent.getKeyText(e.getKeyCode()), tblKeys.getSelectedRow(), 1);
-                }
+	                    tblKeys.setValueAt(KeyEvent.getKeyText(e.getKeyCode()), tblKeys.getSelectedRow(), 1);
+
+	                    _state = State.NORMAL;
+
+	                    lblMessage.setText("<HTML>Attribution done.<BR>Select an action and press enter to edit.</HTML>");
+	                }
+            		else {
+            			lblMessage.setText("<HTML>The key " + KeyEvent.getKeyText(e.getKeyCode()) + " is already in use.</HTML>");
+            		}
+
+            		if (_state == State.NORMAL)
+            			tblKeys.setActionMap(_prevActionMap);
+            	}
             }
         });
 
@@ -145,11 +200,15 @@ public class SettingsDialog extends JDialog
         c.gridx = 1;
         this.getContentPane().add(cmbDragonMode, c);
 
-        c.gridwidth = 2;
+
         c.gridx = 0;
         c.gridy = 3;
         this.getContentPane().add(new JLabel("Keys:"), c);
+        c.gridx = 1;
+        this.getContentPane().add(lblMessage, c);
 
+        c.gridwidth = 2;
+        c.gridx = 0;
         c.gridy = 4;
         this.getContentPane().add(tblKeys, c);
 
@@ -185,6 +244,7 @@ public class SettingsDialog extends JDialog
     private final JComboBox<Dragon.Behaviour> cmbDragonMode = new JComboBox<Dragon.Behaviour>();
     private JTable    tblKeys                                    ; // new JTable();
     private final Map<Action, Integer> keys                    = new LinkedHashMap<Action, Integer>();
+    private final JLabel			lblMessage						= new JLabel("<HTML>Select an action and press enter to edit.<BR></HTML>");
 
 
 }

@@ -89,7 +89,7 @@ public class Configuration
 
     private void initializeWithDefaults()
     {
-        for (Action a : Action.values())
+        for (Action a : Action.Actions)
             _keys.put(a.DefaultKey, a);
 
         _mazeSize = 10;
