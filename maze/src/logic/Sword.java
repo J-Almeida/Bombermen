@@ -5,6 +5,8 @@ package logic;
  */
 public class Sword extends Unit
 {
+    private static final long serialVersionUID = 1L;
+
     /**
      * Instantiates a new sword.
      */

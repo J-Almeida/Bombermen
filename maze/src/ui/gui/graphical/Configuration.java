@@ -22,12 +22,12 @@ public class Configuration
         res._numberOfDragons = this._numberOfDragons;
 
         for (Map.Entry<Integer, Action> elem : _keys.entrySet())
-            res._keys.put(elem.getKey().intValue(), elem.getValue());
+            res._keys.put(elem.getKey(), elem.getValue());
 
         return res;
     }
 
-    private Configuration()    { }
+    private Configuration() { }
 
     public Configuration(String fileName)
     {

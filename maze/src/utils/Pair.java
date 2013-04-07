@@ -55,6 +55,12 @@ public class Pair<T>
         return this.first == other.first && this.second == other.second;
     }
 
+    //@Override
+    //public int hashCode()
+    //{
+    //    return 1/2 * (first + second)*(first + second + 1) + second;
+    //}
+
     @Override
     public String toString()
     {

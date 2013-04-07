@@ -1,7 +1,11 @@
 package model;
 
-public class Position
+import java.io.Serializable;
+
+public class Position implements Cloneable, Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     public Position() {    }
     public Position(int x, int y) { X = x; Y = y; }
 
@@ -14,6 +18,12 @@ public class Position
         Position other = (Position) rhs;
 
         return this.X == other.X && this.Y == other.Y;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return 1/2 * (X + Y)*(X + Y + 1) + Y;
     }
 
     public int X = -1;

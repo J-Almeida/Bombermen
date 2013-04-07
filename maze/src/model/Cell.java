@@ -1,13 +1,17 @@
 package model;
 
+import java.io.Serializable;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Cell.
  *
  * @param <T> the generic type
  */
-public class Cell<T>
+public class Cell<T> implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     /**
      * Instantiates a new cell.
      *

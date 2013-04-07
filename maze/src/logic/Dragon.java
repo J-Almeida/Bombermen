@@ -9,6 +9,8 @@ import utils.RandomEngine;
  */
 public class Dragon extends Unit
 {
+    private static final long serialVersionUID = 1L;
+
     /** Valid values for dragon behaviour */
     public enum Behaviour
     {

@@ -1,12 +1,16 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * The Class Grid.
  *
  * @param <T> the underlying Cell type
  */
-public class Grid<T>
+public class Grid<T> implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     /** The Constant DEFAULT_SEPARATOR. */
     private static final char DEFAULT_SEPARATOR = ' ';
 

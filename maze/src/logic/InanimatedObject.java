@@ -2,6 +2,8 @@ package logic;
 
 public abstract class InanimatedObject extends WorldObject
 {
+    private static final long serialVersionUID = 1L;
+
     public final InanimatedObjectType Type;
 
     public InanimatedObject(InanimatedObjectType type)

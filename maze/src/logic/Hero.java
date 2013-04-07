@@ -7,6 +7,8 @@ import model.Position;
  */
 public class Hero extends Unit
 {
+    private static final long serialVersionUID = 1L;
+
     /** Has sword? */
     private boolean _armed;
 

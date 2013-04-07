@@ -6,6 +6,8 @@ import model.Position;
 
 public class Eagle extends Unit
 {
+    private static final long serialVersionUID = 1L;
+
     public enum EagleState
     {
         OnFlight,

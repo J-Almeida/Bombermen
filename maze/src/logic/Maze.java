@@ -23,7 +23,9 @@ public class Maze implements Serializable
     /** The Grid. */
     private final Grid<InanimatedObject> _board;
     private final Set<Unit> _livingObjects;
-    private final PriorityQueue<UnitEvent> _eventQueue;
+    private transient PriorityQueue<UnitEvent> _eventQueue;
+
+    public void SetEventQueue(PriorityQueue<UnitEvent> eq) { _eventQueue = eq; }
 
     /**
      * Instantiates an empty maze.
@@ -33,9 +35,9 @@ public class Maze implements Serializable
      */
     public Maze(int width, int height)
     {
+        _eventQueue = new PriorityQueue<UnitEvent>();
         _board = new Grid<InanimatedObject>(width, height, PATH);
         _livingObjects = new TreeSet<Unit>(new UnitComparator());
-        _eventQueue = new PriorityQueue<UnitEvent>();
     }
 
     public int GetWidth() { return _board.Width; }
@@ -183,8 +185,14 @@ public class Maze implements Serializable
     public boolean IsPathPosition(Position p)
     {
         Cell<InanimatedObject> c = _board.GetCell(p);
+        if (c != null)
+        {
+            InanimatedObject io = c.GetValue();
+            if (io != null)
+                return io.IsPath();
+        }
 
-        return c != null ? c.GetValue().IsPath() : null;
+        return false;
     }
 
     public WorldObject GetPosition(Position p)

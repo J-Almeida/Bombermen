@@ -7,6 +7,8 @@ package logic;
  */
 public abstract class Unit extends WorldObject
 {
+    private static final long serialVersionUID = 1L;
+
     public final UnitType Type;
 
     /** The _alive. */

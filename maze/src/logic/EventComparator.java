@@ -1,9 +1,12 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 
-public class EventComparator implements Comparator<Event> {
+public class EventComparator implements Comparator<Event>, Serializable
+{
+    private static final long serialVersionUID = 1L;
 
     @Override
     public int compare(Event o1, Event o2) {

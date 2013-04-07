@@ -1,12 +1,16 @@
 package logic;
 
+import java.io.Serializable;
+
 import model.Position;
 
 /**
  * The WorldObject Unit.
  */
-public abstract class WorldObject
+public abstract class WorldObject implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     public final WorldObjectType Type;
 
     public WorldObject(WorldObjectType type)
