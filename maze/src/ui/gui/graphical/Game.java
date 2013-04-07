@@ -40,10 +40,10 @@ public class Game extends JPanel implements KeyListener, MazeGame
     private final int WINDOW_WIDTH = 600;
     private final int WINDOW_HEIGHT = 600;
 
-    private int CELL_WIDTH = WINDOW_WIDTH / CONFIG.GetMazeSize();
-    private int CELL_HEIGHT = WINDOW_HEIGHT / CONFIG.GetMazeSize();
-
     private int MAZE_SIZE = 10;
+
+    private int CELL_WIDTH = WINDOW_WIDTH / MAZE_SIZE;
+    private int CELL_HEIGHT = WINDOW_HEIGHT / MAZE_SIZE;
 
     private void UpdateMazeSizes()
     {
@@ -154,8 +154,10 @@ public class Game extends JPanel implements KeyListener, MazeGame
     }
 
     private Maze _maze;
-    public Maze GetMaze() { return _maze; }
-    public void SetMaze(Maze maze) { _maze = maze; }
+    @Override
+	public Maze GetMaze() { return _maze; }
+    @Override
+	public void SetMaze(Maze maze) { _maze = maze; }
     private final Map<String, TiledImage> _sprites;
     private boolean _gameFinished = false;
 
@@ -169,6 +171,7 @@ public class Game extends JPanel implements KeyListener, MazeGame
         architect.SetMazeGenerator(mg);
         architect.ConstructMaze(CONFIG.GetMazeSize(), CONFIG.GetNumberOfDragons(), CONFIG.GetDragonMode());
         MAZE_SIZE = CONFIG.GetMazeSize();
+
         SetMaze(architect.GetMaze());
         repaint();
     }
@@ -253,14 +256,14 @@ public class Game extends JPanel implements KeyListener, MazeGame
 
     public void DrawCellAt(Graphics g, Image img, int x, int y)
     {
-        g.drawImage(img, (getWidth() - CELL_WIDTH * CONFIG.GetMazeSize()) / 2 + x * CELL_WIDTH, (getHeight() - CELL_HEIGHT * CONFIG.GetMazeSize()) / 2 + y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT, null);
+        g.drawImage(img, (getWidth() - CELL_WIDTH * MAZE_SIZE) / 2 + x * CELL_WIDTH, (getHeight() - CELL_HEIGHT * MAZE_SIZE) / 2 + y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT, null);
     }
 
     public void DrawHalfCellAt(Graphics g, Image img, Position pos, boolean left) { DrawHalfCellAt(g, img, pos.X, pos.Y, left); }
 
     public void DrawHalfCellAt(Graphics g, Image img, int x, int y, boolean left)
     {
-        g.drawImage(img, (getWidth() - CELL_WIDTH * CONFIG.GetMazeSize()) / 2 + x * CELL_WIDTH + (left ? -(CELL_WIDTH / 4) : CELL_WIDTH / 4), (getHeight() - CELL_HEIGHT * CONFIG.GetMazeSize()) / 2 + y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT, null);
+        g.drawImage(img, (getWidth() - CELL_WIDTH * MAZE_SIZE) / 2 + x * CELL_WIDTH + (left ? -(CELL_WIDTH / 4) : CELL_WIDTH / 4), (getHeight() - CELL_HEIGHT * MAZE_SIZE) / 2 + y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT, null);
     }
 
     @Override

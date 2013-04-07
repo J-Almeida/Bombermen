@@ -38,3 +38,4 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 
 maze/maze.config
+*.maze
