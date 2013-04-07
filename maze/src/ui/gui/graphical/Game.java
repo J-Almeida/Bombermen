@@ -62,27 +62,31 @@ public class Game extends JPanel implements KeyListener
 
         final Game m = new Game();
 
-        final JButton startButton = new JButton("Start");
+        final JButton newGameButton = new JButton("New Game");
+        final JButton saveButton = new JButton("Save/Load");
         final JButton exitButton = new JButton("Quit");
         final JButton settingsButton = new JButton("Settings");
 
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        frame.addWindowListener( new WindowAdapter()
+        frame.addWindowListener(new WindowAdapter()
         {
             @Override
-            public void windowClosing(WindowEvent we) {
+            public void windowClosing(WindowEvent we)
+            {
                 CONFIG.TrySaveToFile();
                 System.exit(0);
             }
         });
 
-        startButton.addActionListener(new ActionListener()
+        newGameButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                startButton.setEnabled(false);
-                m._gameStarted = true;
+                int result = JOptionPane.showConfirmDialog(frame, "Are you sure you want to start a new game?");
+
+                if (result == JOptionPane.YES_OPTION)
+                    m.NewGame();
             }
         });
 
@@ -106,36 +110,66 @@ public class Game extends JPanel implements KeyListener
             }
         });
 
-        startButton.addFocusListener(new FocusListener()
+        saveButton.addActionListener(new ActionListener()
         {
             @Override
-            public void focusLost(FocusEvent e)
+            public void actionPerformed(ActionEvent e)
             {
-                m.requestFocusInWindow();
+                SaveLoadDialog d = new SaveLoadDialog(frame, m);
+                d.setVisible(true);
             }
+        });
 
-            @Override
-            public void focusGained(FocusEvent e)
-            {
-                m.requestFocusInWindow();
-            }
+        newGameButton.addFocusListener(new FocusListener()
+        {
+            @Override public void focusLost(FocusEvent e) { m.requestFocusInWindow(); }
+            @Override public void focusGained(FocusEvent e) { m.requestFocusInWindow(); }
+        });
+
+        saveButton.addFocusListener(new FocusListener()
+        {
+            @Override public void focusLost(FocusEvent e) { m.requestFocusInWindow(); }
+            @Override public void focusGained(FocusEvent e) { m.requestFocusInWindow(); }
+        });
+
+        settingsButton.addFocusListener(new FocusListener()
+        {
+            @Override public void focusLost(FocusEvent e) { m.requestFocusInWindow(); }
+            @Override public void focusGained(FocusEvent e) { m.requestFocusInWindow(); }
         });
 
         frame.getContentPane().add(m, BorderLayout.CENTER);
 
-        JPanel southPanel = new JPanel(new GridLayout(1, 3));
+        JPanel southPanel = new JPanel(new GridLayout(1, 4));
         frame.getContentPane().add(southPanel, BorderLayout.SOUTH);
 
-        southPanel.add(startButton);
+        southPanel.add(newGameButton);
+        southPanel.add(saveButton);
         southPanel.add(settingsButton);
         southPanel.add(exitButton);
 
         frame.setVisible(true);
     }
 
-    private final Maze _maze;
-    private boolean _gameStarted = false;
+    private Maze _maze;
+    public Maze GetMaze() { return _maze; }
+    public void SetMaze(Maze maze) { _maze = maze; }
     private final Map<String, TiledImage> _sprites;
+    private boolean _gameFinished = false;
+
+    public void NewGame()
+    {
+        _gameFinished = false;
+
+        Architect architect = new Architect();
+        MazeGenerator mg = new RandomMazeGenerator();
+
+        architect.SetMazeGenerator(mg);
+        architect.ConstructMaze(CONFIG.GetMazeSize(), CONFIG.GetNumberOfDragons(), CONFIG.GetDragonMode());
+
+        SetMaze(architect.GetMaze());
+        repaint();
+    }
 
     public Game()
     {
@@ -148,7 +182,7 @@ public class Game extends JPanel implements KeyListener
         architect.SetMazeGenerator(mg);
         architect.ConstructMaze(CONFIG.GetMazeSize(), CONFIG.GetNumberOfDragons(), CONFIG.GetDragonMode());
 
-        _maze = architect.GetMaze();
+        SetMaze(architect.GetMaze());
 
         // Load sprites
         _sprites = new HashMap<String, TiledImage>();
@@ -168,15 +202,16 @@ public class Game extends JPanel implements KeyListener
     {
         super.paintComponent(g);
         UpdateMazeSizes();
+        requestFocusInWindow();
 
         g.setColor(new Color(0, 100, 0)); // dark green
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        for (int x = 0; x < _maze.GetWidth(); ++x)
+        for (int x = 0; x < GetMaze().GetWidth(); ++x)
         {
-            for (int y = 0; y < _maze.GetHeight(); ++y)
+            for (int y = 0; y < GetMaze().GetHeight(); ++y)
             {
-                InanimatedObject c = _maze.GetGrid().GetCellT(x, y);
+                InanimatedObject c = GetMaze().GetGrid().GetCellT(x, y);
                 if (c.IsPath())
                     DrawCellAt(g, _sprites.get("grass").GetTile(0, 0), x, y);
                 else if (c.IsWall())
@@ -186,32 +221,32 @@ public class Game extends JPanel implements KeyListener
             }
         }
 
-        for (Unit u : _maze.GetLivingObjects())
+        for (Unit u : GetMaze().GetLivingObjects())
         {
             switch (u.Type)
             {
-                case Dragon:
-                    DrawCellAt(g, _sprites.get("dragon").GetTile(iter % 9, u.ToDragon().IsSleeping() ? 11 : 0), u.GetPosition());
-                    break;
-                case Eagle:
-                    if (!u.ToEagle().IsFlying() && !u.ToEagle().IsFollowingHero())
-                        DrawCellAt(g, _sprites.get("eagle").GetTile(16, 0), u.GetPosition());
-                    else if (u.ToEagle().IsFollowingHero())
-                        DrawHalfCellAt(g, _sprites.get("eagle").GetTile(iter % 16, 0), u.GetPosition(), false);
-                    else
-                        DrawCellAt(g, _sprites.get("eagle").GetTile(iter % 16, 0), u.GetPosition());
-                    break;
-                case Hero:
-                    if (_maze.FindEagle() != null && _maze.FindEagle().ToEagle().IsFollowingHero())
-                        DrawHalfCellAt(g, _sprites.get("hero").GetTile(iter % 7, u.ToHero().IsArmed() ? 6 : 8), u.GetPosition(), true);
-                    else
-                        DrawCellAt(g, _sprites.get("hero").GetTile(iter % 7, u.ToHero().IsArmed() ? 6 : 8), u.GetPosition());
-                    break;
-                case Sword:
-                    DrawCellAt(g, _sprites.get("sword").GetTile(0, 0), u.GetPosition());
-                    break;
-                default:
-                    break;
+            case Dragon:
+                DrawCellAt(g, _sprites.get("dragon").GetTile(iter % 9, u.ToDragon().IsSleeping() ? 11 : 0), u.GetPosition());
+                break;
+            case Eagle:
+                if (!u.ToEagle().IsFlying() && !u.ToEagle().IsFollowingHero())
+                    DrawCellAt(g, _sprites.get("eagle").GetTile(16, 0), u.GetPosition());
+                else if (u.ToEagle().IsFollowingHero())
+                    DrawHalfCellAt(g, _sprites.get("eagle").GetTile(iter % 16, 0), u.GetPosition(), false);
+                else
+                    DrawCellAt(g, _sprites.get("eagle").GetTile(iter % 16, 0), u.GetPosition());
+                break;
+            case Hero:
+                if (GetMaze().FindEagle() != null && GetMaze().FindEagle().ToEagle().IsFollowingHero())
+                    DrawHalfCellAt(g, _sprites.get("hero").GetTile(iter % 7, u.ToHero().IsArmed() ? 6 : 8), u.GetPosition(), true);
+                else
+                    DrawCellAt(g, _sprites.get("hero").GetTile(iter % 7, u.ToHero().IsArmed() ? 6 : 8), u.GetPosition());
+                break;
+            case Sword:
+                DrawCellAt(g, _sprites.get("sword").GetTile(0, 0), u.GetPosition());
+                break;
+            default:
+                break;
             }
         }
 
@@ -247,7 +282,7 @@ public class Game extends JPanel implements KeyListener
     @Override
     public void keyReleased(KeyEvent e)
     {
-        if (!_gameStarted)
+        if (_gameFinished)
             return;
 
         Key k = null;
@@ -269,7 +304,7 @@ public class Game extends JPanel implements KeyListener
                 k = Key.LEFT;
                 break;
             case SEND_EAGLE:
-                _maze.SendEagleToSword();
+                GetMaze().SendEagleToSword();
                 break;
             default:
                 return;
@@ -277,13 +312,21 @@ public class Game extends JPanel implements KeyListener
         }
 
         if (k != null)
-            _maze.MoveHero(Direction.FromKey(k));
-        _maze.Update();
+            GetMaze().MoveHero(Direction.FromKey(k));
+        GetMaze().Update();
 
-        if (_maze.IsFinished())
+        if (GetMaze().IsFinished())
         {
-            JOptionPane.showMessageDialog(this, "Game Over");
-            _gameStarted = false;
+            _gameFinished = true;
+
+            if (GetMaze().FindHero() != null)
+                JOptionPane.showMessageDialog(this, "You won!");
+            else
+                JOptionPane.showMessageDialog(this, "You lost, game over.");
+
+            int result = JOptionPane.showConfirmDialog(this, "Do you wish to start a new game?");
+            if (result == JOptionPane.YES_OPTION)
+                NewGame();
         }
 
         repaint();
