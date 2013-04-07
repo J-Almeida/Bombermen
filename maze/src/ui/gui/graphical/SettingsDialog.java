@@ -22,6 +22,7 @@ import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
+import javax.swing.SpinnerNumberModel;
 
 import logic.Dragon;
 
@@ -204,7 +205,6 @@ public class SettingsDialog extends JDialog
         c.gridx = 1;
         getContentPane().add(cmbDragonMode, c);
 
-
         c.gridx = 0;
         c.gridy = 3;
         getContentPane().add(new JLabel("Keys:"), c);
@@ -225,8 +225,7 @@ public class SettingsDialog extends JDialog
         c.gridx = 0;
         c.gridy = 6;
         c.gridwidth = 2;
-        JSeparator sep = new JSeparator();
-        getContentPane().add(sep, c);
+        getContentPane().add(new JSeparator(), c);
 
         c.gridy = 7;
         lblMessage.setPreferredSize(new Dimension(getWidth(), 25));
@@ -251,8 +250,8 @@ public class SettingsDialog extends JDialog
 
     private final JButton   btnOK                             = new JButton("OK");
     private final JButton   btnCancel                         = new JButton("Cancel");
-    private final JSpinner  spnNumberOfDragons                = new JSpinner();
-    private final JSpinner  spnMazeSize                       = new JSpinner();
+    private final JSpinner  spnNumberOfDragons                = new JSpinner(new SpinnerNumberModel(2, 0, 1000, 1));
+    private final JSpinner  spnMazeSize                       = new JSpinner(new SpinnerNumberModel(10, 6, 1000, 1));
     private final JComboBox<Dragon.Behaviour> cmbDragonMode   = new JComboBox<Dragon.Behaviour>();
     private JTable tblKeys;
     private final Map<Action, Integer> keys                   = new LinkedHashMap<Action, Integer>();

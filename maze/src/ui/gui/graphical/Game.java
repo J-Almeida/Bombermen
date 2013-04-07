@@ -155,9 +155,9 @@ public class Game extends JPanel implements KeyListener, MazeGame
 
     private Maze _maze;
     @Override
-	public Maze GetMaze() { return _maze; }
+    public Maze GetMaze() { return _maze; }
     @Override
-	public void SetMaze(Maze maze) { _maze = maze; }
+    public void SetMaze(Maze maze) { _maze = maze; }
     private final Map<String, TiledImage> _sprites;
     private boolean _gameFinished = false;
 
