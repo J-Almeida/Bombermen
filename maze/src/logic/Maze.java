@@ -49,7 +49,7 @@ public class Maze implements Serializable
         int res = 0;
         for (int x = 0; x < _board.Width; x++)
             for (int y = 0; y < _board.Height; y++)
-                if (_board.GetCellT(x, y).equals(PATH))
+                if (_board.GetCellT(x, y).IsPath())
                     res++;
 
         return res;

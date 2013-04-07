@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import logic.Architect;
 import logic.Dragon;
 import logic.Dragon.Behaviour;
+import logic.Eagle;
 import logic.EmptyMazeGenerator;
 import logic.ExitPortal;
 import logic.Hero;
@@ -32,9 +33,11 @@ import logic.Unit;
 import logic.Wall;
 import logic.WorldObject;
 import model.Position;
+import ui.gui.graphical.MazeGame;
+import ui.gui.graphical.SaveLoadDialog;
 import ui.gui.graphical.TiledImage;
 
-public class MazeEditor extends JPanel implements MouseListener
+public class MazeEditor extends JPanel implements MouseListener, MazeGame
 {
     private static final long serialVersionUID = 1L;
 
@@ -63,10 +66,19 @@ public class MazeEditor extends JPanel implements MouseListener
 
         final MazeEditor m = new MazeEditor();
 
-        final JButton saveButton = new JButton("Save");
-        final JButton loadButton = new JButton("Load");
+        final JButton saveButton = new JButton("Save/Load");
         final JButton resetButton = new JButton("Reset");
         final JButton exitButton = new JButton("Quit");
+
+        saveButton.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                SaveLoadDialog d = new SaveLoadDialog(frame, m, true);
+                d.setVisible(true);
+            }
+        });
 
         resetButton.addActionListener(new ActionListener()
         {
@@ -88,10 +100,9 @@ public class MazeEditor extends JPanel implements MouseListener
 
         frame.getContentPane().add(m, BorderLayout.CENTER);
 
-        JPanel southPanel = new JPanel(new GridLayout(1, 1));
+        JPanel southPanel = new JPanel(new GridLayout(1, 3));
         frame.getContentPane().add(southPanel, BorderLayout.SOUTH);
 
-        southPanel.add(loadButton);
         southPanel.add(saveButton);
         southPanel.add(resetButton);
         southPanel.add(exitButton);
@@ -361,5 +372,17 @@ public class MazeEditor extends JPanel implements MouseListener
     @Override
     public void mouseExited(MouseEvent e)
     {
+    }
+
+    @Override
+    public Maze GetMaze()
+    {
+        return _maze;
+    }
+
+    @Override
+    public void SetMaze(Maze m)
+    {
+        _maze = m;
     }
 }

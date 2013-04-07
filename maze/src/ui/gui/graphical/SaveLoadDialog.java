@@ -14,7 +14,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.PriorityQueue;
 
@@ -25,21 +24,24 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 import logic.Maze;
 import logic.UnitEvent;
 
 public class SaveLoadDialog extends JDialog
 {
-    private Game _game;
-    private ArrayList<String> games = new ArrayList<String>();
+    private MazeGame _game;
+    private boolean _editor;
     private static final String _savePath = System.getProperty("user.dir") + "/saves/";
     private JList<String> _fileList = new JList<String>();
 
-    public SaveLoadDialog(JFrame frame, Game m)
+    public SaveLoadDialog(JFrame frame, MazeGame m, boolean editor)
     {
         super(frame, ModalityType.APPLICATION_MODAL);
         _game = m;
+        _editor = editor;
 
         UpdateFiles();
 
@@ -66,17 +68,15 @@ public class SaveLoadDialog extends JDialog
 
     private void UpdateFiles()
     {
-        games.clear();
         File folder = new File(_savePath);
         if (!folder.isDirectory())
             return;
 
         DefaultListModel<String> listModel = new DefaultListModel<String>();
+
         for (File file : folder.listFiles())
-        {
             listModel.addElement(file.getName());
-            //games.add(file.getName());
-        }
+
         _fileList.setModel(listModel);
     }
 
@@ -85,10 +85,14 @@ public class SaveLoadDialog extends JDialog
         ObjectOutputStream os = null;
         try
         {
+            File folder = new File(_savePath);
+            if (!folder.exists())
+                folder.mkdir();
+
             DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
             Date date = new Date();
 
-            os = new ObjectOutputStream(new FileOutputStream(_savePath + dateFormat.format(date) + ".maze"));
+            os = new ObjectOutputStream(new FileOutputStream(_savePath + dateFormat.format(date) + (_editor ? "-custom.maze" : ".maze")));
             os.writeObject(_game.GetMaze());
         }
         catch (IOException ex)
@@ -137,8 +141,8 @@ public class SaveLoadDialog extends JDialog
     {
         setLayout(new BorderLayout());
 
-        String[] gamesStr = { };
-        gamesStr = games.toArray(gamesStr);
+        _fileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        _fileList.setVisibleRowCount(5);
 
         _fileList.addMouseListener(new MouseListener()
         {
@@ -191,7 +195,9 @@ public class SaveLoadDialog extends JDialog
             }
         });
 
-        getContentPane().add(_fileList, BorderLayout.CENTER);
+
+        //getContentPane().add(_fileList, BorderLayout.CENTER);
+        getContentPane().add(new JScrollPane(_fileList), BorderLayout.CENTER);
 
         JPanel southPanel = new JPanel(new GridLayout(1, 3));
         getContentPane().add(southPanel, BorderLayout.SOUTH);

@@ -31,36 +31,38 @@ import logic.Unit;
 import model.Position;
 import utils.Key;
 
-public class Game extends JPanel implements KeyListener
+public class Game extends JPanel implements KeyListener, MazeGame
 {
-    private static Configuration CONFIG = new Configuration("maze.config");
+    private Configuration CONFIG = new Configuration("maze.config");
 
     private static final long serialVersionUID = 1L;
 
-    private static final int WINDOW_WIDTH = 600;
-    private static final int WINDOW_HEIGHT = 600;
+    private final int WINDOW_WIDTH = 600;
+    private final int WINDOW_HEIGHT = 600;
 
-    private static int CELL_WIDTH = WINDOW_WIDTH / CONFIG.GetMazeSize();
-    private static int CELL_HEIGHT = WINDOW_HEIGHT / CONFIG.GetMazeSize();
+    private int CELL_WIDTH = WINDOW_WIDTH / CONFIG.GetMazeSize();
+    private int CELL_HEIGHT = WINDOW_HEIGHT / CONFIG.GetMazeSize();
+
+    private int MAZE_SIZE = 10;
 
     private void UpdateMazeSizes()
     {
         int min = Math.min(getWidth(), getHeight());
-        CELL_WIDTH = min / CONFIG.GetMazeSize();
-        CELL_HEIGHT = min / CONFIG.GetMazeSize();
+        CELL_WIDTH = min / MAZE_SIZE;
+        CELL_HEIGHT = min / MAZE_SIZE;
     }
 
     public static void main(String[] args)
     {
+        final Game m = new Game();
+
         final JFrame frame = new JFrame("The Maze");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        frame.setSize(m.WINDOW_WIDTH, m.WINDOW_HEIGHT);
         //frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         //frame.setUndecorated(true);
 
         frame.setLayout(new BorderLayout());
-
-        final Game m = new Game();
 
         final JButton newGameButton = new JButton("New Game");
         final JButton saveButton = new JButton("Save/Load");
@@ -73,7 +75,7 @@ public class Game extends JPanel implements KeyListener
             @Override
             public void windowClosing(WindowEvent we)
             {
-                CONFIG.TrySaveToFile();
+                m.CONFIG.TrySaveToFile();
                 System.exit(0);
             }
         });
@@ -104,9 +106,9 @@ public class Game extends JPanel implements KeyListener
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                SettingsDialog d = new SettingsDialog(frame, CONFIG);
+                SettingsDialog d = new SettingsDialog(frame, m.CONFIG);
                 d.setVisible(true);
-                CONFIG = d.GetNewConfiguration();
+                m.CONFIG = d.GetNewConfiguration();
             }
         });
 
@@ -115,7 +117,7 @@ public class Game extends JPanel implements KeyListener
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                SaveLoadDialog d = new SaveLoadDialog(frame, m);
+                SaveLoadDialog d = new SaveLoadDialog(frame, m, false);
                 d.setVisible(true);
             }
         });
@@ -166,7 +168,7 @@ public class Game extends JPanel implements KeyListener
 
         architect.SetMazeGenerator(mg);
         architect.ConstructMaze(CONFIG.GetMazeSize(), CONFIG.GetNumberOfDragons(), CONFIG.GetDragonMode());
-
+        MAZE_SIZE = CONFIG.GetMazeSize();
         SetMaze(architect.GetMaze());
         repaint();
     }
@@ -176,13 +178,7 @@ public class Game extends JPanel implements KeyListener
         addKeyListener(this);
         setFocusable(true);
 
-        Architect architect = new Architect();
-        MazeGenerator mg = new RandomMazeGenerator();
-
-        architect.SetMazeGenerator(mg);
-        architect.ConstructMaze(CONFIG.GetMazeSize(), CONFIG.GetNumberOfDragons(), CONFIG.GetDragonMode());
-
-        SetMaze(architect.GetMaze());
+        NewGame();
 
         // Load sprites
         _sprites = new HashMap<String, TiledImage>();
