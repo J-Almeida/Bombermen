@@ -240,7 +240,12 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
             return;
 
         if (obj.IsUnit())
+        {
             obj.ToUnit().Kill();
+            if (obj.ToUnit().IsHero())
+                if (_maze.FindEagle() != null)
+                    _maze.FindEagle().Kill();
+        }
         else if (obj.IsInanimatedObject() && newObj.IsUnit())
         {
             InanimatedObject path = new Path();
@@ -251,6 +256,13 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
         _maze.Update(); // update to remove killed units
 
         _maze.AddWorldObject(newObj);
+        if (newObj.IsUnit() && newObj.ToUnit().IsHero())
+        {
+            Eagle eagle = new Eagle();
+            eagle.SetPosition(newObj.GetPosition().clone());
+            _maze.AddWorldObject(eagle);
+        }
+
         repaint();
     }
 
