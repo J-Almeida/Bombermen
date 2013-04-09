@@ -30,9 +30,7 @@ public class DyingDragonSprite implements AnimatedSprite {
 		if (_playing && _timeCount == 3)
 		{
 			_frame += sprState.GetDeltaX();
-			_frame %= sprState.GetNumFrames();
-
-			if (_frame == 0)
+			if (_frame == sprState.GetNumFrames() - 1)
 				_playing = false;
 
 			_timeCount = 0;
@@ -67,7 +65,7 @@ public class DyingDragonSprite implements AnimatedSprite {
 
 	@Override
 	public boolean IsAlive() {
-		return _playing;
+		return /*_playing;*/ true;
 	}
 
 	@Override
