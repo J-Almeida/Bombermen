@@ -28,7 +28,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import logic.Maze;
-import logic.UnitEvent;
+import logic.UnitEventEntry;
 
 public class SaveLoadDialog extends JDialog
 {
@@ -132,7 +132,7 @@ public class SaveLoadDialog extends JDialog
 
         if (m != null)
         {
-            m.SetEventQueue(new PriorityQueue<UnitEvent>());
+            m.SetEventQueue(new PriorityQueue<UnitEventEntry>());
             _game.SetMaze(m);
         }
     }
