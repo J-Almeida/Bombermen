@@ -87,7 +87,7 @@ public class EagleSprite implements AnimatedSprite
     		}
     	}
 
-    	if (_timeCount == 2)
+    	if (_timeCount == 1)
     	{
     		_frame += _state.sprState.GetDeltaX();
     		_frame %= _state.sprState.GetNumFrames();
