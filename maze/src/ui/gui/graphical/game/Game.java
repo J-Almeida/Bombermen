@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,8 @@ import javax.swing.Timer;
 
 import logic.Architect;
 import logic.Direction;
+import logic.Dragon;
+import logic.Eagle;
 import logic.Hero;
 import logic.InanimatedObject;
 import logic.Maze;
@@ -204,12 +207,14 @@ public class Game extends JPanel implements KeyListener, MazeGame
         // Load sprites
         _sprites = new HashMap<String, TiledImage>();
         _sprites.put("dragon",     new TiledImage("ui/gui/graphical/resources/dragon_trans.png", 128, 128));
+        _sprites.put("dying_dragon", new TiledImage("ui/gui/graphical/resources/dying_dragon_trans.png", 128, 128));
         _sprites.put("eagle",      new TiledImage("ui/gui/graphical/resources/eagle_trans.png",  64,  64));
         _sprites.put("hero",       new TiledImage("ui/gui/graphical/resources/hero_trans.png",   96,  96));
         _sprites.put("sword",      new TiledImage("ui/gui/graphical/resources/sword_trans.png",  96,  96));
         _sprites.put("grass",      new TiledImage("ui/gui/graphical/resources/grass.png",        96,  96));
         _sprites.put("stone",      new TiledImage("ui/gui/graphical/resources/stone.png",        96,  96));
         _sprites.put("dark_stone", new TiledImage("ui/gui/graphical/resources/dark_stone.png",   96,  96));
+
 
         NewGame();
 
@@ -222,8 +227,6 @@ public class Game extends JPanel implements KeyListener, MazeGame
         };
         new Timer(17, taskPerformer).start();
     }
-
-    static int iter = 0;
 
     public void Update(int diff)
     {
@@ -239,6 +242,42 @@ public class Game extends JPanel implements KeyListener, MazeGame
     			_heroMoving = true;
     		else
     			_heroMoving = false;
+    	}
+
+    	/*for (Unit u : _maze.GetLivingObjects())
+    	{
+    		if (!u.IsAlive())
+    		{
+    			_unitSprites.remove(u.GetId());
+    			if (u.IsDragon())
+    			{
+    				_unitSprites.put(u.GetId(), new DyingDragonSprite(u.ToDragon(),_sprites.get("dying_dragon")));
+    			}
+    		}
+    	}*/
+
+    	ArrayList<AnimatedSprite> toRemove = new ArrayList<AnimatedSprite>();
+
+    	for (AnimatedSprite as : _unitSprites.values())
+    	{
+    		if (!as.IsAlive())
+    		{
+    			toRemove.add(as);
+    		}
+    	}
+
+    	for (AnimatedSprite as : toRemove)
+    	{
+    		if (as instanceof DragonSprite)
+    		{
+    			Dragon d = ((DragonSprite)as).GetDragon();
+    			_unitSprites.remove(as.GetUnitId());
+    			_unitSprites.put(d.GetId(), new DyingDragonSprite(d,_sprites.get("dying_dragon")));
+    		}
+    		else
+    		{
+    			_unitSprites.remove(as.GetUnitId());
+    		}
     	}
     }
 
@@ -266,7 +305,7 @@ public class Game extends JPanel implements KeyListener, MazeGame
             }
         }
 
-        for (Unit u : GetMaze().GetLivingObjects())
+        /*for (Unit u : GetMaze().GetLivingObjects())
         {
             switch (u.Type)
             {
@@ -293,9 +332,43 @@ public class Game extends JPanel implements KeyListener, MazeGame
             default:
                 break;
             }
+        }*/
+
+        for (AnimatedSprite as : _unitSprites.values())
+        {
+        	if (as instanceof EagleSprite)
+        	{
+        		Eagle e = _maze.FindEagle();
+        		if (!e.IsFlying() && !e.IsFollowingHero())
+        		{
+        			DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
+        		}
+                else if (e.IsFollowingHero())
+                {
+       			 	DrawHalfCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT), false);
+                }
+                else
+                {
+                	DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
+                }
+        	}
+        	else if (as instanceof HeroSprite)
+        	{
+        		 if (GetMaze().FindEagle() != null && GetMaze().FindEagle().ToEagle().IsFollowingHero())
+        		 {
+        			 DrawHalfCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT), true);
+        		 }
+                 else
+                 {
+                	 DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
+                 }
+        	}
+        	else
+        	{
+        		DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
+        	}
         }
 
-        iter++;
     }
 
     public void DrawCellAt(Graphics g, Image img, Position pos, Position dPos) { DrawCellAt(g, img, pos.X, pos.Y, dPos.X, dPos.Y); }

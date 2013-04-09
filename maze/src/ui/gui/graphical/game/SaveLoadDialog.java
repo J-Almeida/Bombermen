@@ -32,10 +32,10 @@ import logic.UnitEventEntry;
 
 public class SaveLoadDialog extends JDialog
 {
-    private MazeGame _game;
-    private boolean _editor;
+    private final MazeGame _game;
+    private final boolean _editor;
     private static final String _savePath = System.getProperty("user.dir") + "/saves/";
-    private JList<String> _fileList = new JList<String>();
+    private final JList<String> _fileList = new JList<String>();
 
     public SaveLoadDialog(JFrame frame, MazeGame m, boolean editor)
     {

@@ -34,4 +34,14 @@ public class SwordSprite implements AnimatedSprite {
 		return _unit.GetPosition();
 	}
 
+	@Override
+	public boolean IsAlive() {
+		return _unit.IsAlive();
+	}
+
+	@Override
+	public int GetUnitId() {
+		return _unit.GetId();
+	}
+
 }

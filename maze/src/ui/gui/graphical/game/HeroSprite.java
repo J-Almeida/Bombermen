@@ -132,4 +132,14 @@ public class HeroSprite implements AnimatedSprite
 	public Position GetPosition() {
 		return _position;
 	}
+
+	@Override
+	public boolean IsAlive() {
+		return _unit.IsAlive();
+	}
+
+	@Override
+	public int GetUnitId() {
+		return _unit.GetId();
+	}
 }
