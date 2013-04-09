@@ -11,8 +11,17 @@ import logic.Maze;
 import logic.MazeGenerator;
 import logic.RandomMazeGenerator;
 
+/**
+ * The Class Statistics (test code, not relevant)
+ */
 public class Statistics
 {
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static void main(String[] args) throws IOException
     {
         BufferedWriter f = null;

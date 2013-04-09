@@ -7,9 +7,10 @@ import model.Position;
  */
 public class Hero extends Unit
 {
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
-    /** Has sword? */
+    /** Has sword?. */
     private boolean _armed;
 
     /**
@@ -32,27 +33,29 @@ public class Hero extends Unit
 
     /**
      * Equip or unequip sword.
+     *
+     * @param equip true to equip, false to unequip
      */
     public void EquipSword(boolean equip)
     {
         _armed = equip;
     }
 
+    /* (non-Javadoc)
+     * @see logic.WorldObject#GetSymbol()
+     */
     @Override
     public char GetSymbol()
     {
         return _armed ? 'A' : 'H';
     }
 
+    /* (non-Javadoc)
+     * @see logic.Unit#HandleEvent(logic.Maze, logic.Event)
+     */
     @Override
-    public void Update(Maze maze){ }
-
-    @Override
-    public void OnCollision(Unit other)
-    { }
-
-    @Override
-    public void HandleEvent(Maze maze, Event event) {
+    public void HandleEvent(Maze maze, Event event)
+    {
         if (event.IsRequestMovementEvent())
         {
             RequestMovementEvent ev = event.ToRequestMovementEvent();
@@ -78,7 +81,7 @@ public class Hero extends Unit
                 {
                     if (ev.Actor.ToEagle().IsArmed())
                     {
-                        ev.Actor.ToEagle().UnequipSword();
+                        ev.Actor.ToEagle().EquipSword(false);
                         this.EquipSword(true);
                         ev.Actor.ToEagle().SetState(Eagle.EagleState.FollowingHeroWithSword);
                     }
@@ -96,6 +99,5 @@ public class Hero extends Unit
                 }
             }
         }
-
     }
 }

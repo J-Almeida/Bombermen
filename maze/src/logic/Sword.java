@@ -5,6 +5,7 @@ package logic;
  */
 public class Sword extends Unit
 {
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
     /**
@@ -15,23 +16,18 @@ public class Sword extends Unit
         super(UnitType.Sword);
     }
 
+    /* (non-Javadoc)
+     * @see logic.WorldObject#GetSymbol()
+     */
     @Override
     public char GetSymbol()
     {
         return 'E';
     }
 
-    @Override
-    public void Update(Maze maze) { }
-
-    @Override
-    public void OnCollision(Unit other)
-    {
-        if (other.IsHero() || other.IsEagle())
-            this.Kill();
-    }
-
-
+    /* (non-Javadoc)
+     * @see logic.Unit#HandleEvent(logic.Maze, logic.Event)
+     */
     @Override
     public void HandleEvent(Maze maze, Event event)
     {
@@ -44,9 +40,8 @@ public class Sword extends Unit
                 if (ev.Actor.IsHero())
                     ev.Actor.ToHero().EquipSword(true);
                 else if (ev.Actor.IsEagle())
-                    ev.Actor.ToEagle().EquipSword();
+                    ev.Actor.ToEagle().EquipSword(true);
             }
         }
-
     }
 }

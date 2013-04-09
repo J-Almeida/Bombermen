@@ -4,6 +4,8 @@ import java.util.Random;
 
 /**
  * The Class RandomEngine.
+ *
+ * Static wrapper for Random
  */
 public class RandomEngine
 {

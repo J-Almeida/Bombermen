@@ -9,31 +9,40 @@ import utils.RandomEngine;
  */
 public class Dragon extends Unit
 {
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
-    /** Valid values for dragon behaviour */
+    /**
+     * Valid values for dragon behaviour.
+     */
     public enum Behaviour
     {
-        /** No movement at all */
+        /** No movement at all. */
         Idle,
-        /** Random movement */
+
+        /** Random movement. */
         RandomMovement,
-        /** Random movement with ability to sleep */
+
+        /** Random movement with ability to sleep. */
         Sleepy
     }
 
     /** Is dragon sleeping? */
     private boolean _asleep = false;
 
-    /** Sleep countdown */
+    /** Sleep countdown. */
     private int _sleepTimer = 0;
 
+    /** The behaviour. */
     private final Behaviour _db;
 
+    /** True if dragon is on top of sword. */
     private boolean _onSword = false;
 
     /**
      * Instantiates a new dragon.
+     *
+     * @param db the dragon behaviour
      */
     public Dragon(Behaviour db)
     {
@@ -41,6 +50,9 @@ public class Dragon extends Unit
         _db = db;
     }
 
+    /* (non-Javadoc)
+     * @see logic.WorldObject#GetSymbol()
+     */
     @Override
     public char GetSymbol()
     {
@@ -50,7 +62,9 @@ public class Dragon extends Unit
     }
 
     /**
-     * Sets the Dragon to sleep.
+     * Puts the Dragon to sleep.
+     *
+     * @param time the time in seconds
      */
     public void SetToSleep(int time)
     {
@@ -93,6 +107,11 @@ public class Dragon extends Unit
         return true;
     }
 
+    /**
+     * Can sleep?
+     *
+     * @return true, if Dragon is able to sleep
+     */
     public boolean CanSleep()
     {
         if (_db != Behaviour.Sleepy)
@@ -101,6 +120,9 @@ public class Dragon extends Unit
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see logic.Unit#Update(logic.Maze)
+     */
     @Override
     public void Update(Maze maze)
     {
@@ -115,9 +137,9 @@ public class Dragon extends Unit
             }
             else
             {
-                // 15% chance of sleeping between 10 and 20 units of time
+                // 15% chance of sleeping between 1 and 3 seconds
                 if (RandomEngine.GetBool(15))
-                    SetToSleep(RandomEngine.GetInt(10, 20));
+                    SetToSleep(RandomEngine.GetInt(1, 3));
             }
         }
 
@@ -146,6 +168,9 @@ public class Dragon extends Unit
         }
     }
 
+    /* (non-Javadoc)
+     * @see logic.Unit#HandleEvent(logic.Maze, logic.Event)
+     */
     @Override
     public void HandleEvent(Maze maze, Event event)
     {

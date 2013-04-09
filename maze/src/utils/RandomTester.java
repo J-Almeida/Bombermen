@@ -4,31 +4,32 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class RandomTester.
+ *
+ * Explicitly define what values Random returns (used in unit testing)
  */
 public class RandomTester extends Random {
 
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
-    /** The _next booleans. */
+    /** The booleans to be used. */
     private Queue<Boolean> _nextBooleans = new LinkedList<Boolean>();
 
-    /** The _default boolean. */
+    /** The default boolean. */
     private boolean _defaultBoolean = true;
 
-    /** The _next ints. */
+    /** The integers to be used. */
     private Queue<Integer> _nextInts = new LinkedList<Integer>();
 
-    /** The _default int. */
+    /** The default integer. */
     private int _defaultInt = 0;
 
     /**
      * Push int.
      *
-     * @param val the val
+     * @param val the int
      */
     public void PushInt(int val)
     {
@@ -36,9 +37,9 @@ public class RandomTester extends Random {
     }
 
     /**
-     * Push ints.
+     * Push multiple ints.
      *
-     * @param val the val
+     * @param val the array of ints
      */
     public void PushInts(int[] val)
     {
@@ -49,7 +50,7 @@ public class RandomTester extends Random {
     /**
      * Push boolean.
      *
-     * @param val the val
+     * @param val the boolean
      */
     public void PushBoolean(boolean val)
     {
@@ -57,9 +58,9 @@ public class RandomTester extends Random {
     }
 
     /**
-     * Push booleans.
+     * Push multiple booleans.
      *
-     * @param val the val
+     * @param val the array of booleans.
      */
     public void PushBooleans(boolean[] val)
     {
@@ -93,7 +94,4 @@ public class RandomTester extends Random {
     {
         return _nextInts.isEmpty() ? _defaultInt : _nextInts.poll();
     }
-
-
-
 }

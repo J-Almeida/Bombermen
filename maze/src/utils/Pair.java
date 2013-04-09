@@ -8,7 +8,7 @@ package utils;
 public class Pair<T>
 {
     /**
-     * Builder method for Pair<Integer> (sugar)
+     * Builder method for Pair<Integer> (sugar).
      *
      * @param fst the first element
      * @param snd the second element
@@ -20,7 +20,7 @@ public class Pair<T>
     }
 
     /**
-     * Builder method for Pair<Double> (sugar)
+     * Builder method for Pair<Double> (sugar).
      *
      * @param fst the first element
      * @param snd the second element
@@ -43,6 +43,9 @@ public class Pair<T>
         this.second = snd;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object rhs)
@@ -55,18 +58,18 @@ public class Pair<T>
         return this.first == other.first && this.second == other.second;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode()
     {
         return 1/2 * (first.hashCode() + second.hashCode()) * (first.hashCode() + second.hashCode() + 1) + second.hashCode();
     }
 
-    //@Override
-    //public int hashCode()
-    //{
-    //    return 1/2 * (first + second)*(first + second + 1) + second;
-    //}
-
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {
@@ -81,6 +84,9 @@ public class Pair<T>
         return sb.toString();
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#clone()
+     */
     @Override
     public Object clone()
     {

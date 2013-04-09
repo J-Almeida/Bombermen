@@ -4,64 +4,118 @@ import java.util.Stack;
 
 import model.Position;
 
+/**
+ * The Class Eagle.
+ */
 public class Eagle extends Unit
 {
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The Eagle state.
+     */
     public enum EagleState
     {
+        /** Eagle is flying */
         OnFlight,
+
+        /** Eagle laying on floor */
         OnFloor,
+
+        /** Eagle is following hero */
         FollowingHero,
+
+        /** Eagle reached sword */
         ReachedSword,
+
+        /** Eagle if flying back to hero */
         OnFlightBack,
+
+        /** Eagle is following hero and hero has sword */
         FollowingHeroWithSword
     }
 
+    /** The eagle state. */
     private EagleState _state;
+
+    /** The eagle speed. */
     private static final double _speed = 1;
+
+    /** Eagle carries the sword. */
     private boolean _armed = false;
 
+    /**
+     * Instantiates a new eagle.
+     */
     public Eagle()
     {
         super(UnitType.Eagle);
         _state = EagleState.FollowingHero;
     }
 
+    /**
+     * Sets the state.
+     *
+     * @param state the state
+     */
     public void SetState(EagleState state)
     {
         _state = state;
     }
 
+    /**
+     * Gets the state.
+     *
+     * @return the eagle state
+     */
     public EagleState GetState()
     {
         return _state;
     }
 
-    public void EquipSword()
+    /**
+     * Equip sword.
+     *
+     * @param equip true if should equip, false to unequip
+     */
+    public void EquipSword(boolean equip)
     {
         _armed = true;
     }
 
-    public void UnequipSword()
-    {
-        _armed = false;
-    }
-
+    /**
+     * Checks if Eagle carries sword.
+     *
+     * @return true, if successful
+     */
     public boolean IsArmed()
     {
         return _armed;
     }
 
+    /** The initial position. */
     private Position _initialPosition = null;
+
+    /** The sword position. */
     private Position _swordPosition = null;
+
+    /** The path eagle followed when flying to sword */
     private final Stack<Position> _wayPath = new Stack<Position>();
 
+    /**
+     * Sets the sword position (internal)
+     *
+     * @param pos the pos
+     */
     public void SetSwordPosition(Position pos)
     {
         _swordPosition = pos;
     }
 
+    /* (non-Javadoc)
+     * @see logic.Unit#Update(logic.Maze)
+     */
     @Override
     public void Update(Maze maze)
     {
@@ -113,16 +167,15 @@ public class Eagle extends Unit
             }
 
             if (_wayPath.isEmpty())
-            {
                 SetState(EagleState.OnFloor);
-            }
         }
         else if (_state == EagleState.ReachedSword)
-        {
             _state = EagleState.OnFlightBack;
-        }
     }
 
+    /* (non-Javadoc)
+     * @see logic.Unit#HandleEvent(logic.Maze, logic.Event)
+     */
     @Override
     public void HandleEvent(Maze maze, Event event)
     {
@@ -140,16 +193,14 @@ public class Eagle extends Unit
                 }
                 else if (_position.equals(ev.Actor.GetPosition()))
                 {
-                    this.UnequipSword();
+                    this.EquipSword(false);
                     ev.Actor.ToHero().EquipSword(true);
                     SetState(EagleState.FollowingHeroWithSword);
                 }
                 else if (ev.Actor.IsDragon())
                 {
                     if (_position.equals(ev.Actor.GetPosition()) || Position.IsAdjacent(_position, ev.Actor.GetPosition()))
-                    {
                         this.Kill();
-                    }
                 }
             }
         }
@@ -164,22 +215,39 @@ public class Eagle extends Unit
         }
     }
 
+    /**
+     * Can be killed by dragon.
+     *
+     * @return true, if successful
+     */
     public boolean CanBeKilledByDragon()
     {
         return _state != EagleState.OnFlight && _state != EagleState.OnFlightBack && _state != EagleState.FollowingHeroWithSword;
     }
 
+    /**
+     * Checks if is flying.
+     *
+     * @return true, if successful
+     */
     public boolean IsFlying()
     {
         return _state == EagleState.OnFlight || _state == EagleState.OnFlightBack;
     }
 
+    /**
+     * Checks if is following hero.
+     *
+     * @return true, if successful
+     */
     public boolean IsFollowingHero()
     {
         return _state == EagleState.FollowingHero || _state == EagleState.FollowingHeroWithSword;
     }
 
-
+    /* (non-Javadoc)
+     * @see logic.WorldObject#GetSymbol()
+     */
     @Override
     public char GetSymbol()
     {

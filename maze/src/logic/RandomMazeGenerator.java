@@ -7,12 +7,19 @@ import utils.Pair;
 import utils.RandomEngine;
 import utils.Utilities;
 
-/** ConcreteBuilder - Randomised NxN maze */
+/**
+ * ConcreteBuilder - Randomized NxN maze.
+ */
 public class RandomMazeGenerator extends MazeGenerator
 {
+    /* (non-Javadoc)
+     * @see logic.MazeGenerator#BuildMaze()
+     */
     @Override
     public void BuildMaze()
     {
+        // Randomized depth first search with backtracking
+
         Stack<CellNeighbors> stk = new Stack<CellNeighbors>();
 
         for (int i = 0; i < _maze.GetWidth(); i++)

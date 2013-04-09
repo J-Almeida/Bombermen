@@ -3,17 +3,26 @@ package logic;
 import model.Position;
 import utils.Key;
 
+/**
+ * The Enum Direction.
+ */
 public enum Direction
 {
-    North, // N - 0º
-    Northeast, // NE - 45º
-    East, // S - 90º
-    Southeast, // SE - 135º
-    South, // S - 180º
-    Southwest, // SW - 225º
-    West, // W - 270º
-    Northwest; // NW - 315º
+    North, /** N - 0º */
+    Northeast, /** NE - 45º */
+    East, /** S - 90º */
+    Southeast, /** SE - 135º */
+    South, /** S - 180º */
+    Southwest, /** SW - 225º */
+    West, /** W - 270º */
+    Northwest; /**  NW - 315º */
 
+    /**
+     * Convert Key to Direction
+     *
+     * @param k the key
+     * @return the direction
+     */
     public static Direction FromKey(Key k)
     {
         switch (k)
@@ -31,6 +40,12 @@ public enum Direction
         }
     }
 
+    /**
+     * Apply movement in a certain direction.
+     *
+     * @param p the current position (to be modified)
+     * @param d the direction to go
+     */
     public static void ApplyMovement(Position p, Direction d)
     {
         switch (d)

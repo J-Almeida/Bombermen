@@ -11,7 +11,7 @@ import logic.RandomMazeGenerator;
 import utils.Key;
 
 /**
- * The Class CLI.
+ * Command line interface
  */
 public class CLI
 {

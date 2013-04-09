@@ -2,7 +2,6 @@ package model;
 
 import java.io.Serializable;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Cell.
  *
@@ -10,12 +9,13 @@ import java.io.Serializable;
  */
 public class Cell<T> implements Serializable
 {
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
     /**
      * Instantiates a new cell.
      *
-     * @param val the val
+     * @param val the stored value
      */
     public Cell(T val)
     {
@@ -37,6 +37,9 @@ public class Cell<T> implements Serializable
      */
     public void SetValue(T val) { _value = val; }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {
@@ -44,7 +47,7 @@ public class Cell<T> implements Serializable
     }
 
     /**
-     * Was visited.
+     * Was visited. (for DFS)
      *
      * @return true, if successful
      */
@@ -55,9 +58,9 @@ public class Cell<T> implements Serializable
      */
     public void Visit() { _visited = true; }
 
-    /** The _value. */
+    /** The value. */
     private T _value;
 
-    /** The _visited. */
+    /** Was visited */
     private boolean _visited;
 }

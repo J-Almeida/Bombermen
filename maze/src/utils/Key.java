@@ -26,10 +26,10 @@ public enum Key
      * @param c the character
      * @param i the value
      */
-    Key(char c, int i) { _val = c;    _num = i; }
+    Key(char c, int i) { _val = c; _num = i; }
 
     /**
-     * Gets the value.
+     * Gets the character.
      *
      * @return the character
      */

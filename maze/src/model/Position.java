@@ -4,13 +4,27 @@ import java.io.Serializable;
 
 import logic.Direction;
 
+/**
+ * The Class Position.
+ */
 public class Position implements Cloneable, Serializable
 {
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
-    public Position() {    }
+    /**
+     * Instantiates a new position.
+     *
+     * @param x the x
+     * @param y the y
+     */
     public Position(int x, int y) { X = x; Y = y; }
 
+    public Position() { X = -1; Y = -1; }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object rhs)
     {
@@ -22,22 +36,36 @@ public class Position implements Cloneable, Serializable
         return this.X == other.X && this.Y == other.Y;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode()
     {
-        return 1/2 * (X + Y)*(X + Y + 1) + Y;
+        return 1/2 * (X + Y)*(X + Y + 1) + Y; // Cantor pairing function
     }
 
-    public int X = -1;
-    public int Y = -1;
+    /** The x. */
+    public int X;
 
+    /** The y. */
+    public int Y;
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#clone()
+     */
     @Override
     public Position clone()
     {
         return new Position(this.X, this.Y);
     }
 
-
+    /**
+     * Gets the direction from.
+     *
+     * @param other the other
+     * @return the direction
+     */
     public Direction GetDirectionFrom(Position other)
     {
         int dX = this.X - other.X;
@@ -51,9 +79,10 @@ public class Position implements Cloneable, Serializable
     }
     /**
      * Checks if is adjacent.
+     * Does not include self position.
      *
-     * @param pos1 the pos1
-     * @param pos2 the pos2
+     * @param pos1 the first position
+     * @param pos2 the second position
      * @return true, if is adjacent
      */
     public static boolean IsAdjacent(Position pos1, Position pos2)

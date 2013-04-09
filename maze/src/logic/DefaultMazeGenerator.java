@@ -2,16 +2,27 @@ package logic;
 
 import model.Position;
 
-/** ConcreteBuilder - Default 10x10 maze */
+/**
+ * ConcreteBuilder - Default 10x10 maze.
+ */
 public class DefaultMazeGenerator extends MazeGenerator
 {
+    /** String representation of the maze. */
     private String[] _cells;
 
+    /**
+     * Instantiates a new default maze generator.
+     *
+     * @param cells the string representation of the maze.
+     */
     public DefaultMazeGenerator(String[] cells)
     {
         _cells = cells.clone();
     }
 
+    /**
+     * Instantiates a new default maze generator.
+     */
     public DefaultMazeGenerator()
     {
          this(new String[] {  "XXXXXXXXXX",
@@ -26,6 +37,9 @@ public class DefaultMazeGenerator extends MazeGenerator
                               "XXXXXXXXXX" });
     }
 
+    /* (non-Javadoc)
+     * @see logic.MazeGenerator#BuildMaze()
+     */
     @Override
     public void BuildMaze()
     {

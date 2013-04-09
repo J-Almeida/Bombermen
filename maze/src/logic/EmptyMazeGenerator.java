@@ -2,8 +2,14 @@ package logic;
 
 import model.Position;
 
+/**
+ * ConcreteBuilder - Empty maze with only outter walls.
+ */
 public class EmptyMazeGenerator extends MazeGenerator
 {
+    /* (non-Javadoc)
+     * @see logic.MazeGenerator#BuildMaze()
+     */
     @Override
     public void BuildMaze()
     {

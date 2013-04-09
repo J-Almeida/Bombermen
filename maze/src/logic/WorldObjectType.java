@@ -5,6 +5,9 @@ package logic;
  */
 public enum WorldObjectType
 {
+    /** Inanimated object. */
     InanimatedObject,
+
+    /** Unit. */
     Unit;
 }

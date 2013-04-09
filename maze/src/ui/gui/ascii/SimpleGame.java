@@ -24,10 +24,19 @@ import logic.MazeGenerator;
 import logic.RandomMazeGenerator;
 import utils.Key;
 
+/**
+ * Graphical interface but still using ASCII representation of the maze
+ */
 public class SimpleGame extends JPanel implements KeyListener
 {
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
     public static void main(String[] args)
     {
         JFrame frame = new JFrame("The Maze");
@@ -45,12 +54,24 @@ public class SimpleGame extends JPanel implements KeyListener
         frame.setVisible(true);
     }
 
+    /** The text area. */
     private JTextArea _textArea = new JTextArea(10, 10);
+
+    /** The quit button. */
     private JButton _quitButton = new JButton("Quit");
+
+    /** The start button. */
     private JButton _startButton = new JButton("Start");
+
+    /** The maze. */
     private Maze _maze;
+
+    /** The game started. */
     private boolean _gameStarted = false;
 
+    /**
+     * Instantiates a new simple game.
+     */
     public SimpleGame()
     {
         addKeyListener(this);
@@ -108,6 +129,9 @@ public class SimpleGame extends JPanel implements KeyListener
         add(_quitButton);
     }
 
+    /* (non-Javadoc)
+     * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+     */
     @Override
     public void paintComponent(Graphics g)
     {
@@ -117,6 +141,9 @@ public class SimpleGame extends JPanel implements KeyListener
         _textArea.setText(_maze.toString());
     }
 
+    /* (non-Javadoc)
+     * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
+     */
     @Override
     public void keyTyped(KeyEvent e)
     {
@@ -124,12 +151,18 @@ public class SimpleGame extends JPanel implements KeyListener
         repaint();
     }
 
+    /* (non-Javadoc)
+     * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
+     */
     @Override
     public void keyPressed(KeyEvent e)
     {
         repaint();
     }
 
+    /* (non-Javadoc)
+     * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
+     */
     @Override
     public void keyReleased(KeyEvent e)
     {

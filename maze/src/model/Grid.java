@@ -5,16 +5,17 @@ import java.io.Serializable;
 /**
  * The Class Grid.
  *
- * @param <T> the underlying Cell type
+ * @param <T> the stored Cell type
  */
 public class Grid<T> implements Serializable
 {
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
     /** The Constant DEFAULT_SEPARATOR. */
     private static final char DEFAULT_SEPARATOR = ' ';
 
-    /** The _cells. */
+    /** The cells (2 dimensional array). */
     private Cell<T>[][] _cells;
 
     /** The Separator. */
@@ -31,7 +32,7 @@ public class Grid<T> implements Serializable
      *
      * @param width the width
      * @param height the height
-     * @param obj_init the obj_init
+     * @param obj_init the default object
      */
     @SuppressWarnings("unchecked")
     public Grid(int width, int height, T obj_init)
@@ -72,7 +73,7 @@ public class Grid<T> implements Serializable
     /**
      * Gets the cell.
      *
-     * @param pos the pos
+     * @param pos the position
      * @return the cell
      */
     public Cell<T> GetCell(Position pos)
@@ -80,6 +81,13 @@ public class Grid<T> implements Serializable
         return GetCell(pos.X, pos.Y);
     }
 
+    /**
+     * Gets the cell.
+     *
+     * @param x the x position
+     * @param y the y position
+     * @return the cell
+     */
     public Cell<T> GetCell(int x, int y)
     {
         if (y >= 0 && y < _cells.length && x >= 0 && x < _cells[y].length)
@@ -88,16 +96,23 @@ public class Grid<T> implements Serializable
     }
 
     /**
-     * Gets the cell t.
+     * Gets the cell stored value
      *
-     * @param pos the pos
-     * @return the t
+     * @param pos the position
+     * @return the value
      */
     public T GetCellT(Position pos)
     {
         return GetCellT(pos.X, pos.Y);
     }
 
+    /**
+     * Gets the cell stored value
+     *
+     * @param x the x position
+     * @param y the y position
+     * @return the value
+     */
     public T GetCellT(int x, int y)
     {
         Cell<T> c = GetCell(x, y);
@@ -108,8 +123,8 @@ public class Grid<T> implements Serializable
     /**
      * Sets the cell.
      *
-     * @param pos the pos
-     * @param val the val
+     * @param pos the position
+     * @param val the value
      */
     public void SetCell(Position pos, T val)
     {

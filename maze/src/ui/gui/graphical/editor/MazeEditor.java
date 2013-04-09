@@ -37,18 +37,32 @@ import ui.gui.graphical.game.MazeGame;
 import ui.gui.graphical.game.SaveLoadDialog;
 import ui.gui.graphical.game.TiledImage;
 
+/**
+ * The Class MazeEditor.
+ */
 public class MazeEditor extends JPanel implements MouseListener, MazeGame
 {
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
+    /** The Constant WINDOW_WIDTH. */
     private static final int WINDOW_WIDTH = 600;
+
+    /** The Constant WINDOW_HEIGHT. */
     private static final int WINDOW_HEIGHT = 600;
 
+    /** The maze size. */
     private static int MAZE_SIZE = 20;
 
+    /** The cell width. */
     private static int CELL_WIDTH = WINDOW_WIDTH / 10;
+
+    /** The cell height. */
     private static int CELL_HEIGHT = WINDOW_HEIGHT / 10;
 
+    /**
+     * Update maze sizes.
+     */
     private void UpdateMazeSizes()
     {
         int min = Math.min(getWidth(), getHeight());
@@ -56,6 +70,11 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
         CELL_HEIGHT = min / MAZE_SIZE;
     }
 
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
     public static void main(String[] args)
     {
         final JFrame frame = new JFrame("The Maze Editor");
@@ -110,9 +129,15 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
         frame.setVisible(true);
     }
 
+    /** The maze. */
     private Maze _maze;
+
+    /** The map of sprites. */
     private Map<String, TiledImage> _sprites;
 
+    /**
+     * Instantiates a new maze editor.
+     */
     public MazeEditor()
     {
         addMouseListener(this);
@@ -159,8 +184,9 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
         _sprites.put("dark_stone", new TiledImage("../resources/dark_stone.png",   96,  96));
     }
 
-    static int iter = 0;
-
+    /* (non-Javadoc)
+     * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+     */
     @Override
     public void paintComponent(Graphics g)
     {
@@ -189,13 +215,13 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
             switch (u.Type)
             {
                 case Dragon:
-                    DrawCellAt(g, _sprites.get("dragon").GetTile(iter % 9, 0), u.GetPosition());
+                    DrawCellAt(g, _sprites.get("dragon").GetTile(0, 0), u.GetPosition());
                     break;
                 case Eagle:
-                    DrawHalfCellAt(g, _sprites.get("eagle").GetTile(iter % 16, 0), u.GetPosition(), false);
+                    DrawHalfCellAt(g, _sprites.get("eagle").GetTile(0, 0), u.GetPosition(), false);
                     break;
                 case Hero:
-                    DrawHalfCellAt(g, _sprites.get("hero").GetTile(iter % 7, 8), u.GetPosition(), true);
+                    DrawHalfCellAt(g, _sprites.get("hero").GetTile(0, 8), u.GetPosition(), true);
                     break;
                 case Sword:
                     DrawCellAt(g, _sprites.get("sword").GetTile(0, 0), u.GetPosition());
@@ -204,24 +230,57 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
                     break;
             }
         }
-
-        iter++;
     }
 
+    /**
+     * Draw cell at position.
+     *
+     * @param g the graphics used to draw
+     * @param img the image to draw
+     * @param pos the position
+     */
     public void DrawCellAt(Graphics g, Image img, Position pos) { DrawCellAt(g, img, pos.X, pos.Y); }
 
+    /**
+     * Draw cell at position.
+     *
+     * @param g the graphics used to draw
+     * @param img the image to draw
+     * @param x the x position
+     * @param y the y position
+     */
     public void DrawCellAt(Graphics g, Image img, int x, int y)
     {
         g.drawImage(img, (getWidth() - CELL_WIDTH * MAZE_SIZE) / 2 + x * CELL_WIDTH, (getHeight() - CELL_HEIGHT * MAZE_SIZE) / 2 + y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT, null);
     }
 
+    /**
+     * Draw half cell at position.
+     *
+     * @param g the graphics used to draw
+     * @param img the image to draw
+     * @param pos the position
+     * @param left true if draw at left, false if draw at right
+     */
     public void DrawHalfCellAt(Graphics g, Image img, Position pos, boolean left) { DrawHalfCellAt(g, img, pos.X, pos.Y, left); }
 
+    /**
+     * Draw half cell at position.
+     *
+     * @param g the graphics used to draw
+     * @param img the image to draw
+     * @param x the x position
+     * @param y the y position
+     * @param left true if draw at left, false if draw at right
+     */
     public void DrawHalfCellAt(Graphics g, Image img, int x, int y, boolean left)
     {
         g.drawImage(img, (getWidth() - CELL_WIDTH * MAZE_SIZE) / 2 + x * CELL_WIDTH + (left ? -(CELL_WIDTH / 4) : CELL_WIDTH / 4), (getHeight() - CELL_HEIGHT * MAZE_SIZE) / 2 + y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT, null);
     }
 
+    /* (non-Javadoc)
+     * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+     */
     @Override
     public void mouseClicked(MouseEvent e)
     {
@@ -266,16 +325,24 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
         repaint();
     }
 
+    /**
+     * Gets the next world object when iterating over the possible objects for a cell.
+     *
+     * @param oldObj the previous object
+     * @return the world object (null if nothing is available)
+     */
     private WorldObject GetNextWorldObject(WorldObject oldObj)
     {
         WorldObject newObj = null;
 
-        // path
-        // wall
-        // exitportal
-        // hero
-        // dragon
-        // sword
+        // List to follow:
+        // 1. path
+        // 2. wall
+        // 3. exitportal
+        // 4. hero
+        // 5. dragon
+        // 6. sword
+        // 1. ... (back to beginning)
 
         if (oldObj.IsInanimatedObject())
         {
@@ -347,6 +414,12 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
         return newObj;
     }
 
+    /**
+     * Checks if is border.
+     *
+     * @param position the position
+     * @return true, if successful
+     */
     private boolean IsBorder(Position position)
     {
         int x = position.X;
@@ -354,6 +427,9 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
         return x == 0 || x == MAZE_SIZE - 1 || y == 0 || y == MAZE_SIZE - 1;
     }
 
+    /**
+     * Reset maze.
+     */
     public void ResetMaze()
     {
         Architect architect = new Architect();
@@ -366,32 +442,42 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
         repaint();
     }
 
+    /* (non-Javadoc)
+     * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
+     */
     @Override
-    public void mousePressed(MouseEvent e)
-    {
-    }
+    public void mousePressed(MouseEvent e) { }
 
+    /* (non-Javadoc)
+     * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
+     */
     @Override
-    public void mouseReleased(MouseEvent e)
-    {
-    }
+    public void mouseReleased(MouseEvent e) { }
 
+    /* (non-Javadoc)
+     * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
+     */
     @Override
-    public void mouseEntered(MouseEvent e)
-    {
-    }
+    public void mouseEntered(MouseEvent e) { }
 
+    /* (non-Javadoc)
+     * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
+     */
     @Override
-    public void mouseExited(MouseEvent e)
-    {
-    }
+    public void mouseExited(MouseEvent e) { }
 
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.MazeGame#GetMaze()
+     */
     @Override
     public Maze GetMaze()
     {
         return _maze;
     }
 
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.MazeGame#SetMaze(logic.Maze)
+     */
     @Override
     public void SetMaze(Maze m)
     {

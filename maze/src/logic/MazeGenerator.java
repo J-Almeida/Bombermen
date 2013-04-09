@@ -8,18 +8,47 @@ import model.Position;
 import utils.Pair;
 import utils.Utilities;
 
-/** Builder */
+/**
+ * Builder.
+ */
 public abstract class MazeGenerator
 {
+    /** The maze size. */
     protected int _size = 10;
+
+    /** The dragon count. */
     protected int _dragonCount = 2;
+
+    /** The dragon behaviour. */
     protected Dragon.Behaviour _dragonBehaviour = Dragon.Behaviour.Sleepy;
+
+    /** The maze. */
     protected Maze _maze;
 
+    /**
+     * Gets the maze.
+     *
+     * @return the maze
+     */
     public Maze GetMaze() { return _maze; }
+
+    /**
+     * Creates the new maze.
+     */
     public void CreateNewMaze() { _maze = new Maze(_size, _size); }
 
+    /**
+     * Sets the maze size.
+     *
+     * @param size the size
+     */
     public void SetMazeSize(int size) { _size = size; }
+
+    /**
+     * Sets the number of dragons.
+     *
+     * @param num the num
+     */
     public void SetNumberOfDragons(int num)
     {
         final int maxDragons = (int) (0.5 * _size * _size - 1.2463 * _size - 0.5273) - 8; // average number of free cells minus 8 cells around hero that cannot be used
@@ -28,8 +57,17 @@ public abstract class MazeGenerator
         else
             _dragonCount = num;
     }
+
+    /**
+     * Sets the dragons behaviour.
+     *
+     * @param db the db
+     */
     public void SetDragonsBehaviour(Dragon.Behaviour db) { _dragonBehaviour = db; }
 
+    /**
+     * Builds the maze.
+     */
     public abstract void BuildMaze();
 
     /**
@@ -196,7 +234,6 @@ public abstract class MazeGenerator
      */
     protected static class CellNeighbors
     {
-
         /** The cell-position pair. */
         public CellPos cp;
 

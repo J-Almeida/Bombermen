@@ -5,12 +5,12 @@ import java.util.List;
 import model.Position;
 
 /**
- * The Class Utilities.
+ * Miscellaneous utility functions
  */
 public abstract class Utilities
 {
     /**
-     * The Class RandElement.
+     * Class returned by RandomElement(List<T> l)
      *
      * @param <T> the generic type
      */
@@ -19,8 +19,8 @@ public abstract class Utilities
         /**
          * Instantiates a new rand element.
          *
-         * @param pos the pos
-         * @param ele the ele
+         * @param pos the index
+         * @param ele the object
          */
         public RandElement(int pos, T ele)
         {
@@ -28,15 +28,15 @@ public abstract class Utilities
             Element = ele;
         }
 
-        /** The Position. */
+        /** The index. */
         public int Position;
 
-        /** The Element. */
+        /** The object. */
         public T Element;
     }
 
     /**
-     * Random position between [min, max] values
+     * Random position between [min, max] values.
      *
      * @param min1 the minimum X
      * @param max1 the maximum X
