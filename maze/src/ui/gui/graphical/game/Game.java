@@ -439,8 +439,8 @@ public class Game extends JPanel implements KeyListener, MazeGame
      * @param g the graphics
      * @param img the image to draw
      * @param pos the position
-     * @param dx the x delta position
-     * @param dy the y delta position
+     * @param dX the x delta position
+     * @param dY the y delta position
      */
     public void DrawCellAt(Graphics g, Image img, Position pos, int dX, int dY) { DrawCellAt(g, img, pos.X, pos.Y, dX, dY); }
 
@@ -451,8 +451,8 @@ public class Game extends JPanel implements KeyListener, MazeGame
      * @param img the image to draw
      * @param x the x position
      * @param y the y position
-     * @param dx the x delta position
-     * @param dy the y delta position
+     * @param dX the x delta position
+     * @param dY the y delta position
      */
     public void DrawCellAt(Graphics g, Image img, int x, int y, int dX, int dY)
     {
@@ -475,7 +475,7 @@ public class Game extends JPanel implements KeyListener, MazeGame
      * @param g the graphics used to draw
      * @param img the image to draw
      * @param pos the position
-     * @param dpos the delta position
+     * @param dPos the delta position
      * @param left true if draw at left, false if draw at right
      */
     public void DrawHalfCellAt(Graphics g, Image img, Position pos, Position dPos, boolean left) { DrawHalfCellAt(g, img, pos.X, pos.Y, dPos.X, dPos.Y, left); }
@@ -486,8 +486,8 @@ public class Game extends JPanel implements KeyListener, MazeGame
      * @param g the graphics used to draw
      * @param img the image to draw
      * @param pos the position
-     * @param dx the x delta position
-     * @param dy the y delta position
+     * @param dX the x delta position
+     * @param dY the y delta position
      * @param left true if draw at left, false if draw at right
      */
     public void DrawHalfCellAt(Graphics g, Image img, Position pos, int dX, int dY, boolean left) { DrawHalfCellAt(g, img, pos.X, pos.Y, dX, dY, left); }
@@ -499,8 +499,8 @@ public class Game extends JPanel implements KeyListener, MazeGame
      * @param img the image to draw
      * @param x the x position
      * @param y the y position
-     * @param dx the x delta position
-     * @param dy the y delta position
+     * @param dX the x delta position
+     * @param dY the y delta position
      * @param left true if draw at left, false if draw at right
      */
     public void DrawHalfCellAt(Graphics g, Image img, int x, int y, int dX, int dY, boolean left)

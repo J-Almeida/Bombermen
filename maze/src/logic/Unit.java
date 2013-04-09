@@ -112,7 +112,7 @@ public abstract class Unit extends WorldObject
     /**
      * Checks if is unit type.
      *
-     * @param typ the type
+     * @param type the type
      * @return true, if successful
      */
     public boolean Is(UnitType type) { return Type == type; }
