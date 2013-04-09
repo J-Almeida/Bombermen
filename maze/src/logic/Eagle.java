@@ -186,7 +186,7 @@ public class Eagle extends Unit
             {
                 if (IsFollowingHero())
                 {
-                	Position pos = this.GetPosition().clone();
+                    Position pos = this.GetPosition().clone();
                     _position = ev.Actor.GetPosition().clone();
                     _direction = _position.GetDirectionFrom(pos);
                     maze.ForwardEventToUnits(new MovementEvent(this, ev.Direction));

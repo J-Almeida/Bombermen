@@ -167,7 +167,7 @@ public class Game extends JPanel implements KeyListener, MazeGame
     private final HashMap<Integer, AnimatedSprite> _unitSprites = new HashMap<Integer, AnimatedSprite>();
     private boolean _gameFinished = false;
 
-	private boolean _heroMoving = false;
+    private boolean _heroMoving = false;
 
     public void NewGame()
     {
@@ -215,12 +215,11 @@ public class Game extends JPanel implements KeyListener, MazeGame
         _sprites.put("stone",      new TiledImage("ui/gui/graphical/resources/stone.png",        96,  96));
         _sprites.put("dark_stone", new TiledImage("ui/gui/graphical/resources/dark_stone.png",   96,  96));
 
-
         NewGame();
 
         ActionListener taskPerformer = new ActionListener() {
             @Override
-			public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 Update(17);
                 repaint();
             }
@@ -230,55 +229,51 @@ public class Game extends JPanel implements KeyListener, MazeGame
 
     public void Update(int diff)
     {
-    	GetMaze().Update(diff);
+        GetMaze().Update(diff);
 
-    	for (AnimatedSprite as : _unitSprites.values())
-    		as.Update(diff);
+        for (AnimatedSprite as : _unitSprites.values())
+            as.Update(diff);
 
-    	Hero h = _maze.FindHero();
-    	if (h != null)
-    	{
-    		if (((HeroSprite)(_unitSprites.get(h.GetId()))).IsWalking())
-    			_heroMoving = true;
-    		else
-    			_heroMoving = false;
-    	}
+        Hero h = _maze.FindHero();
+        if (h != null)
+        {
+            if (((HeroSprite)(_unitSprites.get(h.GetId()))).IsWalking())
+                _heroMoving = true;
+            else
+                _heroMoving = false;
+        }
 
-    	/*for (Unit u : _maze.GetLivingObjects())
-    	{
-    		if (!u.IsAlive())
-    		{
-    			_unitSprites.remove(u.GetId());
-    			if (u.IsDragon())
-    			{
-    				_unitSprites.put(u.GetId(), new DyingDragonSprite(u.ToDragon(),_sprites.get("dying_dragon")));
-    			}
-    		}
-    	}*/
+        /*for (Unit u : _maze.GetLivingObjects())
+        {
+            if (!u.IsAlive())
+            {
+                _unitSprites.remove(u.GetId());
+                if (u.IsDragon())
+                {
+                    _unitSprites.put(u.GetId(), new DyingDragonSprite(u.ToDragon(),_sprites.get("dying_dragon")));
+                }
+            }
+        }*/
 
-    	ArrayList<AnimatedSprite> toRemove = new ArrayList<AnimatedSprite>();
+        ArrayList<AnimatedSprite> toRemove = new ArrayList<AnimatedSprite>();
 
-    	for (AnimatedSprite as : _unitSprites.values())
-    	{
-    		if (!as.IsAlive())
-    		{
-    			toRemove.add(as);
-    		}
-    	}
+        for (AnimatedSprite as : _unitSprites.values())
+            if (!as.IsAlive())
+                toRemove.add(as);
 
-    	for (AnimatedSprite as : toRemove)
-    	{
-    		if (as instanceof DragonSprite)
-    		{
-    			Dragon d = ((DragonSprite)as).GetDragon();
-    			_unitSprites.remove(as.GetUnitId());
-    			_unitSprites.put(d.GetId(), new DyingDragonSprite(d,_sprites.get("dying_dragon")));
-    		}
-    		else
-    		{
-    			_unitSprites.remove(as.GetUnitId());
-    		}
-    	}
+        for (AnimatedSprite as : toRemove)
+        {
+            if (as instanceof DragonSprite)
+            {
+                Dragon d = ((DragonSprite)as).GetDragon();
+                _unitSprites.remove(as.GetUnitId());
+                _unitSprites.put(d.GetId(), new DyingDragonSprite(d,_sprites.get("dying_dragon")));
+            }
+            else
+            {
+                _unitSprites.remove(as.GetUnitId());
+            }
+        }
     }
 
     @Override
@@ -336,37 +331,25 @@ public class Game extends JPanel implements KeyListener, MazeGame
 
         for (AnimatedSprite as : _unitSprites.values())
         {
-        	if (as instanceof EagleSprite)
-        	{
-        		Eagle e = _maze.FindEagle();
-        		if (!e.IsFlying() && !e.IsFollowingHero())
-        		{
-        			DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
-        		}
+            if (as instanceof EagleSprite)
+            {
+                Eagle e = _maze.FindEagle();
+                if (!e.IsFlying() && !e.IsFollowingHero())
+                    DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
                 else if (e.IsFollowingHero())
-                {
-       			 	DrawHalfCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT), false);
-                }
+                    DrawHalfCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT), false);
                 else
-                {
-                	DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
-                }
-        	}
-        	else if (as instanceof HeroSprite)
-        	{
-        		 if (GetMaze().FindEagle() != null && GetMaze().FindEagle().ToEagle().IsFollowingHero())
-        		 {
-        			 DrawHalfCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT), true);
-        		 }
+                    DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
+            }
+            else if (as instanceof HeroSprite)
+            {
+                 if (GetMaze().FindEagle() != null && GetMaze().FindEagle().ToEagle().IsFollowingHero())
+                     DrawHalfCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT), true);
                  else
-                 {
-                	 DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
-                 }
-        	}
-        	else
-        	{
-        		DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
-        	}
+                     DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
+            }
+            else
+                DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
         }
 
     }
@@ -392,16 +375,10 @@ public class Game extends JPanel implements KeyListener, MazeGame
     }
 
     @Override
-    public void keyTyped(KeyEvent e)
-    {
-        //repaint();
-    }
+    public void keyTyped(KeyEvent e) { }
 
     @Override
-    public void keyPressed(KeyEvent e)
-    {
-        //repaint();
-    }
+    public void keyPressed(KeyEvent e) { }
 
     @Override
     public void keyReleased(KeyEvent e)
@@ -411,35 +388,35 @@ public class Game extends JPanel implements KeyListener, MazeGame
 
         if (!_heroMoving)
         {
-			Key k = null;
-			Action a = CONFIG.GetAction(e.getKeyCode());
-			if (a != null)
-			{
-				switch (a)
-				{
-				case HERO_UP:
-					k = Key.UP;
-					break;
-				case HERO_DOWN:
-					k = Key.DOWN;
-					break;
-				case HERO_RIGHT:
-					k = Key.RIGHT;
-					break;
-				case HERO_LEFT:
-					k = Key.LEFT;
-					break;
-				case SEND_EAGLE:
-					GetMaze().SendEagleToSword();
-					break;
-				default:
-					return;
-				}
-			}
+            Key k = null;
+            Action a = CONFIG.GetAction(e.getKeyCode());
+            if (a != null)
+            {
+                switch (a)
+                {
+                case HERO_UP:
+                    k = Key.UP;
+                    break;
+                case HERO_DOWN:
+                    k = Key.DOWN;
+                    break;
+                case HERO_RIGHT:
+                    k = Key.RIGHT;
+                    break;
+                case HERO_LEFT:
+                    k = Key.LEFT;
+                    break;
+                case SEND_EAGLE:
+                    GetMaze().SendEagleToSword();
+                    break;
+                default:
+                    return;
+                }
+            }
 
-        	if (k != null)
-        		GetMaze().MoveHero(Direction.FromKey(k));
-        	Update(0);
+            if (k != null)
+                GetMaze().MoveHero(Direction.FromKey(k));
+            Update(0);
         }
 
         if (GetMaze().IsFinished())

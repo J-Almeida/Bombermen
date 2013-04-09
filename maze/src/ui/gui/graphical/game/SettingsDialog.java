@@ -248,12 +248,12 @@ public class SettingsDialog extends JDialog
     private final Configuration _prevConfig;
     private Configuration _newConfig = null;
 
-    private final JButton   btnOK                             = new JButton("OK");
-    private final JButton   btnCancel                         = new JButton("Cancel");
-    private final JSpinner  spnNumberOfDragons                = new JSpinner(new SpinnerNumberModel(2, 0, 1000, 1));
-    private final JSpinner  spnMazeSize                       = new JSpinner(new SpinnerNumberModel(10, 6, 1000, 1));
-    private final JComboBox<Dragon.Behaviour> cmbDragonMode   = new JComboBox<Dragon.Behaviour>();
+    private final JButton  btnOK                             = new JButton("OK");
+    private final JButton  btnCancel                         = new JButton("Cancel");
+    private final JSpinner spnNumberOfDragons                = new JSpinner(new SpinnerNumberModel(2, 0, 1000, 1));
+    private final JSpinner spnMazeSize                       = new JSpinner(new SpinnerNumberModel(10, 6, 1000, 1));
+    private final JComboBox<Dragon.Behaviour> cmbDragonMode  = new JComboBox<Dragon.Behaviour>();
     private JTable tblKeys;
-    private final Map<Action, Integer> keys                   = new LinkedHashMap<Action, Integer>();
-    private final JLabel            lblMessage                = new JLabel("<HTML>Select an action and press enter to edit.<BR></HTML>");
+    private final Map<Action, Integer> keys                  = new LinkedHashMap<Action, Integer>();
+    private final JLabel lblMessage                          = new JLabel("<HTML>Select an action and press enter to edit.<BR></HTML>");
 }

@@ -9,8 +9,8 @@ import model.Position;
 
 public class HeroSprite implements AnimatedSprite
 {
-	private static int STOPPED_ARMED_DIFF = 1;
-	private static int WALKING_ARMED_LINE_DIFF = 4;
+    private static int STOPPED_ARMED_DIFF = 1;
+    private static int WALKING_ARMED_LINE_DIFF = 4;
     private enum state
     {
         STOPPED(new SpriteState(1, 0, 8, 0, 2)),
@@ -43,25 +43,23 @@ public class HeroSprite implements AnimatedSprite
     @Override
     public void Update(int diff)
     {
-    	_timeCount++;
+        _timeCount++;
 
-    	if (_state != state.WALKING && !_position.equals(_unit.GetPosition()))
-    	{
-    		_state = state.WALKING;
-    	}
+        if (_state != state.WALKING && !_position.equals(_unit.GetPosition()))
+            _state = state.WALKING;
 
-    	if (_timeCount == 3)
-    	{
-    		_frame += _state.sprState.GetDeltaX();
-    		_frame %= _state.sprState.GetNumFrames();
+        if (_timeCount == 3)
+        {
+            _frame += _state.sprState.GetDeltaX();
+            _frame %= _state.sprState.GetNumFrames();
 
-    		if (_state == state.WALKING && _frame == 0) {
-        		_state = state.STOPPED;
-        		_position = _unit.GetPosition().clone();
-        	}
+            if (_state == state.WALKING && _frame == 0) {
+                _state = state.STOPPED;
+                _position = _unit.GetPosition().clone();
+            }
 
-    		_timeCount = 0;
-    	}
+            _timeCount = 0;
+        }
     }
 
     @Override
@@ -72,26 +70,20 @@ public class HeroSprite implements AnimatedSprite
             return _sprite.GetTile(_frame, _state.sprState.GetInitialLine() + (_unit.IsArmed() ? WALKING_ARMED_LINE_DIFF : 0) + _dirMap.get(unitCurrentDir));
         else
         {
-            if (unitCurrentDir == Direction.South)
+            switch (unitCurrentDir)
             {
+            case South:
                 return _sprite.GetTile(0 + (_unit.IsArmed() ? STOPPED_ARMED_DIFF : 0), _state.sprState.GetInitialLine());
-            }
-            else if (unitCurrentDir == Direction.North)
-            {
+            case North:
                 return _sprite.GetTile(4 + (_unit.IsArmed() ? STOPPED_ARMED_DIFF : 0), _state.sprState.GetInitialLine());
-            }
-            else if (unitCurrentDir == Direction.West)
-            {
+            case West:
                 return _sprite.GetTile(2 + (_unit.IsArmed() ? STOPPED_ARMED_DIFF : 0), _state.sprState.GetInitialLine());
-            }
-            else if (unitCurrentDir == Direction.East)
-            {
+            case East:
                 return _sprite.GetTile(6 + (_unit.IsArmed() ? STOPPED_ARMED_DIFF : 0), _state.sprState.GetInitialLine());
+            default:
+                return null;
             }
         }
-
-        return null;
-
     }
 
     private int _frame = 0;
@@ -103,43 +95,47 @@ public class HeroSprite implements AnimatedSprite
 
     private final HashMap<Direction, Integer> _dirMap = new HashMap<Direction, Integer>();
 
-	@Override
-	public Position GetDeltaPosition(int cell_width, int cell_height) {
-		if (_state == state.WALKING)
-		{
-			Direction unitCurrentDir = _unit.GetDirection();
-			switch (unitCurrentDir)
-			{
-			case East:
-				return new Position((cell_width / _state.sprState.GetNumFrames()) * _frame, 0);
-			case West:
-				return new Position(-(cell_width / _state.sprState.GetNumFrames()) * _frame, 0);
-			case North:
-				return new Position(0 , -(cell_height / _state.sprState.GetNumFrames()) * _frame);
-			case South:
-				return new Position(0 , (cell_height / _state.sprState.GetNumFrames()) * _frame);
-			default:
-				return null;
-			}
-		}
-		else
-		{
-			return new Position(0, 0);
-		}
-	}
+    @Override
+    public Position GetDeltaPosition(int cell_width, int cell_height)
+    {
+        if (_state == state.WALKING)
+        {
+            Direction unitCurrentDir = _unit.GetDirection();
+            switch (unitCurrentDir)
+            {
+            case East:
+                return new Position((cell_width / _state.sprState.GetNumFrames()) * _frame, 0);
+            case West:
+                return new Position(-(cell_width / _state.sprState.GetNumFrames()) * _frame, 0);
+            case North:
+                return new Position(0 , -(cell_height / _state.sprState.GetNumFrames()) * _frame);
+            case South:
+                return new Position(0 , (cell_height / _state.sprState.GetNumFrames()) * _frame);
+            default:
+                return null;
+            }
+        }
+        else
+        {
+            return new Position(0, 0);
+        }
+    }
 
-	@Override
-	public Position GetPosition() {
-		return _position;
-	}
+    @Override
+    public Position GetPosition()
+    {
+        return _position;
+    }
 
-	@Override
-	public boolean IsAlive() {
-		return _unit.IsAlive();
-	}
+    @Override
+    public boolean IsAlive()
+    {
+        return _unit.IsAlive();
+    }
 
-	@Override
-	public int GetUnitId() {
-		return _unit.GetId();
-	}
+    @Override
+    public int GetUnitId()
+    {
+        return _unit.GetId();
+    }
 }
