@@ -11,7 +11,6 @@ import model.Cell;
 import model.Grid;
 import model.Position;
 
-// TODO: Auto-generated Javadoc
 /**
  * Main class for the game - Maze
  */

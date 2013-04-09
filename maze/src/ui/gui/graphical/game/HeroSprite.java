@@ -7,25 +7,56 @@ import logic.Direction;
 import logic.Hero;
 import model.Position;
 
+/**
+ * The Class HeroSprite.
+ */
 public class HeroSprite implements AnimatedSprite
 {
+    /** The stopped armed frame count. */
     private static int STOPPED_ARMED_DIFF = 1;
+
+    /** The walking armed line frame count. */
     private static int WALKING_ARMED_LINE_DIFF = 4;
+
+    /**
+     * The HeroSprite state.
+     */
     private enum state
     {
+
+        /** The stopped. */
         STOPPED(new SpriteState(1, 0, 8, 0, 2)),
+
+        /** The walking. */
         WALKING(new SpriteState(8, 0, 0, 1, 0));
 
+        /**
+         * Instantiates a new state.
+         *
+         * @param s the sprite state
+         */
         state(SpriteState s)
         {
             sprState = s;
         }
 
+        /** The sprite state. */
         public final SpriteState sprState;
     }
 
+    /**
+     * Checks if is walking.
+     *
+     * @return true, if successful
+     */
     public boolean IsWalking() { return _state == state.WALKING; }
 
+    /**
+     * Instantiates a new hero sprite.
+     *
+     * @param u the hero
+     * @param sprite the sprite
+     */
     public HeroSprite(Hero u, TiledImage sprite)
     {
         _dirMap.put(Direction.East, 0);
@@ -40,6 +71,9 @@ public class HeroSprite implements AnimatedSprite
         _sprite = sprite;
     }
 
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.AnimatedSprite#Update(int)
+     */
     @Override
     public void Update(int diff)
     {
@@ -62,6 +96,9 @@ public class HeroSprite implements AnimatedSprite
         }
     }
 
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.AnimatedSprite#GetCurrentImage()
+     */
     @Override
     public BufferedImage GetCurrentImage()
     {
@@ -86,15 +123,30 @@ public class HeroSprite implements AnimatedSprite
         }
     }
 
+    /** The frame. */
     private int _frame = 0;
+
+    /** The time count. */
     private int _timeCount = 0;
+
+    /** The unit. */
     private final Hero _unit;
+
+    /** The position. */
     private Position _position;
+
+    /** The state. */
     private state _state = state.STOPPED;
+
+    /** The sprite. */
     private final TiledImage _sprite;
 
+    /** The direction map. */
     private final HashMap<Direction, Integer> _dirMap = new HashMap<Direction, Integer>();
 
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.AnimatedSprite#GetDeltaPosition(int, int)
+     */
     @Override
     public Position GetDeltaPosition(int cell_width, int cell_height)
     {
@@ -121,18 +173,27 @@ public class HeroSprite implements AnimatedSprite
         }
     }
 
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.AnimatedSprite#GetPosition()
+     */
     @Override
     public Position GetPosition()
     {
         return _position;
     }
 
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.AnimatedSprite#IsAlive()
+     */
     @Override
     public boolean IsAlive()
     {
         return _unit.IsAlive();
     }
 
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.AnimatedSprite#GetUnitId()
+     */
     @Override
     public int GetUnitId()
     {

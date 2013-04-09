@@ -11,8 +11,14 @@ import java.util.Map;
 
 import logic.Dragon;
 
+/**
+ * The Class Configuration.
+ */
 public class Configuration
 {
+    /* (non-Javadoc)
+     * @see java.lang.Object#clone()
+     */
     @Override
     protected Object clone()
     {
@@ -27,8 +33,16 @@ public class Configuration
         return res;
     }
 
+    /**
+     * Instantiates a new configuration.
+     */
     private Configuration() { }
 
+    /**
+     * Instantiates a new configuration.
+     *
+     * @param fileName the file name
+     */
     public Configuration(String fileName)
     {
         _fileName = fileName;
@@ -50,6 +64,11 @@ public class Configuration
         }
     }
 
+    /**
+     * Try save to file.
+     *
+     * @return true, if successful
+     */
     public boolean TrySaveToFile()
     {
         ObjectOutputStream os = null;
@@ -70,6 +89,12 @@ public class Configuration
         return false;
     }
 
+    /**
+     * Write to file.
+     *
+     * @param os the os
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void WriteToFile(ObjectOutputStream os) throws IOException
     {
         os.writeObject(this._keys);
@@ -78,6 +103,13 @@ public class Configuration
         os.writeObject(this._dragonMode);
     }
 
+    /**
+     * Read from file.
+     *
+     * @param is the is
+     * @throws ClassNotFoundException the class not found exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @SuppressWarnings("unchecked")
     private void ReadFromFile(ObjectInputStream is) throws ClassNotFoundException, IOException
     {
@@ -87,6 +119,9 @@ public class Configuration
         this._dragonMode = (Dragon.Behaviour) is.readObject();
     }
 
+    /**
+     * Initialize with defaults.
+     */
     private void initializeWithDefaults()
     {
         for (Action a : Action.Actions)
@@ -98,37 +133,95 @@ public class Configuration
     }
 
 
+    /**
+     * Gets the action.
+     *
+     * @param key the key
+     * @return the action
+     */
     public Action GetAction(int key)
     {
         return _keys.get(key);
     }
 
+    /**
+     * Gets the maze size.
+     *
+     * @return the int
+     */
     public int GetMazeSize() { return _mazeSize; }
+
+    /**
+     * Gets the number of dragons.
+     *
+     * @return the int
+     */
     public int GetNumberOfDragons() { return _numberOfDragons; }
+
+    /**
+     * Gets the dragon mode.
+     *
+     * @return the dragon. behaviour
+     */
     public Dragon.Behaviour GetDragonMode() { return _dragonMode; }
 
+    /** The _file name. */
     private String _fileName;
 
+    /** The _keys. */
     public Map<Integer, Action> _keys = new LinkedHashMap<Integer, Action>();
+
+    /** The _maze size. */
     Integer _mazeSize;
+
+    /** The _number of dragons. */
     Integer _numberOfDragons;
+
+    /** The _dragon mode. */
     Dragon.Behaviour _dragonMode;
 
+    /**
+     * Sets the number of dragons.
+     *
+     * @param value the value
+     */
     public void SetNumberOfDragons(int value)
     {
         _numberOfDragons = value;
     }
 
+    /**
+     * Sets the dragon mode.
+     *
+     * @param value the value
+     */
     public void SetDragonMode(Dragon.Behaviour value)
     {
         _dragonMode = value;
     }
 
+    /**
+     * Sets the maze size.
+     *
+     * @param value the value
+     */
     public void SetMazeSize(int value)
     {
         _mazeSize = value;
     }
 
+    /**
+     * Gets the keys.
+     *
+     * @return the map
+     */
     public Map<Integer, Action> GetKeys() { return _keys; }
+
+    /**
+     * Sets the keys.
+     *
+     * @param value the value
+     * @return the map
+     */
     public Map<Integer, Action> SetKeys(LinkedHashMap<Integer, Action> value) { return _keys = value; }
 }

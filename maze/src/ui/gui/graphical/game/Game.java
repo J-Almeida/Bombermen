@@ -36,20 +36,35 @@ import logic.Unit;
 import model.Position;
 import utils.Key;
 
+/**
+ * The main class.
+ */
 public class Game extends JPanel implements KeyListener, MazeGame
 {
+    /** The configuration. */
     private Configuration CONFIG = new Configuration("maze.config");
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
+    /** The window width. */
     private final int WINDOW_WIDTH = 600;
+
+    /** The window height. */
     private final int WINDOW_HEIGHT = 600;
 
+    /** The maze size. */
     private int MAZE_SIZE = 10;
 
+    /** The cell width. */
     private int CELL_WIDTH = WINDOW_WIDTH / MAZE_SIZE;
+
+    /** The cell height. */
     private int CELL_HEIGHT = WINDOW_HEIGHT / MAZE_SIZE;
 
+    /**
+     * Update CELL_WIDTH and CELL_HEIGHT
+     */
     private void UpdateMazeSizes()
     {
         int min = Math.min(getWidth(), getHeight());
@@ -57,6 +72,11 @@ public class Game extends JPanel implements KeyListener, MazeGame
         CELL_HEIGHT = min / MAZE_SIZE;
     }
 
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
     public static void main(String[] args)
     {
         final Game m = new Game();
@@ -158,17 +178,36 @@ public class Game extends JPanel implements KeyListener, MazeGame
         frame.setVisible(true);
     }
 
+    /** The maze. */
     private Maze _maze;
+
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.MazeGame#GetMaze()
+     */
     @Override
     public Maze GetMaze() { return _maze; }
+
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.MazeGame#SetMaze(logic.Maze)
+     */
     @Override
     public void SetMaze(Maze maze) { _maze = maze; }
+
+    /** The sprites. */
     private final Map<String, TiledImage> _sprites;
+
+    /** The unit sprites. */
     private final HashMap<Integer, AnimatedSprite> _unitSprites = new HashMap<Integer, AnimatedSprite>();
+
+    /** Is game finished? */
     private boolean _gameFinished = false;
 
+    /** Is hero moving? If so, block inputs. */
     private boolean _heroMoving = false;
 
+    /**
+     * Create a new game (calls repaint())
+     */
     public void NewGame()
     {
         _gameFinished = false;
@@ -199,6 +238,9 @@ public class Game extends JPanel implements KeyListener, MazeGame
         repaint();
     }
 
+    /**
+     * Instantiates a new game.
+     */
     public Game()
     {
         addKeyListener(this);
@@ -227,6 +269,11 @@ public class Game extends JPanel implements KeyListener, MazeGame
         new Timer(17, taskPerformer).start();
     }
 
+    /**
+     * Update.
+     *
+     * @param diff the difference in milliseconds between this frame and previous
+     */
     public void Update(int diff)
     {
         GetMaze().Update(diff);
@@ -276,6 +323,9 @@ public class Game extends JPanel implements KeyListener, MazeGame
         }
     }
 
+    /* (non-Javadoc)
+     * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+     */
     @Override
     public void paintComponent(Graphics g)
     {
@@ -354,32 +404,125 @@ public class Game extends JPanel implements KeyListener, MazeGame
 
     }
 
+    /**
+     * Draw cell at position
+     *
+     * @param g the graphics
+     * @param img the image to draw
+     * @param pos the position
+     * @param dPos the delta position
+     */
     public void DrawCellAt(Graphics g, Image img, Position pos, Position dPos) { DrawCellAt(g, img, pos.X, pos.Y, dPos.X, dPos.Y); }
+
+    /**
+     * Draw cell at position
+     *
+     * @param g the graphics
+     * @param img the image to draw
+     * @param pos the position
+     */
     public void DrawCellAt(Graphics g, Image img, Position pos) { DrawCellAt(g, img, pos.X, pos.Y, 0, 0); }
+
+    /**
+     * Draw cell at position
+     *
+     * @param g the graphics
+     * @param img the image to draw
+     * @param x the x position
+     * @param y the y position
+     */
     public void DrawCellAt(Graphics g, Image img, int x, int y) { DrawCellAt(g, img, x, y, 0, 0); }
 
+    /**
+     * Draw cell at position
+     *
+     * @param g the graphics
+     * @param img the image to draw
+     * @param pos the position
+     * @param dx the x delta position
+     * @param dy the y delta position
+     */
     public void DrawCellAt(Graphics g, Image img, Position pos, int dX, int dY) { DrawCellAt(g, img, pos.X, pos.Y, dX, dY); }
 
+    /**
+     * Draw cell at position
+     *
+     * @param g the graphics
+     * @param img the image to draw
+     * @param x the x position
+     * @param y the y position
+     * @param dx the x delta position
+     * @param dy the y delta position
+     */
     public void DrawCellAt(Graphics g, Image img, int x, int y, int dX, int dY)
     {
         g.drawImage(img, (getWidth() - CELL_WIDTH * MAZE_SIZE) / 2 + x * CELL_WIDTH + dX, (getHeight() - CELL_HEIGHT * MAZE_SIZE) / 2 + y * CELL_HEIGHT + dY, CELL_WIDTH, CELL_HEIGHT, null);
     }
 
+    /**
+     * Draw half cell at position.
+     *
+     * @param g the graphics used to draw
+     * @param img the image to draw
+     * @param pos the position
+     * @param left true if draw at left, false if draw at right
+     */
     public void DrawHalfCellAt(Graphics g, Image img, Position pos, boolean left) { DrawHalfCellAt(g, img, pos.X, pos.Y, 0, 0, left); }
+
+    /**
+     * Draw half cell at position.
+     *
+     * @param g the graphics used to draw
+     * @param img the image to draw
+     * @param pos the position
+     * @param dpos the delta position
+     * @param left true if draw at left, false if draw at right
+     */
     public void DrawHalfCellAt(Graphics g, Image img, Position pos, Position dPos, boolean left) { DrawHalfCellAt(g, img, pos.X, pos.Y, dPos.X, dPos.Y, left); }
+
+    /**
+     * Draw half cell at position.
+     *
+     * @param g the graphics used to draw
+     * @param img the image to draw
+     * @param pos the position
+     * @param dx the x delta position
+     * @param dy the y delta position
+     * @param left true if draw at left, false if draw at right
+     */
     public void DrawHalfCellAt(Graphics g, Image img, Position pos, int dX, int dY, boolean left) { DrawHalfCellAt(g, img, pos.X, pos.Y, dX, dY, left); }
 
+    /**
+     * Draw half cell at position.
+     *
+     * @param g the graphics used to draw
+     * @param img the image to draw
+     * @param x the x position
+     * @param y the y position
+     * @param dx the x delta position
+     * @param dy the y delta position
+     * @param left true if draw at left, false if draw at right
+     */
     public void DrawHalfCellAt(Graphics g, Image img, int x, int y, int dX, int dY, boolean left)
     {
         g.drawImage(img, (getWidth() - CELL_WIDTH * MAZE_SIZE) / 2 + x * CELL_WIDTH + (left ? -(CELL_WIDTH / 4) : CELL_WIDTH / 4) + dX, (getHeight() - CELL_HEIGHT * MAZE_SIZE) / 2 + y * CELL_HEIGHT + dY, CELL_WIDTH, CELL_HEIGHT, null);
     }
 
+    /* (non-Javadoc)
+     * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
+     */
     @Override
     public void keyTyped(KeyEvent e) { }
 
+    /* (non-Javadoc)
+     * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
+     */
     @Override
     public void keyPressed(KeyEvent e) { }
 
+    /* (non-Javadoc)
+     * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
+     */
     @Override
     public void keyReleased(KeyEvent e)
     {

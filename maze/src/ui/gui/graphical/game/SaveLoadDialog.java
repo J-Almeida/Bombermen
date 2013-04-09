@@ -30,13 +30,30 @@ import javax.swing.ListSelectionModel;
 import logic.Maze;
 import logic.UnitEventEntry;
 
+/**
+ * The Class SaveLoadDialog.
+ */
 public class SaveLoadDialog extends JDialog
 {
+    /** The game. */
     private final MazeGame _game;
+
+    /** True if we are saving in editor mode. */
     private final boolean _editor;
+
+    /** The Constant savePath. */
     private static final String _savePath = System.getProperty("user.dir") + "/saves/";
+
+    /** The file list. */
     private final JList<String> _fileList = new JList<String>();
 
+    /**
+     * Instantiates a new save load dialog.
+     *
+     * @param frame the frame
+     * @param m the maze
+     * @param editor true if we are saving in editor mode
+     */
     public SaveLoadDialog(JFrame frame, MazeGame m, boolean editor)
     {
         super(frame, ModalityType.APPLICATION_MODAL);
@@ -45,12 +62,16 @@ public class SaveLoadDialog extends JDialog
 
         UpdateFiles();
 
-        //setSize(getSize().width + 50, getSize().height + 100);
         setLocation(frame.getLocation().x + frame.getSize().width / 2 - getSize().width / 2, frame.getLocation().y + frame.getSize().height / 2 - getSize().height / 2);
 
         initUI();
     }
 
+    /**
+     * Delete file game.
+     *
+     * @param name the name of the game to delete
+     */
     private void DeleteGame(String name)
     {
         File folder = new File(_savePath);
@@ -66,6 +87,9 @@ public class SaveLoadDialog extends JDialog
             }
     }
 
+    /**
+     * Update files, reads savePath folder files
+     */
     private void UpdateFiles()
     {
         File folder = new File(_savePath);
@@ -80,6 +104,9 @@ public class SaveLoadDialog extends JDialog
         _fileList.setModel(listModel);
     }
 
+    /**
+     * Save current game.
+     */
     private void SaveGame()
     {
         ObjectOutputStream os = null;
@@ -107,6 +134,11 @@ public class SaveLoadDialog extends JDialog
         }
     }
 
+    /**
+     * Load game.
+     *
+     * @param name the name of the game to load
+     */
     private void LoadGame(String name)
     {
         ObjectInputStream os = null;
@@ -137,6 +169,9 @@ public class SaveLoadDialog extends JDialog
         }
     }
 
+    /**
+     * Initializes the interface
+     */
     private void initUI()
     {
         setLayout(new BorderLayout());
@@ -209,5 +244,6 @@ public class SaveLoadDialog extends JDialog
         pack();
     }
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 }

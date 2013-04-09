@@ -7,21 +7,42 @@ import logic.Direction;
 import logic.Eagle;
 import model.Position;
 
+/**
+ * The Class EagleSprite.
+ */
 public class EagleSprite implements AnimatedSprite
 {
+    /**
+     * The state of the EagleSprite.
+     */
     private enum state
     {
+        /** Stopped. */
         STOPPED(new SpriteState(1, 16, 0, 0, 0)),
+
+        /** Flying. */
         FLYING(new SpriteState(16, 0, 0, 1, 0));
 
+        /**
+         * Instantiates a new state.
+         *
+         * @param s the state
+         */
         state(SpriteState s)
         {
             sprState = s;
         }
 
+        /** The sprite state. */
         public final SpriteState sprState;
     }
 
+    /**
+     * Instantiates a new eagle sprite.
+     *
+     * @param eagle the eagle
+     * @param sprite the sprite
+     */
     public EagleSprite(Eagle eagle, TiledImage sprite)
     {
         _dirMap.put(Direction.East, 0);
@@ -34,6 +55,9 @@ public class EagleSprite implements AnimatedSprite
         _position = _unit.GetPosition().clone();
     }
 
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.AnimatedSprite#Update(int)
+     */
     @Override
     public void Update(int diff)
     {
@@ -98,6 +122,9 @@ public class EagleSprite implements AnimatedSprite
 
     }
 
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.AnimatedSprite#GetCurrentImage()
+     */
     @Override
     public BufferedImage GetCurrentImage()
     {
@@ -108,15 +135,30 @@ public class EagleSprite implements AnimatedSprite
             return _sprite.GetTile(_state.sprState.GetInitialColumn(), _state.sprState.GetInitialLine() + _dirMap.get(unitCurrentDir));
     }
 
+    /** The state. */
     private state _state = state.STOPPED;
+
+    /** The time count. */
     private int _timeCount = 0;
+
+    /** The frame. */
     private int _frame = 0;
+
+    /** The unit. */
     private final Eagle _unit;
+
+    /** The position. */
     private Position _position;
+
+    /** The sprite. */
     private final TiledImage _sprite;
 
+    /** The direction map */
     private final HashMap<Direction, Integer> _dirMap = new HashMap<Direction, Integer>();
 
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.AnimatedSprite#GetDeltaPosition(int, int)
+     */
     @Override
     public Position GetDeltaPosition(int cell_width, int cell_height)
     {
@@ -141,6 +183,9 @@ public class EagleSprite implements AnimatedSprite
             return new Position(0, 0);
     }
 
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.AnimatedSprite#GetPosition()
+     */
     @Override
     public Position GetPosition()
     {
@@ -164,12 +209,18 @@ public class EagleSprite implements AnimatedSprite
             return _unit.GetPosition();*/
     }
 
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.AnimatedSprite#IsAlive()
+     */
     @Override
     public boolean IsAlive()
     {
         return _unit.IsAlive();
     }
 
+    /* (non-Javadoc)
+     * @see ui.gui.graphical.game.AnimatedSprite#GetUnitId()
+     */
     @Override
     public int GetUnitId()
     {

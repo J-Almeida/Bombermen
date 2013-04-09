@@ -26,14 +26,29 @@ import javax.swing.SpinnerNumberModel;
 
 import logic.Dragon;
 
+/**
+ * The Class SettingsDialog.
+ */
 public class SettingsDialog extends JDialog
 {
+    /**
+     * The state of SettingsDialog, editing table or not.
+     */
     private enum State
     {
+        /** The normal. */
         NORMAL,
+
+        /** The editing. */
         EDITING
     }
 
+    /**
+     * Instantiates a new settings dialog.
+     *
+     * @param frame the parent frame
+     * @param prevConfig the previous config
+     */
     SettingsDialog(JFrame frame, Configuration prevConfig)
     {
         super(frame, ModalityType.APPLICATION_MODAL);
@@ -47,6 +62,9 @@ public class SettingsDialog extends JDialog
         setTitle("Settings");
     }
 
+    /**
+     * Initializes the interface
+     */
     @SuppressWarnings("serial")
     private void initUI()
     {
@@ -242,18 +260,43 @@ public class SettingsDialog extends JDialog
         pack();
     }
 
+    /**
+     * Gets the new configuration.
+     *
+     * @return the configuration
+     */
     public Configuration GetNewConfiguration() { return _newConfig; }
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
+
+    /** The previous configuration. */
     private final Configuration _prevConfig;
+
+    /** The new configuration. */
     private Configuration _newConfig = null;
 
+    /** The OK button. */
     private final JButton  btnOK                             = new JButton("OK");
+
+    /** The Cancel button. */
     private final JButton  btnCancel                         = new JButton("Cancel");
+
+    /** The number of dragons spinner. */
     private final JSpinner spnNumberOfDragons                = new JSpinner(new SpinnerNumberModel(2, 0, 1000, 1));
+
+    /** The maze size spinner. */
     private final JSpinner spnMazeSize                       = new JSpinner(new SpinnerNumberModel(10, 6, 1000, 1));
+
+    /** The combo box with dragon modes. */
     private final JComboBox<Dragon.Behaviour> cmbDragonMode  = new JComboBox<Dragon.Behaviour>();
+
+    /** The table with keys. */
     private JTable tblKeys;
+
+    /** The keys map. */
     private final Map<Action, Integer> keys                  = new LinkedHashMap<Action, Integer>();
+
+    /** The helper label message. */
     private final JLabel lblMessage                          = new JLabel("<HTML>Select an action and press enter to edit.<BR></HTML>");
 }

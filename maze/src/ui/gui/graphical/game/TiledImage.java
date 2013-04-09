@@ -8,12 +8,27 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+/**
+ * The Class TiledImage.
+ */
 public class TiledImage
 {
+    /** The image with all tiles. */
     private BufferedImage _image;
+
+    /** The width (px) of each tile. */
     private int _tileWidth;
+
+    /** The height (px) of each tile. */
     private int _tileHeight;
 
+    /**
+     * Instantiates a new tiled image.
+     *
+     * @param path the path to file
+     * @param tileWidth the tile width
+     * @param tileHeight the tile height
+     */
     public TiledImage(String path, int tileWidth, int tileHeight)
     {
         try
@@ -30,13 +45,28 @@ public class TiledImage
         _tileHeight = tileHeight;
     }
 
+    /**
+     * The Class KeyTile.
+     */
     private class KeyTile
     {
+        /** The Column. */
         private int Column;
+
+        /** The Line. */
         private int Line;
 
+        /**
+         * Instantiates a new key tile.
+         *
+         * @param col the column
+         * @param line the line
+         */
         public KeyTile(int col, int line) { Column = col; Line = line; }
 
+        /* (non-Javadoc)
+         * @see java.lang.Object#equals(java.lang.Object)
+         */
         @Override
         public boolean equals(Object obj)
         {
@@ -48,6 +78,9 @@ public class TiledImage
             return this.Column == k.Column && this.Line == k.Line;
         }
 
+        /* (non-Javadoc)
+         * @see java.lang.Object#hashCode()
+         */
         @Override
         public int hashCode()
         {
@@ -58,10 +91,25 @@ public class TiledImage
         }
     }
 
-    Map<KeyTile, BufferedImage> _tiles = new HashMap<KeyTile, BufferedImage>();
+    /** The cached tiles. */
+    private Map<KeyTile, BufferedImage> _tiles = new HashMap<KeyTile, BufferedImage>();
 
-    public BufferedImage GetBufferedImage() { return _image; }
+    /**
+     * Gets the original image.
+     *
+     * @return the buffered image
+     */
+    BufferedImage GetBufferedImage() { return _image; }
 
+    /**
+     * Gets the tile at position (col, line)
+     *
+     * Multiple calls to this method with the same arguments will NOT load the image multiple times, only once (cached).
+     *
+     * @param col the column
+     * @param line the line
+     * @return the buffered image
+     */
     public BufferedImage GetTile(int col, int line)
     {
         KeyTile k = new KeyTile(col, line);
