@@ -1,4 +1,4 @@
-package ui.gui.graphical;
+package ui.gui.graphical.game;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -174,6 +174,21 @@ public class Game extends JPanel implements KeyListener, MazeGame
         MAZE_SIZE = CONFIG.GetMazeSize();
 
         SetMaze(architect.GetMaze());
+
+        // Initialize sprites
+        _unitSprites.clear();
+        for (Unit u : _maze.GetLivingObjects())
+        {
+            if (u.IsHero())
+                _unitSprites.put(u.GetId(), new HeroSprite(u.ToHero(), _sprites.get("hero")));
+            else if (u.IsDragon())
+                _unitSprites.put(u.GetId(), new DragonSprite(u.ToDragon(), _sprites.get("dragon")));
+            else if (u.IsEagle())
+                _unitSprites.put(u.GetId(), new EagleSprite(u.ToEagle(), _sprites.get("eagle")));
+            else if (u.IsSword())
+                _unitSprites.put(u.GetId(), new SwordSprite(u.ToSword(), _sprites.get("sword")));
+        }
+
         repaint();
     }
 
@@ -182,29 +197,17 @@ public class Game extends JPanel implements KeyListener, MazeGame
         addKeyListener(this);
         setFocusable(true);
 
-        NewGame();
-
         // Load sprites
         _sprites = new HashMap<String, TiledImage>();
-        _sprites.put("dragon",     new TiledImage("resources/dragon_trans.png", 128, 128));
-        _sprites.put("eagle",      new TiledImage("resources/eagle_trans.png",  64,  64));
-        _sprites.put("hero",       new TiledImage("resources/hero_trans.png",   96,  96));
-        _sprites.put("sword",      new TiledImage("resources/sword_trans.png",  96,  96));
-        _sprites.put("grass",      new TiledImage("resources/grass.png",        96,  96));
-        _sprites.put("stone",      new TiledImage("resources/stone.png",        96,  96));
-        _sprites.put("dark_stone", new TiledImage("resources/dark_stone.png",   96,  96));
+        _sprites.put("dragon",     new TiledImage("../resources/dragon_trans.png", 128, 128));
+        _sprites.put("eagle",      new TiledImage("../resources/eagle_trans.png",  64,  64));
+        _sprites.put("hero",       new TiledImage("../resources/hero_trans.png",   96,  96));
+        _sprites.put("sword",      new TiledImage("../resources/sword_trans.png",  96,  96));
+        _sprites.put("grass",      new TiledImage("../resources/grass.png",        96,  96));
+        _sprites.put("stone",      new TiledImage("../resources/stone.png",        96,  96));
+        _sprites.put("dark_stone", new TiledImage("../resources/dark_stone.png",   96,  96));
 
-        for (Unit u : _maze.GetLivingObjects())
-        {
-        	if (u.IsHero())
-        		_unitSprites.put(u.GetId(), new HeroSprite(u.ToHero(), _sprites.get("hero")));
-        	else if (u.IsDragon())
-        		_unitSprites.put(u.GetId(), new DragonSprite(u.ToDragon(), _sprites.get("dragon")));
-        	else if (u.IsEagle())
-        		_unitSprites.put(u.GetId(), new EagleSprite(u.ToEagle(), _sprites.get("eagle")));
-        	else if (u.IsSword())
-        		_unitSprites.put(u.GetId(), new SwordSprite(u.ToSword(), _sprites.get("sword")));
-        }
+        NewGame();
     }
 
     static int iter = 0;

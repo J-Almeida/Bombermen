@@ -91,7 +91,7 @@ public class Eagle extends Unit
             }
             else
             {
-            	Position pos = GetPosition().clone();
+                Position pos = GetPosition().clone();
                 SetPosition(_swordPosition);
                 _direction = GetPosition().GetDirectionFrom(pos);
                 maze.ForwardEventToUnits(new MovementEvent(this, null));
@@ -106,7 +106,7 @@ public class Eagle extends Unit
         {
             if (!_wayPath.isEmpty())
             {
-            	Position pos = GetPosition().clone();
+                Position pos = GetPosition().clone();
                 SetPosition(_wayPath.pop());
                 _direction = GetPosition().GetDirectionFrom(pos);
                 maze.ForwardEventToUnits(new MovementEvent(this, null));

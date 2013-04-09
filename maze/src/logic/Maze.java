@@ -25,7 +25,7 @@ public class Maze implements Serializable
     private final Set<Unit> _livingObjects;
     private transient PriorityQueue<UnitEvent> _eventQueue;
 
-	private int _diff = 0;
+    private int _diff = 0;
 
     public void SetEventQueue(PriorityQueue<UnitEvent> eq) { _eventQueue = eq; }
 
@@ -100,18 +100,18 @@ public class Maze implements Serializable
 
     public void Update()
     {
-    	Update(1000);
+        Update(1000);
     }
 
     public void Update(int diff)
     {
-    	_diff  += diff;
+        _diff  += diff;
 
-    	if (_diff >= 1000) {
-    		for (Unit wo : _livingObjects)
-    			wo.Update(this);
-    		_diff = 0;
-    	}
+        if (_diff >= 1000) {
+            for (Unit wo : _livingObjects)
+                wo.Update(this);
+            _diff = 0;
+        }
 
         while (!_eventQueue.isEmpty())
             _eventQueue.poll().HandleEvent(this);

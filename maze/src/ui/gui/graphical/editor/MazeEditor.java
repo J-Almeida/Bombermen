@@ -33,9 +33,9 @@ import logic.Unit;
 import logic.Wall;
 import logic.WorldObject;
 import model.Position;
-import ui.gui.graphical.MazeGame;
-import ui.gui.graphical.SaveLoadDialog;
-import ui.gui.graphical.TiledImage;
+import ui.gui.graphical.game.MazeGame;
+import ui.gui.graphical.game.SaveLoadDialog;
+import ui.gui.graphical.game.TiledImage;
 
 public class MazeEditor extends JPanel implements MouseListener, MazeGame
 {
@@ -150,13 +150,13 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
 
         // Load sprites
         _sprites = new HashMap<String, TiledImage>();
-        _sprites.put("dragon",     new TiledImage("resources/dragon_trans.png", 128, 128));
-        _sprites.put("eagle",      new TiledImage("resources/eagle_trans.png",  64,  64));
-        _sprites.put("hero",       new TiledImage("resources/hero_trans.png",   96,  96));
-        _sprites.put("sword",      new TiledImage("resources/sword_trans.png",  96,  96));
-        _sprites.put("grass",      new TiledImage("resources/grass.png",        96,  96));
-        _sprites.put("stone",      new TiledImage("resources/stone.png",        96,  96));
-        _sprites.put("dark_stone", new TiledImage("resources/dark_stone.png",   96,  96));
+        _sprites.put("dragon",     new TiledImage("../resources/dragon_trans.png", 128, 128));
+        _sprites.put("eagle",      new TiledImage("../resources/eagle_trans.png",  64,  64));
+        _sprites.put("hero",       new TiledImage("../resources/hero_trans.png",   96,  96));
+        _sprites.put("sword",      new TiledImage("../resources/sword_trans.png",  96,  96));
+        _sprites.put("grass",      new TiledImage("../resources/grass.png",        96,  96));
+        _sprites.put("stone",      new TiledImage("../resources/stone.png",        96,  96));
+        _sprites.put("dark_stone", new TiledImage("../resources/dark_stone.png",   96,  96));
     }
 
     static int iter = 0;

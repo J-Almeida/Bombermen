@@ -1,4 +1,4 @@
-package ui.gui.graphical;
+package ui.gui.graphical.game;
 
 import java.awt.event.KeyEvent;
 

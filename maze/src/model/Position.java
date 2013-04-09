@@ -40,14 +40,14 @@ public class Position implements Cloneable, Serializable
 
     public Direction GetDirectionFrom(Position other)
     {
-    	int dX = this.X - other.X;
-    	int dY = this.Y - other.Y;
-    	double m = Math.abs((double)dY / (double)dX);
+        int dX = this.X - other.X;
+        int dY = this.Y - other.Y;
+        double m = Math.abs((double)dY / (double)dX);
 
-    	if (m >= 0. && m < 1.)
-    		return dX < 0 ? Direction.West : Direction.East;
-    	else
-    		return dY < 0 ? Direction.North : Direction.South;
+        if (m >= 0. && m < 1.)
+            return dX < 0 ? Direction.West : Direction.East;
+        else
+            return dY < 0 ? Direction.North : Direction.South;
     }
     /**
      * Checks if is adjacent.
