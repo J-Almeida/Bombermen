@@ -57,8 +57,8 @@ public class Dragon extends Unit
     public char GetSymbol()
     {
         return _asleep ?
-                    (_onSword ? 'f' : 'd') :
-                    (_onSword ? 'F' : 'D') ;
+                    _onSword ? 'f' : 'd' :
+                    _onSword ? 'F' : 'D' ;
     }
 
     /**

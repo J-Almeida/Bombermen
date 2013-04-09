@@ -122,7 +122,7 @@ public class Maze implements Serializable
         for (Unit u : _livingObjects)
         {
             Position p = u.GetPosition();
-            result[p.Y * (GetWidth() * 2) + p.X * 2] = u.GetSymbol();
+            result[p.Y * GetWidth() * 2 + p.X * 2] = u.GetSymbol();
         }
 
         return String.copyValueOf(result);

@@ -87,9 +87,9 @@ public class Position implements Cloneable, Serializable
      */
     public static boolean IsAdjacent(Position pos1, Position pos2)
     {
-        return (pos1.equals(new Position(pos2.X + 1, pos2.Y)))
-                || (pos1.equals(new Position(pos2.X - 1, pos2.Y)))
-                || (pos1.equals(new Position(pos2.X, pos2.Y + 1)))
-                || (pos1.equals(new Position(pos2.X, pos2.Y - 1)));
+        return pos1.equals(new Position(pos2.X + 1, pos2.Y))
+                || pos1.equals(new Position(pos2.X - 1, pos2.Y))
+                || pos1.equals(new Position(pos2.X, pos2.Y + 1))
+                || pos1.equals(new Position(pos2.X, pos2.Y - 1));
     }
 }

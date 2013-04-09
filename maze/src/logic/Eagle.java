@@ -130,7 +130,7 @@ public class Eagle extends Unit
             double deltaX = _swordPosition.X - GetPosition().X;
             double deltaY = _swordPosition.Y - GetPosition().Y;
 
-            double dist = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
+            double dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
             if (dist > _speed)
             {
                 double ratio = _speed / dist;

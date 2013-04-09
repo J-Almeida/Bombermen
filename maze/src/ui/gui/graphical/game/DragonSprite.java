@@ -138,13 +138,13 @@ public class DragonSprite implements AnimatedSprite
             switch (unitCurrentDir)
             {
             case East:
-                return new Position((cell_width / _state.sprState.GetNumFrames()) * _frame, 0);
+                return new Position(cell_width / _state.sprState.GetNumFrames() * _frame, 0);
             case West:
                 return new Position(-(cell_width / _state.sprState.GetNumFrames()) * _frame, 0);
             case North:
                 return new Position(0 , -(cell_height / _state.sprState.GetNumFrames()) * _frame);
             case South:
-                return new Position(0 , (cell_height / _state.sprState.GetNumFrames()) * _frame);
+                return new Position(0 , cell_height / _state.sprState.GetNumFrames() * _frame);
             default:
                 return null;
             }

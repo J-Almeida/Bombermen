@@ -192,12 +192,12 @@ public abstract class MazeGenerator
                     new CellPos(_maze.GetGrid().GetCell(new Position(x - 2, y)), new Position(x - 2, y)),
                     new CellPos(_maze.GetGrid().GetCell(new Position(x - 1, y)), new Position(x - 1, y))));
 
-        if (x <= (w - 2))
+        if (x <= w - 2)
             l.add(new Pair<CellPos>(
                     new CellPos(_maze.GetGrid().GetCell(new Position(x + 2, y)), new Position(x + 2, y)),
                     new CellPos(_maze.GetGrid().GetCell(new Position(x + 1, y)), new Position(x + 1, y))));
 
-        if (y <= (w - 2))
+        if (y <= w - 2)
             l.add(new Pair<CellPos>(
                     new CellPos(_maze.GetGrid().GetCell(new Position(x, y + 2)), new Position(x, y + 2)),
                     new CellPos(_maze.GetGrid().GetCell(new Position(x, y + 1)), new Position(x, y + 1))));

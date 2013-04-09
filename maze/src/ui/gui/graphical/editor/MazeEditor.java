@@ -133,7 +133,7 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
     private Maze _maze;
 
     /** The map of sprites. */
-    private Map<String, TiledImage> _sprites;
+    private final Map<String, TiledImage> _sprites;
 
     /**
      * Instantiates a new maze editor.

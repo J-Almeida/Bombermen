@@ -55,16 +55,16 @@ public class SimpleGame extends JPanel implements KeyListener
     }
 
     /** The text area. */
-    private JTextArea _textArea = new JTextArea(10, 10);
+    private final JTextArea _textArea = new JTextArea(10, 10);
 
     /** The quit button. */
-    private JButton _quitButton = new JButton("Quit");
+    private final JButton _quitButton = new JButton("Quit");
 
     /** The start button. */
-    private JButton _startButton = new JButton("Start");
+    private final JButton _startButton = new JButton("Start");
 
     /** The maze. */
-    private Maze _maze;
+    private final Maze _maze;
 
     /** The game started. */
     private boolean _gameStarted = false;

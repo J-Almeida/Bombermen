@@ -8,7 +8,7 @@ import model.Position;
 public class DefaultMazeGenerator extends MazeGenerator
 {
     /** String representation of the maze. */
-    private String[] _cells;
+    private final String[] _cells;
 
     /**
      * Instantiates a new default maze generator.

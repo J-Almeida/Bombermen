@@ -16,7 +16,7 @@ public class Grid<T> implements Serializable
     private static final char DEFAULT_SEPARATOR = ' ';
 
     /** The cells (2 dimensional array). */
-    private Cell<T>[][] _cells;
+    private final Cell<T>[][] _cells;
 
     /** The Separator. */
     public char Separator = DEFAULT_SEPARATOR;

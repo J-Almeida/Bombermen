@@ -29,7 +29,7 @@ public abstract class WorldObject implements Serializable
     private static int _lastId = 0;
 
     /** The current id. */
-    private int _id = ++_lastId;
+    private final int _id = ++_lastId;
 
     /**
      * Gets the id.

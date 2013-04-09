@@ -15,16 +15,16 @@ public class RandomTester extends Random {
     private static final long serialVersionUID = 1L;
 
     /** The booleans to be used. */
-    private Queue<Boolean> _nextBooleans = new LinkedList<Boolean>();
+    private final Queue<Boolean> _nextBooleans = new LinkedList<Boolean>();
 
     /** The default boolean. */
-    private boolean _defaultBoolean = true;
+    private final boolean _defaultBoolean = true;
 
     /** The integers to be used. */
-    private Queue<Integer> _nextInts = new LinkedList<Integer>();
+    private final Queue<Integer> _nextInts = new LinkedList<Integer>();
 
     /** The default integer. */
-    private int _defaultInt = 0;
+    private final int _defaultInt = 0;
 
     /**
      * Push int.

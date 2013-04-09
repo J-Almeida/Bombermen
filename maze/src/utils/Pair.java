@@ -91,7 +91,7 @@ public class Pair<T>
     public Object clone()
     {
         Pair<T> other = new Pair<T>(this.first, this.second);
-        return (Object)other;
+        return other;
     }
 
     /** The first element. */

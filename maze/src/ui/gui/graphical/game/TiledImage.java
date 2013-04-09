@@ -17,10 +17,10 @@ public class TiledImage
     private BufferedImage _image;
 
     /** The width (px) of each tile. */
-    private int _tileWidth;
+    private final int _tileWidth;
 
     /** The height (px) of each tile. */
-    private int _tileHeight;
+    private final int _tileHeight;
 
     /**
      * Instantiates a new tiled image.
@@ -51,10 +51,10 @@ public class TiledImage
     private class KeyTile
     {
         /** The Column. */
-        private int Column;
+        private final int Column;
 
         /** The Line. */
-        private int Line;
+        private final int Line;
 
         /**
          * Instantiates a new key tile.
@@ -92,7 +92,7 @@ public class TiledImage
     }
 
     /** The cached tiles. */
-    private Map<KeyTile, BufferedImage> _tiles = new HashMap<KeyTile, BufferedImage>();
+    private final Map<KeyTile, BufferedImage> _tiles = new HashMap<KeyTile, BufferedImage>();
 
     /**
      * Gets the original image.

@@ -284,7 +284,7 @@ public class Game extends JPanel implements KeyListener, MazeGame
         Hero h = _maze.FindHero();
         if (h != null)
         {
-            if (((HeroSprite)(_unitSprites.get(h.GetId()))).IsWalking())
+            if (((HeroSprite)_unitSprites.get(h.GetId())).IsWalking())
                 _heroMoving = true;
             else
                 _heroMoving = false;

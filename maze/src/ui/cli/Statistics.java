@@ -49,12 +49,12 @@ public class Statistics
                         architect.ConstructMaze(mazeSize, 2,
                                 Dragon.Behaviour.Sleepy);
                         maze = architect.GetMaze();
-                        double m = (maze.GetNumberOfPathCells());
+                        double m = maze.GetNumberOfPathCells();
                         props.add(m);
                         average += m;
                     }
 
-                    timeavg = (System.currentTimeMillis() - start);
+                    timeavg = System.currentTimeMillis() - start;
 
                     average /= max;
                     timeavg /= max;
