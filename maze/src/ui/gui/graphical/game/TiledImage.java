@@ -18,7 +18,7 @@ public class TiledImage
     {
         try
         {
-            InputStream input = getClass().getResourceAsStream(path);
+            InputStream input = java.lang.ClassLoader.getSystemResourceAsStream(path);
             _image = ImageIO.read(input);
         }
         catch (IOException e)

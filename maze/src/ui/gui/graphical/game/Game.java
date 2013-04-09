@@ -203,13 +203,13 @@ public class Game extends JPanel implements KeyListener, MazeGame
 
         // Load sprites
         _sprites = new HashMap<String, TiledImage>();
-        _sprites.put("dragon",     new TiledImage("../resources/dragon_trans.png", 128, 128));
-        _sprites.put("eagle",      new TiledImage("../resources/eagle_trans.png",  64,  64));
-        _sprites.put("hero",       new TiledImage("../resources/hero_trans.png",   96,  96));
-        _sprites.put("sword",      new TiledImage("../resources/sword_trans.png",  96,  96));
-        _sprites.put("grass",      new TiledImage("../resources/grass.png",        96,  96));
-        _sprites.put("stone",      new TiledImage("../resources/stone.png",        96,  96));
-        _sprites.put("dark_stone", new TiledImage("../resources/dark_stone.png",   96,  96));
+        _sprites.put("dragon",     new TiledImage("ui/gui/graphical/resources/dragon_trans.png", 128, 128));
+        _sprites.put("eagle",      new TiledImage("ui/gui/graphical/resources/eagle_trans.png",  64,  64));
+        _sprites.put("hero",       new TiledImage("ui/gui/graphical/resources/hero_trans.png",   96,  96));
+        _sprites.put("sword",      new TiledImage("ui/gui/graphical/resources/sword_trans.png",  96,  96));
+        _sprites.put("grass",      new TiledImage("ui/gui/graphical/resources/grass.png",        96,  96));
+        _sprites.put("stone",      new TiledImage("ui/gui/graphical/resources/stone.png",        96,  96));
+        _sprites.put("dark_stone", new TiledImage("ui/gui/graphical/resources/dark_stone.png",   96,  96));
 
         NewGame();
 
