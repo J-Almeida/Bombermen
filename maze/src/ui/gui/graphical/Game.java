@@ -159,6 +159,7 @@ public class Game extends JPanel implements KeyListener, MazeGame
     @Override
     public void SetMaze(Maze maze) { _maze = maze; }
     private final Map<String, TiledImage> _sprites;
+    private final HashMap<Integer, AnimatedSprite> _unitSprites = new HashMap<Integer, AnimatedSprite>();
     private boolean _gameFinished = false;
 
     public void NewGame()
@@ -192,6 +193,18 @@ public class Game extends JPanel implements KeyListener, MazeGame
         _sprites.put("grass",      new TiledImage("resources/grass.png",        96,  96));
         _sprites.put("stone",      new TiledImage("resources/stone.png",        96,  96));
         _sprites.put("dark_stone", new TiledImage("resources/dark_stone.png",   96,  96));
+
+        for (Unit u : _maze.GetLivingObjects())
+        {
+        	if (u.IsHero())
+        		_unitSprites.put(u.GetId(), new HeroSprite(u.ToHero(), _sprites.get("hero")));
+        	else if (u.IsDragon())
+        		_unitSprites.put(u.GetId(), new DragonSprite(u.ToDragon(), _sprites.get("dragon")));
+        	else if (u.IsEagle())
+        		_unitSprites.put(u.GetId(), new EagleSprite(u.ToEagle(), _sprites.get("eagle")));
+        	else if (u.IsSword())
+        		_unitSprites.put(u.GetId(), new SwordSprite(u.ToSword(), _sprites.get("sword")));
+        }
     }
 
     static int iter = 0;
@@ -225,24 +238,24 @@ public class Game extends JPanel implements KeyListener, MazeGame
             switch (u.Type)
             {
             case Dragon:
-                DrawCellAt(g, _sprites.get("dragon").GetTile(iter % 9, u.ToDragon().IsSleeping() ? 11 : 0), u.GetPosition());
+                DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), u.GetPosition());
                 break;
             case Eagle:
                 if (!u.ToEagle().IsFlying() && !u.ToEagle().IsFollowingHero())
-                    DrawCellAt(g, _sprites.get("eagle").GetTile(16, 0), u.GetPosition());
+                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), u.GetPosition());
                 else if (u.ToEagle().IsFollowingHero())
-                    DrawHalfCellAt(g, _sprites.get("eagle").GetTile(iter % 16, 0), u.GetPosition(), false);
+                    DrawHalfCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), u.GetPosition(), false);
                 else
-                    DrawCellAt(g, _sprites.get("eagle").GetTile(iter % 16, 0), u.GetPosition());
+                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), u.GetPosition());
                 break;
             case Hero:
                 if (GetMaze().FindEagle() != null && GetMaze().FindEagle().ToEagle().IsFollowingHero())
-                    DrawHalfCellAt(g, _sprites.get("hero").GetTile(iter % 7, u.ToHero().IsArmed() ? 6 : 8), u.GetPosition(), true);
+                    DrawHalfCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), u.GetPosition(), true);
                 else
-                    DrawCellAt(g, _sprites.get("hero").GetTile(iter % 7, u.ToHero().IsArmed() ? 6 : 8), u.GetPosition());
+                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), u.GetPosition());
                 break;
             case Sword:
-                DrawCellAt(g, _sprites.get("sword").GetTile(0, 0), u.GetPosition());
+                DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), u.GetPosition());
                 break;
             default:
                 break;

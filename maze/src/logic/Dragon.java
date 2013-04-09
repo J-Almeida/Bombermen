@@ -139,6 +139,8 @@ public class Dragon extends Unit
 
                     Sword s = maze.FindSword();
                     _onSword  = s != null && _position.equals(s.GetPosition());
+
+                    _direction = dir;
                 }
             }
         }
@@ -157,6 +159,7 @@ public class Dragon extends Unit
             if (maze.IsPathPosition(newPos))
             {
                 _position = newPos;
+                _direction = ev.Direction;
                 maze.ForwardEventToUnits(new MovementEvent(this, ev.Direction));
             }
         }

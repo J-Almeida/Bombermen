@@ -14,6 +14,13 @@ public abstract class Unit extends WorldObject
     /** The _alive. */
     protected boolean _alive;
 
+    protected Direction _direction = Direction.South;
+
+	public Direction GetDirection() {
+		// TODO Auto-generated method stub
+		return _direction;
+	}
+
     /**
      * Instantiates a new unit.
      *

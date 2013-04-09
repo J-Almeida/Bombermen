@@ -60,6 +60,8 @@ public class Hero extends Unit
             Position newPos = _position.clone();
             Direction.ApplyMovement(newPos, ev.Direction);
 
+            _direction = ev.Direction;
+
             if (maze.IsPathPosition(newPos) || (IsArmed() && maze.IsExitPosition(newPos)))
             {
                 _position = newPos;

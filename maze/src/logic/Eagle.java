@@ -84,12 +84,16 @@ public class Eagle extends Unit
                 double yMove = ratio * deltaY;
                 double newXPos = xMove + GetPosition().X;
                 double newYPos = yMove + GetPosition().Y;
+                Position pos = GetPosition().clone();
                 SetPosition(new Position(Math.round((float)newXPos), Math.round((float)newYPos)));
+                _direction = GetPosition().GetDirectionFrom(pos);
                 maze.ForwardEventToUnits(new MovementEvent(this, null));
             }
             else
             {
+            	Position pos = GetPosition().clone();
                 SetPosition(_swordPosition);
+                _direction = GetPosition().GetDirectionFrom(pos);
                 maze.ForwardEventToUnits(new MovementEvent(this, null));
             }
 
@@ -102,7 +106,9 @@ public class Eagle extends Unit
         {
             if (!_wayPath.isEmpty())
             {
+            	Position pos = GetPosition().clone();
                 SetPosition(_wayPath.pop());
+                _direction = GetPosition().GetDirectionFrom(pos);
                 maze.ForwardEventToUnits(new MovementEvent(this, null));
             }
 
