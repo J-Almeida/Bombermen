@@ -20,9 +20,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import logic.Architect;
 import logic.Direction;
+import logic.Hero;
 import logic.InanimatedObject;
 import logic.Maze;
 import logic.MazeGenerator;
@@ -162,6 +164,8 @@ public class Game extends JPanel implements KeyListener, MazeGame
     private final HashMap<Integer, AnimatedSprite> _unitSprites = new HashMap<Integer, AnimatedSprite>();
     private boolean _gameFinished = false;
 
+	private boolean _heroMoving = false;
+
     public void NewGame()
     {
         _gameFinished = false;
@@ -208,9 +212,35 @@ public class Game extends JPanel implements KeyListener, MazeGame
         _sprites.put("dark_stone", new TiledImage("../resources/dark_stone.png",   96,  96));
 
         NewGame();
+
+        ActionListener taskPerformer = new ActionListener() {
+            @Override
+			public void actionPerformed(ActionEvent evt) {
+                Update(17);
+                repaint();
+            }
+        };
+        new Timer(17, taskPerformer).start();
     }
 
     static int iter = 0;
+
+    public void Update(int diff)
+    {
+    	GetMaze().Update(diff);
+
+    	for (AnimatedSprite as : _unitSprites.values())
+    		as.Update(diff);
+
+    	Hero h = _maze.FindHero();
+    	if (h != null)
+    	{
+    		if (((HeroSprite)(_unitSprites.get(h.GetId()))).IsWalking())
+    			_heroMoving = true;
+    		else
+    			_heroMoving = false;
+    	}
+    }
 
     @Override
     public void paintComponent(Graphics g)
@@ -241,24 +271,24 @@ public class Game extends JPanel implements KeyListener, MazeGame
             switch (u.Type)
             {
             case Dragon:
-                DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), u.GetPosition());
+                DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
                 break;
             case Eagle:
                 if (!u.ToEagle().IsFlying() && !u.ToEagle().IsFollowingHero())
-                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), u.GetPosition());
+                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
                 else if (u.ToEagle().IsFollowingHero())
-                    DrawHalfCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), u.GetPosition(), false);
+                    DrawHalfCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT), false);
                 else
-                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), u.GetPosition());
+                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
                 break;
             case Hero:
                 if (GetMaze().FindEagle() != null && GetMaze().FindEagle().ToEagle().IsFollowingHero())
-                    DrawHalfCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), u.GetPosition(), true);
+                    DrawHalfCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT), true);
                 else
-                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), u.GetPosition());
+                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
                 break;
             case Sword:
-                DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), u.GetPosition());
+                DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), 0, 0);
                 break;
             default:
                 break;
@@ -268,18 +298,24 @@ public class Game extends JPanel implements KeyListener, MazeGame
         iter++;
     }
 
-    public void DrawCellAt(Graphics g, Image img, Position pos) { DrawCellAt(g, img, pos.X, pos.Y); }
+    public void DrawCellAt(Graphics g, Image img, Position pos, Position dPos) { DrawCellAt(g, img, pos.X, pos.Y, dPos.X, dPos.Y); }
+    public void DrawCellAt(Graphics g, Image img, Position pos) { DrawCellAt(g, img, pos.X, pos.Y, 0, 0); }
+    public void DrawCellAt(Graphics g, Image img, int x, int y) { DrawCellAt(g, img, x, y, 0, 0); }
 
-    public void DrawCellAt(Graphics g, Image img, int x, int y)
+    public void DrawCellAt(Graphics g, Image img, Position pos, int dX, int dY) { DrawCellAt(g, img, pos.X, pos.Y, dX, dY); }
+
+    public void DrawCellAt(Graphics g, Image img, int x, int y, int dX, int dY)
     {
-        g.drawImage(img, (getWidth() - CELL_WIDTH * MAZE_SIZE) / 2 + x * CELL_WIDTH, (getHeight() - CELL_HEIGHT * MAZE_SIZE) / 2 + y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT, null);
+        g.drawImage(img, (getWidth() - CELL_WIDTH * MAZE_SIZE) / 2 + x * CELL_WIDTH + dX, (getHeight() - CELL_HEIGHT * MAZE_SIZE) / 2 + y * CELL_HEIGHT + dY, CELL_WIDTH, CELL_HEIGHT, null);
     }
 
-    public void DrawHalfCellAt(Graphics g, Image img, Position pos, boolean left) { DrawHalfCellAt(g, img, pos.X, pos.Y, left); }
+    public void DrawHalfCellAt(Graphics g, Image img, Position pos, boolean left) { DrawHalfCellAt(g, img, pos.X, pos.Y, 0, 0, left); }
+    public void DrawHalfCellAt(Graphics g, Image img, Position pos, Position dPos, boolean left) { DrawHalfCellAt(g, img, pos.X, pos.Y, dPos.X, dPos.Y, left); }
+    public void DrawHalfCellAt(Graphics g, Image img, Position pos, int dX, int dY, boolean left) { DrawHalfCellAt(g, img, pos.X, pos.Y, dX, dY, left); }
 
-    public void DrawHalfCellAt(Graphics g, Image img, int x, int y, boolean left)
+    public void DrawHalfCellAt(Graphics g, Image img, int x, int y, int dX, int dY, boolean left)
     {
-        g.drawImage(img, (getWidth() - CELL_WIDTH * MAZE_SIZE) / 2 + x * CELL_WIDTH + (left ? -(CELL_WIDTH / 4) : CELL_WIDTH / 4), (getHeight() - CELL_HEIGHT * MAZE_SIZE) / 2 + y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT, null);
+        g.drawImage(img, (getWidth() - CELL_WIDTH * MAZE_SIZE) / 2 + x * CELL_WIDTH + (left ? -(CELL_WIDTH / 4) : CELL_WIDTH / 4) + dX, (getHeight() - CELL_HEIGHT * MAZE_SIZE) / 2 + y * CELL_HEIGHT + dY, CELL_WIDTH, CELL_HEIGHT, null);
     }
 
     @Override
@@ -300,35 +336,38 @@ public class Game extends JPanel implements KeyListener, MazeGame
         if (_gameFinished)
             return;
 
-        Key k = null;
-        Action a = CONFIG.GetAction(e.getKeyCode());
-        if (a != null)
+        if (!_heroMoving)
         {
-            switch (a)
-            {
-            case HERO_UP:
-                k = Key.UP;
-                break;
-            case HERO_DOWN:
-                k = Key.DOWN;
-                break;
-            case HERO_RIGHT:
-                k = Key.RIGHT;
-                break;
-            case HERO_LEFT:
-                k = Key.LEFT;
-                break;
-            case SEND_EAGLE:
-                GetMaze().SendEagleToSword();
-                break;
-            default:
-                return;
-            }
-        }
+			Key k = null;
+			Action a = CONFIG.GetAction(e.getKeyCode());
+			if (a != null)
+			{
+				switch (a)
+				{
+				case HERO_UP:
+					k = Key.UP;
+					break;
+				case HERO_DOWN:
+					k = Key.DOWN;
+					break;
+				case HERO_RIGHT:
+					k = Key.RIGHT;
+					break;
+				case HERO_LEFT:
+					k = Key.LEFT;
+					break;
+				case SEND_EAGLE:
+					GetMaze().SendEagleToSword();
+					break;
+				default:
+					return;
+				}
+			}
 
-        if (k != null)
-            GetMaze().MoveHero(Direction.FromKey(k));
-        GetMaze().Update();
+        	if (k != null)
+        		GetMaze().MoveHero(Direction.FromKey(k));
+        	Update(0);
+        }
 
         if (GetMaze().IsFinished())
         {
