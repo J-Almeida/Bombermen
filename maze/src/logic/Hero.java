@@ -1,5 +1,6 @@
 package logic;
 
+import logic.Eagle.EagleState;
 import model.Position;
 
 /**
@@ -77,7 +78,7 @@ public class Hero extends Unit
 
             if (ev.Actor.IsEagle())
             {
-                if (_position.equals(ev.Actor.GetPosition()))
+                if (ev.Actor.ToEagle().GetState() == EagleState.OnFloor && _position.equals(ev.Actor.GetPosition()))
                 {
                     if (ev.Actor.ToEagle().IsArmed())
                     {

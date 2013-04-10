@@ -81,7 +81,7 @@ public class Eagle extends Unit
      */
     public void EquipSword(boolean equip)
     {
-        _armed = true;
+        _armed = equip;
     }
 
     /**
@@ -191,7 +191,7 @@ public class Eagle extends Unit
                     _direction = _position.GetDirectionFrom(pos);
                     maze.ForwardEventToUnits(new MovementEvent(this, ev.Direction));
                 }
-                else if (_position.equals(ev.Actor.GetPosition()))
+                else if (_state == EagleState.OnFloor && _position.equals(ev.Actor.GetPosition()))
                 {
                     this.EquipSword(false);
                     ev.Actor.ToHero().EquipSword(true);
