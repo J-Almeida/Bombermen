@@ -1,7 +1,7 @@
 package logic;
 
 /**
- * The Class Sword.
+ * Sword unit.
  */
 public class Sword extends Unit
 {

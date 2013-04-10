@@ -1,7 +1,7 @@
 package logic;
 
 /**
- * The Class Wall.
+ * Represents a wall in the maze, can't be transfixed.
  */
 public class Wall extends InanimatedObject
 {

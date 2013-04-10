@@ -5,7 +5,7 @@ import java.io.Serializable;
 import model.Position;
 
 /**
- * The WorldObject Unit.
+ * Base class for units and inanimatedobjects. It has an identifier, a symbol (character representation) and a position.
  */
 public abstract class WorldObject implements Serializable
 {

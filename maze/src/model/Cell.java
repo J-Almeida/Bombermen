@@ -3,7 +3,7 @@ package model;
 import java.io.Serializable;
 
 /**
- * The Class Cell.
+ * Represents a cell inside a grid.
  *
  * @param <T> the generic type
  */

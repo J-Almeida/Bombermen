@@ -1,7 +1,7 @@
 package logic;
 
 /**
- * The Class SendEagleEvent.
+ * Event used when the Hero wants the Eagle to get sword
  */
 public class SendEagleEvent extends Event
 {

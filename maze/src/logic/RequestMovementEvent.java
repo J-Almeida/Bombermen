@@ -1,7 +1,7 @@
 package logic;
 
 /**
- * The Class RequestMovementEvent.
+ * Event used when an unit has to move (usually, the Hero)
  */
 public class RequestMovementEvent extends Event
 {

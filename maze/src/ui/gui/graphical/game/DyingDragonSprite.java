@@ -8,7 +8,7 @@ import logic.Dragon;
 import model.Position;
 
 /**
- * The Class DyingDragonSprite.
+ * AnimatedSprite for dragons that die.
  */
 public class DyingDragonSprite implements AnimatedSprite
 {

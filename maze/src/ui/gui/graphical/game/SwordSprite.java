@@ -6,7 +6,7 @@ import logic.Sword;
 import model.Position;
 
 /**
- * The Class SwordSprite.
+ * The AnimatedSprite for a sword.
  */
 public class SwordSprite implements AnimatedSprite
 {

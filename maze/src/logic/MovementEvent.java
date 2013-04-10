@@ -1,7 +1,7 @@
 package logic;
 
 /**
- * The Class MovementEvent.
+ * Event used when a unit moves.
  */
 public class MovementEvent extends Event
 {

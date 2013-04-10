@@ -4,7 +4,7 @@ import model.Position;
 import utils.Key;
 
 /**
- * The Enum Direction.
+ * Enum to define possible movement directions.
  */
 public enum Direction
 {

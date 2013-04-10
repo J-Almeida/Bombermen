@@ -1,7 +1,7 @@
 package logic;
 
 /**
- * The Class Path.
+ * Represents a pathway that can be transversed.
  */
 public class Path extends InanimatedObject
 {

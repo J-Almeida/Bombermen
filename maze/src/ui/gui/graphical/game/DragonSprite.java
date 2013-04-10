@@ -8,7 +8,7 @@ import logic.Dragon;
 import model.Position;
 
 /**
- * The Class DragonSprite.
+ * AnimatedSprite for Dragons
  */
 public class DragonSprite implements AnimatedSprite
 {

@@ -5,8 +5,6 @@ import java.util.Queue;
 import java.util.Random;
 
 /**
- * The Class RandomTester.
- *
  * Explicitly define what values Random returns (used in unit testing)
  */
 public class RandomTester extends Random {

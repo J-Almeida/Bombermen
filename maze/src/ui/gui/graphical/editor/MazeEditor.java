@@ -38,7 +38,8 @@ import ui.gui.graphical.game.SaveLoadDialog;
 import ui.gui.graphical.game.TiledImage;
 
 /**
- * The Class MazeEditor.
+ * MazeEditor - graphical with sprites.
+ * Cells are chosen by looping through a list of possible cells (hero, wall, etc.), with mouse clicks in the cell.
  */
 public class MazeEditor extends JPanel implements MouseListener, MazeGame
 {

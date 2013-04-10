@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import model.Position;
 
 /**
- * The Interface AnimatedSprite.
+ * The Interface AnimatedSprite - animation
  */
 public interface AnimatedSprite
 {

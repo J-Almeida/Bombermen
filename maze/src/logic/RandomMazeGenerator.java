@@ -8,7 +8,7 @@ import utils.RandomEngine;
 import utils.Utilities;
 
 /**
- * ConcreteBuilder - Randomized NxN maze.
+ * ConcreteBuilder - Randomized NxN maze (using Depth First Search with backtracking).
  */
 public class RandomMazeGenerator extends MazeGenerator
 {
@@ -18,8 +18,6 @@ public class RandomMazeGenerator extends MazeGenerator
     @Override
     public void BuildMaze()
     {
-        // Randomized depth first search with backtracking
-
         Stack<CellNeighbors> stk = new Stack<CellNeighbors>();
 
         for (int i = 0; i < _maze.GetWidth(); i++)

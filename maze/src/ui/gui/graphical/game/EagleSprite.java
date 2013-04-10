@@ -8,7 +8,7 @@ import logic.Eagle;
 import model.Position;
 
 /**
- * The Class EagleSprite.
+ * The AnimatedSprite for Eagles.
  */
 public class EagleSprite implements AnimatedSprite
 {

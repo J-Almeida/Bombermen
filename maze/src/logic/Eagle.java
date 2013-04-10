@@ -5,7 +5,7 @@ import java.util.Stack;
 import model.Position;
 
 /**
- * The Class Eagle.
+ * Eagle unit.
  */
 public class Eagle extends Unit
 {

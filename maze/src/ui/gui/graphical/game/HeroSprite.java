@@ -8,7 +8,7 @@ import logic.Hero;
 import model.Position;
 
 /**
- * The Class HeroSprite.
+ * The AnimatedSprite for Heros.
  */
 public class HeroSprite implements AnimatedSprite
 {

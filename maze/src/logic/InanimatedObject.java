@@ -1,7 +1,7 @@
 package logic;
 
 /**
- * The Class InanimatedObject.
+ * Base class for basic objects that can't move (walls and pathways)
  */
 public abstract class InanimatedObject extends WorldObject
 {

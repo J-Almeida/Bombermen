@@ -1,7 +1,7 @@
 package utils;
 
 /**
- * The Class Pair.
+ * Represents two values of any type, first and second.
  *
  * @param <T> the generic type
  */

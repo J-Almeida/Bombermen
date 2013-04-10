@@ -4,7 +4,7 @@ import logic.Eagle.EagleState;
 import model.Position;
 
 /**
- * The Class Hero.
+ * Hero unit - main character of the game, controlled by the player using RequestMovementEvent
  */
 public class Hero extends Unit
 {

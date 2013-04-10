@@ -1,7 +1,7 @@
 package ui.gui.graphical.game;
 
 /**
- * The Class SpriteState.
+ * Represents the animation state of a Sprite
  */
 public class SpriteState
 {

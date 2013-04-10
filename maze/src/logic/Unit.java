@@ -2,7 +2,7 @@ package logic;
 
 
 /**
- * The Class Unit.
+ * Base class for all living objects
  */
 public abstract class Unit extends WorldObject
 {

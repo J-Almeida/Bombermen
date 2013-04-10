@@ -5,7 +5,7 @@ import utils.Key;
 import utils.RandomEngine;
 
 /**
- * The Class Dragon.
+ * Dragon unit
  */
 public class Dragon extends Unit
 {

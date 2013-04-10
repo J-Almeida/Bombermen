@@ -1,7 +1,7 @@
 package logic;
 
 /**
- * The Class Event.
+ * Base class for maze events.
  */
 public abstract class Event
 {

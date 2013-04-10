@@ -5,7 +5,7 @@ import java.io.Serializable;
 import logic.Direction;
 
 /**
- * The Class Position.
+ * Represents a position in space (2D).
  */
 public class Position implements Cloneable, Serializable
 {

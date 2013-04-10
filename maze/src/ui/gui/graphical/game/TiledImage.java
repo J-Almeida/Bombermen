@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 /**
- * The Class TiledImage.
+ * An image with multiple tiles, backed up by a BufferedImage.
  */
 public class TiledImage
 {

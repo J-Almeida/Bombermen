@@ -1,7 +1,7 @@
 package logic;
 
 /**
- * The Class ExitPortal.
+ * ExitPortal inanimatedobject - the exit
  */
 public class ExitPortal extends InanimatedObject
 {
