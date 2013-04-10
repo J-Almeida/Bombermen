@@ -13,10 +13,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -27,6 +34,7 @@ import logic.Architect;
 import logic.Direction;
 import logic.Dragon;
 import logic.Eagle;
+import logic.Eagle.EagleState;
 import logic.Hero;
 import logic.InanimatedObject;
 import logic.Maze;
@@ -211,6 +219,10 @@ public class Game extends JPanel implements KeyListener, MazeGame
     public void NewGame()
     {
         _gameFinished = false;
+        _swordJustPicked = false;
+        _eagleJustDied = false;
+        _eagleJustArrived = false;
+        _dragonsJustDied.clear();
 
         Architect architect = new Architect();
         MazeGenerator mg = new RandomMazeGenerator();
@@ -269,6 +281,11 @@ public class Game extends JPanel implements KeyListener, MazeGame
         new Timer(17, taskPerformer).start();
     }
 
+    private boolean _eagleJustDied = false;
+    private boolean _swordJustPicked = false;
+    private Set<Integer> _dragonsJustDied = new HashSet<Integer>();
+    private boolean _eagleJustArrived = false;
+
     /**
      * Update.
      *
@@ -290,18 +307,6 @@ public class Game extends JPanel implements KeyListener, MazeGame
                 _heroMoving = false;
         }
 
-        /*for (Unit u : _maze.GetLivingObjects())
-        {
-            if (!u.IsAlive())
-            {
-                _unitSprites.remove(u.GetId());
-                if (u.IsDragon())
-                {
-                    _unitSprites.put(u.GetId(), new DyingDragonSprite(u.ToDragon(),_sprites.get("dying_dragon")));
-                }
-            }
-        }*/
-
         ArrayList<AnimatedSprite> toRemove = new ArrayList<AnimatedSprite>();
 
         for (AnimatedSprite as : _unitSprites.values())
@@ -321,6 +326,64 @@ public class Game extends JPanel implements KeyListener, MazeGame
                 _unitSprites.remove(as.GetUnitId());
             }
         }
+
+        // eagle sounds
+        Eagle eagle = _maze.FindEagle();
+        if (eagle == null)
+        {
+            if (!_eagleJustDied)
+            {
+                PlaySound("eagle_scream.wav", 0);
+                _eagleJustDied = true;
+            }
+        }
+        else
+        {
+            if (eagle.GetState() == EagleState.FollowingHeroWithSword)
+                if (!_eagleJustArrived)
+                {
+                    PlaySound("wing_flap.wav", 0);
+                    _eagleJustArrived = true;
+                }
+        }
+
+        // sword sounds
+        if (_maze.FindSword() == null)
+        {
+            if (!_swordJustPicked)
+            {
+                PlaySound("pick_sword.wav", 0);
+                _swordJustPicked = true;
+            }
+        }
+
+        // dragon sounds
+        ArrayList<Dragon> dragons = _maze.FindDragons();
+        for (Dragon d : dragons)
+            _dragonsJustDied.add(d.GetId());
+
+        ArrayList<Integer> toRemoveDrags = new ArrayList<Integer>();
+        for (Integer i : _dragonsJustDied)
+        {
+            boolean found = false;
+            for (Dragon d2 : dragons)
+            {
+                if (i == d2.GetId() && d2.IsAlive())
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                PlaySound("dragon_roar.wav", 0);
+                toRemoveDrags.add(i);
+            }
+        }
+
+        for (Integer i : toRemoveDrags)
+            _dragonsJustDied.remove(i);
     }
 
     /* (non-Javadoc)
@@ -350,34 +413,10 @@ public class Game extends JPanel implements KeyListener, MazeGame
             }
         }
 
-        /*for (Unit u : GetMaze().GetLivingObjects())
-        {
-            switch (u.Type)
-            {
-            case Dragon:
-                DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
-                break;
-            case Eagle:
-                if (!u.ToEagle().IsFlying() && !u.ToEagle().IsFollowingHero())
-                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
-                else if (u.ToEagle().IsFollowingHero())
-                    DrawHalfCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT), false);
-                else
-                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
-                break;
-            case Hero:
-                if (GetMaze().FindEagle() != null && GetMaze().FindEagle().ToEagle().IsFollowingHero())
-                    DrawHalfCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT), true);
-                else
-                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
-                break;
-            case Sword:
-                DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), 0, 0);
-                break;
-            default:
-                break;
-            }
-        }*/
+        // draw dying dragons before everything else
+        for (AnimatedSprite as : _unitSprites.values())
+            if (as instanceof DyingDragonSprite)
+                DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
 
         for (AnimatedSprite as : _unitSprites.values())
         {
@@ -398,7 +437,7 @@ public class Game extends JPanel implements KeyListener, MazeGame
                  else
                      DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
             }
-            else
+            else if (!(as instanceof DyingDragonSprite))
                 DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
         }
 
@@ -520,6 +559,36 @@ public class Game extends JPanel implements KeyListener, MazeGame
     @Override
     public void keyPressed(KeyEvent e) { }
 
+    public static synchronized void PlaySound(final String fileName, final int timeOut)
+    {
+        new Thread(new Runnable()
+        {
+            public void run()
+            {
+                try
+                {
+                    InputStream audioSrc = java.lang.ClassLoader.getSystemResourceAsStream("ui/gui/graphical/resources/" + fileName);
+                    InputStream bufferedIn = new BufferedInputStream(audioSrc);
+
+                    Clip clip = AudioSystem.getClip();
+
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(bufferedIn);
+                    clip.open(inputStream);
+                    clip.start();
+                    if (timeOut != 0)
+                    {
+                        Thread.sleep(timeOut);
+                        clip.stop();
+                    }
+                }
+                catch (Exception e)
+                {
+                    System.err.println(e);
+                }
+            }
+        }).start();
+    }
+
     /* (non-Javadoc)
      * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
      */
@@ -558,7 +627,10 @@ public class Game extends JPanel implements KeyListener, MazeGame
             }
 
             if (k != null)
+            {
                 GetMaze().MoveHero(Direction.FromKey(k));
+                PlaySound("footsteps.wav", 500);
+            }
             Update(0);
         }
 
@@ -567,9 +639,15 @@ public class Game extends JPanel implements KeyListener, MazeGame
             _gameFinished = true;
 
             if (GetMaze().FindHero() != null)
+            {
+                PlaySound("win.wav", 0);
                 JOptionPane.showMessageDialog(this, Messages.getString("Game.WINNING_MESSAGE")); //$NON-NLS-1$
+            }
             else
+            {
+                PlaySound("lose.wav", 0);
                 JOptionPane.showMessageDialog(this, Messages.getString("Game.LOSE_MESSAGE")); //$NON-NLS-1$
+            }
 
             int result = JOptionPane.showConfirmDialog(this, Messages.getString("Game.NEW_GAME_QUERY")); //$NON-NLS-1$
             if (result == JOptionPane.YES_OPTION)
