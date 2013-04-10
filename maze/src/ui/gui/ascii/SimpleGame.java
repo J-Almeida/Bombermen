@@ -39,7 +39,7 @@ public class SimpleGame extends JPanel implements KeyListener
      */
     public static void main(String[] args)
     {
-        JFrame frame = new JFrame("The Maze");
+        JFrame frame = new JFrame(Messages.getString("SimpleGame.WINDOW_TITLE")); //$NON-NLS-1$
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
         frame.setResizable(false);
@@ -58,10 +58,10 @@ public class SimpleGame extends JPanel implements KeyListener
     private final JTextArea _textArea = new JTextArea(10, 10);
 
     /** The quit button. */
-    private final JButton _quitButton = new JButton("Quit");
+    private final JButton _quitButton = new JButton(Messages.getString("SimpleGame.QUIT_BUTTON")); //$NON-NLS-1$
 
     /** The start button. */
-    private final JButton _startButton = new JButton("Start");
+    private final JButton _startButton = new JButton(Messages.getString("SimpleGame.START_BUTTON")); //$NON-NLS-1$
 
     /** The maze. */
     private final Maze _maze;
@@ -199,7 +199,7 @@ public class SimpleGame extends JPanel implements KeyListener
 
         if (_maze.IsFinished())
         {
-            JOptionPane.showMessageDialog(this, "Game Over");
+            JOptionPane.showMessageDialog(this, Messages.getString("SimpleGame.GAME_OVER_MESSAGE")); //$NON-NLS-1$
             _gameStarted = false;
         }
     }

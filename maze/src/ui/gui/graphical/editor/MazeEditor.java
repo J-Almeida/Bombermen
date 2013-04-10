@@ -78,7 +78,7 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
      */
     public static void main(String[] args)
     {
-        final JFrame frame = new JFrame("The Maze Editor");
+        final JFrame frame = new JFrame(Messages.getString("MazeEditor.WINDOW_TITLE")); //$NON-NLS-1$
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -86,9 +86,9 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
 
         final MazeEditor m = new MazeEditor();
 
-        final JButton saveButton = new JButton("Save/Load");
-        final JButton resetButton = new JButton("Reset");
-        final JButton exitButton = new JButton("Quit");
+        final JButton saveButton = new JButton(Messages.getString("MazeEditor.SAVE_LOAD_BUTTON")); //$NON-NLS-1$
+        final JButton resetButton = new JButton(Messages.getString("MazeEditor.RESET_BUTTON")); //$NON-NLS-1$
+        final JButton exitButton = new JButton(Messages.getString("MazeEditor.QUIT_BUTTON")); //$NON-NLS-1$
 
         saveButton.addActionListener(new ActionListener()
         {
@@ -149,7 +149,7 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
 
         do
         {
-            String mazeSizeStr = JOptionPane.showInputDialog("Maze size", 10);
+            String mazeSizeStr = JOptionPane.showInputDialog(Messages.getString("MazeEditor.MAZE_SIZE"), 10); //$NON-NLS-1$
             try
             {
                 mazeSize = Integer.parseInt(mazeSizeStr);
@@ -158,7 +158,7 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
             }
             catch (NumberFormatException ex)
             {
-                JOptionPane.showMessageDialog(this, "Invalid maze size");
+                JOptionPane.showMessageDialog(this, Messages.getString("MazeEditor.INVALID_MAZE_SIZE")); //$NON-NLS-1$
                 success = false;
             }
         }
@@ -176,13 +176,13 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
 
         // Load sprites
         _sprites = new HashMap<String, TiledImage>();
-        _sprites.put("dragon",     new TiledImage("ui/gui/graphical/resources/dragon_trans.png", 128, 128));
-        _sprites.put("eagle",      new TiledImage("ui/gui/graphical/resources/eagle_trans.png",  64,  64));
-        _sprites.put("hero",       new TiledImage("ui/gui/graphical/resources/hero_trans.png",   96,  96));
-        _sprites.put("sword",      new TiledImage("ui/gui/graphical/resources/sword_trans.png",  96,  96));
-        _sprites.put("grass",      new TiledImage("ui/gui/graphical/resources/grass.png",        96,  96));
-        _sprites.put("stone",      new TiledImage("ui/gui/graphical/resources/stone.png",        96,  96));
-        _sprites.put("dark_stone", new TiledImage("ui/gui/graphical/resources/dark_stone.png",   96,  96));
+        _sprites.put(Messages.getString("MazeEditor.DRAGON_SPRITE_NAME"),     new TiledImage(Messages.getString("MazeEditor.DRAGON_SPRITE_FILE_NAME"), 128, 128)); //$NON-NLS-1$ //$NON-NLS-2$
+        _sprites.put(Messages.getString("MazeEditor.EAGLE_SPRITE_NAME"),      new TiledImage(Messages.getString("MazeEditor.EAGLE_SPRITE_FILE_NAME"),  64,  64)); //$NON-NLS-1$ //$NON-NLS-2$
+        _sprites.put(Messages.getString("MazeEditor.HERO_SPRITE_NAME"),       new TiledImage(Messages.getString("MazeEditor.HERO_SPRITE_FILE_NAME"),   96,  96)); //$NON-NLS-1$ //$NON-NLS-2$
+        _sprites.put(Messages.getString("MazeEditor.SWORD_SPRITE_NAME"),      new TiledImage(Messages.getString("MazeEditor.SWORD_SPRITE_FILE_NAME"),  96,  96)); //$NON-NLS-1$ //$NON-NLS-2$
+        _sprites.put(Messages.getString("MazeEditor.PATH_SPRITE_NAME"),      new TiledImage(Messages.getString("MazeEditor.PATH_SPRITE_FILE_NAME"),        96,  96)); //$NON-NLS-1$ //$NON-NLS-2$
+        _sprites.put(Messages.getString("MazeEditor.WALL_SPRITE_NAME"),      new TiledImage(Messages.getString("MazeEditor.WALL_SPRITE_FILE_NAME"),        96,  96)); //$NON-NLS-1$ //$NON-NLS-2$
+        _sprites.put(Messages.getString("MazeEditor.EXIT_SPRITE_NAME"), new TiledImage(Messages.getString("MazeEditor.EXIT_SPRITE_FILE_NAME"),   96,  96)); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /* (non-Javadoc)
@@ -203,11 +203,11 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
             {
                 InanimatedObject c = _maze.GetGrid().GetCellT(x, y);
                 if (c.IsPath())
-                    DrawCellAt(g, _sprites.get("grass").GetTile(0, 0), x, y);
+                    DrawCellAt(g, _sprites.get(Messages.getString("MazeEditor.PATH_SPRITE_NAME")).GetTile(0, 0), x, y); //$NON-NLS-1$
                 else if (c.IsWall())
-                    DrawCellAt(g, _sprites.get("stone").GetTile(0, 0), x, y);
+                    DrawCellAt(g, _sprites.get(Messages.getString("MazeEditor.WALL_SPRITE_NAME")).GetTile(0, 0), x, y); //$NON-NLS-1$
                 else if (c.IsExitPortal())
-                    DrawCellAt(g, _sprites.get("dark_stone").GetTile(0, 0), x, y);
+                    DrawCellAt(g, _sprites.get(Messages.getString("MazeEditor.EXIT_SPRITE_NAME")).GetTile(0, 0), x, y); //$NON-NLS-1$
             }
         }
 
@@ -216,16 +216,16 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
             switch (u.Type)
             {
                 case Dragon:
-                    DrawCellAt(g, _sprites.get("dragon").GetTile(0, 0), u.GetPosition());
+                    DrawCellAt(g, _sprites.get(Messages.getString("MazeEditor.DRAGON_SPRITE_NAME")).GetTile(0, 0), u.GetPosition()); //$NON-NLS-1$
                     break;
                 case Eagle:
-                    DrawHalfCellAt(g, _sprites.get("eagle").GetTile(0, 0), u.GetPosition(), false);
+                    DrawHalfCellAt(g, _sprites.get(Messages.getString("MazeEditor.EAGLE_SPRITE_NAME")).GetTile(0, 0), u.GetPosition(), false); //$NON-NLS-1$
                     break;
                 case Hero:
-                    DrawHalfCellAt(g, _sprites.get("hero").GetTile(0, 8), u.GetPosition(), true);
+                    DrawHalfCellAt(g, _sprites.get(Messages.getString("MazeEditor.HERO_SPRITE_NAME")).GetTile(0, 8), u.GetPosition(), true); //$NON-NLS-1$
                     break;
                 case Sword:
-                    DrawCellAt(g, _sprites.get("sword").GetTile(0, 0), u.GetPosition());
+                    DrawCellAt(g, _sprites.get(Messages.getString("MazeEditor.SWORD_SPRITE_NAME")).GetTile(0, 0), u.GetPosition()); //$NON-NLS-1$
                     break;
                 default:
                     break;

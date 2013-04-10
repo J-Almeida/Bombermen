@@ -59,7 +59,7 @@ public class SettingsDialog extends JDialog
 
         setSize(getSize().width + 50, getSize().height + 100);
         setLocation(frame.getLocation().x + frame.getSize().width / 2 - getSize().width / 2, frame.getLocation().y + frame.getSize().height / 2 - getSize().height / 2);
-        setTitle("Settings");
+        setTitle(Messages.getString("SettingsDialog.WINDOW_TITLE")); //$NON-NLS-1$
     }
 
     /**
@@ -68,7 +68,7 @@ public class SettingsDialog extends JDialog
     @SuppressWarnings("serial")
     private void initUI()
     {
-        String[] columnNames = { "Action", "Key" };
+        String[] columnNames = { Messages.getString("SettingsDialog.ACTION_COLUMN_NAME"), Messages.getString("SettingsDialog.KEY_COLUMN_NAME") }; //$NON-NLS-1$ //$NON-NLS-2$
 
         Map<Integer, Action> tempKeys = _prevConfig.GetKeys();
 
@@ -128,7 +128,7 @@ public class SettingsDialog extends JDialog
                         _rowNumber = tblKeys.getSelectedRow();
                         _prevActionMap = tblKeys.getActionMap();
                         tblKeys.setActionMap(new ActionMap());
-                        lblMessage.setText("<HTML>Press a key to change the selected<BR>action os ESC to cancel.</HTML>");
+                        lblMessage.setText(Messages.getString("SettingsDialog.EDITING_HELP_MESSAGE")); //$NON-NLS-1$
                     }
                 }
                 else if (_state == State.EDITING)
@@ -136,12 +136,12 @@ public class SettingsDialog extends JDialog
                     if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
                     {
                         _state = State.NORMAL;
-                        lblMessage.setText("<HTML>Action Cacelled.<BR>Select an action and press enter to edit.</HTML>");
+                        lblMessage.setText(Messages.getString("SettingsDialog.CANCELLED_HELP_MESSAGE")); //$NON-NLS-1$
                     }
                     else if (tblKeys.getSelectedRow() != _rowNumber)
                     {
                         _state = State.NORMAL;
-                        lblMessage.setText("<HTML>Select an action and press enter to edit.</HTML>");
+                        lblMessage.setText(Messages.getString("SettingsDialog.NORMAL_HELP_MESSAGE")); //$NON-NLS-1$
                     }
                     else if (!keys.containsValue(e.getKeyCode()))
                     {
@@ -152,10 +152,10 @@ public class SettingsDialog extends JDialog
 
                         _state = State.NORMAL;
 
-                        lblMessage.setText("<HTML>Attribution done.<BR>Select an action and press enter to edit.</HTML>");
+                        lblMessage.setText(Messages.getString("SettingsDialog.SUCCESSFULL_HELP_MESSAGE")); //$NON-NLS-1$
                     }
                     else
-                        lblMessage.setText("<HTML>The key " + KeyEvent.getKeyText(e.getKeyCode()) + " is already in use.</HTML>");
+                        lblMessage.setText(Messages.getString("SettingsDialog.USED_HELP_MESSAGE_1") + KeyEvent.getKeyText(e.getKeyCode()) + Messages.getString("SettingsDialog.USED_HELP_MESSAGE_2")); //$NON-NLS-1$ //$NON-NLS-2$
 
                     if (_state == State.NORMAL)
                         tblKeys.setActionMap(_prevActionMap);
@@ -204,28 +204,28 @@ public class SettingsDialog extends JDialog
 
         c.gridx = 0;
         c.gridy = 0;
-        getContentPane().add(new JLabel("Number of Dragons: "), c);
+        getContentPane().add(new JLabel(Messages.getString("SettingsDialog.NUMBER_OF_DRAGONS")), c); //$NON-NLS-1$
 
         c.gridx = 1;
         getContentPane().add(spnNumberOfDragons, c);
 
         c.gridx = 0;
         c.gridy = 1;
-        getContentPane().add(new JLabel("Maze Size: "), c);
+        getContentPane().add(new JLabel(Messages.getString("SettingsDialog.MAZE_SIZE")), c); //$NON-NLS-1$
 
         c.gridx = 1;
         getContentPane().add(spnMazeSize, c);
 
         c.gridx = 0;
         c.gridy = 2;
-        getContentPane().add(new JLabel("Dragon Mode: "), c);
+        getContentPane().add(new JLabel(Messages.getString("SettingsDialog.DRAGON_MODE")), c); //$NON-NLS-1$
 
         c.gridx = 1;
         getContentPane().add(cmbDragonMode, c);
 
         c.gridx = 0;
         c.gridy = 3;
-        getContentPane().add(new JLabel("Keys:"), c);
+        getContentPane().add(new JLabel(Messages.getString("SettingsDialog.KEYS")), c); //$NON-NLS-1$
 
         c.gridwidth = 2;
         c.gridx = 0;
@@ -277,10 +277,10 @@ public class SettingsDialog extends JDialog
     private Configuration _newConfig = null;
 
     /** The OK button. */
-    private final JButton  btnOK                             = new JButton("OK");
+    private final JButton  btnOK                             = new JButton(Messages.getString("SettingsDialog.OK_BUTTON")); //$NON-NLS-1$
 
     /** The Cancel button. */
-    private final JButton  btnCancel                         = new JButton("Cancel");
+    private final JButton  btnCancel                         = new JButton(Messages.getString("SettingsDialog.CANCEL_BUTTON")); //$NON-NLS-1$
 
     /** The number of dragons spinner. */
     private final JSpinner spnNumberOfDragons                = new JSpinner(new SpinnerNumberModel(2, 0, 1000, 1));
@@ -298,5 +298,5 @@ public class SettingsDialog extends JDialog
     private final Map<Action, Integer> keys                  = new LinkedHashMap<Action, Integer>();
 
     /** The helper label message. */
-    private final JLabel lblMessage                          = new JLabel("<HTML>Select an action and press enter to edit.<BR></HTML>");
+    private final JLabel lblMessage                          = new JLabel(Messages.getString("SettingsDialog.NORMAL_HELP_MESSAGE")); //$NON-NLS-1$
 }

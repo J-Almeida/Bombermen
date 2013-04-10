@@ -42,7 +42,7 @@ import utils.Key;
 public class Game extends JPanel implements KeyListener, MazeGame
 {
     /** The configuration. */
-    private Configuration CONFIG = new Configuration("maze.config");
+    private Configuration CONFIG = new Configuration(Messages.getString("Game.CONFIGURATION_FILE")); //$NON-NLS-1$
 
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
@@ -81,7 +81,7 @@ public class Game extends JPanel implements KeyListener, MazeGame
     {
         final Game m = new Game();
 
-        final JFrame frame = new JFrame("The Maze");
+        final JFrame frame = new JFrame(Messages.getString("Game.WINDOW_TITLE")); //$NON-NLS-1$
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(m.WINDOW_WIDTH, m.WINDOW_HEIGHT);
         //frame.setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -89,10 +89,10 @@ public class Game extends JPanel implements KeyListener, MazeGame
 
         frame.setLayout(new BorderLayout());
 
-        final JButton newGameButton = new JButton("New Game");
-        final JButton saveButton = new JButton("Save/Load");
-        final JButton exitButton = new JButton("Quit");
-        final JButton settingsButton = new JButton("Settings");
+        final JButton newGameButton = new JButton(Messages.getString("Game.NEW_GAME_BUTTON")); //$NON-NLS-1$
+        final JButton saveButton = new JButton(Messages.getString("Game.SAVE_LOAD_BUTTON")); //$NON-NLS-1$
+        final JButton exitButton = new JButton(Messages.getString("Game.QUIT_BUTTON")); //$NON-NLS-1$
+        final JButton settingsButton = new JButton(Messages.getString("Game.SETTINGS_BUTTON")); //$NON-NLS-1$
 
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter()
@@ -110,7 +110,7 @@ public class Game extends JPanel implements KeyListener, MazeGame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                int result = JOptionPane.showConfirmDialog(frame, "Are you sure you want to start a new game?");
+                int result = JOptionPane.showConfirmDialog(frame, Messages.getString("Game.NEW_GAME_CONFIRMATION")); //$NON-NLS-1$
 
                 if (result == JOptionPane.YES_OPTION)
                     m.NewGame();
@@ -226,13 +226,13 @@ public class Game extends JPanel implements KeyListener, MazeGame
         for (Unit u : _maze.GetLivingObjects())
         {
             if (u.IsHero())
-                _unitSprites.put(u.GetId(), new HeroSprite(u.ToHero(), _sprites.get("hero")));
+                _unitSprites.put(u.GetId(), new HeroSprite(u.ToHero(), _sprites.get(Messages.getString("Game.HERO_SPRITE_NAME")))); //$NON-NLS-1$
             else if (u.IsDragon())
-                _unitSprites.put(u.GetId(), new DragonSprite(u.ToDragon(), _sprites.get("dragon")));
+                _unitSprites.put(u.GetId(), new DragonSprite(u.ToDragon(), _sprites.get(Messages.getString("Game.DRAGON_SPRITE_NAME")))); //$NON-NLS-1$
             else if (u.IsEagle())
-                _unitSprites.put(u.GetId(), new EagleSprite(u.ToEagle(), _sprites.get("eagle")));
+                _unitSprites.put(u.GetId(), new EagleSprite(u.ToEagle(), _sprites.get(Messages.getString("Game.EAGLE_SPRITE_NAME")))); //$NON-NLS-1$
             else if (u.IsSword())
-                _unitSprites.put(u.GetId(), new SwordSprite(u.ToSword(), _sprites.get("sword")));
+                _unitSprites.put(u.GetId(), new SwordSprite(u.ToSword(), _sprites.get(Messages.getString("Game.SWORD_SPRITE_NAME")))); //$NON-NLS-1$
         }
 
         repaint();
@@ -248,14 +248,14 @@ public class Game extends JPanel implements KeyListener, MazeGame
 
         // Load sprites
         _sprites = new HashMap<String, TiledImage>();
-        _sprites.put("dragon",     new TiledImage("ui/gui/graphical/resources/dragon_trans.png", 128, 128));
-        _sprites.put("dying_dragon", new TiledImage("ui/gui/graphical/resources/dying_dragon_trans.png", 128, 128));
-        _sprites.put("eagle",      new TiledImage("ui/gui/graphical/resources/eagle_trans.png",  64,  64));
-        _sprites.put("hero",       new TiledImage("ui/gui/graphical/resources/hero_trans.png",   96,  96));
-        _sprites.put("sword",      new TiledImage("ui/gui/graphical/resources/sword_trans.png",  96,  96));
-        _sprites.put("grass",      new TiledImage("ui/gui/graphical/resources/grass.png",        96,  96));
-        _sprites.put("stone",      new TiledImage("ui/gui/graphical/resources/stone.png",        96,  96));
-        _sprites.put("dark_stone", new TiledImage("ui/gui/graphical/resources/dark_stone.png",   96,  96));
+        _sprites.put(Messages.getString("Game.DRAGON_SPRITE_NAME"),     new TiledImage(Messages.getString("Game.DRAGON_SPRITE_FILE_NAME"), 128, 128)); //$NON-NLS-1$ //$NON-NLS-2$
+        _sprites.put(Messages.getString("Game.DYING_DRAGON_SPRITE_NAME"), new TiledImage(Messages.getString("Game.DYING_DRAGON_SPRITE_FILE_NAME"), 128, 128)); //$NON-NLS-1$ //$NON-NLS-2$
+        _sprites.put(Messages.getString("Game.EAGLE_SPRITE_NAME"),      new TiledImage(Messages.getString("Game.EAGLE_SPRITE_FILE_NAME"),  64,  64)); //$NON-NLS-1$ //$NON-NLS-2$
+        _sprites.put(Messages.getString("Game.HERO_SPRITE_NAME"),       new TiledImage(Messages.getString("Game.HERO_SPRITE_FILE_NAME"),   96,  96)); //$NON-NLS-1$ //$NON-NLS-2$
+        _sprites.put(Messages.getString("Game.SWORD_SPRITE_NAME"),      new TiledImage(Messages.getString("Game.SWORD_SPRITE_FILE_NAME"),  96,  96)); //$NON-NLS-1$ //$NON-NLS-2$
+        _sprites.put(Messages.getString("Game.PATH_SPRITE_NAME"),      new TiledImage(Messages.getString("Game.PATH_SPRITE_FILE_NAME"),        96,  96)); //$NON-NLS-1$ //$NON-NLS-2$
+        _sprites.put(Messages.getString("Game.WALL_SPRITE_NAME"),      new TiledImage(Messages.getString("Game.WALL_SPRITE_FILE_NAME"),        96,  96)); //$NON-NLS-1$ //$NON-NLS-2$
+        _sprites.put(Messages.getString("Game.EXIT_SPRITE_NAME"), new TiledImage(Messages.getString("Game.EXIT_SPRITE_FILE_NAME"),   96,  96)); //$NON-NLS-1$ //$NON-NLS-2$
 
         NewGame();
 
@@ -314,7 +314,7 @@ public class Game extends JPanel implements KeyListener, MazeGame
             {
                 Dragon d = ((DragonSprite)as).GetDragon();
                 _unitSprites.remove(as.GetUnitId());
-                _unitSprites.put(d.GetId(), new DyingDragonSprite(d,_sprites.get("dying_dragon")));
+                _unitSprites.put(d.GetId(), new DyingDragonSprite(d,_sprites.get(Messages.getString("Game.DYING_DRAGON_SPRITE_NAME")))); //$NON-NLS-1$
             }
             else
             {
@@ -342,11 +342,11 @@ public class Game extends JPanel implements KeyListener, MazeGame
             {
                 InanimatedObject c = GetMaze().GetGrid().GetCellT(x, y);
                 if (c.IsPath())
-                    DrawCellAt(g, _sprites.get("grass").GetTile(0, 0), x, y);
+                    DrawCellAt(g, _sprites.get(Messages.getString("Game.PATH_SPRITE_NAME")).GetTile(0, 0), x, y); //$NON-NLS-1$
                 else if (c.IsWall())
-                    DrawCellAt(g, _sprites.get("stone").GetTile(0, 0), x, y);
+                    DrawCellAt(g, _sprites.get(Messages.getString("Game.WALL_SPRITE_NAME")).GetTile(0, 0), x, y); //$NON-NLS-1$
                 else if (c.IsExitPortal())
-                    DrawCellAt(g, _sprites.get("dark_stone").GetTile(0, 0), x, y);
+                    DrawCellAt(g, _sprites.get(Messages.getString("Game.EXIT_SPRITE_NAME")).GetTile(0, 0), x, y); //$NON-NLS-1$
             }
         }
 
@@ -567,11 +567,11 @@ public class Game extends JPanel implements KeyListener, MazeGame
             _gameFinished = true;
 
             if (GetMaze().FindHero() != null)
-                JOptionPane.showMessageDialog(this, "You won!");
+                JOptionPane.showMessageDialog(this, Messages.getString("Game.WINNING_MESSAGE")); //$NON-NLS-1$
             else
-                JOptionPane.showMessageDialog(this, "You lost, game over.");
+                JOptionPane.showMessageDialog(this, Messages.getString("Game.LOSE_MESSAGE")); //$NON-NLS-1$
 
-            int result = JOptionPane.showConfirmDialog(this, "Do you wish to start a new game?");
+            int result = JOptionPane.showConfirmDialog(this, Messages.getString("Game.NEW_GAME_QUERY")); //$NON-NLS-1$
             if (result == JOptionPane.YES_OPTION)
                 NewGame();
         }

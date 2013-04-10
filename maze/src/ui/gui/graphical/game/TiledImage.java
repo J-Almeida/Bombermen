@@ -38,7 +38,7 @@ public class TiledImage
         }
         catch (IOException e)
         {
-            System.out.println("ERROR: Could not load image " + path + "."); // TODO: remove this log
+            System.out.println(Messages.getString("TiledImage.LOAD_ERROR_MESSAGE") + path + "."); // TODO: remove this log //$NON-NLS-1$
         }
 
         _tileWidth = tileWidth;

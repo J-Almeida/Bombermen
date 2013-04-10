@@ -125,7 +125,7 @@ public class SaveLoadDialog extends JDialog
         catch (IOException ex)
         {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "An error occured while trying to save game.");
+            JOptionPane.showMessageDialog(null, Messages.getString("SaveLoadDialog.SAVE_ERROR_MESSAGE")); //$NON-NLS-1$
         }
         finally
         {
@@ -151,10 +151,10 @@ public class SaveLoadDialog extends JDialog
         catch (IOException ex)
         {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "An error occured while trying to load game.");
+            JOptionPane.showMessageDialog(null, Messages.getString("SaveLoadDialog.LOAD_ERROR_MESSAGE")); //$NON-NLS-1$
         } catch (ClassNotFoundException ex)
         {
-            JOptionPane.showMessageDialog(null, "An error occured while trying to load game.");
+            JOptionPane.showMessageDialog(null, Messages.getString("SaveLoadDialog.LOAD_ERROR_MESSAGE")); //$NON-NLS-1$
             ex.printStackTrace();
         }
         finally
@@ -192,7 +192,7 @@ public class SaveLoadDialog extends JDialog
             }
         });
 
-        JButton saveButton = new JButton("Save current game");
+        JButton saveButton = new JButton(Messages.getString("SaveLoadDialog.SAVE_GAME_BUTTON")); //$NON-NLS-1$
         saveButton.addActionListener(new ActionListener()
         {
             @Override
@@ -202,7 +202,7 @@ public class SaveLoadDialog extends JDialog
             }
         });
 
-        JButton loadButton = new JButton("Load selected game");
+        JButton loadButton = new JButton(Messages.getString("SaveLoadDialog.LOAD_GAME_BUTTON")); //$NON-NLS-1$
         loadButton.addActionListener(new ActionListener()
         {
             @Override
@@ -218,7 +218,7 @@ public class SaveLoadDialog extends JDialog
             }
         });
 
-        JButton deleteButton = new JButton("Delete selected game");
+        JButton deleteButton = new JButton(Messages.getString("SaveLoadDialog.DELTE_GAME_BUTTON")); //$NON-NLS-1$
         deleteButton.addActionListener(new ActionListener()
         {
             @Override

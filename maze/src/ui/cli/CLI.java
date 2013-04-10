@@ -36,12 +36,12 @@ public class CLI
         {
             boolean success = true;
             System.out.println(maze);
-            System.out.print("Move hero (W, S, A, D, 1): ");
+            System.out.print(Messages.getString("CLI.PROMPT")); //$NON-NLS-1$
             do
             {
                 if (!success)
                 {
-                    System.out.print("Invalid move. Try again: ");
+                    System.out.print(Messages.getString("CLI.INVALID_MOVE")); //$NON-NLS-1$
                     success = true;
                 }
 
@@ -86,8 +86,8 @@ public class CLI
 
         System.out.println(maze);
         if (maze.FindHero() != null && maze.FindHero().IsAlive())
-            System.out.println("You Won!");
+            System.out.println(Messages.getString("CLI.WINNING_MESSAGE")); //$NON-NLS-1$
         else
-            System.out.println("You Lost!");
+            System.out.println(Messages.getString("CLI.LOSE_MESSAGE")); //$NON-NLS-1$
     }
 }
