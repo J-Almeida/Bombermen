@@ -350,34 +350,10 @@ public class Game extends JPanel implements KeyListener, MazeGame
             }
         }
 
-        /*for (Unit u : GetMaze().GetLivingObjects())
-        {
-            switch (u.Type)
-            {
-            case Dragon:
-                DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
-                break;
-            case Eagle:
-                if (!u.ToEagle().IsFlying() && !u.ToEagle().IsFollowingHero())
-                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
-                else if (u.ToEagle().IsFollowingHero())
-                    DrawHalfCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT), false);
-                else
-                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
-                break;
-            case Hero:
-                if (GetMaze().FindEagle() != null && GetMaze().FindEagle().ToEagle().IsFollowingHero())
-                    DrawHalfCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT), true);
-                else
-                    DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), _unitSprites.get(u.GetId()).GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
-                break;
-            case Sword:
-                DrawCellAt(g, _unitSprites.get(u.GetId()).GetCurrentImage(), _unitSprites.get(u.GetId()).GetPosition(), 0, 0);
-                break;
-            default:
-                break;
-            }
-        }*/
+        // draw dying dragons before everything else
+        for (AnimatedSprite as : _unitSprites.values())
+            if (as instanceof DyingDragonSprite)
+                DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
 
         for (AnimatedSprite as : _unitSprites.values())
         {
@@ -398,7 +374,7 @@ public class Game extends JPanel implements KeyListener, MazeGame
                  else
                      DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
             }
-            else
+            else if (!(as instanceof DyingDragonSprite))
                 DrawCellAt(g, as.GetCurrentImage(), as.GetPosition(), as.GetDeltaPosition(CELL_WIDTH, CELL_HEIGHT));
         }
 

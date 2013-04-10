@@ -1,5 +1,7 @@
 package logic;
 
+import logic.Eagle.EagleState;
+
 /**
  * Sword unit.
  */
@@ -38,7 +40,12 @@ public class Sword extends Unit
             {
                 this.Kill();
                 if (ev.Actor.IsHero())
+                {
                     ev.Actor.ToHero().EquipSword(true);
+                    Eagle e = maze.FindEagle();
+                    if (e != null && e.GetState() == EagleState.FollowingHero)
+                        e.SetState(EagleState.FollowingHeroWithSword);
+                }
                 else if (ev.Actor.IsEagle())
                     ev.Actor.ToEagle().EquipSword(true);
             }
