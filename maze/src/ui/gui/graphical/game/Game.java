@@ -215,22 +215,22 @@ public class Game extends JPanel implements KeyListener, MazeGame
 
     public void ResetGame()
     {
-    	ArrayList<Dragon> drgs = _maze.FindDragons();
-    	CONFIG.SetMazeSize(_maze.GetWidth());
-    	CONFIG.SetNumberOfDragons(drgs.size());
-    	if (drgs.size() > 0)
-    	{
-    		if (drgs.get(0).CanMove())
-    			CONFIG.SetDragonMode(Dragon.Behaviour.RandomMovement);
-    		else if (drgs.get(0).CanSleep())
-    			CONFIG.SetDragonMode(Dragon.Behaviour.Sleepy);
-    		else
-    			CONFIG.SetDragonMode(Dragon.Behaviour.Idle);
-    	}
+        ArrayList<Dragon> drgs = _maze.FindDragons();
+        CONFIG.SetMazeSize(_maze.GetWidth());
+        CONFIG.SetNumberOfDragons(drgs.size());
+        if (drgs.size() > 0)
+        {
+            if (drgs.get(0).CanMove())
+                CONFIG.SetDragonMode(Dragon.Behaviour.RandomMovement);
+            else if (drgs.get(0).CanSleep())
+                CONFIG.SetDragonMode(Dragon.Behaviour.Sleepy);
+            else
+                CONFIG.SetDragonMode(Dragon.Behaviour.Idle);
+        }
 
         MAZE_SIZE = CONFIG.GetMazeSize();
 
-    	// Initialize sprites
+        // Initialize sprites
         _unitSprites.clear();
         for (Unit u : _maze.GetLivingObjects())
         {
@@ -243,6 +243,11 @@ public class Game extends JPanel implements KeyListener, MazeGame
             else if (u.IsSword())
                 _unitSprites.put(u.GetId(), new SwordSprite(u.ToSword(), _sprites.get(Messages.getString("Game.SWORD_SPRITE_NAME")))); //$NON-NLS-1$
         }
+
+        _eagleJustDied = false;
+        _swordJustPicked = false;
+        _dragonsJustDied.clear();
+        _eagleJustArrived = false;
 
         repaint();
     }
@@ -317,7 +322,7 @@ public class Game extends JPanel implements KeyListener, MazeGame
 
     private boolean _eagleJustDied = false;
     private boolean _swordJustPicked = false;
-    private final Set<Integer> _dragonsJustDied = new HashSet<Integer>();
+    private Set<Integer> _dragonsJustDied = new HashSet<Integer>();
     private boolean _eagleJustArrived = false;
 
     /**
@@ -598,7 +603,7 @@ public class Game extends JPanel implements KeyListener, MazeGame
         new Thread(new Runnable()
         {
             @Override
-			public void run()
+            public void run()
             {
                 try
                 {
