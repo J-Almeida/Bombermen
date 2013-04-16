@@ -1,10 +1,14 @@
 package ui.gui.graphical.game;
 
+import java.io.Serializable;
+
 /**
  * Represents the animation state of a Sprite
  */
-public class SpriteState
+public class SpriteState implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     /**
      * Instantiates a new sprite state.
      *

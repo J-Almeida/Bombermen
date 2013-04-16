@@ -1,6 +1,7 @@
 package ui.gui.graphical.game;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.HashMap;
 
 import logic.Direction;
@@ -21,7 +22,7 @@ public class HeroSprite implements AnimatedSprite
     /**
      * The HeroSprite state.
      */
-    private enum state
+    private enum state implements Serializable
     {
 
         /** The stopped. */
