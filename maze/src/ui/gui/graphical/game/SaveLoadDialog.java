@@ -166,6 +166,7 @@ public class SaveLoadDialog extends JDialog
         {
             m.SetEventQueue(new PriorityQueue<UnitEventEntry>());
             _game.SetMaze(m);
+            _game.ResetGame();
         }
     }
 

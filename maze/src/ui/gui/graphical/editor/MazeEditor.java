@@ -484,4 +484,10 @@ public class MazeEditor extends JPanel implements MouseListener, MazeGame
     {
         _maze = m;
     }
+
+	@Override
+	public void ResetGame() {
+		// TODO Auto-generated method stub
+
+	}
 }

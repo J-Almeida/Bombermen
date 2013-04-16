@@ -21,6 +21,8 @@ public interface MazeGame
      */
     void SetMaze(Maze m);
 
+    void ResetGame();
+
     /**
      * Repaint.
      */
