@@ -23,8 +23,14 @@ public class QuadTreeTests
 
         @Override
         public void Update(int diff) { }
+
+        @Override
+        public boolean IsAlive()
+        {
+            return true;
+        }
     }
-    
+
     @Test
     public void TestQuadTree()
     {

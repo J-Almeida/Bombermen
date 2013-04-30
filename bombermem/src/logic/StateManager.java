@@ -6,7 +6,7 @@ import java.util.Map;
 public class StateManager
 {
     private Map<String, IState> _states;
-    private IState _currentState;
+    private String _currentState;
     
     public StateManager()
     {
@@ -16,25 +16,25 @@ public class StateManager
     
     public void Update(int diff)
     {
-        _currentState.Update(diff);
+        _states.get(_currentState).Update(diff);
     }
-    
-    public void Draw()
-    {
-        _currentState.Draw();
-    }
-    
+
     public void ChangeState(String newState)
     {
         if (_currentState != null)
-            _currentState.UnloadContents();
-        _currentState = _states.get(newState);
-        _currentState.Initialize();
-        _currentState.LoadContents();
+            _states.get(_currentState).UnloadContents();
+        _currentState = newState;
+        _states.get(_currentState).Initialize();
+        _states.get(_currentState).LoadContents();
     }
     
     public void AddState(String name, IState state)
     {
         _states.put(name, state);
+    }
+    
+    public String GetCurrentState()
+    {
+        return _currentState;
     }
 }

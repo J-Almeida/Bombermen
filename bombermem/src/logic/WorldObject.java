@@ -14,5 +14,7 @@ public abstract class WorldObject
         Position = position;
     }
     
+    public abstract boolean IsAlive();
+    
     public abstract void Update(int diff);
 }

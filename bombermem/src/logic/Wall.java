@@ -19,4 +19,10 @@ public class Wall extends WorldObject
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    public boolean IsAlive()
+    {
+        return Undestroyable || HitPoints > 0;
+    }
 }

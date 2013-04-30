@@ -1,4 +1,4 @@
-package client;
+package gui.swing;
 
 import java.awt.Graphics2D;
 

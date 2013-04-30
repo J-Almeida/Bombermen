@@ -25,13 +25,6 @@ public class MainMenuState implements IState
     }
 
     @Override
-    public void Draw()
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void UnloadContents()
     {
         // TODO Auto-generated method stub

@@ -19,4 +19,11 @@ public class Bomb extends WorldObject
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    public boolean IsAlive()
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

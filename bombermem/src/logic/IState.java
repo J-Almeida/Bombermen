@@ -11,8 +11,6 @@ public interface IState
     void LoadContents();
     /** Called every frame, updates the "state" */
     void Update(int diff);
-    /** Called when re-drawing the screen is needed. Called after Update() */
-    void Draw();
     /** Frees the memory of allocated resources in LoadContents() */
     void UnloadContents();
 }

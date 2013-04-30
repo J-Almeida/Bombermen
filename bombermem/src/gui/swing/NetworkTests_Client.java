@@ -1,4 +1,4 @@
-package client;
+package gui.swing;
 
 import java.io.BufferedReader;
 import java.io.IOException;

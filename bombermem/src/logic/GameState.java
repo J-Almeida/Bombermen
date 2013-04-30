@@ -1,8 +1,11 @@
 package logic;
 
-public class GameState implements IState
-{
+import java.util.Map;
 
+public abstract class GameState implements IState
+{
+    Map<Integer, WorldObject> _entities;
+    
     @Override
     public void Initialize()
     {
@@ -20,15 +23,7 @@ public class GameState implements IState
     @Override
     public void Update(int diff)
     {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void Draw()
-    {
-        // TODO Auto-generated method stub
-
+        
     }
 
     @Override
@@ -37,5 +32,4 @@ public class GameState implements IState
         // TODO Auto-generated method stub
 
     }
-
 }
