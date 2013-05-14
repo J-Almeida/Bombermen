@@ -7,6 +7,7 @@ import java.awt.geom.Point2D;
  */
 public enum Direction
 {
+    None,
     North, /** N - 0º */
     Northeast, /** NE - 45º */
     East, /** S - 90º */
@@ -44,34 +45,42 @@ public enum Direction
      *
      * @param p the current position (to be modified)
      * @param d the direction to go
+     * @param inc movement to apply
      */
-    public static void ApplyMovement(Point2D p, Direction d)
+    public static void ApplyMovement(Point2D p, Direction d, double inc)
     {
+        if (d == null || d == Direction.None)
+            return;
+        
+        System.out.println("p: " + p + " d: " + d + "inc: " + inc);
+        
         switch (d)
         {
             case East:
-                p.setLocation(p.getX() + 1, p.getY());
+                p.setLocation(p.getX() + inc, p.getY());
                 break;
             case North:
-                p.setLocation(p.getX(), p.getY() - 1);
+                p.setLocation(p.getX(), p.getY() - inc);
                 break;
             case Northeast:
-                p.setLocation(p.getX() + 1, p.getY() - 1);
+                p.setLocation(p.getX() + inc * Math.sqrt(2)/2, p.getY() - inc * Math.sqrt(2)/2);
                 break;
             case Northwest:
-                p.setLocation(p.getX() - 1, p.getY() - 1);
+                p.setLocation(p.getX() - inc * Math.sqrt(2)/2, p.getY() - inc * Math.sqrt(2)/2);
                 break;
             case South:
-                p.setLocation(p.getX(), p.getY() + 1);
+                p.setLocation(p.getX(), p.getY() + inc);
                 break;
             case Southeast:
-                p.setLocation(p.getX() + 1, p.getY() + 1);
+                p.setLocation(p.getX() + inc * Math.sqrt(2)/2, p.getY() + inc * Math.sqrt(2)/2);
                 break;
             case Southwest:
-                p.setLocation(p.getX() - 1, p.getY() + 1);
+                p.setLocation(p.getX() - inc * Math.sqrt(2)/2, p.getY() + inc * Math.sqrt(2)/2);
                 break;
             case West:
-                p.setLocation(p.getX() - 1, p.getY());
+                p.setLocation(p.getX() - inc, p.getY());
+                break;
+            default:
                 break;
         }
     }

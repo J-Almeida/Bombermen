@@ -37,4 +37,14 @@ public enum Key
 
     /** Key from KeyEvent associated with this enum. */
     private int _key;
+
+    /** Converts KeyEvent to this enum. */
+    public static Key ToEnum(int num)
+    {
+        for (Key v : Key.values())
+            if (v._key == num)
+                return v;
+
+        return null;
+    }
 }

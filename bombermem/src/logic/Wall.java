@@ -2,15 +2,17 @@ package logic;
 
 import java.awt.geom.Point2D;
 
+import logic.events.Event;
+
 public class Wall extends WorldObject
 {
-    boolean Undestroyable;
     int HitPoints;
-    
-    public Wall(int guid, Point2D pos)
+
+    public Wall(int guid, Point2D pos, int hitpoints)
     {
-        super(guid, pos);
-        // TODO Auto-generated constructor stub
+        super(WorldObjectType.Wall, guid, pos);
+
+        HitPoints = hitpoints;
     }
 
     @Override
@@ -23,6 +25,18 @@ public class Wall extends WorldObject
     @Override
     public boolean IsAlive()
     {
-        return Undestroyable || HitPoints > 0;
+        return IsUndestroyable() || HitPoints > 0;
+    }
+
+    public boolean IsUndestroyable()
+    {
+        return HitPoints == -1;
+    }
+
+    @Override
+    public void HandleEvent(GameState gs, WorldObject src, Event event)
+    {
+        // TODO Auto-generated method stub
+        
     }
 }

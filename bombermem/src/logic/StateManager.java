@@ -37,4 +37,9 @@ public class StateManager
     {
         return _currentState;
     }
+
+    public IState GetState(String string)
+    {
+        return _states.get(string);
+    }
 }

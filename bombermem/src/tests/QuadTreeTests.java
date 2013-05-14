@@ -6,7 +6,9 @@ import static org.hamcrest.CoreMatchers.*;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import logic.GameState;
 import logic.WorldObject;
+import logic.events.Event;
 import model.QuadTree;
 
 import org.junit.Test;
@@ -18,17 +20,12 @@ public class QuadTreeTests
     {
         public DummyWorldObject(int guid, Point pos)
         {
-            super(guid, pos);
+            super(null, guid, pos);
         }
 
-        @Override
-        public void Update(int diff) { }
-
-        @Override
-        public boolean IsAlive()
-        {
-            return true;
-        }
+        @Override public void Update(int diff) { }
+        @Override public boolean IsAlive() { return true; }
+        @Override public void HandleEvent(GameState gs, WorldObject src, Event event) { }
     }
 
     @Test

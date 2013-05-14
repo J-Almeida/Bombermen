@@ -3,6 +3,8 @@ package gui.swing;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +15,7 @@ import logic.IState;
 import logic.StateManager;
 
 @SuppressWarnings("serial")
-public class Client extends JPanel implements Runnable
+public class Client extends JPanel implements Runnable, KeyListener
 {   
     private static final int DEFAULT_HEIGHT = 600;
     private static final int DEFAULT_WIDTH = 800;
@@ -41,13 +43,15 @@ public class Client extends JPanel implements Runnable
         
         Client c = new Client();
         frame.add(c);
+        
+        //c._stateManager.
+        frame.addKeyListener(c);
 
         //frame.pack();
         frame.setVisible(true);
         
         new Thread(c).start();
     }
-    
     
     @Override
     public void paintComponent(Graphics g)
@@ -62,8 +66,8 @@ public class Client extends JPanel implements Runnable
     {
         _stateManager = new StateManager();
         _states = new HashMap<String, IDraw>();
-        
-        AddState("game", new GameState());
+
+        AddState("game", new SwingGameState());
 
         _stateManager.ChangeState("game");
     }
@@ -76,6 +80,32 @@ public class Client extends JPanel implements Runnable
         {
             _stateManager.Update(10);
             repaint();
+            try
+            {
+                Thread.sleep(20);
+            } catch (InterruptedException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e)
+    {
+        _stateManager.GetState("game").keyTyped(e);
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e)
+    {
+        _stateManager.GetState("game").keyPressed(e);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e)
+    {
+        _stateManager.GetState("game").keyReleased(e);
     }
 }

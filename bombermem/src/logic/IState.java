@@ -1,9 +1,11 @@
 package logic;
 
+import java.awt.event.KeyListener;
+
 /**
  * Abstract class that defines an application state
  */
-public interface IState
+public interface IState extends KeyListener
 {
     /** Initialization of some variables */
     void Initialize();
