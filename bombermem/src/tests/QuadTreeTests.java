@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 
 import logic.GameState;
 import logic.WorldObject;
@@ -26,6 +27,10 @@ public class QuadTreeTests
         @Override public void Update(int diff) { }
         @Override public boolean IsAlive() { return true; }
         @Override public void HandleEvent(GameState gs, WorldObject src, Event event) { }
+        @Override public Rectangle2D GetBoundingBox()
+        {
+            return new Rectangle2D.Double(Position.getX(), Position.getY(), 1, 1);
+        }
     }
 
     @Test

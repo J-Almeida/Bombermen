@@ -2,6 +2,7 @@ package gui.swing;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 import logic.PowerUp;
 
@@ -19,6 +20,13 @@ public class SwingPowerUp extends PowerUp implements IDraw
     {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public Rectangle2D GetBoundingBox()
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

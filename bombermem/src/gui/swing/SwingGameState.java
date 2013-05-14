@@ -26,7 +26,18 @@ public class SwingGameState extends GameState implements IDraw, KeyListener
         _objectBuilder = new SwingWorldObjectBuilder();
         _objectBuilder.SetGameState(this);
         
-        _objectBuilder.CreatePlayer("test", new Point2D.Double(50, 50));
+        _objectBuilder.CreatePlayer("test", new Point2D.Double(56, 60));
+
+        for (int x = 0; x < 50; ++x)
+        {
+            for (int y = 0; y < 50; ++y)
+            {
+                if (x == 0 || x == 47 || y == 0 || y == 47)
+                    _objectBuilder.CreateWall(-1, new Point2D.Double(x * SwingWall.SIZE  + SwingWall.SIZE / 2, y * SwingWall.SIZE  + SwingWall.SIZE / 2));
+                else if (x % 2 == 0 && y % 2 == 0)
+                    _objectBuilder.CreateWall(1, new Point2D.Double(x * SwingWall.SIZE  + SwingWall.SIZE / 2, y * SwingWall.SIZE  + SwingWall.SIZE / 2));
+            }
+        }
     }
     
     @Override

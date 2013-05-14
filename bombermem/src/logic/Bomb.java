@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 
 import logic.events.Event;
 
-public class Bomb extends WorldObject
+public abstract class Bomb extends WorldObject
 {
     public Bomb(int guid, Point2D position, int playerOwnerId, int radius, int strength, int time)
     {
@@ -14,6 +14,9 @@ public class Bomb extends WorldObject
         Strength = strength;
         Time = time;
         PlayerOwnerId = playerOwnerId;
+        
+        _timer = Time * 1000;
+        _shouldExplode = false;
     }
 
     public int Radius; // Number of cells in each direction
@@ -21,11 +24,19 @@ public class Bomb extends WorldObject
     public int Time; // Time to explode
     public int PlayerOwnerId; // Player who planted the bomb
 
+    private int _timer;
+    protected boolean _shouldExplode;
+    
     @Override
     public void Update(int diff)
     {
-        // TODO Auto-generated method stub
-        
+        _timer -= diff;
+
+        if (_timer <= 0)
+        {
+            _shouldExplode = true;
+            _timer = -1;
+        }
     }
 
     @Override

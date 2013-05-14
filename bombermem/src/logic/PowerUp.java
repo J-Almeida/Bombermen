@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 
 import logic.events.Event;
 
-public class PowerUp extends WorldObject
+public abstract class PowerUp extends WorldObject
 {
     public PowerUp(int guid, Point2D pos)
     {

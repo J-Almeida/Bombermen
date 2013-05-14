@@ -30,7 +30,10 @@ public class SwingWorldObjectBuilder implements IWorldObjectBuilder
     @Override
     public Bomb CreateBomb(WorldObject creator, int radius, int strength, int timer)
     {
-        SwingBomb bomb = new SwingBomb(_lastId++, (Point2D) creator.Position.clone(), creator.Guid, radius, strength, timer);
+        Point2D p = new Point2D.Double(Math.floor(creator.Position.getX() / 40.0) * 40 + 20,
+                                       Math.floor(creator.Position.getY() / 40.0) * 40 + 20);
+
+        SwingBomb bomb = new SwingBomb(_lastId++, p, creator.Guid, radius, strength, timer);
 
         if (_gameState != null)
             _gameState.AddEntity(bomb);

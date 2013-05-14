@@ -1,6 +1,8 @@
 package logic;
 
 import java.awt.Rectangle;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,14 +50,25 @@ public abstract class GameState implements IState
         PushEvent(_entities.get(_currentPlayerId), null, new RequestMovementEvent(direction));
     }
     
-    public boolean CollidesWall(Rectangle rect)
+    public boolean CollidesWall(Rectangle2D rect)
     {
         List<WorldObject> objs = _quadTree.QueryRange(rect);
 
         for (WorldObject obj : objs)
-            if (obj.Type == WorldObjectType.Wall)
+            if (obj.Type == WorldObjectType.Wall || obj.Type == WorldObjectType.Bomb)
                 return true;
-        
+
+        return false;
+    }
+    
+    public boolean CollidesBomb(Point2D point)
+    {
+        List<WorldObject> objs = _quadTree.QueryRange(point);
+
+        for (WorldObject obj : objs)
+            if (obj.Type == WorldObjectType.Bomb)
+                return true;
+
         return false;
     }
 

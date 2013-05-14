@@ -1,6 +1,7 @@
 package logic;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 import logic.events.Event;
 
@@ -29,4 +30,6 @@ public abstract class WorldObject
     public abstract void Update(int diff);
 
     public abstract void HandleEvent(GameState gs, WorldObject src, Event event);
+    
+    public abstract Rectangle2D GetBoundingBox();
 }

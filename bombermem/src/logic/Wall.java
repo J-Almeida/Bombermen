@@ -4,9 +4,9 @@ import java.awt.geom.Point2D;
 
 import logic.events.Event;
 
-public class Wall extends WorldObject
+public abstract class Wall extends WorldObject
 {
-    int HitPoints;
+    public int HitPoints;
 
     public Wall(int guid, Point2D pos, int hitpoints)
     {

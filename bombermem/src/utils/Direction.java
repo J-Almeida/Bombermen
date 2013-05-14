@@ -52,7 +52,7 @@ public enum Direction
         if (d == null || d == Direction.None)
             return;
         
-        System.out.println("p: " + p + " d: " + d + "inc: " + inc);
+        // System.out.println("p: " + p + " d: " + d + "inc: " + inc);
         
         switch (d)
         {
@@ -82,6 +82,33 @@ public enum Direction
                 break;
             default:
                 break;
+        }
+    }
+    
+    public static Direction InverseDirection(Direction d)
+    {
+        switch (d)
+        {
+            case East:
+                return West;
+            case None:
+                return None;
+            case North:
+                return South;
+            case Northeast:
+                return Southwest;
+            case Northwest:
+                return Southeast;
+            case South:
+                return North;
+            case Southeast:
+                return Northwest;
+            case Southwest:
+                return Northeast;
+            case West:
+                return East;
+            default:
+                return null;
         }
     }
 }

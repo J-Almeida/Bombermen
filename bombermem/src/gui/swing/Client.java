@@ -53,10 +53,12 @@ public class Client extends JPanel implements Runnable, KeyListener
         new Thread(c).start();
     }
     
+    private static final Color BACKGROUND_COLOR = new Color(16, 120,48); // dark green
+    
     @Override
     public void paintComponent(Graphics g)
     {
-        g.setColor(Color.WHITE);
+        g.setColor(BACKGROUND_COLOR);
         g.fillRect(0, 0, getWidth(), getHeight());
 
         _states.get(_stateManager.GetCurrentState()).Draw((Graphics2D)g);
@@ -76,18 +78,23 @@ public class Client extends JPanel implements Runnable, KeyListener
     public void run()
     {
         boolean done = false;
+        long millis = System.currentTimeMillis();
         while (!done)
         {
-            _stateManager.Update(10);
+            int dt = (int) (System.currentTimeMillis() - millis);
+            millis = System.currentTimeMillis();
+            _stateManager.Update(dt);
+
             repaint();
             try
             {
                 Thread.sleep(20);
-            } catch (InterruptedException e)
+            }
+            catch (InterruptedException e)
             {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-            }
+            } 
         }
     }
 

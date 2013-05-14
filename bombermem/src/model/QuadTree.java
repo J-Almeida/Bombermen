@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import logic.WorldObject;
@@ -77,7 +78,7 @@ public class QuadTree
             return inRange;
         
         for (WorldObject obj : Entities.values())
-            if (range.contains(obj.Position))
+            if (range.intersects(obj.GetBoundingBox()))
                 inRange.add(obj);
         
         if (IsLeaf())
@@ -85,6 +86,26 @@ public class QuadTree
         
         for (int i = 0; i < NODE_COUNT; ++i)
             inRange.addAll(Nodes[i].QueryRange(range));
+
+        return inRange;
+    }
+    
+    public List<WorldObject> QueryRange(Point2D point)
+    {
+        List<WorldObject> inRange = new ArrayList<WorldObject>();
+        
+        if (!Boundary.contains(point))
+            return inRange;
+        
+        for (WorldObject obj : Entities.values())
+            if (obj.GetBoundingBox().contains(point))
+                inRange.add(obj);
+        
+        if (IsLeaf())
+            return inRange;
+        
+        for (int i = 0; i < NODE_COUNT; ++i)
+            inRange.addAll(Nodes[i].QueryRange(point));
 
         return inRange;
     }

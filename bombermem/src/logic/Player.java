@@ -1,14 +1,16 @@
 package logic;
 
-import java.awt.Rectangle;
+import gui.swing.SwingPlayer;
+
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 import logic.events.Event;
 import logic.events.MovementEvent;
 import logic.events.RequestMovementEvent;
 import logic.events.SpawnEvent;
 
-public class Player extends WorldObject
+public abstract class Player extends WorldObject
 {
     protected int currentTile = 0;
     
@@ -47,16 +49,14 @@ public class Player extends WorldObject
                 utils.Direction.ApplyMovement(newPos, rmv.Direction, 1.5);
 
                 Direction = rmv.Direction;
-                
-                // private final static int SIZE_WIDTH = 360/20; 18
-                // private final static int SIZE_HEIGHT = 26;
 
-                if (!gs.CollidesWall(new Rectangle((int)(Position.getX() - 18 / 2), (int)(Position.getY() - 26 / 2), 18, 26)));
+                Rectangle2D bb = new Rectangle2D.Double(newPos.getX() - SwingPlayer.SIZE_WIDTH / 2, newPos.getY() - SwingPlayer.SIZE_HEIGHT / 2, SwingPlayer.SIZE_WIDTH, SwingPlayer.SIZE_HEIGHT);
+                if (!gs.CollidesWall(bb) || gs.CollidesBomb(Position))
                 {
-                    Position.setLocation(newPos);
-                    gs.ForwardEvent(this, new MovementEvent(rmv.Direction));
+                        Position.setLocation(newPos);
+                        gs.ForwardEvent(this, new MovementEvent(rmv.Direction));
                 }
-                
+
                 break;
             }
                 
