@@ -69,7 +69,7 @@ public class Client extends JPanel implements Runnable, KeyListener
         _stateManager = new StateManager();
         _states = new HashMap<String, IDraw>();
 
-        AddState("game", new SwingGameState());
+        AddState("game", SwingGameState.GetInstance());
 
         _stateManager.ChangeState("game");
     }

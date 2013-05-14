@@ -51,15 +51,14 @@ public abstract class Player extends WorldObject
                 Direction = rmv.Direction;
 
                 Rectangle2D bb = new Rectangle2D.Double(newPos.getX() - SwingPlayer.SIZE_WIDTH / 2, newPos.getY() - SwingPlayer.SIZE_HEIGHT / 2, SwingPlayer.SIZE_WIDTH, SwingPlayer.SIZE_HEIGHT);
-                if (!gs.CollidesWall(bb) || gs.CollidesBomb(Position))
+                if (!gs.CollidesWall(bb))
                 {
-                        Position.setLocation(newPos);
-                        gs.ForwardEvent(this, new MovementEvent(rmv.Direction));
+                    Position.setLocation(newPos);
+                    gs.ForwardEvent(this, new MovementEvent(rmv.Direction));
                 }
 
                 break;
             }
-                
             case Spawn:
             {
                 SpawnEvent se = event.ToSpawnEvent();

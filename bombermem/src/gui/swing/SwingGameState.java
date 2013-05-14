@@ -17,8 +17,16 @@ import logic.GameState;
 public class SwingGameState extends GameState implements IDraw, KeyListener
 {
     Map<Integer, IDraw> _drawableEntities;
+    
+    private static SwingGameState _instance;
+    public static SwingGameState GetInstance()
+    {
+        if (_instance == null)
+            _instance = new SwingGameState();
+        return _instance;
+    }
 
-    public SwingGameState()
+    private SwingGameState()
     {
         _drawableEntities = new HashMap<Integer, IDraw>();
         _entities = new HashMap<Integer, WorldObject>();

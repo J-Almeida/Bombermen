@@ -41,6 +41,10 @@ public class SwingBomb extends Bomb implements IDraw
         else
         {
             strength = (strength + 1) % 5;
+            boolean drawEast = true;
+            boolean drawWest = true;
+            boolean drawNorth = true;
+            boolean drawSouth = true;
         
             // center
             g.drawImage(_explosionTile.GetTile(2, strength), (int)(x - EXPLOSION_SIZE / 2), (int)(y - EXPLOSION_SIZE / 2), EXPLOSION_SIZE, EXPLOSION_SIZE, null); // middle
@@ -48,17 +52,43 @@ public class SwingBomb extends Bomb implements IDraw
             // body
             for (int i = 1; i < Radius; ++i)
             {
-                g.drawImage(_explosionTile.GetTile(1, strength), (int)((x - EXPLOSION_SIZE / 2) - (i * EXPLOSION_SIZE)), (int)((y - EXPLOSION_SIZE / 2)), EXPLOSION_SIZE, EXPLOSION_SIZE, null); // west
-                g.drawImage(_explosionTile.GetTile(4, strength), (int)((x - EXPLOSION_SIZE / 2) + (i * EXPLOSION_SIZE)), (int)((y - EXPLOSION_SIZE / 2)), EXPLOSION_SIZE, EXPLOSION_SIZE, null); // east
-                g.drawImage(_explosionTile.GetTile(6, strength), (int)((x - EXPLOSION_SIZE / 2)), (int)((y - EXPLOSION_SIZE / 2) - (i * EXPLOSION_SIZE)), EXPLOSION_SIZE, EXPLOSION_SIZE, null); // north
-                g.drawImage(_explosionTile.GetTile(8, strength), (int)((x - EXPLOSION_SIZE / 2)), (int)((y - EXPLOSION_SIZE / 2) + (i * EXPLOSION_SIZE)), EXPLOSION_SIZE, EXPLOSION_SIZE, null); // south 
+                Rectangle2D westBB = new Rectangle2D.Double((x - EXPLOSION_SIZE / 2) - (i * EXPLOSION_SIZE), (y - EXPLOSION_SIZE / 2), EXPLOSION_SIZE, EXPLOSION_SIZE);
+                Rectangle2D eastBB = new Rectangle2D.Double((x - EXPLOSION_SIZE / 2) + (i * EXPLOSION_SIZE), (y - EXPLOSION_SIZE / 2), EXPLOSION_SIZE, EXPLOSION_SIZE);
+                Rectangle2D northBB = new Rectangle2D.Double((x - EXPLOSION_SIZE / 2), (y - EXPLOSION_SIZE / 2) - (i * EXPLOSION_SIZE), EXPLOSION_SIZE, EXPLOSION_SIZE);
+                Rectangle2D southBB = new Rectangle2D.Double((x - EXPLOSION_SIZE / 2), (y - EXPLOSION_SIZE / 2) + (i * EXPLOSION_SIZE), EXPLOSION_SIZE, EXPLOSION_SIZE);
+                
+                if (!SwingGameState.GetInstance().CollidesWall(westBB))
+                    g.drawImage(_explosionTile.GetTile(1, strength), (int)westBB.getX(), (int)westBB.getY(), (int)westBB.getWidth(), (int)westBB.getHeight(), null); // west
+                else
+                    drawWest = false;
+                if (!SwingGameState.GetInstance().CollidesWall(eastBB))
+                    g.drawImage(_explosionTile.GetTile(4, strength), (int)eastBB.getX(), (int)eastBB.getY(), (int)eastBB.getWidth(), (int)eastBB.getHeight(), null); // east
+                else
+                    drawEast = false;
+                if (!SwingGameState.GetInstance().CollidesWall(northBB))
+                    g.drawImage(_explosionTile.GetTile(6, strength), (int)northBB.getX(), (int)northBB.getY(), (int)northBB.getWidth(), (int)northBB.getHeight(), null); // north
+                else
+                    drawNorth = false;
+                if (!SwingGameState.GetInstance().CollidesWall(southBB))
+                    g.drawImage(_explosionTile.GetTile(8, strength), (int)southBB.getX(), (int)southBB.getY(), (int)southBB.getWidth(), (int)southBB.getHeight(), null); // south 
+                else
+                    drawSouth = false;
             }
             
             // tip
-            g.drawImage(_explosionTile.GetTile(0, strength), (int)((x - EXPLOSION_SIZE / 2) - (Radius * EXPLOSION_SIZE)), (int)((y - EXPLOSION_SIZE / 2)), EXPLOSION_SIZE, EXPLOSION_SIZE, null); // west
-            g.drawImage(_explosionTile.GetTile(3, strength), (int)((x - EXPLOSION_SIZE / 2) + (Radius * EXPLOSION_SIZE)), (int)((y - EXPLOSION_SIZE / 2)), EXPLOSION_SIZE, EXPLOSION_SIZE, null); // east
-            g.drawImage(_explosionTile.GetTile(5, strength), (int)((x - EXPLOSION_SIZE / 2)), (int)((y - EXPLOSION_SIZE / 2) - (Radius * EXPLOSION_SIZE)), EXPLOSION_SIZE, EXPLOSION_SIZE, null); // north
-            g.drawImage(_explosionTile.GetTile(7, strength), (int)((x - EXPLOSION_SIZE / 2)), (int)((y - EXPLOSION_SIZE / 2) + (Radius * EXPLOSION_SIZE)), EXPLOSION_SIZE, EXPLOSION_SIZE, null); // south 
+            Rectangle2D westBB = new Rectangle2D.Double((x - EXPLOSION_SIZE / 2) - (Radius * EXPLOSION_SIZE), (y - EXPLOSION_SIZE / 2), EXPLOSION_SIZE, EXPLOSION_SIZE);
+            Rectangle2D eastBB = new Rectangle2D.Double((x - EXPLOSION_SIZE / 2) + (Radius * EXPLOSION_SIZE), (y - EXPLOSION_SIZE / 2), EXPLOSION_SIZE, EXPLOSION_SIZE);
+            Rectangle2D northBB = new Rectangle2D.Double((x - EXPLOSION_SIZE / 2), (y - EXPLOSION_SIZE / 2) - (Radius * EXPLOSION_SIZE), EXPLOSION_SIZE, EXPLOSION_SIZE);
+            Rectangle2D southBB = new Rectangle2D.Double((x - EXPLOSION_SIZE / 2), (y - EXPLOSION_SIZE / 2) + (Radius * EXPLOSION_SIZE), EXPLOSION_SIZE, EXPLOSION_SIZE);
+
+            if (drawWest && !SwingGameState.GetInstance().CollidesWall(westBB))
+                g.drawImage(_explosionTile.GetTile(0, strength), (int)westBB.getX(), (int)westBB.getY(), (int)westBB.getWidth(), (int)westBB.getHeight(), null); // west
+            if (drawEast && !SwingGameState.GetInstance().CollidesWall(eastBB))
+                g.drawImage(_explosionTile.GetTile(3, strength), (int)eastBB.getX(), (int)eastBB.getY(), (int)eastBB.getWidth(), (int)eastBB.getHeight(), null); // east
+            if (drawNorth && !SwingGameState.GetInstance().CollidesWall(northBB))
+                g.drawImage(_explosionTile.GetTile(5, strength), (int)northBB.getX(), (int)northBB.getY(), (int)northBB.getWidth(), (int)northBB.getHeight(), null); // north
+            if (drawSouth && !SwingGameState.GetInstance().CollidesWall(southBB))
+                g.drawImage(_explosionTile.GetTile(7, strength), (int)southBB.getX(), (int)southBB.getY(), (int)southBB.getWidth(), (int)southBB.getHeight(), null); // south 
             //_shouldExplode = false;
         }
     }
