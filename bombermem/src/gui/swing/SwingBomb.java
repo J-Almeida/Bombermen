@@ -56,20 +56,20 @@ public class SwingBomb extends Bomb implements IDraw
                 Rectangle2D eastBB = new Rectangle2D.Double((x - EXPLOSION_SIZE / 2) + (i * EXPLOSION_SIZE), (y - EXPLOSION_SIZE / 2), EXPLOSION_SIZE, EXPLOSION_SIZE);
                 Rectangle2D northBB = new Rectangle2D.Double((x - EXPLOSION_SIZE / 2), (y - EXPLOSION_SIZE / 2) - (i * EXPLOSION_SIZE), EXPLOSION_SIZE, EXPLOSION_SIZE);
                 Rectangle2D southBB = new Rectangle2D.Double((x - EXPLOSION_SIZE / 2), (y - EXPLOSION_SIZE / 2) + (i * EXPLOSION_SIZE), EXPLOSION_SIZE, EXPLOSION_SIZE);
-                
-                if (!SwingGameState.GetInstance().CollidesWall(westBB))
+
+                if (drawWest && !SwingGameState.GetInstance().CollidesWall(westBB))
                     g.drawImage(_explosionTile.GetTile(1, strength), (int)westBB.getX(), (int)westBB.getY(), (int)westBB.getWidth(), (int)westBB.getHeight(), null); // west
                 else
                     drawWest = false;
-                if (!SwingGameState.GetInstance().CollidesWall(eastBB))
+                if (drawEast && !SwingGameState.GetInstance().CollidesWall(eastBB))
                     g.drawImage(_explosionTile.GetTile(4, strength), (int)eastBB.getX(), (int)eastBB.getY(), (int)eastBB.getWidth(), (int)eastBB.getHeight(), null); // east
                 else
                     drawEast = false;
-                if (!SwingGameState.GetInstance().CollidesWall(northBB))
+                if (drawNorth && !SwingGameState.GetInstance().CollidesWall(northBB))
                     g.drawImage(_explosionTile.GetTile(6, strength), (int)northBB.getX(), (int)northBB.getY(), (int)northBB.getWidth(), (int)northBB.getHeight(), null); // north
                 else
                     drawNorth = false;
-                if (!SwingGameState.GetInstance().CollidesWall(southBB))
+                if (drawSouth && !SwingGameState.GetInstance().CollidesWall(southBB))
                     g.drawImage(_explosionTile.GetTile(8, strength), (int)southBB.getX(), (int)southBB.getY(), (int)southBB.getWidth(), (int)southBB.getHeight(), null); // south 
                 else
                     drawSouth = false;
