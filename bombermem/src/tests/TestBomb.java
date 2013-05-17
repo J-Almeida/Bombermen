@@ -1,5 +1,7 @@
 package tests;
 
+import gui.swing.SwingBomb;
+
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -15,7 +17,7 @@ public class TestBomb extends Bomb {
 	@Override
 	public Rectangle2D GetBoundingBox() {
 		// TODO Auto-generated method stub
-		return null;
+		return new Rectangle2D.Double(Position.getX() - SwingBomb.BOMB_SIZE_WIDTH / 2, Position.getY() - SwingBomb.BOMB_SIZE_HEIGHT / 2, SwingBomb.BOMB_SIZE_WIDTH, SwingBomb.BOMB_SIZE_HEIGHT);
 	}
 
 }
