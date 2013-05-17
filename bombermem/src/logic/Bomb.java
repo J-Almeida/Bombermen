@@ -45,7 +45,12 @@ public abstract class Bomb extends WorldObject
         // TODO Auto-generated method stub
         return false;
     }
-
+    
+    public boolean ShouldExplode()
+    {
+    	return _shouldExplode;
+    }
+    
     @Override
     public void HandleEvent(GameState gs, WorldObject src, Event event)
     {
