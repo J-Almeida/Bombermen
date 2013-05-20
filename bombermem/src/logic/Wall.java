@@ -1,14 +1,15 @@
 package logic;
 
-import java.awt.geom.Point2D;
+import java.awt.Point;
 
 import logic.events.Event;
+import logic.events.ExplodeEvent;
 
 public abstract class Wall extends WorldObject
 {
     public int HitPoints;
 
-    public Wall(int guid, Point2D pos, int hitpoints)
+    public Wall(int guid, Point pos, int hitpoints)
     {
         super(WorldObjectType.Wall, guid, pos);
 
@@ -16,10 +17,10 @@ public abstract class Wall extends WorldObject
     }
 
     @Override
-    public void Update(int diff)
+    public void Update(GameState gs, int diff)
     {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -36,7 +37,19 @@ public abstract class Wall extends WorldObject
     @Override
     public void HandleEvent(GameState gs, WorldObject src, Event event)
     {
-        // TODO Auto-generated method stub
-        
+        if (event.IsExplodeEvent())
+        {
+            ExplodeEvent ev = event.ToExplodeEvent();
+            
+            if (!IsUndestroyable())
+            {
+                int dmg = ev.Bomb.Strength;
+
+                if (dmg > HitPoints)
+                    HitPoints = 0;
+                else
+                    HitPoints -= dmg;
+            }
+        }
     }
 }

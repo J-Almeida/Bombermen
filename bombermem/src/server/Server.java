@@ -13,7 +13,7 @@ public class Server
         final ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
 
         final Vector<Session> _sessions = new Vector<Session>();
-        
+
         new Thread(new Runnable()
         {
             @Override
@@ -33,7 +33,7 @@ public class Server
                     }
 
                     _sessions.add(session);
-                    
+
                     Thread thread = new Thread(session);
                     thread.start();
                 }
@@ -49,7 +49,7 @@ public class Server
             {
                 s.Update(dt);
             }
-            
+
             millis -= dt;
         }
 

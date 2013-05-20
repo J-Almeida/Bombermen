@@ -21,7 +21,7 @@ public enum Key
 
     /** Space bar (space). */
     SPACE(KeyEvent.VK_SPACE),
-    
+
     /** Escape (esc). */
     ESC(KeyEvent.VK_ESCAPE);
 
@@ -31,7 +31,7 @@ public enum Key
      * @param defaultKey key associated with this enum.
      */
     Key(int defaultKey) { _key = defaultKey; }
-    
+
     /** Get key associated with this enum. */
     int GetKey() { return _key; }
 

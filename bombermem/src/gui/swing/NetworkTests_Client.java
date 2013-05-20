@@ -16,7 +16,7 @@ public class NetworkTests_Client
         Socket socket = null;
         PrintWriter out = null;
         BufferedReader in = null;
-        
+
         try
         {
             socket = new Socket(SERVER_HOST, server.Server.SERVER_PORT);
@@ -35,11 +35,11 @@ public class NetworkTests_Client
             //e.printStackTrace();
             System.exit(1);
         }
-        
+
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
         String fromServer;
         String fromUser;
- 
+
         while((fromServer = in.readLine()) != null)
         {
             System.out.println("Server: " + fromServer);
@@ -53,7 +53,7 @@ public class NetworkTests_Client
                 out.println(fromUser);
             }
         }
- 
+
         out.close();
         in.close();
         stdIn.close();

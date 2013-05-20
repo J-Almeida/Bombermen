@@ -37,20 +37,20 @@ public class MainMenuState implements IState
     public void keyTyped(KeyEvent e)
     {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void keyPressed(KeyEvent e)
     {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void keyReleased(KeyEvent e)
     {
         // TODO Auto-generated method stub
-        
+
     }
 }

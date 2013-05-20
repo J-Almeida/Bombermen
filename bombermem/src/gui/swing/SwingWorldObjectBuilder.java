@@ -1,6 +1,6 @@
 package gui.swing;
 
-import java.awt.geom.Point2D;
+import java.awt.Point;
 
 import logic.Bomb;
 import logic.GameState;
@@ -14,7 +14,7 @@ public class SwingWorldObjectBuilder implements IWorldObjectBuilder
 {
     private int _lastId;
     private SwingGameState _gameState;
-    
+
     public SwingWorldObjectBuilder()
     {
         _lastId = 0;
@@ -30,8 +30,7 @@ public class SwingWorldObjectBuilder implements IWorldObjectBuilder
     @Override
     public Bomb CreateBomb(WorldObject creator, int radius, int strength, int timer)
     {
-        Point2D p = new Point2D.Double(Math.floor(creator.Position.getX() / 40.0) * 40 + 20,
-                                       Math.floor(creator.Position.getY() / 40.0) * 40 + 20);
+        Point p = new Point(creator.Position.x, creator.Position.y);
 
         SwingBomb bomb = new SwingBomb(_lastId++, p, creator.Guid, radius, strength, timer);
 
@@ -42,35 +41,35 @@ public class SwingWorldObjectBuilder implements IWorldObjectBuilder
     }
 
     @Override
-    public Player CreatePlayer(String name, Point2D position)
+    public Player CreatePlayer(String name, Point position)
     {
         SwingPlayer player = new SwingPlayer(_lastId++, position, name);
-        
+
         if (_gameState != null)
             _gameState.AddEntity(player);
-        
+
         return player;
     }
 
     @Override
-    public Wall CreateWall(int hitpoints, Point2D position)
+    public Wall CreateWall(int hitpoints, Point position)
     {
         SwingWall wall = new SwingWall(_lastId++, position, hitpoints);
-        
+
         if (_gameState != null)
             _gameState.AddEntity(wall);
-        
+
         return wall;
     }
 
     @Override
-    public PowerUp CreatePowerUp(Point2D position)
+    public PowerUp CreatePowerUp(Point position)
     {
         SwingPowerUp powerup = new SwingPowerUp(_lastId++, position);
-        
+
         if (_gameState != null)
             _gameState.AddEntity(powerup);
-        
+
         return powerup;
     }
 }

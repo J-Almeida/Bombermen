@@ -1,22 +1,22 @@
 package logic;
 
-import java.awt.geom.Point2D;
+import java.awt.Point;
 
 import logic.events.Event;
 
 public abstract class PowerUp extends WorldObject
 {
-    public PowerUp(int guid, Point2D pos)
+    public PowerUp(int guid, Point pos)
     {
         super(WorldObjectType.PowerUp, guid, pos);
         // TODO Auto-generated constructor stub
     }
 
     @Override
-    public void Update(int diff)
+    public void Update(GameState gs, int diff)
     {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -30,6 +30,6 @@ public abstract class PowerUp extends WorldObject
     public void HandleEvent(GameState gs, WorldObject src, Event event)
     {
         // TODO Auto-generated method stub
-        
+
     }
 }

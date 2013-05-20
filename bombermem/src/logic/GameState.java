@@ -1,7 +1,8 @@
 package logic;
 
+import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,20 +20,18 @@ import model.QuadTree;
 
 public abstract class GameState implements IState
 {
-    protected Map<Integer, WorldObject> _entities;
-    protected Map<Key, Boolean> _pressedKeys;
+    protected Map<Integer, WorldObject> _entities = new HashMap<Integer, WorldObject>();
+    protected Map<Key, Boolean> _pressedKeys = new HashMap<Key, Boolean>();
     protected QuadTree _quadTree;
     protected int _currentPlayerId = 0;
     protected IWorldObjectBuilder _objectBuilder;
-    protected Queue<UnitEventEntry> _eventQueue;
+    protected Queue<UnitEventEntry> _eventQueue = new LinkedList<UnitEventEntry>();
 
     @Override
     public void Initialize()
     {
-        _quadTree = new QuadTree(new Rectangle(0, 0, 800, 600));
-        _eventQueue = new LinkedList<UnitEventEntry>();
-        
-        _pressedKeys = new HashMap<Key, Boolean>();
+        _quadTree = new QuadTree(new Rectangle(0, 0, 50, 50));
+
         for (Key k : Key.values())
             _pressedKeys.put(k, false);
     }
@@ -43,21 +42,28 @@ public abstract class GameState implements IState
         // TODO Auto-generated method stub
 
     }
-    
-    public void MoveHero(Direction direction)
+
+    public void MovePlayer(Direction direction)
     {
         PushEvent(_entities.get(_currentPlayerId), null, new RequestMovementEvent(direction));
     }
     
-    public boolean CollidesWall(Rectangle2D rect)
+    public class WallCollision
     {
-        List<WorldObject> objs = _quadTree.QueryRange(rect);
+        WallCollision(boolean coll, Wall wall) { Collision = coll; Wall = wall; }
+        boolean Collision;
+        Wall Wall;
+    }
+
+    public WallCollision CollidesWall(Point p)
+    {
+        List<WorldObject> objs = _quadTree.QueryRange(p);
 
         for (WorldObject obj : objs)
             if (obj.Type == WorldObjectType.Wall)
-                return true;
+                return new WallCollision(true, (Wall)obj);
 
-        return false;
+        return new WallCollision(false, null);
     }
 
     @Override
@@ -67,7 +73,7 @@ public abstract class GameState implements IState
         {
             if (!pair.getValue())
                 continue;
-            
+
             switch (pair.getKey())
             {
             case ESC:
@@ -78,7 +84,8 @@ public abstract class GameState implements IState
             case UP:
                 Direction d = Direction.FromKey(pair.getKey());
                 if (d != null)
-                    PushEvent(_entities.get(_currentPlayerId), null, new RequestMovementEvent(d));
+                    MovePlayer(d);
+                pair.setValue(false);
                 break;
             case SPACE:
                 PushEvent(_entities.get(_currentPlayerId), null, new SpawnEvent(WorldObjectType.Bomb));
@@ -88,17 +95,31 @@ public abstract class GameState implements IState
                 break;
             }
         }
-
-        _quadTree.Clear();
-        for (WorldObject wo : _entities.values())
-        {
-            wo.Update(diff);
-            _quadTree.Insert(wo);
-        }
         
         // handle events
         while (!_eventQueue.isEmpty())
             _eventQueue.poll().HandleEvent(this);
+
+        synchronized (_quadTree)
+        {
+            // update objects & build quadtree
+            _quadTree.Clear();
+            for (WorldObject wo : _entities.values())
+            {
+                wo.Update(this, diff);
+                _quadTree.Insert(wo);
+            }
+        }
+
+        ArrayList<Integer> toRemove = new ArrayList<Integer>();
+        for (WorldObject wo : _entities.values())
+        {
+            if (!wo.IsAlive())
+                toRemove.add(wo.Guid);
+        }
+        
+        for (Integer i : toRemove)
+            _entities.remove(i);
     }
 
     @Override
@@ -107,9 +128,9 @@ public abstract class GameState implements IState
         // TODO Auto-generated method stub
 
     }
-    
+
     public void PushEvent(WorldObject wo, WorldObject src, Event ev) { _eventQueue.add(new UnitEventEntry(wo, src, ev)); }
-    
+
     public void ForwardEvent(WorldObject src, Event ev)
     {
         for (WorldObject wo : _entities.values())
@@ -117,6 +138,6 @@ public abstract class GameState implements IState
     }
 
     public void AddEntity(WorldObject entity) { _entities.put(entity.Guid, entity); }
-    
+
     public IWorldObjectBuilder GetObjectBuilder() { return _objectBuilder; }
 }

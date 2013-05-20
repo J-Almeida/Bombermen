@@ -1,6 +1,6 @@
 package utils;
 
-import java.awt.geom.Point2D;
+import java.awt.Point;
 
 /**
  * Enum to define possible movement directions.
@@ -47,44 +47,46 @@ public enum Direction
      * @param d the direction to go
      * @param inc movement to apply
      */
-    public static void ApplyMovement(Point2D p, Direction d, double inc)
+    public static void ApplyMovement(Point p, Direction d, int inc)
     {
-        if (d == null || d == Direction.None)
+        if (p == null || d == null || d == Direction.None)
             return;
-        
-        // System.out.println("p: " + p + " d: " + d + "inc: " + inc);
-        
+
         switch (d)
         {
             case East:
-                p.setLocation(p.getX() + inc, p.getY());
+                p.x += inc;
                 break;
             case North:
-                p.setLocation(p.getX(), p.getY() - inc);
+                p.y -= inc;
                 break;
             case Northeast:
-                p.setLocation(p.getX() + inc * Math.sqrt(2)/2, p.getY() - inc * Math.sqrt(2)/2);
+                p.x += inc;
+                p.y -= inc;
                 break;
             case Northwest:
-                p.setLocation(p.getX() - inc * Math.sqrt(2)/2, p.getY() - inc * Math.sqrt(2)/2);
+                p.x -= inc;
+                p.y -= inc;
                 break;
             case South:
-                p.setLocation(p.getX(), p.getY() + inc);
+                p.y += inc;
                 break;
             case Southeast:
-                p.setLocation(p.getX() + inc * Math.sqrt(2)/2, p.getY() + inc * Math.sqrt(2)/2);
+                p.x += inc;
+                p.y += inc;
                 break;
             case Southwest:
-                p.setLocation(p.getX() - inc * Math.sqrt(2)/2, p.getY() + inc * Math.sqrt(2)/2);
+                p.x -= inc;
+                p.y += inc;
                 break;
             case West:
-                p.setLocation(p.getX() - inc, p.getY());
+                p.x -= inc;
                 break;
             default:
                 break;
         }
     }
-    
+
     public static Direction InverseDirection(Direction d)
     {
         switch (d)

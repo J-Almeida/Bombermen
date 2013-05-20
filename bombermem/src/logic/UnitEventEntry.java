@@ -35,7 +35,7 @@ public class UnitEventEntry
 
     /** The unit. */
     private final WorldObject _entity;
-    
+
     /** Unit who originated the event. */
     private final WorldObject _source;
 
