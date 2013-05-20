@@ -65,19 +65,14 @@ public class SwingGameState extends GameState implements IDraw, KeyListener
     public void Draw(Graphics2D g)
     {
         g.setColor(BACKGROUND_COLOR);
-        //System.out.println("fillRect: w: " + g.getClipBounds().width + " h: " + g.getClipBounds().height + ".");
         g.fillRect(0, 0, g.getClipBounds().width, g.getClipBounds().height);
 
         synchronized (_quadTree)
         {
             List<WorldObject> objs = _quadTree.QueryRange(new Rectangle(0, 0, 50, 50));
 
-            //System.out.println("Drawing " + objs.size() + " objects.");
-            
             for (WorldObject wo : objs)
-            {
                 ((IDraw)wo).Draw(g);
-            }
         }
     }
 

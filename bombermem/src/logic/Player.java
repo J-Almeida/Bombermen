@@ -23,7 +23,7 @@ public abstract class Player extends WorldObject
     @Override
     public void Update(GameState gs, int diff)
     {
-        
+
     }
 
     @Override
@@ -44,7 +44,7 @@ public abstract class Player extends WorldObject
                 Point newPos = (Point) Position.clone();
                 utils.Direction.ApplyMovement(newPos, rmv.Direction, 1);
 
-                Direction = rmv.Direction;
+                Dir = rmv.Direction;
 
                 if (!gs.CollidesWall(newPos).Collision)
                 {
@@ -58,7 +58,7 @@ public abstract class Player extends WorldObject
             {
                 SpawnEvent se = event.ToSpawnEvent();
                 if (se.Type == WorldObjectType.Bomb)
-                    gs.GetObjectBuilder().CreateBomb(this, 10, 1, 3);
+                    gs.GetObjectBuilder().CreateBomb(this, 3, 1, 3);
                 break;
             }
             default:

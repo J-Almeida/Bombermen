@@ -12,7 +12,7 @@ public abstract class WorldObject
 
     public final Point Position;
 
-    public Direction Direction;
+    public Direction Dir;
 
     public final WorldObjectType Type;
 
@@ -20,7 +20,7 @@ public abstract class WorldObject
     {
         Guid = guid;
         Position = position;
-        Direction = null;
+        Dir = null;
         Type = type;
     }
 

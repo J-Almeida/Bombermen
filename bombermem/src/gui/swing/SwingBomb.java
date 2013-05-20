@@ -3,6 +3,8 @@ package gui.swing;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
+import utils.Direction;
+
 import logic.Bomb;
 
 public class SwingBomb extends Bomb implements IDraw
@@ -36,7 +38,7 @@ public class SwingBomb extends Bomb implements IDraw
         if (!_shouldExplode)
         {
             int bombCol = 0;
-            
+
             if (_bombTimer % 1000.0 > (1000.0 / 5) * 4)
                 bombCol = 1;
             else if (_bombTimer % 1000.0 > (1000.0 / 5) * 5)
@@ -50,7 +52,8 @@ public class SwingBomb extends Bomb implements IDraw
 
             g.drawImage(_bombTile.GetTile(bombCol, 0), col * 20, row * 20, BOMB_SIZE_WIDTH, BOMB_SIZE_HEIGHT, null);
         }
-        else /* if (!_explosionEnded) */
+
+        if (_shouldExplode && !_explosionEnded)
         {
 
             int strength;
@@ -76,28 +79,18 @@ public class SwingBomb extends Bomb implements IDraw
             // center
             g.drawImage(_explosionTile.GetTile(2, strength), col * 20, row * 20, EXPLOSION_SIZE, EXPLOSION_SIZE, null); // middle
 
-            // body
-            for (int i = 1; i <= _westRadius; ++i)
-                g.drawImage(_explosionTile.GetTile(1, strength), (col - i) * 20, row * 20, EXPLOSION_SIZE, EXPLOSION_SIZE, null);
-            
-            for (int i = 1; i <= _eastRadius; ++i)
-                g.drawImage(_explosionTile.GetTile(4, strength), (col + i) * 20, row * 20, EXPLOSION_SIZE, EXPLOSION_SIZE, null);
-            
-            for (int i = 1; i <= _northRadius; ++i)
-                g.drawImage(_explosionTile.GetTile(6, strength), col * 20, (row  - i) * 20, EXPLOSION_SIZE, EXPLOSION_SIZE, null);
-            
-            for (int i = 1; i <= _southRadius; ++i)
-                g.drawImage(_explosionTile.GetTile(8, strength), col * 20, (row + i) * 20, EXPLOSION_SIZE, EXPLOSION_SIZE, null);
+            // body & tip
+            for (int i = 1; i <= _radius[Direction.West.Index]; ++i)
+                g.drawImage(_explosionTile.GetTile(i == _radius[Direction.West.Index] ? 0 : 1, strength), (col - i) * 20, row * 20, EXPLOSION_SIZE, EXPLOSION_SIZE, null);
 
-            // tip
-            if (_westTip)
-                g.drawImage(_explosionTile.GetTile(0, strength), (col - Radius) * 20, row * 20, EXPLOSION_SIZE, EXPLOSION_SIZE, null);
-            if (_eastTip)
-                g.drawImage(_explosionTile.GetTile(3, strength), (col + Radius) * 20, row * 20, EXPLOSION_SIZE, EXPLOSION_SIZE, null);
-            if (_northTip)
-                g.drawImage(_explosionTile.GetTile(5, strength), col * 20, (row - Radius) * 20, EXPLOSION_SIZE, EXPLOSION_SIZE, null);
-            if (_southTip)
-                g.drawImage(_explosionTile.GetTile(7, strength), col * 20, (row + Radius) * 20, EXPLOSION_SIZE, EXPLOSION_SIZE, null);
+            for (int i = 1; i <= _radius[Direction.East.Index]; ++i)
+                g.drawImage(_explosionTile.GetTile(i == _radius[Direction.East.Index] ? 3 : 4, strength), (col + i) * 20, row * 20, EXPLOSION_SIZE, EXPLOSION_SIZE, null);
+
+            for (int i = 1; i <= _radius[Direction.North.Index]; ++i)
+                g.drawImage(_explosionTile.GetTile(i == _radius[Direction.North.Index] ? 5 : 6, strength), col * 20, (row - i) * 20, EXPLOSION_SIZE, EXPLOSION_SIZE, null);
+
+            for (int i = 1; i <= _radius[Direction.South.Index]; ++i)
+                g.drawImage(_explosionTile.GetTile(i == _radius[Direction.South.Index] ? 7 : 8, strength), col * 20, (row + i) * 20, EXPLOSION_SIZE, EXPLOSION_SIZE, null);
         }
     }
 }

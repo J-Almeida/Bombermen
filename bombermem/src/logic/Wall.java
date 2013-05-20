@@ -40,7 +40,7 @@ public abstract class Wall extends WorldObject
         if (event.IsExplodeEvent())
         {
             ExplodeEvent ev = event.ToExplodeEvent();
-            
+
             if (!IsUndestroyable())
             {
                 int dmg = ev.Bomb.Strength;

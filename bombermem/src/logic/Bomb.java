@@ -1,6 +1,10 @@
 package logic;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+
+import utils.Direction;
 
 import logic.GameState.WallCollision;
 import logic.events.Event;
@@ -22,20 +26,8 @@ public abstract class Bomb extends WorldObject
     public int Strength; // Damage in number of hitpoints
     public int Time; // Time to explode
     public int PlayerOwnerId; // Player who planted the bomb
-    
-    protected int _northRadius = -1;
-    protected int _southRadius = -1;
-    protected int _eastRadius = -1;
-    protected int _westRadius = -1;
-    protected boolean _northTip = false;
-    protected boolean _southTip = false;
-    protected boolean _eastTip = false;
-    protected boolean _westTip = false;
-    
-    private boolean _drawEast = true;
-    private boolean _drawWest = true;
-    private boolean _drawNorth = true;
-    private boolean _drawSouth = true;
+
+    protected int _radius[] = { 0, 0, 0, 0 };/* new int[4]; */
 
     protected int _bombTimer = 0;
     protected int _explosionTimer = 0;
@@ -52,116 +44,76 @@ public abstract class Bomb extends WorldObject
             _shouldExplode = true;
             _bombTimer = -1;
         }
-        
+
         if (_shouldExplode)
         {
             _explosionTimer += diff;
-            
+
             if (_explosionTimer > 600)
             {
                 _explosionEnded = true;
                 _explosionTimer = -1;
             }
 
-            _westRadius = 0;
-            _eastRadius = 0;
-            _northRadius = 0;
-            _southRadius = 0;
-            
-            _northTip = false;
-            _southTip = false;
-            _eastTip = false;
-            _westTip = false;
-
-            for (int i = 1; i < Radius; ++i)
+            if (_explosionTimer != diff)
             {
-                if (_drawWest)
-                {
-                    Point westP = new Point(Position.x - i, Position.y);
-                    WallCollision wc = gs.CollidesWall(westP);
-                    if (!wc.Collision)
-                        _westRadius++;
-                    else
-                    {
-                        _drawWest = false;
-                        gs.PushEvent(wc.Wall, this, new ExplodeEvent(this));
-                    }
-                }
+                /*
+                List<WorldObject> objs = new ArrayList<WorldObject>();
 
-                if (_drawEast)
-                {
-                    Point eastP = new Point(Position.x + i, Position.y);
-                    WallCollision wc = gs.CollidesWall(eastP);
-                    if (!wc.Collision)
-                        _eastRadius++;
-                    else
-                    {
-                        _drawEast = false;
-                        gs.PushEvent(wc.Wall, this, new ExplodeEvent(this));
-                    }
-                }
+                for (int i = 1; i <= _radius[Direction.West.Index]; ++i)
+                    objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.West, i)));
 
-                if (_drawNorth)
-                {
-                    Point northP = new Point(Position.x, Position.y - i);
-                    WallCollision wc = gs.CollidesWall(northP);
-                    if (!wc.Collision)
-                        _northRadius++;
-                    else
-                    {
-                        _drawNorth = false;
-                        gs.PushEvent(wc.Wall, this, new ExplodeEvent(this));
-                    }
-                }
+                for (int i = 1; i <= _radius[Direction.East.Index]; ++i)
+                    objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.East, i)));
 
-                if (_drawSouth)
-                {
-                    Point southP = new Point(Position.x, Position.y + i);
-                    WallCollision wc = gs.CollidesWall(southP);
-                    if (!wc.Collision)
-                        _southRadius++;
-                    else
-                    {
-                        _drawSouth = false;
-                        gs.PushEvent(wc.Wall, this, new ExplodeEvent(this));
-                    }
-                }
+                for (int i = 1; i <= _radius[Direction.North.Index]; ++i)
+                    objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.North, i)));
+
+                for (int i = 1; i <= _radius[Direction.South.Index]; ++i)
+                    objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.South, i)));
+
+                for (WorldObject obj : objs)
+                    if (obj.Type == WorldObjectType.Player || obj.Type == WorldObjectType.Bomb)
+                        gs.PushEvent(obj, this, new ExplodeEvent(this));
+                */
+
+                return;
             }
 
-            if (_drawWest)
+            boolean[] draw = { true, true, true, true };
+
+            for (int i = 1; i <= Radius; ++i)
             {
-                Point westP = new Point(Position.x - Radius, Position.y);
-                WallCollision wc = gs.CollidesWall(westP);
-                _westTip = true;
-                if (!wc.Collision)
-                    gs.PushEvent(wc.Wall, this, new ExplodeEvent(this));
-            }
-            
-            if (_drawEast)
-            {
-                Point eastP = new Point(Position.x + Radius, Position.y);
-                WallCollision wc = gs.CollidesWall(eastP);
-                _eastTip = true;
-                if (wc.Collision)
-                    gs.PushEvent(wc.Wall, this, new ExplodeEvent(this));
-            }
-            
-            if (_drawNorth)
-            {
-                Point northP = new Point(Position.x, Position.y - Radius);
-                WallCollision wc = gs.CollidesWall(northP);
-                _northTip = true;
-                if (wc.Collision)
-                    gs.PushEvent(wc.Wall, this, new ExplodeEvent(this));
-            }
-            
-            if (_drawSouth)
-            {
-                Point southP = new Point(Position.x, Position.y + Radius);
-                WallCollision wc = gs.CollidesWall(southP);
-                _southTip = true;
-                if (wc.Collision)
-                    gs.PushEvent(wc.Wall, this, new ExplodeEvent(this));
+                for (utils.Direction d : utils.Direction.values())
+                {
+                    if (draw[d.Index])
+                    {
+                        WallCollision wc = gs.CollidesWall(Direction.ApplyMovementToPoint(Position, d, i));
+                        _radius[d.Index]++;
+                        if (wc.Collision)
+                        {
+                            if (wc.Wall.IsUndestroyable())
+                                _radius[d.Index]--;
+                            draw[d.Index] = false;
+                            gs.PushEvent(wc.Wall, this, new ExplodeEvent(this));
+                        }
+
+                        /*
+                        List<WorldObject> objs = gs.CollidesAny(Direction.ApplyMovementToPoint(Position, d, i));
+                        for (WorldObject obj : objs)
+                        {
+                            gs.PushEvent(obj, this, new ExplodeEvent(this));
+                            if (obj.Type == WorldObjectType.Wall)
+                            {
+                                _radius[d.Index]++;
+                                if (((Wall)obj).IsUndestroyable())
+                                    _radius[d.Index]--;
+                                draw[d.Index] = false;
+                            }
+                        }
+                        */
+                    }
+                }
             }
         }
     }
@@ -180,7 +132,9 @@ public abstract class Bomb extends WorldObject
     @Override
     public void HandleEvent(GameState gs, WorldObject src, Event event)
     {
-        // TODO Auto-generated method stub
-
+        if (event.IsExplodeEvent())
+        {
+            _shouldExplode = true;
+        }
     }
 }

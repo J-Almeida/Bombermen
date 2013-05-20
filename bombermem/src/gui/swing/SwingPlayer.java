@@ -26,10 +26,10 @@ public class SwingPlayer extends Player implements IDraw
     {
         int tile = -1;
 
-        if (Direction == null)
-            Direction = utils.Direction.South; // default
+        if (Dir == null)
+            Dir = utils.Direction.South; // default
 
-        switch (Direction)
+        switch (Dir)
         {
         case East:
             tile = 6;
@@ -49,7 +49,7 @@ public class SwingPlayer extends Player implements IDraw
 
         int row = Position.x;
         int col = Position.y;
-        
+
         g.drawImage(_tiledImage.GetTile(tile, 0), row * 20, col * 20, SIZE_WIDTH, SIZE_HEIGHT, null);
     }
 }
