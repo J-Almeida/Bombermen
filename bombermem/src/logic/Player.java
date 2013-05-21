@@ -10,6 +10,7 @@ import logic.events.SpawnEvent;
 public abstract class Player extends WorldObject
 {
     protected int currentTile = 0;
+    private boolean _alive = true;
 
     final String Name;
 
@@ -29,7 +30,7 @@ public abstract class Player extends WorldObject
     @Override
     public boolean IsAlive()
     {
-        return true;
+        return _alive;
     }
 
     @Override
@@ -59,6 +60,11 @@ public abstract class Player extends WorldObject
                 SpawnEvent se = event.ToSpawnEvent();
                 if (se.Type == WorldObjectType.Bomb)
                     gs.GetObjectBuilder().CreateBomb(this, 3, 1, 3);
+                break;
+            }
+            case Explode:
+            {
+                _alive = false;
                 break;
             }
             default:

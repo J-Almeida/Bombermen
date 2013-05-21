@@ -37,7 +37,7 @@ public class StateManager
     {
         return _currentState;
     }
-    
+
     public IState GetCurrentState()
     {
         return GetState(_currentState);

@@ -55,7 +55,6 @@ public class SwingBomb extends Bomb implements IDraw
 
         if (_shouldExplode && !_explosionEnded)
         {
-
             int strength;
             if (_explosionTimer < 67)
                 strength = 0;

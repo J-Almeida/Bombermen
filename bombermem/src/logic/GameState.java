@@ -3,6 +3,7 @@ package logic;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,7 +48,7 @@ public abstract class GameState implements IState
     {
         PushEvent(_entities.get(_currentPlayerId), null, new RequestMovementEvent(direction));
     }
-    
+
     public class WallCollision
     {
         WallCollision(boolean coll, Wall wall) { Collision = coll; Wall = wall; }
@@ -57,13 +58,38 @@ public abstract class GameState implements IState
 
     public WallCollision CollidesWall(Point p)
     {
-        List<WorldObject> objs = _quadTree.QueryRange(p);
+        synchronized (_quadTree)
+        {
+            List<WorldObject> objs = _quadTree.QueryRange(p);
 
-        for (WorldObject obj : objs)
-            if (obj.Type == WorldObjectType.Wall)
-                return new WallCollision(true, (Wall)obj);
+            for (WorldObject obj : objs)
+                if (obj.Type == WorldObjectType.Wall)
+                    return new WallCollision(true, (Wall)obj);
 
-        return new WallCollision(false, null);
+            return new WallCollision(false, null);
+        }
+    }
+
+    public List<WorldObject> CollidesAny(Point p)
+    {
+        synchronized (_quadTree)
+        {
+            List<WorldObject> objs = _quadTree.QueryRange(p);
+
+            try
+            {
+                for (WorldObject obj : objs)
+                    objs.add(obj);
+            }
+            catch (ConcurrentModificationException e)
+            {
+
+            }
+
+
+            return objs;
+        }
+
     }
 
     @Override
@@ -95,7 +121,7 @@ public abstract class GameState implements IState
                 break;
             }
         }
-        
+
         // handle events
         while (!_eventQueue.isEmpty())
             _eventQueue.poll().HandleEvent(this);
@@ -117,7 +143,7 @@ public abstract class GameState implements IState
             if (!wo.IsAlive())
                 toRemove.add(wo.Guid);
         }
-        
+
         for (Integer i : toRemove)
             _entities.remove(i);
     }

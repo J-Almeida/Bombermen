@@ -27,7 +27,7 @@ public abstract class Bomb extends WorldObject
     public int Time; // Time to explode
     public int PlayerOwnerId; // Player who planted the bomb
 
-    protected int _radius[] = { 0, 0, 0, 0 };/* new int[4]; */
+    protected int _radius[] = { 0, 0, 0, 0 };
 
     protected int _bombTimer = 0;
     protected int _explosionTimer = 0;
@@ -55,67 +55,56 @@ public abstract class Bomb extends WorldObject
                 _explosionTimer = -1;
             }
 
-            if (_explosionTimer != diff)
+            if (_explosionTimer == diff)
+                CalculateRadiuses(gs);
+            else
+                VerifyCollisions(gs);
+        }
+    }
+
+    private void CalculateRadiuses(GameState gs)
+    {
+        System.out.println("Calculating bomb explosion...");
+        
+        boolean[] draw = { true, true, true, true };
+
+        for (int i = 1; i <= Radius; ++i)
+        {
+            for (utils.Direction d : utils.Direction.values())
             {
-                /*
-                List<WorldObject> objs = new ArrayList<WorldObject>();
-
-                for (int i = 1; i <= _radius[Direction.West.Index]; ++i)
-                    objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.West, i)));
-
-                for (int i = 1; i <= _radius[Direction.East.Index]; ++i)
-                    objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.East, i)));
-
-                for (int i = 1; i <= _radius[Direction.North.Index]; ++i)
-                    objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.North, i)));
-
-                for (int i = 1; i <= _radius[Direction.South.Index]; ++i)
-                    objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.South, i)));
-
-                for (WorldObject obj : objs)
-                    if (obj.Type == WorldObjectType.Player || obj.Type == WorldObjectType.Bomb)
-                        gs.PushEvent(obj, this, new ExplodeEvent(this));
-                */
-
-                return;
-            }
-
-            boolean[] draw = { true, true, true, true };
-
-            for (int i = 1; i <= Radius; ++i)
-            {
-                for (utils.Direction d : utils.Direction.values())
+                if (draw[d.Index])
                 {
-                    if (draw[d.Index])
+                    WallCollision wc = gs.CollidesWall(Direction.ApplyMovementToPoint(Position, d, i));
+                    _radius[d.Index]++;
+                    if (wc.Collision)
                     {
-                        WallCollision wc = gs.CollidesWall(Direction.ApplyMovementToPoint(Position, d, i));
-                        _radius[d.Index]++;
-                        if (wc.Collision)
-                        {
-                            if (wc.Wall.IsUndestroyable())
-                                _radius[d.Index]--;
-                            draw[d.Index] = false;
-                            gs.PushEvent(wc.Wall, this, new ExplodeEvent(this));
-                        }
-
-                        /*
-                        List<WorldObject> objs = gs.CollidesAny(Direction.ApplyMovementToPoint(Position, d, i));
-                        for (WorldObject obj : objs)
-                        {
-                            gs.PushEvent(obj, this, new ExplodeEvent(this));
-                            if (obj.Type == WorldObjectType.Wall)
-                            {
-                                _radius[d.Index]++;
-                                if (((Wall)obj).IsUndestroyable())
-                                    _radius[d.Index]--;
-                                draw[d.Index] = false;
-                            }
-                        }
-                        */
+                        if (wc.Wall.IsUndestroyable())
+                            _radius[d.Index]--;
+                        draw[d.Index] = false;
                     }
                 }
             }
         }
+    }
+
+    public void VerifyCollisions(GameState gs)
+    {
+        List<WorldObject> objs = new ArrayList<WorldObject>();
+
+        for (int i = 1; i <= _radius[Direction.West.Index]; ++i)
+            objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.West, i)));
+
+        for (int i = 1; i <= _radius[Direction.East.Index]; ++i)
+            objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.East, i)));
+
+        for (int i = 1; i <= _radius[Direction.North.Index]; ++i)
+            objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.North, i)));
+
+        for (int i = 1; i <= _radius[Direction.South.Index]; ++i)
+            objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.South, i)));
+
+        for (WorldObject obj : objs)
+            gs.PushEvent(obj, this, new ExplodeEvent(this));
     }
 
     @Override
