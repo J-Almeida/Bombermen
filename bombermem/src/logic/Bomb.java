@@ -64,8 +64,8 @@ public abstract class Bomb extends WorldObject
 
     private void CalculateRadiuses(GameState gs)
     {
-        System.out.println("Calculating bomb explosion...");
-        
+        System.out.println(Guid + " - Calculating bomb explosion...");
+
         boolean[] draw = { true, true, true, true };
 
         for (int i = 1; i <= Radius; ++i)
@@ -89,19 +89,13 @@ public abstract class Bomb extends WorldObject
 
     public void VerifyCollisions(GameState gs)
     {
+        System.out.println(Guid + " - Verifying bomb collisions...");
+
         List<WorldObject> objs = new ArrayList<WorldObject>();
 
-        for (int i = 1; i <= _radius[Direction.West.Index]; ++i)
-            objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.West, i)));
-
-        for (int i = 1; i <= _radius[Direction.East.Index]; ++i)
-            objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.East, i)));
-
-        for (int i = 1; i <= _radius[Direction.North.Index]; ++i)
-            objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.North, i)));
-
-        for (int i = 1; i <= _radius[Direction.South.Index]; ++i)
-            objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.South, i)));
+        for (Direction d : Direction.values())
+            for (int i = 1; i <= _radius[d.Index]; ++i)
+                objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, d, i)));
 
         for (WorldObject obj : objs)
             gs.PushEvent(obj, this, new ExplodeEvent(this));

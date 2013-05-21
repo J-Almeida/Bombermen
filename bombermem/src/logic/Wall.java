@@ -2,6 +2,9 @@ package logic;
 
 import java.awt.Point;
 
+import utils.RandomEngine;
+
+import logic.PowerUp.PowerUpType;
 import logic.events.Event;
 import logic.events.ExplodeEvent;
 
@@ -49,6 +52,14 @@ public abstract class Wall extends WorldObject
                     HitPoints = 0;
                 else
                     HitPoints -= dmg;
+
+                if (HitPoints == 0)
+                {
+                    if (RandomEngine.GetBool(50))
+                    {
+                        gs.GetObjectBuilder().CreatePowerUp(Position, utils.Utilities.RandomElement(PowerUpType.values()).Element);
+                    }
+                }
             }
         }
     }

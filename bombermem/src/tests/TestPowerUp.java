@@ -6,8 +6,8 @@ import logic.PowerUp;
 
 public class TestPowerUp extends PowerUp
 {
-     public TestPowerUp(int guid, Point pos)
+     public TestPowerUp(int guid, Point pos, PowerUpType type)
      {
-          super(guid, pos);
+          super(guid, pos, type);
      }
 }

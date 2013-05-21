@@ -7,6 +7,7 @@ import logic.GameState;
 import logic.IWorldObjectBuilder;
 import logic.Player;
 import logic.PowerUp;
+import logic.PowerUp.PowerUpType;
 import logic.Wall;
 import logic.WorldObject;
 
@@ -63,9 +64,9 @@ public class TestWorldObjectBuilder implements IWorldObjectBuilder
      }
 
      @Override
-     public PowerUp CreatePowerUp(Point position)
+     public PowerUp CreatePowerUp(Point position, PowerUpType type)
      {
-          PowerUp powerup = new TestPowerUp(_lastId++, position);
+          PowerUp powerup = new TestPowerUp(_lastId++, position, type);
 
           if (_gameState != null)
                _gameState.AddEntity(powerup);
