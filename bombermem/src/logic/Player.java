@@ -2,14 +2,21 @@ package logic;
 
 import java.awt.Point;
 
+import utils.Direction;
 import logic.events.Event;
 import logic.events.MovementEvent;
 import logic.events.RequestMovementEvent;
 import logic.events.SpawnEvent;
 
-public abstract class Player extends WorldObject
+public class Player extends WorldObject implements network.NetPlayer
 {
-    protected int currentTile = 0;
+    @Override
+	public String GetName() 
+    {
+		return Name;
+	}
+
+	protected int currentTile = 0;
     private boolean _alive = true;
 
     final String Name;
@@ -19,6 +26,7 @@ public abstract class Player extends WorldObject
         super(WorldObjectType.Player, guid, pos);
 
         Name = name;
+        Dir = Direction.South;
     }
 
     @Override

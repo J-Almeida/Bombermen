@@ -1,5 +1,7 @@
 package model;
 
+import gui.swing.ClientWorldObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
+import network.NetWorldObject;
 import logic.WorldObject;
 
 
@@ -23,27 +26,27 @@ public class QuadTree
 
     public final Rectangle2D Boundary;
 
-    public final Map<Integer, WorldObject> Entities;
+    public final Map<Integer, ClientWorldObject> Entities;
 
     public QuadTree[] Nodes;
 
     public QuadTree(Rectangle2D boundary)
     {
         Boundary = boundary;
-        Entities = new HashMap<Integer, WorldObject>();
+        Entities = new HashMap<Integer, ClientWorldObject>();
         Nodes = null;
     }
 
     private boolean IsLeaf() { return Nodes == null; }
 
-    public boolean Insert(WorldObject obj)
+    public boolean Insert(ClientWorldObject obj)
     {
-        if (!Boundary.contains(obj.Position))
+        if (!Boundary.contains(obj.GetPosition()))
             return false;
 
         if (Entities.size() < NODE_CAPACITY)
         {
-            Entities.put(obj.Guid, obj);
+            Entities.put(obj.GetGuid(), obj);
             return true;
         }
 
@@ -71,15 +74,15 @@ public class QuadTree
         Nodes[SOUTHEAST] = new QuadTree(new Rectangle2D.Double(x + subWidth, y + subHeight, subWidth, subHeight));
     }
 
-    public List<WorldObject> QueryRange(Rectangle range)
+    public List<ClientWorldObject> QueryRange(Rectangle range)
     {
-        List<WorldObject> inRange = new ArrayList<WorldObject>();
+        List<ClientWorldObject> inRange = new ArrayList<ClientWorldObject>();
 
         if (!Boundary.intersects(range))
             return inRange;
 
-        for (WorldObject obj : Entities.values())
-            if (range.contains(obj.Position))
+        for (ClientWorldObject obj : Entities.values())
+            if (range.contains(obj.GetPosition()))
                 inRange.add(obj);
 
         if (IsLeaf())
@@ -91,15 +94,15 @@ public class QuadTree
         return inRange;
     }
 
-    public List<WorldObject> QueryRange(Point point)
+    public List<ClientWorldObject> QueryRange(Point point)
     {
-        List<WorldObject> inRange = new ArrayList<WorldObject>();
+        List<ClientWorldObject> inRange = new ArrayList<ClientWorldObject>();
 
         if (!Boundary.contains(point))
             return inRange;
 
-        for (WorldObject obj : Entities.values())
-            if (obj.Position.equals(point))
+        for (ClientWorldObject obj : Entities.values())
+            if (obj.GetPosition().equals(point))
                 inRange.add(obj);
 
         if (IsLeaf())

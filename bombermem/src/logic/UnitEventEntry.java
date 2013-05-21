@@ -13,7 +13,7 @@ public class UnitEventEntry
      * @param wo the worldobject
      * @param e the event
      */
-    public UnitEventEntry(WorldObject wo, WorldObject src, Event e)
+    public UnitEventEntry(int wo, int src, Event e)
     {
         _entity = wo;
         _source = src;
@@ -27,17 +27,20 @@ public class UnitEventEntry
      */
     public void HandleEvent(GameState gs)
     {
-        if (_entity == null || gs == null || _event == null)
+    	WorldObject sourceWo = gs.GetEntity(_source);
+    	WorldObject entityWo = gs.GetEntity(_entity);
+    	
+        if (sourceWo == null || entityWo == null || gs == null || _event == null)
             return;
 
-        _entity.HandleEvent(gs, _source, _event);
+        entityWo.HandleEvent(gs, sourceWo, _event);
     }
 
     /** The unit. */
-    private final WorldObject _entity;
+    private final int _entity;
 
     /** Unit who originated the event. */
-    private final WorldObject _source;
+    private final int _source;
 
     /** The event. */
     private final Event _event;

@@ -3,14 +3,11 @@ package gui.swing;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
-import logic.PowerUp;
-
-public class SwingPowerUp extends PowerUp implements IDraw
+public class SwingPowerUp implements ClientWorldObject
 {
-    public SwingPowerUp(int guid, Point pos)
+    public SwingPowerUp(network.NetPowerUp powerUp)
     {
-        super(guid, pos);
-        // TODO Auto-generated constructor stub
+        _powerUp = powerUp;
     }
 
     @Override
@@ -19,4 +16,18 @@ public class SwingPowerUp extends PowerUp implements IDraw
         // TODO Auto-generated method stub
 
     }
+    
+    private network.NetPowerUp _powerUp;
+
+	@Override
+	public int GetGuid()
+	{
+		return _powerUp.GetGuid();
+	}
+
+	@Override
+	public Point GetPosition()
+	{
+		return _powerUp.GetPosition();
+	}
 }

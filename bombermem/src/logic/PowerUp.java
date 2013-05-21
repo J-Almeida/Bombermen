@@ -4,7 +4,7 @@ import java.awt.Point;
 
 import logic.events.Event;
 
-public abstract class PowerUp extends WorldObject
+public class PowerUp extends WorldObject implements network.NetPowerUp
 {
     public PowerUp(int guid, Point pos)
     {

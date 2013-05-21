@@ -11,52 +11,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import model.QuadTree;
+import network.ClientInterface;
+import network.NetBomb;
+import network.NetPlayer;
+import network.NetPowerUp;
+import network.NetWall;
+import network.NetWorldObject;
 import utils.Key;
-
 import logic.WorldObject;
 import logic.GameState;
 
-public class SwingGameState extends GameState implements IDraw, KeyListener
+public class SwingGameState implements IDraw, KeyListener, ClientInterface
 {
+	protected Map<Integer, ClientWorldObject> _entities = new HashMap<Integer, ClientWorldObject>();
+    protected Map<Key, Boolean> _pressedKeys = new HashMap<Key, Boolean>();
+    protected QuadTree _quadTree = new QuadTree(new Rectangle(0, 0, 50, 50));
+    
     public SwingGameState()
     {
-        _objectBuilder = new SwingWorldObjectBuilder();
-        _objectBuilder.SetGameState(this);
-
-        _objectBuilder.CreatePlayer("test", new Point(1, 1));
-
-        for (int x = 0; x < 50; ++x)
-            for (int y = 0; y < 50; ++y)
-                if (x == 0 || x == 47 || y == 0 || y == 47 || (x % 2 == 0 && y % 2 == 0))
-                    _objectBuilder.CreateWall(-1, new Point(x, y));
-
-        Map<Integer, Point> map = new HashMap<Integer, Point>();
-
-        Random r = new Random();
-
-        while (map.size() != 500)
-        {
-            int x = r.nextInt(50);
-            int y = r.nextInt(50);
-
-            int hash = (int)(1.0/2.0 * (x + y) * (x + y + 1) + y);
-            if (map.containsKey(hash))
-                continue;
-
-            if (x == 0 || y == 0)
-                continue;
-
-            if ((x % 2) == 0 && (y % 2) == 0)
-                continue;
-
-            if ((x == 1 && y == 1) || ((x == 1) && (y == 2)) || ((x == 2) && (y == 1)))
-                continue;
-
-            map.put(hash, new Point(x, y));
-        }
-
-        for (Point p : map.values())
-            _objectBuilder.CreateWall(1, p);
     }
 
     private static final Color BACKGROUND_COLOR = new Color(16, 120,48); // dark green
@@ -67,13 +40,13 @@ public class SwingGameState extends GameState implements IDraw, KeyListener
         g.setColor(BACKGROUND_COLOR);
         g.fillRect(0, 0, g.getClipBounds().width, g.getClipBounds().height);
 
-        synchronized (_quadTree)
-        {
-            List<WorldObject> objs = _quadTree.QueryRange(new Rectangle(0, 0, 50, 50));
+        for (ClientWorldObject obj : _entities.values())
+        	_quadTree.Insert(obj);
+        
+        List<ClientWorldObject> objs = _quadTree.QueryRange(new Rectangle(0, 0, 50, 50));
 
-            for (WorldObject wo : objs)
-                ((IDraw)wo).Draw(g);
-        }
+        for (ClientWorldObject wo : objs)
+            ((IDraw)wo).Draw(g);
     }
 
     @Override
@@ -98,4 +71,29 @@ public class SwingGameState extends GameState implements IDraw, KeyListener
 
         _pressedKeys.put(k, false);
     }
+
+	@Override
+	public void CreateBomb(NetBomb b)
+	{
+		_entities.put(b.GetGuid(), new SwingBomb(b));
+	}
+
+	@Override
+	public void CreatePlayer(NetPlayer p) 
+	{
+		_entities.put(p.GetGuid(), new SwingPlayer(p));
+		
+	}
+
+	@Override
+	public void CreatePowerUp(NetPowerUp pu) 
+	{
+		_entities.put(pu.GetGuid(), new SwingPowerUp(pu));
+	}
+
+	@Override
+	public void CreateWall(NetWall w) 
+	{
+		_entities.put(w.GetGuid(), new SwingWall(w));
+	}
 }

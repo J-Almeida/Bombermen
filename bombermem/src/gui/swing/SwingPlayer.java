@@ -3,9 +3,7 @@ package gui.swing;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
-import logic.Player;
-
-public class SwingPlayer extends Player implements IDraw
+public class SwingPlayer implements ClientWorldObject
 {
     private TiledImage _tiledImage;
 
@@ -14,9 +12,9 @@ public class SwingPlayer extends Player implements IDraw
     public final static int SIZE_REAL_WIDTH = 18;
     public final static int SIZE_REAL_HEIGHT = 26;
 
-    public SwingPlayer(int guid, Point pos, String name)
+    public SwingPlayer(network.NetPlayer pl)
     {
-        super(guid, pos, name);
+        _player = pl;
 
         _tiledImage = new TiledImage("gui/swing/resources/bomberman.png", SIZE_REAL_WIDTH, SIZE_REAL_HEIGHT);
     }
@@ -26,10 +24,7 @@ public class SwingPlayer extends Player implements IDraw
     {
         int tile = -1;
 
-        if (Dir == null)
-            Dir = utils.Direction.South; // default
-
-        switch (Dir)
+        switch (_player.GetDirection())
         {
         case East:
             tile = 6;
@@ -47,9 +42,24 @@ public class SwingPlayer extends Player implements IDraw
             return;
         }
 
-        int row = Position.x;
-        int col = Position.y;
+        Point pos = _player.GetPosition();
+        int row = pos.x;
+        int col = pos.y;
 
         g.drawImage(_tiledImage.GetTile(tile, 0), row * 20, col * 20, SIZE_WIDTH, SIZE_HEIGHT, null);
     }
+
+    private network.NetPlayer _player;
+    
+	@Override
+	public int GetGuid()
+	{
+		return _player.GetGuid();
+	}
+
+	@Override
+	public Point GetPosition()
+	{
+		return _player.GetPosition();
+	}
 }

@@ -6,9 +6,33 @@ import logic.events.Event;
 
 import utils.Direction;
 
-public abstract class WorldObject
+public abstract class WorldObject implements network.NetWorldObject
 {
-    public final int Guid;
+    @Override
+	public int GetGuid() 
+    {
+		return Guid;
+	}
+
+	@Override
+	public Point GetPosition() 
+	{
+		return Position;
+	}
+
+	@Override
+	public Direction GetDirection()
+	{
+		return Dir;
+	}
+
+	@Override
+	public WorldObjectType GetType()
+	{
+		return Type;
+	}
+
+	public final int Guid;
 
     public final Point Position;
 

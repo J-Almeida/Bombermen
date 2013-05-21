@@ -3,18 +3,16 @@ package gui.swing;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
-import logic.Wall;
-
-public class SwingWall extends Wall implements IDraw
+public class SwingWall implements ClientWorldObject
 {
     private TiledImage _tileWall;
 
     public final static int SIZE_REAL = 16;
     public final static int SIZE = 20;
 
-    public SwingWall(int guid, Point pos, int hitpoints)
+    public SwingWall(network.NetWall wall)
     {
-        super(guid, pos, hitpoints);
+        _wall = wall;
 
         _tileWall = new TiledImage("gui/swing/resources/wall.png", SIZE_REAL, SIZE_REAL);
     }
@@ -22,9 +20,25 @@ public class SwingWall extends Wall implements IDraw
     @Override
     public void Draw(Graphics2D g)
     {
-        int row = Position.x;
-        int col = Position.y;
+    	Point pos = _wall.GetPosition();
+    	
+        int row = pos.x;
+        int col = pos.y;
 
-        g.drawImage(_tileWall.GetTile(IsUndestroyable() ? 0 : 1, 0), row * 20, col * 20, SIZE, SIZE, null);
+        g.drawImage(_tileWall.GetTile(_wall.IsUndestroyable() ? 0 : 1, 0), row * 20, col * 20, SIZE, SIZE, null);
     }
+    
+    private network.NetWall _wall;
+
+	@Override
+	public int GetGuid()
+	{
+		return _wall.GetGuid();
+	}
+
+	@Override
+	public Point GetPosition()
+	{
+		return _wall.GetPosition();
+	}
 }

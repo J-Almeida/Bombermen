@@ -5,9 +5,15 @@ import java.awt.Point;
 import logic.events.Event;
 import logic.events.ExplodeEvent;
 
-public abstract class Wall extends WorldObject
+public class Wall extends WorldObject implements network.NetWall
 {
-    public int HitPoints;
+    @Override
+	public int GetHitPoints()
+    {
+		return HitPoints;
+	}
+
+	public int HitPoints;
 
     public Wall(int guid, Point pos, int hitpoints)
     {

@@ -10,22 +10,67 @@ import logic.GameState.WallCollision;
 import logic.events.Event;
 import logic.events.ExplodeEvent;
 
-public abstract class Bomb extends WorldObject
+public class Bomb extends WorldObject implements network.NetBomb
 {
-    public Bomb(int guid, Point position, int playerOwnerId, int radius, int strength, int time)
+    @Override
+	public int GetPlayerOwnerId() 
+    {
+		return PlayerOwnerId;
+	}
+
+	public int GetBombTimer()
+	{
+		return _bombTimer;
+	}
+	
+	public int GetExplosionTimer()
+	{
+		return _explosionTimer;
+	}
+	
+	public boolean IsExplosionEnded()
+	{
+		return _explosionEnded;
+	}
+    
+	@Override
+	public int GetTime() 
+	{
+		return Time;
+	}
+
+	@Override
+	public int GetStrength() 
+	{
+		return Strength;
+	}
+
+	@Override
+	public int GetMaxRadius() 
+	{
+		return MaxRadius;
+	}
+
+	@Override
+	public int GetRadius(Direction d) 
+	{
+		return _radius[d.Index];
+	}
+
+	public Bomb(int guid, Point position, int playerOwnerId, int radius, int strength, int time)
     {
         super(WorldObjectType.Bomb, guid, position);
 
-        Radius = radius;
+        MaxRadius = radius;
         Strength = strength;
         Time = time;
         PlayerOwnerId = playerOwnerId;
     }
 
-    public int Radius; // Number of cells in each direction
+    public int MaxRadius; // Number of cells in each direction
     public int Strength; // Damage in number of hitpoints
     public int Time; // Time to explode
-    public int PlayerOwnerId; // Player who planted the bomb
+    public final int PlayerOwnerId; // Player who planted the bomb
 
     protected int _radius[] = { 0, 0, 0, 0 };
 
@@ -68,7 +113,7 @@ public abstract class Bomb extends WorldObject
         
         boolean[] draw = { true, true, true, true };
 
-        for (int i = 1; i <= Radius; ++i)
+        for (int i = 1; i <= MaxRadius; ++i)
         {
             for (utils.Direction d : utils.Direction.values())
             {

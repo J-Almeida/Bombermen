@@ -25,9 +25,14 @@ public abstract class GameState implements IState
     protected Map<Key, Boolean> _pressedKeys = new HashMap<Key, Boolean>();
     protected QuadTree _quadTree;
     protected int _currentPlayerId = 0;
-    protected IWorldObjectBuilder _objectBuilder;
+    protected WorldObjectBuilder _objectBuilder;
     protected Queue<UnitEventEntry> _eventQueue = new LinkedList<UnitEventEntry>();
 
+    public WorldObject GetEntity(int guid)
+    {
+    	return _entities.get(guid);
+    }
+    
     @Override
     public void Initialize()
     {
@@ -124,7 +129,9 @@ public abstract class GameState implements IState
 
         // handle events
         while (!_eventQueue.isEmpty())
+        {
             _eventQueue.poll().HandleEvent(this);
+        }
 
         synchronized (_quadTree)
         {
@@ -155,7 +162,7 @@ public abstract class GameState implements IState
 
     }
 
-    public void PushEvent(WorldObject wo, WorldObject src, Event ev) { _eventQueue.add(new UnitEventEntry(wo, src, ev)); }
+    public void PushEvent(WorldObject wo, WorldObject src, Event ev) { _eventQueue.add(new UnitEventEntry(wo.Guid, src.Guid, ev)); }
 
     public void ForwardEvent(WorldObject src, Event ev)
     {
@@ -165,5 +172,5 @@ public abstract class GameState implements IState
 
     public void AddEntity(WorldObject entity) { _entities.put(entity.Guid, entity); }
 
-    public IWorldObjectBuilder GetObjectBuilder() { return _objectBuilder; }
+    public WorldObjectBuilder GetObjectBuilder() { return _objectBuilder; }
 }
