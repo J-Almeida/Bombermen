@@ -51,7 +51,7 @@ public class Client extends JPanel implements Runnable, KeyListener
         //_stateManager.AddState("settings", new SwingSettings());
         //_stateManager.AddState("selectserver", new SwingSelectServer());
         //_stateManager.AddState("scoreboard", new SwingScoreBoard());
-        _stateManager.AddState("game", new SwingGameState("rmi://localhost:20001","Client"));
+        _stateManager.AddState("game", new SwingGameState("Client", "rmi://localhost"));
 
         _stateManager.ChangeState("game");
     }

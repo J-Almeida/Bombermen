@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,9 +11,14 @@ import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
 
-public class QuadTree<T extends Positionable>
+public class QuadTree<T extends Positionable> implements Serializable
 {
-    private static final int NODE_CAPACITY = 4;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static final int NODE_CAPACITY = 4;
 
     private static final int NORTHWEST = 0;
     private static final int NORTHEAST = 1;
@@ -63,8 +69,8 @@ public class QuadTree<T extends Positionable>
         double subHeight = Boundary.getHeight() / 2;
         double x = Boundary.getX();
         double y = Boundary.getY();
-
-        Nodes = (QuadTree<T>[]) Array.newInstance(QuadTree.class.getComponentType(), NODE_COUNT);
+        
+        Nodes = (QuadTree<T>[]) new QuadTree<?>[NODE_COUNT];
         Nodes[NORTHWEST] = new QuadTree<T>(new Rectangle2D.Double(x,            y,             subWidth, subHeight));
         Nodes[NORTHEAST] = new QuadTree<T>(new Rectangle2D.Double(x + subWidth, y,             subWidth, subHeight));
         Nodes[SOUTHWEST] = new QuadTree<T>(new Rectangle2D.Double(x,            y + subHeight, subWidth, subHeight));
