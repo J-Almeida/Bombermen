@@ -4,11 +4,11 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import network.Server;
 import utils.Direction;
-
-import logic.GameState.WallCollision;
 import logic.events.Event;
 import logic.events.ExplodeEvent;
+import model.QuadTree;
 
 public class Bomb extends WorldObject implements network.NetBomb
 {
@@ -80,7 +80,7 @@ public class Bomb extends WorldObject implements network.NetBomb
     protected boolean _explosionEnded = false;
 
     @Override
-    public void Update(GameState gs, int diff)
+    public void Update(QuadTree<WorldObject> qt, int diff)
     {
         _bombTimer += diff;
 
@@ -101,13 +101,13 @@ public class Bomb extends WorldObject implements network.NetBomb
             }
 
             if (_explosionTimer == diff)
-                CalculateRadiuses(gs);
+                CalculateRadiuses(qt);
             else
-                VerifyCollisions(gs);
+                VerifyCollisions(qt);
         }
     }
 
-    private void CalculateRadiuses(GameState gs)
+    private void CalculateRadiuses(QuadTree<WorldObject> qt)
     {
         System.out.println("Calculating bomb explosion...");
         
@@ -119,37 +119,43 @@ public class Bomb extends WorldObject implements network.NetBomb
             {
                 if (draw[d.Index])
                 {
-                    WallCollision wc = gs.CollidesWall(Direction.ApplyMovementToPoint(Position, d, i));
+                	List<WorldObject> lstWo = qt.QueryRange(Direction.ApplyMovementToPoint(Position, d, i));
+
                     _radius[d.Index]++;
-                    if (wc.Collision)
-                    {
-                        if (wc.Wall.IsUndestroyable())
-                            _radius[d.Index]--;
-                        draw[d.Index] = false;
-                    }
+                	
+                	for (WorldObject wo :lstWo)
+                	{
+                		if (wo.Type == WorldObjectType.Wall)
+                		{
+                			Wall w = (Wall)wo;
+                			if (w.IsUndestroyable())
+                				_radius[d.Index]--;
+                            draw[d.Index] = false;
+                		}
+                	}
                 }
             }
         }
     }
 
-    public void VerifyCollisions(GameState gs)
+    public void VerifyCollisions(QuadTree<WorldObject> qt)
     {
         List<WorldObject> objs = new ArrayList<WorldObject>();
 
         for (int i = 1; i <= _radius[Direction.West.Index]; ++i)
-            objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.West, i)));
+            objs.addAll(qt.QueryRange(Direction.ApplyMovementToPoint(Position, Direction.West, i)));
 
         for (int i = 1; i <= _radius[Direction.East.Index]; ++i)
-            objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.East, i)));
+            objs.addAll(qt.QueryRange(Direction.ApplyMovementToPoint(Position, Direction.East, i)));
 
         for (int i = 1; i <= _radius[Direction.North.Index]; ++i)
-            objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.North, i)));
+            objs.addAll(qt.QueryRange(Direction.ApplyMovementToPoint(Position, Direction.North, i)));
 
         for (int i = 1; i <= _radius[Direction.South.Index]; ++i)
-            objs.addAll(gs.CollidesAny(Direction.ApplyMovementToPoint(Position, Direction.South, i)));
+            objs.addAll(qt.QueryRange(Direction.ApplyMovementToPoint(Position, Direction.South, i)));
 
         for (WorldObject obj : objs)
-            gs.PushEvent(obj, this, new ExplodeEvent(this));
+        	Server.GetInstance().PushEvent(obj, this, new ExplodeEvent(this));
     }
 
     @Override

@@ -3,10 +3,10 @@ package logic;
 import java.awt.Point;
 
 import logic.events.Event;
-
+import model.QuadTree;
 import utils.Direction;
 
-public abstract class WorldObject implements network.NetWorldObject
+public abstract class WorldObject implements network.NetWorldObject, model.Positionable
 {
     @Override
 	public int GetGuid() 
@@ -50,7 +50,7 @@ public abstract class WorldObject implements network.NetWorldObject
 
     public abstract boolean IsAlive();
 
-    public abstract void Update(GameState gameState, int diff);
+    public abstract void Update(QuadTree<WorldObject> qt, int diff);
 
     public abstract void HandleEvent(GameState gs, WorldObject src, Event event);
 }

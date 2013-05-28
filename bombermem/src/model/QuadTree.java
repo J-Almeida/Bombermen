@@ -1,7 +1,6 @@
 package model;
 
-import gui.swing.ClientWorldObject;
-
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,11 +9,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
-import network.NetWorldObject;
-import logic.WorldObject;
 
-
-public class QuadTree
+public class QuadTree<T extends Positionable>
 {
     private static final int NODE_CAPACITY = 4;
 
@@ -26,20 +22,20 @@ public class QuadTree
 
     public final Rectangle2D Boundary;
 
-    public final Map<Integer, ClientWorldObject> Entities;
+    public final Map<Integer, T> Entities;
 
-    public QuadTree[] Nodes;
+    public QuadTree<T>[] Nodes;
 
     public QuadTree(Rectangle2D boundary)
     {
         Boundary = boundary;
-        Entities = new HashMap<Integer, ClientWorldObject>();
+        Entities = new HashMap<Integer, T>();
         Nodes = null;
     }
 
     private boolean IsLeaf() { return Nodes == null; }
 
-    public boolean Insert(ClientWorldObject obj)
+    public boolean Insert(T obj)
     {
         if (!Boundary.contains(obj.GetPosition()))
             return false;
@@ -60,28 +56,29 @@ public class QuadTree
         return false;
     }
 
-    private void Subdivide()
+    @SuppressWarnings("unchecked")
+	private void Subdivide()
     {
         double subWidth = Boundary.getWidth() / 2;
         double subHeight = Boundary.getHeight() / 2;
         double x = Boundary.getX();
         double y = Boundary.getY();
 
-        Nodes = new QuadTree[NODE_COUNT];
-        Nodes[NORTHWEST] = new QuadTree(new Rectangle2D.Double(x,            y,             subWidth, subHeight));
-        Nodes[NORTHEAST] = new QuadTree(new Rectangle2D.Double(x + subWidth, y,             subWidth, subHeight));
-        Nodes[SOUTHWEST] = new QuadTree(new Rectangle2D.Double(x,            y + subHeight, subWidth, subHeight));
-        Nodes[SOUTHEAST] = new QuadTree(new Rectangle2D.Double(x + subWidth, y + subHeight, subWidth, subHeight));
+        Nodes = (QuadTree<T>[]) Array.newInstance(QuadTree.class.getComponentType(), NODE_COUNT);
+        Nodes[NORTHWEST] = new QuadTree<T>(new Rectangle2D.Double(x,            y,             subWidth, subHeight));
+        Nodes[NORTHEAST] = new QuadTree<T>(new Rectangle2D.Double(x + subWidth, y,             subWidth, subHeight));
+        Nodes[SOUTHWEST] = new QuadTree<T>(new Rectangle2D.Double(x,            y + subHeight, subWidth, subHeight));
+        Nodes[SOUTHEAST] = new QuadTree<T>(new Rectangle2D.Double(x + subWidth, y + subHeight, subWidth, subHeight));
     }
 
-    public List<ClientWorldObject> QueryRange(Rectangle range)
+    public List<T> QueryRange(Rectangle range)
     {
-        List<ClientWorldObject> inRange = new ArrayList<ClientWorldObject>();
+        List<T> inRange = new ArrayList<T>();
 
         if (!Boundary.intersects(range))
             return inRange;
 
-        for (ClientWorldObject obj : Entities.values())
+        for (T obj : Entities.values())
             if (range.contains(obj.GetPosition()))
                 inRange.add(obj);
 
@@ -94,14 +91,14 @@ public class QuadTree
         return inRange;
     }
 
-    public List<ClientWorldObject> QueryRange(Point point)
+    public List<T> QueryRange(Point point)
     {
-        List<ClientWorldObject> inRange = new ArrayList<ClientWorldObject>();
+        List<T> inRange = new ArrayList<T>();
 
         if (!Boundary.contains(point))
             return inRange;
 
-        for (ClientWorldObject obj : Entities.values())
+        for (T obj : Entities.values())
             if (obj.GetPosition().equals(point))
                 inRange.add(obj);
 

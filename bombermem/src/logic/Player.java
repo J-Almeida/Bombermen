@@ -2,11 +2,12 @@ package logic;
 
 import java.awt.Point;
 
-import utils.Direction;
 import logic.events.Event;
 import logic.events.MovementEvent;
 import logic.events.RequestMovementEvent;
 import logic.events.SpawnEvent;
+import model.QuadTree;
+import utils.Direction;
 
 public class Player extends WorldObject implements network.NetPlayer
 {
@@ -30,7 +31,7 @@ public class Player extends WorldObject implements network.NetPlayer
     }
 
     @Override
-    public void Update(GameState gs, int diff)
+    public void Update(QuadTree<WorldObject> qt, int diff)
     {
 
     }

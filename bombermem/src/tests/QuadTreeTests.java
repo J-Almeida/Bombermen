@@ -31,7 +31,7 @@ public class QuadTreeTests
     @Test
     public void TestQuadTree()
     {
-        QuadTree qt = new QuadTree(new Rectangle(0, 0, 5, 5));
+        QuadTree<DummyWorldObject> qt = new QuadTree<DummyWorldObject>(new Rectangle(0, 0, 5, 5));
 
         assertTrue(qt.Insert(new DummyWorldObject(1, new Point(1, 1))));
         assertTrue(qt.Insert(new DummyWorldObject(2, new Point(3, 1))));

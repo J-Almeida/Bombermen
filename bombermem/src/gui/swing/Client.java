@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -18,7 +20,7 @@ public class Client extends JPanel implements Runnable, KeyListener
 
     StateManager _stateManager;
 
-    public static void main(String[] args) throws InterruptedException
+    public static void main(String[] args) throws InterruptedException, RemoteException, NotBoundException
     {
         JFrame frame = new JFrame("Bombermen 0.1");
         frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -41,7 +43,7 @@ public class Client extends JPanel implements Runnable, KeyListener
         ((IDraw)_stateManager.GetCurrentState()).Draw((Graphics2D)g);
     }
 
-    public Client()
+    public Client() throws RemoteException, NotBoundException
     {
         _stateManager = new StateManager();
 
@@ -49,7 +51,7 @@ public class Client extends JPanel implements Runnable, KeyListener
         //_stateManager.AddState("settings", new SwingSettings());
         //_stateManager.AddState("selectserver", new SwingSelectServer());
         //_stateManager.AddState("scoreboard", new SwingScoreBoard());
-        _stateManager.AddState("game", new SwingGameState());
+        _stateManager.AddState("game", new SwingGameState("rmi://localhost:20001","Client"));
 
         _stateManager.ChangeState("game");
     }

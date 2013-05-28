@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import logic.events.Event;
 import logic.events.ExplodeEvent;
+import model.QuadTree;
 
 public class Wall extends WorldObject implements network.NetWall
 {
@@ -23,7 +24,7 @@ public class Wall extends WorldObject implements network.NetWall
     }
 
     @Override
-    public void Update(GameState gs, int diff)
+    public void Update(QuadTree<WorldObject> qt, int diff)
     {
         // TODO Auto-generated method stub
 

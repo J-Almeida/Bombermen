@@ -3,7 +3,6 @@ package logic;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +22,7 @@ public abstract class GameState implements IState
 {
     protected Map<Integer, WorldObject> _entities = new HashMap<Integer, WorldObject>();
     protected Map<Key, Boolean> _pressedKeys = new HashMap<Key, Boolean>();
-    protected QuadTree _quadTree;
+    protected QuadTree<WorldObject> _quadTree;
     protected int _currentPlayerId = 0;
     protected WorldObjectBuilder _objectBuilder;
     protected Queue<UnitEventEntry> _eventQueue = new LinkedList<UnitEventEntry>();
@@ -36,7 +35,7 @@ public abstract class GameState implements IState
     @Override
     public void Initialize()
     {
-        _quadTree = new QuadTree(new Rectangle(0, 0, 50, 50));
+        _quadTree = new QuadTree<WorldObject>(new Rectangle(0, 0, 50, 50));
 
         for (Key k : Key.values())
             _pressedKeys.put(k, false);
@@ -79,20 +78,7 @@ public abstract class GameState implements IState
     {
         synchronized (_quadTree)
         {
-            List<WorldObject> objs = _quadTree.QueryRange(p);
-
-            try
-            {
-                for (WorldObject obj : objs)
-                    objs.add(obj);
-            }
-            catch (ConcurrentModificationException e)
-            {
-
-            }
-
-
-            return objs;
+            return _quadTree.QueryRange(p);
         }
 
     }
@@ -139,7 +125,7 @@ public abstract class GameState implements IState
             _quadTree.Clear();
             for (WorldObject wo : _entities.values())
             {
-                wo.Update(this, diff);
+                wo.Update(_quadTree, diff);
                 _quadTree.Insert(wo);
             }
         }

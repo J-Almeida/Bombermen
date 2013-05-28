@@ -3,6 +3,7 @@ package logic;
 import java.awt.Point;
 
 import logic.events.Event;
+import model.QuadTree;
 
 public class PowerUp extends WorldObject implements network.NetPowerUp
 {
@@ -13,7 +14,7 @@ public class PowerUp extends WorldObject implements network.NetPowerUp
     }
 
     @Override
-    public void Update(GameState gs, int diff)
+    public void Update(QuadTree<WorldObject> qt, int diff)
     {
         // TODO Auto-generated method stub
 

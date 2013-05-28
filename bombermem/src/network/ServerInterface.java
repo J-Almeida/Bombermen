@@ -7,7 +7,7 @@ import logic.UnitEventEntry;
 
 public interface ServerInterface extends Remote
 {
-	public void SendEvent(UnitEventEntry uev) throws RemoteException;
-	public boolean Join(String name) throws RemoteException;
+	public void PushEvent(UnitEventEntry uev) throws RemoteException;
+	public boolean Join(String name, ClientInterface client) throws RemoteException;
 	// public boolean Spectate() throws RemoteException;
 }
