@@ -6,7 +6,7 @@ import logic.events.Event;
 import model.QuadTree;
 import utils.Direction;
 
-public abstract class WorldObject implements network.NetWorldObject, model.Positionable
+public abstract class WorldObject implements model.Positionable
 {
     @Override
 	public int GetGuid() 
@@ -20,13 +20,11 @@ public abstract class WorldObject implements network.NetWorldObject, model.Posit
 		return Position;
 	}
 
-	@Override
 	public Direction GetDirection()
 	{
 		return Dir;
 	}
 
-	@Override
 	public WorldObjectType GetType()
 	{
 		return Type;

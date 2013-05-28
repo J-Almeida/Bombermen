@@ -3,42 +3,39 @@ package gui.swing;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
-public class SwingWall implements ClientWorldObject
+import logic.WorldObjectType;
+import logic.events.Event;
+import utils.Direction;
+
+public class SwingWall extends SwingWorldObject
 {
     private TiledImage _tileWall;
 
     public final static int SIZE_REAL = 16;
     public final static int SIZE = 20;
-
-    public SwingWall(network.NetWall wall)
+    
+    public final boolean IsUndestroyable;
+    
+    public SwingWall(int guid, Point pos, Direction dir, boolean undestroyable)
     {
-        _wall = wall;
+    	super(guid, WorldObjectType.Wall, pos, dir);
 
+    	IsUndestroyable = undestroyable;
         _tileWall = new TiledImage("gui/swing/resources/wall.png", SIZE_REAL, SIZE_REAL);
     }
 
     @Override
     public void Draw(Graphics2D g)
-    {
-    	Point pos = _wall.GetPosition();
-    	
-        int row = pos.x;
-        int col = pos.y;
+    {   	
+        int row = Position.x;
+        int col = Position.y;
 
-        g.drawImage(_tileWall.GetTile(_wall.IsUndestroyable() ? 0 : 1, 0), row * 20, col * 20, SIZE, SIZE, null);
+        g.drawImage(_tileWall.GetTile(IsUndestroyable ? 0 : 1, 0), row * 20, col * 20, SIZE, SIZE, null);
     }
-    
-    private network.NetWall _wall;
 
 	@Override
-	public int GetGuid()
-	{
-		return _wall.GetGuid();
-	}
-
-	@Override
-	public Point GetPosition()
-	{
-		return _wall.GetPosition();
+	public void Handle(Event ev) {
+		// TODO Auto-generated method stub
+		
 	}
 }

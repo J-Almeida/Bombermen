@@ -4,6 +4,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
@@ -20,7 +23,7 @@ public class Client extends JPanel implements Runnable, KeyListener
 
     StateManager _stateManager;
 
-    public static void main(String[] args) throws InterruptedException, RemoteException, NotBoundException
+    public static void main(String[] args) throws InterruptedException, NotBoundException, UnknownHostException, IOException
     {
         JFrame frame = new JFrame("Bombermen 0.1");
         frame.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -43,7 +46,7 @@ public class Client extends JPanel implements Runnable, KeyListener
         ((IDraw)_stateManager.GetCurrentState()).Draw((Graphics2D)g);
     }
 
-    public Client() throws RemoteException, NotBoundException
+    public Client() throws NotBoundException, UnknownHostException, IOException
     {
         _stateManager = new StateManager();
 
@@ -51,7 +54,7 @@ public class Client extends JPanel implements Runnable, KeyListener
         //_stateManager.AddState("settings", new SwingSettings());
         //_stateManager.AddState("selectserver", new SwingSelectServer());
         //_stateManager.AddState("scoreboard", new SwingScoreBoard());
-        _stateManager.AddState("game", new SwingGameState("Client", "rmi://localhost"));
+        _stateManager.AddState("game", new SwingGameState(InetAddress.getLocalHost().getHostName(), 7777));
 
         _stateManager.ChangeState("game");
     }

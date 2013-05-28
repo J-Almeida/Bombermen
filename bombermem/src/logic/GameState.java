@@ -22,7 +22,7 @@ public abstract class GameState implements IState
 {
     protected Map<Integer, WorldObject> _entities = new HashMap<Integer, WorldObject>();
     protected Map<Key, Boolean> _pressedKeys = new HashMap<Key, Boolean>();
-    protected QuadTree<WorldObject> _quadTree;
+    protected QuadTree<WorldObject> _quadTree = new QuadTree<WorldObject>(new Rectangle(0, 0, 50, 50));
     protected int _currentPlayerId = 0;
     protected WorldObjectBuilder _objectBuilder;
     protected Queue<UnitEventEntry> _eventQueue = new LinkedList<UnitEventEntry>();
@@ -35,7 +35,7 @@ public abstract class GameState implements IState
     @Override
     public void Initialize()
     {
-        _quadTree = new QuadTree<WorldObject>(new Rectangle(0, 0, 50, 50));
+        /*_quadTree = new QuadTree<WorldObject>(new Rectangle(0, 0, 50, 50));*/
 
         for (Key k : Key.values())
             _pressedKeys.put(k, false);

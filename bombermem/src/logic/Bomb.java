@@ -10,9 +10,8 @@ import logic.events.Event;
 import logic.events.ExplodeEvent;
 import model.QuadTree;
 
-public class Bomb extends WorldObject implements network.NetBomb
+public class Bomb extends WorldObject
 {
-    @Override
 	public int GetPlayerOwnerId() 
     {
 		return PlayerOwnerId;
@@ -33,25 +32,21 @@ public class Bomb extends WorldObject implements network.NetBomb
 		return _explosionEnded;
 	}
     
-	@Override
 	public int GetTime() 
 	{
 		return Time;
 	}
 
-	@Override
 	public int GetStrength() 
 	{
 		return Strength;
 	}
 
-	@Override
 	public int GetMaxRadius() 
 	{
 		return MaxRadius;
 	}
 
-	@Override
 	public int GetRadius(Direction d) 
 	{
 		return _radius[d.Index];

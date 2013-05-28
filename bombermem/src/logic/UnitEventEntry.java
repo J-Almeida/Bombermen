@@ -36,6 +36,10 @@ public class UnitEventEntry
         entityWo.HandleEvent(gs, sourceWo, _event);
     }
 
+    public int GetEntity() { return _entity; }
+    public int GetSource() { return _source; }
+    public Event GetEvent() { return _event; }
+    
     /** The unit. */
     private final int _entity;
 

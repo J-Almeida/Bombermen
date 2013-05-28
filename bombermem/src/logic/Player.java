@@ -9,9 +9,8 @@ import logic.events.SpawnEvent;
 import model.QuadTree;
 import utils.Direction;
 
-public class Player extends WorldObject implements network.NetPlayer
+public class Player extends WorldObject
 {
-    @Override
 	public String GetName() 
     {
 		return Name;

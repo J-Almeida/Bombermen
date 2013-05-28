@@ -5,65 +5,83 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.rmi.Naming;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Map.Entry;
 
 import logic.IState;
+import logic.UnitEventEntry;
+import logic.WorldObject;
+import logic.WorldObjectType;
+import logic.events.MovementEvent;
+import logic.events.SpawnEvent;
 import model.QuadTree;
-import network.ClientInterface;
-import network.NetBomb;
-import network.NetPlayer;
-import network.NetPowerUp;
-import network.NetWall;
-import network.NetWorldObject;
-import network.ServerInterface;
+import utils.Direction;
 import utils.Key;
 
-public class SwingGameState implements IDraw, IState, KeyListener, ClientInterface, Serializable
+public class SwingGameState implements IDraw, IState, KeyListener, Runnable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
-	protected Map<Integer, ClientWorldObject> _entities = new HashMap<Integer, ClientWorldObject>();
+	protected Map<Integer, SwingWorldObject> _entities = new HashMap<Integer, SwingWorldObject>();
     protected Map<Key, Boolean> _pressedKeys = new HashMap<Key, Boolean>();
-    protected QuadTree<ClientWorldObject> _quadTree = new QuadTree<ClientWorldObject>(new Rectangle(0, 0, 50, 50));
-    protected ServerInterface _server = null;
-    public final String UserName;
+    protected QuadTree<SwingWorldObject> _quadTree = new QuadTree<SwingWorldObject>(new Rectangle(0, 0, 50, 50));
+    protected Queue<UnitEventEntry> _eventQueue = new LinkedList<UnitEventEntry>();
+    protected Socket _socket;
     
-    public SwingGameState(String userName, String url) throws RemoteException, NotBoundException
+    public SwingGameState(String url, int port) throws UnknownHostException, IOException
     {
-    	try 
-    	{
-			_server = (ServerInterface)Naming.lookup(url + "/Bombermen");
-		} 
-    	catch (MalformedURLException e) 
-    	{ 
-			e.printStackTrace();
-		}
-    	catch ( RemoteException | NotBoundException e) 
-    	{
-			throw e;
-		}
+    	_socket = new Socket(url, port);
     	
-    	UserName = userName;
-    	
-		try {
-			_server.Join(UserName, this);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	Thread t = new Thread(this);
+    	t.start();
     }
 
+	@Override
+	public void run() 
+	{
+		while (true)
+		{
+			try 
+			{
+				ObjectInputStream ois = new ObjectInputStream(_socket.getInputStream());
+				UnitEventEntry eve = (UnitEventEntry)ois.readObject();
+				_eventQueue.add(eve);
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+			catch (ClassNotFoundException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+    
+	public void SendEvent(UnitEventEntry eve)
+	{
+		try 
+		{
+			ObjectOutputStream oos = new ObjectOutputStream(_socket.getOutputStream());
+			oos.writeObject(eve);
+			
+			oos.close();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
     private static final Color BACKGROUND_COLOR = new Color(16, 120,48); // dark green
 
     @Override
@@ -76,14 +94,14 @@ public class SwingGameState implements IDraw, IState, KeyListener, ClientInterfa
         
         System.out.println("Number of entities: " + _entities.size());
         
-        for (ClientWorldObject obj : _entities.values())
+        for (SwingWorldObject obj : _entities.values())
         	_quadTree.Insert(obj);
         
-        List<ClientWorldObject> objs = _quadTree.QueryRange(new Rectangle(0, 0, 50, 50));
+        List<SwingWorldObject> objs = _quadTree.QueryRange(new Rectangle(0, 0, 50, 50));
 
         System.out.println("Number of objects: " + objs.size());
         
-        for (ClientWorldObject wo : objs)
+        for (SwingWorldObject wo : objs)
             ((IDraw)wo).Draw(g);
     }
 
@@ -111,86 +129,60 @@ public class SwingGameState implements IDraw, IState, KeyListener, ClientInterfa
     }
 
 	@Override
-	public void CreateBomb(NetBomb b) throws RemoteException
+	public void Initialize() 
 	{
-		_entities.put(b.GetGuid(), new SwingBomb(b));
 	}
 
 	@Override
-	public void CreatePlayer(NetPlayer p) throws RemoteException 
+	public void LoadContents() 
 	{
-		_entities.put(p.GetGuid(), new SwingPlayer(p));
-		
 	}
 
 	@Override
-	public void CreatePowerUp(NetPowerUp pu)  throws RemoteException
+	public void Update(int diff) 
 	{
-		_entities.put(pu.GetGuid(), new SwingPowerUp(pu));
-	}
+		for (Entry<Key, Boolean> pair : _pressedKeys.entrySet())
+        {
+            if (!pair.getValue())
+                continue;
 
-	@Override
-	public void CreateWall(NetWall w) throws RemoteException 
-	{
-		_entities.put(w.GetGuid(), new SwingWall(w));
-		System.out.println("New Wall: " + w.GetGuid() + ". Number Of Entities: " + _entities.size());
-	}
-
-	@Override
-	public void Initialize() {
-
-	}
-
-	@Override
-	public void LoadContents() {
-		// TODO Auto-generated method stub
+            switch (pair.getKey())
+            {
+            case ESC:
+                break;
+            case DOWN:
+            case LEFT:
+            case RIGHT:
+            case UP:
+                Direction d = Direction.FromKey(pair.getKey());
+                if (d != null)
+                    SendEvent(new UnitEventEntry(0, 0, new MovementEvent(d)));
+                pair.setValue(false);
+                break;
+            case SPACE:
+            	SendEvent(new UnitEventEntry(0, 0, new SpawnEvent(WorldObjectType.Bomb)));
+                pair.setValue(false);
+                break;
+            default:
+                break;
+            }
+        }
 		
-	}
-
-	@Override
-	public void Update(int diff) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void UnloadContents() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void Notify(String s) {
-		System.out.println(s);
-		
-	}
-
-	@Override
-	public void CreateWorldObject(NetWorldObject b) throws RemoteException
-	{
-		switch (b.GetType())
+		while (!_eventQueue.isEmpty())
 		{
-		case Bomb:
-			CreateBomb((NetBomb)b);
-			break;
-		case Player:
-			CreatePlayer((NetPlayer)b);
-			break;
-		case PowerUp:
-			CreatePowerUp((NetPowerUp)b);
-			break;
-		case Wall:
-			CreateWall((NetWall)b);
-			break;
-		default:
-			break;
+			UnitEventEntry eve = _eventQueue.poll();
+			
+	    	SwingWorldObject entityWo = _entities.get(eve.GetEntity());
+	    	
+	        if (entityWo == null)
+	            return;
+
+	        entityWo.Handle(eve.GetEvent());
 		}
-		
 	}
 
 	@Override
-	public void DestroyWorldObject(int guid) {
-		// TODO Auto-generated method stub
-		
+	public void UnloadContents() 
+	{
 	}
 }

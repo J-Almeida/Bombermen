@@ -3,7 +3,11 @@ package gui.swing;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
-public class SwingPlayer implements ClientWorldObject
+import utils.Direction;
+import logic.WorldObjectType;
+import logic.events.Event;
+
+public class SwingPlayer extends SwingWorldObject
 {
     private TiledImage _tiledImage;
 
@@ -12,9 +16,9 @@ public class SwingPlayer implements ClientWorldObject
     public final static int SIZE_REAL_WIDTH = 18;
     public final static int SIZE_REAL_HEIGHT = 26;
 
-    public SwingPlayer(network.NetPlayer pl)
+    public SwingPlayer(int guid, Point pos, Direction dir)
     {
-        _player = pl;
+    	super(guid, WorldObjectType.Player, pos, dir);
 
         _tiledImage = new TiledImage("gui/swing/resources/bomberman.png", SIZE_REAL_WIDTH, SIZE_REAL_HEIGHT);
     }
@@ -24,7 +28,7 @@ public class SwingPlayer implements ClientWorldObject
     {
         int tile = -1;
 
-        switch (_player.GetDirection())
+        switch (this.Dir)
         {
         case East:
             tile = 6;
@@ -42,24 +46,15 @@ public class SwingPlayer implements ClientWorldObject
             return;
         }
 
-        Point pos = _player.GetPosition();
-        int row = pos.x;
-        int col = pos.y;
+        int row = Position.x;
+        int col = Position.y;
 
         g.drawImage(_tiledImage.GetTile(tile, 0), row * 20, col * 20, SIZE_WIDTH, SIZE_HEIGHT, null);
     }
 
-    private network.NetPlayer _player;
-    
 	@Override
-	public int GetGuid()
-	{
-		return _player.GetGuid();
-	}
-
-	@Override
-	public Point GetPosition()
-	{
-		return _player.GetPosition();
+	public void Handle(Event ev) {
+		// TODO Auto-generated method stub
+		
 	}
 }

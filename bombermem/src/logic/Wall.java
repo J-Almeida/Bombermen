@@ -6,7 +6,7 @@ import logic.events.Event;
 import logic.events.ExplodeEvent;
 import model.QuadTree;
 
-public class Wall extends WorldObject implements network.NetWall
+public class Wall extends WorldObject
 {
     @Override
 	public int GetHitPoints()

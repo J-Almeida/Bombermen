@@ -1,14 +1,13 @@
 package model;
 
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
 
 
 public class QuadTree<T extends Positionable> implements Serializable

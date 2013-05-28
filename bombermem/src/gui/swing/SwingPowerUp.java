@@ -3,11 +3,15 @@ package gui.swing;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
-public class SwingPowerUp implements ClientWorldObject
+import logic.WorldObjectType;
+import logic.events.Event;
+import utils.Direction;
+
+public class SwingPowerUp extends SwingWorldObject
 {
-    public SwingPowerUp(network.NetPowerUp powerUp)
+    public SwingPowerUp(int guid, Point pos, Direction dir)
     {
-        _powerUp = powerUp;
+    	super(guid, WorldObjectType.PowerUp, pos, dir);
     }
 
     @Override
@@ -16,18 +20,10 @@ public class SwingPowerUp implements ClientWorldObject
         // TODO Auto-generated method stub
 
     }
-    
-    private network.NetPowerUp _powerUp;
 
 	@Override
-	public int GetGuid()
-	{
-		return _powerUp.GetGuid();
-	}
-
-	@Override
-	public Point GetPosition()
-	{
-		return _powerUp.GetPosition();
+	public void Handle(Event ev) {
+		// TODO Auto-generated method stub
+		
 	}
 }

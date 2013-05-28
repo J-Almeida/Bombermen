@@ -5,7 +5,7 @@ import java.awt.Point;
 import logic.events.Event;
 import model.QuadTree;
 
-public class PowerUp extends WorldObject implements network.NetPowerUp
+public class PowerUp extends WorldObject
 {
     public PowerUp(int guid, Point pos)
     {
