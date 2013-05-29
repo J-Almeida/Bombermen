@@ -32,16 +32,16 @@ public class SwingPlayer extends Player implements IDraw
         switch (Dir)
         {
         case East:
-            tile = 6;
+            tile = 3;
             break;
         case North:
-            tile = 10;
+            tile = 5;
             break;
         case South:
-            tile = 0;
+            tile = 1;
             break;
         case West:
-            tile = 3;
+            tile = 7;
             break;
         default:
             return;
