@@ -3,14 +3,16 @@ package pt.up.fe.pt.lpoo;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-public class Main {
-	public static void main(String[] args) {
-		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = "bombermen";
-		cfg.useGL20 = false;
-		cfg.width = 480;
-		cfg.height = 320;
-		
-		new LwjglApplication(new Bombermen(), cfg);
-	}
+public class Main
+{
+    public static void main(String[] args)
+    {
+        LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
+        cfg.title = "Bombermen";
+        cfg.useGL20 = true;
+        cfg.width = 800;
+        cfg.height = 480;
+
+        new LwjglApplication(new Bombermen(), cfg);
+    }
 }
