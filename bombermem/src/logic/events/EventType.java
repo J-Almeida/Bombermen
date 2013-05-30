@@ -7,4 +7,5 @@ public enum EventType
     Death,
     Spawn,
     Explode,
+    PickUp,
 }

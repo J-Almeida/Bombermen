@@ -74,22 +74,8 @@ public abstract class GameState implements IState
     {
         synchronized (_quadTree)
         {
-            List<WorldObject> objs = _quadTree.QueryRange(p);
-
-            try
-            {
-                for (WorldObject obj : objs)
-                    objs.add(obj);
-            }
-            catch (ConcurrentModificationException e)
-            {
-
-            }
-
-
-            return objs;
+            return _quadTree.QueryRange(p);
         }
-
     }
 
     @Override

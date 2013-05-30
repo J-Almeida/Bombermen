@@ -3,6 +3,7 @@ package logic;
 import java.awt.Point;
 
 import logic.events.Event;
+import logic.events.PickUpEvent;
 
 public abstract class PowerUp extends WorldObject
 {
@@ -22,6 +23,7 @@ public abstract class PowerUp extends WorldObject
 
     public final PowerUpType Type;
     protected int _timer = 0;
+    protected boolean _handled = false;
     private boolean _alive = true;
 
     public PowerUp(int guid, Point pos, PowerUpType type)
@@ -52,6 +54,50 @@ public abstract class PowerUp extends WorldObject
         if (event.IsExplodeEvent())
         {
             _alive = false;
+        }
+        else if (event.IsPickUpEvent())
+        {
+            _alive = false;
+
+            PickUpEvent ev = event.ToPickUpEvent();
+            if (!_handled)
+            {
+                Handle(ev);
+                _handled = true;
+            }
+        }
+    }
+
+    public void Handle(PickUpEvent p)
+    {
+        System.out.println(this.Guid + " - PowerUp Handle (for " + p.Player.Guid + ")");
+
+        switch (Type)
+        {
+        case BombUp:
+            p.Player.MaxBombs++;
+            break;
+        case Fire:
+            p.Player.BombRadius++;
+            break;
+        case FullFire:
+            p.Player.BombRadius = 50; // TODO: change to real max
+            break;
+        case Kick:
+            System.out.println("Kick powerup not implemented.");
+            break;
+        case Punch:
+            System.out.println("Punch powerup not implemented.");
+            break;
+        case Skate:
+            System.out.println("Skate powerup not implemented.");
+            break;
+        case Skull:
+            System.out.println("Skull powerup not implemented.");
+            break;
+        default:
+            break;
+
         }
     }
 }

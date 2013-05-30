@@ -12,6 +12,11 @@ import logic.events.ExplodeEvent;
 
 public abstract class Bomb extends WorldObject
 {
+    public interface ExplodeHandler
+    {
+        void OnExplode();
+    }
+
     public Bomb(int guid, Point position, int playerOwnerId, int radius, int strength, int time)
     {
         super(WorldObjectType.Bomb, guid, position);
@@ -34,6 +39,8 @@ public abstract class Bomb extends WorldObject
     protected boolean _shouldExplode = false;
     protected boolean _explosionEnded = false;
 
+    protected ExplodeHandler _explodeHandler = null;
+
     @Override
     public void Update(GameState gs, int diff)
     {
@@ -53,6 +60,8 @@ public abstract class Bomb extends WorldObject
             {
                 _explosionEnded = true;
                 _explosionTimer = -1;
+                if (_explodeHandler != null)
+                    _explodeHandler.OnExplode();
             }
 
             if (_explosionTimer == diff)
@@ -120,4 +129,6 @@ public abstract class Bomb extends WorldObject
             _shouldExplode = true;
         }
     }
+
+    public void AddOnExplodeHandler(ExplodeHandler eh) { _explodeHandler = eh; }
 }

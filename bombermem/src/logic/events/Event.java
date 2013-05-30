@@ -20,12 +20,15 @@ public abstract class Event
     public boolean IsDeathEvent()           { return Type == EventType.Death; }
     public boolean IsSpawnEvent()           { return Type == EventType.Spawn; }
     public boolean IsExplodeEvent()         { return Type == EventType.Explode; }
+    public boolean IsPickUpEvent()          { return Type == EventType.PickUp; }
 
     public RequestMovementEvent ToRequestMovementEvent() { return IsRequestMovementEvent() ? (RequestMovementEvent)this : null; }
     public MovementEvent        ToMovementEvent()        { return IsMovementEvent()        ? (MovementEvent)this : null; }
     public DeathEvent           ToDeathEvent()           { return IsDeathEvent()           ? (DeathEvent)this : null; }
     public SpawnEvent           ToSpawnEvent()           { return IsSpawnEvent()           ? (SpawnEvent)this : null; }
     public ExplodeEvent         ToExplodeEvent()         { return IsExplodeEvent()         ? (ExplodeEvent)this : null; }
+    public PickUpEvent          ToPickUpEvent()          { return IsPickUpEvent()          ? (PickUpEvent)this : null; }
+
 
     /**
      * Checks if is same type.
