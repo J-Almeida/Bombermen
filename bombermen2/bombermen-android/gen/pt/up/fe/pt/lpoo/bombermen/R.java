@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package pt.up.fe.pt.lpoo;
+package pt.up.fe.pt.lpoo.bombermen;
 
 public final class R {
     public static final class attr {

@@ -1,4 +1,4 @@
-package pt.up.fe.pt.lpoo;
+package pt.up.fe.pt.lpoo.bombermen;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
