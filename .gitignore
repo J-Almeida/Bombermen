@@ -1,11 +1,11 @@
 *.class
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
-.metadata
+.metadata/*
+*/.metadata/*
 */bin/*
 mt1/*
 
@@ -39,3 +39,6 @@ _ReSharper*/
 
 maze/maze.config
 *.maze
+*RemoteSystemsTempFiles/*
+*/.gwt-log
+*/gen/*
