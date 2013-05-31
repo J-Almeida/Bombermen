@@ -6,13 +6,12 @@ public class SpawnMessage extends Message
 
     public SpawnMessage()
     {
-        super(MessageType.SPAWN);
+        super(Message.TYPE_SPAWN);
     }
 
     @Override
     public String toString()
     {
-        return "I'm a Spawn message!";
+        return "[Message: Spawn]";
     }
-
 }

@@ -6,13 +6,12 @@ public class PingMessage extends Message
 
     public PingMessage()
     {
-        super(MessageType.PING);
+        super(Message.TYPE_PING);
     }
 
     @Override
     public String toString()
     {
-        return "I'm a Ping message!";
+        return "[Message: Ping]";
     }
-
 }

@@ -44,9 +44,8 @@ public class Receiver<T> implements Runnable
 
                     synchronized (_messageQueue)
                     {
-                        this._messageQueue.add(msg);
+                        _messageQueue.add(msg);
                     }
-
                 }
                 catch (ClassNotFoundException e)
                 {

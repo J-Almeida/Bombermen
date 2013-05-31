@@ -41,4 +41,7 @@ maze/maze.config
 *.maze
 *RemoteSystemsTempFiles/*
 */.gwt-log
-*/gen/*
+*/gen*
+*/bombermen-android/gen/*
+*/bombermen-html/.gwt/.gwt-log
+*/RemoteSystemsTempFiles/.project

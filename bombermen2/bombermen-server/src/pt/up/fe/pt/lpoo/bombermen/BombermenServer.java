@@ -128,8 +128,7 @@ public class BombermenServer implements Runnable
             {
                 e.printStackTrace();
             }
-        }
-        while (true);
+        } while (true);
     }
 }
 
