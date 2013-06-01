@@ -3,6 +3,7 @@ package pt.up.fe.pt.lpoo.bombermen;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.net.Socket;
 
 public class Sender<T>
@@ -28,8 +29,16 @@ public class Sender<T>
         _out.close();
     }
 
-    public void Send(T msg) throws IOException
+    public void Send(T msg)
     {
-        _out.writeObject(msg);
+        try
+        {
+            _out.writeObject(msg);
+            Gdx.app.debug("Sender", "Sent message " + msg);
+        }
+        catch (IOException e)
+        {
+            Gdx.app.error("Sender", "Could not send message " + msg);
+        }
     }
 }
