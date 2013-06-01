@@ -8,10 +8,10 @@ public class Main
     public static void main(String[] args)
     {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-        cfg.title = "Bombermen";
-        cfg.useGL20 = true;
-        cfg.width = 800;
-        cfg.height = 480;
+        cfg.title = Constants.WINDOW_TITLE;
+        cfg.useGL20 = Constants.USE_GL20;
+        cfg.width = Constants.DEFAULT_WIDTH;
+        cfg.height = Constants.DEFAULT_HEIGHT;
 
         new LwjglApplication(new Bombermen(), cfg);
     }

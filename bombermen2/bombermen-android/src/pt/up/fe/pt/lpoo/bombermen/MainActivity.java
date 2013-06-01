@@ -13,7 +13,10 @@ public class MainActivity extends AndroidApplication
         super.onCreate(savedInstanceState);
 
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
-        cfg.useGL20 = true;
+        cfg.useGL20 = Constants.USE_GL20;
+        cfg.useAccelerometer = false;
+        cfg.useCompass = false;
+        cfg.useWakelock = false;
 
         initialize(new Bombermen(), cfg);
     }
