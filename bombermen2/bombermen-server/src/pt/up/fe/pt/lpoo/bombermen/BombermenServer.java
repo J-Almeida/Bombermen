@@ -12,8 +12,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
-import pt.up.fe.pt.lpoo.bombermen.messages.PingMessage;
-import pt.up.fe.pt.lpoo.bombermen.messages.SpawnMessage;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 
 public class BombermenServer implements Runnable
 {
@@ -120,8 +120,8 @@ public class BombermenServer implements Runnable
                     _clients.put(clientId, ch);
                 }
 
-                ch.ClientSender.Send(new SpawnMessage());
-                ch.ClientSender.Send(new PingMessage());
+                ch.ClientSender.Send(new SMSG_SPAWN());
+                ch.ClientSender.Send(new SMSG_PING());
 
             }
             catch (IOException e)

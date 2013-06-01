@@ -6,12 +6,13 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
-import pt.up.fe.pt.lpoo.bombermen.messages.PingMessage;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
 
 public class ClientTest
 {
     private Receiver<Message> _receiver;
     private Sender<Message> _sender;
+    private Socket _socket;
 
     public ClientTest(String host, int port) throws UnknownHostException, IOException
     {
@@ -28,8 +29,6 @@ public class ClientTest
         _socket.close();
     }
 
-    private Socket _socket;
-
     public void Disconnect() throws IOException
     {
         _receiver.Finish();
@@ -38,7 +37,7 @@ public class ClientTest
     public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException
     {
         ClientTest ct = new ClientTest(InetAddress.getLocalHost().getHostAddress(), 7777);
-        ct._sender.Send(new PingMessage());
+        ct._sender.Send(new SMSG_PING());
 
         while (ct._receiver.IsEmpty());
 

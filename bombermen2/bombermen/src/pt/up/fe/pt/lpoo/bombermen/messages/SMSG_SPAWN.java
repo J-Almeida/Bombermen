@@ -1,17 +1,17 @@
 package pt.up.fe.pt.lpoo.bombermen.messages;
 
-public class PingMessage extends Message
+public class SMSG_SPAWN extends Message
 {
     private static final long serialVersionUID = 1L;
 
-    public PingMessage()
+    public SMSG_SPAWN()
     {
-        super(Message.TYPE_PING);
+        super(Message.SMSG_SPAWN);
     }
 
     @Override
     public String toString()
     {
-        return "[Message: Ping]";
+        return "[SMSG_SPAWN]";
     }
 }
