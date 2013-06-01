@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -128,7 +129,8 @@ public class BombermenServer implements Runnable
             {
                 e.printStackTrace();
             }
-        } while (true);
+        }
+        while (true);
     }
 }
 
@@ -179,6 +181,9 @@ class ClientHandler
 
                 in.close();
 
+            }
+            catch (SocketException e)
+            {
             }
             catch (IOException e1)
             {

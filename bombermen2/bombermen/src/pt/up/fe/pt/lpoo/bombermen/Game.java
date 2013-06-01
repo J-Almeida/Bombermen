@@ -1,54 +1,54 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import java.io.IOException;
+import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
+import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
+import pt.up.fe.pt.lpoo.bombermen.messages.Message;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
+import pt.up.fe.pt.lpoo.utils.Direction;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
-import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
-import pt.up.fe.pt.lpoo.bombermen.messages.Message;
-import pt.up.fe.pt.lpoo.utils.Direction;
-
 public class Game implements Input.Commands
 {
     private static Game _instance = null;
+
     public static Game Instance()
     {
-        if (_instance == null)
-            _instance = new Game();
+        if (_instance == null) _instance = new Game();
         return _instance;
     }
-    
+
     private Game()
     {
         _world = new World();
         _builder = new EntityBuilder();
-        
+
         try
         {
-            _socket = Gdx.net.newClientSocket(Protocol.TCP, "127.0.0.1", 7777, null);
+            _socket = Gdx.net.newClientSocket(Protocol.TCP, "192.168.1.3", 7777, null);
             _receiver = new Receiver<Message>(_socket);
             _sender = new Sender<Message>(_socket);
+            _sender.Send(new SMSG_PING());
         }
         catch (GdxRuntimeException GdxE)
         {
             GdxE.printStackTrace();
         }
     }
-    
+
     public World GetWorld()
     {
         return _world;
     }
-    
+
     public EntityBuilder GetBuilder()
     {
         return _builder;
     }
-    
+
     public Sender<Message> GetSender()
     {
         return _sender;

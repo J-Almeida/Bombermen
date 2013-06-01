@@ -11,9 +11,10 @@ public class Bombermen implements ApplicationListener
 {
     private OrthographicCamera camera;
     private SpriteBatch batch;
+    private ControlPad _controlPad = null;
 
     private float timeStep;
-    
+
     private Game _game;
 
     @Override
@@ -25,10 +26,19 @@ public class Bombermen implements ApplicationListener
             timeStep = 1 / 60f;
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch = new SpriteBatch();
-        
-        Gdx.input.setInputProcessor(new Input(Game.Instance(), camera));
+
+        Input in = new Input(Game.Instance(), camera);
+
+        if (Gdx.app.getType() == ApplicationType.Android)
+        {
+            _controlPad = new ControlPad();
+            _controlPad.SetSize(Constants.DEFAULT_PAD_WIDTH, Constants.DEFAULT_PAD_WIDTH);
+            in.SetControlPad(_controlPad);
+        }
+
+        Gdx.input.setInputProcessor(in);
     }
 
     @Override
@@ -45,10 +55,10 @@ public class Bombermen implements ApplicationListener
 
         camera.update();
 
-        // batch.setProjectionMatrix(camera.combined);
-        // batch.begin();
-        // ...
-        // batch.end();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        if (_controlPad != null) _controlPad.draw(batch);
+        batch.end();
     }
 
     @Override

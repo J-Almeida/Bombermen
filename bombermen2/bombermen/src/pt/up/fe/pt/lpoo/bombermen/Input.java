@@ -1,24 +1,41 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 
 public class Input implements InputProcessor
 {
     public interface Commands
     {
         void MovePlayerDown();
+
         void MovePlayerUp();
+
         void MovePlayerLeft();
+
         void MovePlayerRight();
+
         void PlaceBomb();
     }
-    
+
     private Commands _commands;
     private Camera _camera;
+    private ControlPad _controlPad = null;
+
+    public ControlPad GetControlPad()
+    {
+        return _controlPad;
+    }
+
+    public void SetControlPad(ControlPad controlPad)
+    {
+        _controlPad = controlPad;
+    }
+
     private Vector3 _tempVector = new Vector3();
 
     public Input(Commands commands, Camera camera)
@@ -74,12 +91,38 @@ public class Input implements InputProcessor
     {
         _tempVector.set(screenX, screenY, 0);
         _camera.unproject(_tempVector);
-        
-        //if (_tempVector.x > ... && _tempVector.x < ...
-        //        && _tempVector.y > ... && _tempVector.y < ...)
-        //    _commands.PlaceBomb();
-        //...
-        
+
+        if (_controlPad != null)
+        {
+            if (button == Buttons.LEFT)
+            {
+                int dir = _controlPad.Click(_tempVector);
+
+                System.out.println("Direction: " + dir);
+
+                switch (dir)
+                {
+                    case ControlPad.DIR_UP:
+                        _commands.MovePlayerUp();
+                        break;
+                    case ControlPad.DIR_DOWN:
+                        _commands.MovePlayerDown();
+                        break;
+                    case ControlPad.DIR_LEFT:
+                        _commands.MovePlayerLeft();
+                        break;
+                    case ControlPad.DIR_RIGHT:
+                        _commands.MovePlayerRight();
+                        break;
+                }
+            }
+        }
+
+        // if (_tempVector.x > ... && _tempVector.x < ...
+        // && _tempVector.y > ... && _tempVector.y < ...)
+        // _commands.PlaceBomb();
+        // ...
+
         return true;
     }
 
