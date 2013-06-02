@@ -55,15 +55,20 @@ public class Bombermen implements ApplicationListener
     @Override
     public void render()
     {
-        Gdx.gl.glClearColor(0, 1, 1, 1);
+        Gdx.gl.glClearColor(16f / 255, 120f / 255, 48f / 255, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
         camera.update();
 
+        // center 15 by 13 cells
+        camera.combined.translate(Constants.DEFAULT_WIDTH / 2 - 15 * Constants.CELL_SIZE / 2,
+                Constants.DEFAULT_HEIGHT / 2 - 13 * Constants.CELL_SIZE / 2 - 26, 0);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
         if (_controlPad != null) _controlPad.draw(batch);
+
+        Game.Instance().draw(batch);
 
         batch.end();
     }

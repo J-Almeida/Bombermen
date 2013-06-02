@@ -1,5 +1,6 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.IntMap;
@@ -20,12 +21,12 @@ public class World implements Disposable
 
     public static float GetPositionAtCenterX(int tileX)
     {
-        return tileX * Constants.CELL_SIZE * 1.5f;
+        return (tileX * Constants.CELL_SIZE) + Constants.CELL_SIZE / 2;
     }
 
     public static float GetPositionAtCenterY(int tileY)
     {
-        return tileY * Constants.CELL_SIZE * 1.5f;
+        return (tileY * Constants.CELL_SIZE) + Constants.CELL_SIZE / 2;
     }
 
     @Override
@@ -48,5 +49,13 @@ public class World implements Disposable
     {
         entity.OnDestroy();
         _entities.remove(entity.GetGuid());
+    }
+
+    public void draw(SpriteBatch batch)
+    {
+        for (Entity e : _entities.values())
+        {
+            e.draw(batch);
+        }
     }
 }

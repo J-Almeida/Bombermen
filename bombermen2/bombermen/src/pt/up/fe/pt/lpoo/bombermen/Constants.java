@@ -18,7 +18,7 @@ public final class Constants
     public static final int INIT_BOMB_RADIUS = 2;
     public static final int DEFAULT_BOMB_TIMER = 3; // 3 seconds
     public static final int DEFAULT_BOMB_STRENGTH = 1; // 1 hp damage
-    public static final int CELL_SIZE = 50; // px
+    public static final int CELL_SIZE = 36; // px
 
     // Maps
     public static final String DEFAULT_MAP_FILE_CHARSET = "US-ASCII";

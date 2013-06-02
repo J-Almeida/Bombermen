@@ -16,7 +16,7 @@ public class MapLoader
 
     public boolean TryLoad(int number, Ref<Integer> width, Ref<Integer> height)
     {
-        FileHandle file = Gdx.files.internal("data/maps/map" + number + ".txt");
+        FileHandle file = Gdx.files.internal("data/map" + number + ".txt");
 
         if (!file.exists())
             return false;

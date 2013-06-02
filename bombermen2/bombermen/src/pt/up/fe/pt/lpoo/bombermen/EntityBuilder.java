@@ -22,18 +22,28 @@ public class EntityBuilder
         float y = World.GetPositionAtCenterY(tileY);
 
         Sprite s = new Sprite(_textureManager.Get("bomb"), 0, 0, 18 * 3, 18);
+        s.setPosition(x - 18 / 2, y + 18 / 2);
         s.setOrigin(x, y);
 
-        return new Bomb(s, _lastGuid++, creator, creator.GetBombRadius(),
+        Bomb b = new Bomb(s, _lastGuid++, creator, creator.GetBombRadius(),
                 Constants.DEFAULT_BOMB_STRENGTH, Constants.DEFAULT_BOMB_TIMER);
+
+        b.SplitSprite(18, 18);
+
+        return b;
     }
 
     public Player CreatePlayer(String name, float x, float y)
     {
         Sprite s = new Sprite(_textureManager.Get("bomberman"), 0, 0, 18 * 8, 26);
+        s.setPosition(x - 18 / 2, y + 26 / 2);
         s.setOrigin(x, y);
 
-        return new Player(s, _lastGuid++, name);
+        Player p = new Player(s, _lastGuid++, name);
+
+        p.SplitSprite(18, 26);
+
+        return p;
     }
 
     public Wall CreateWall(int hitPoints, int tileX, int tileY)
@@ -41,10 +51,17 @@ public class EntityBuilder
         float x = World.GetPositionAtCenterX(tileX);
         float y = World.GetPositionAtCenterY(tileY);
 
-        Sprite s = new Sprite(_textureManager.Get("wall"), hitPoints == -1 ? 0 : 16, 0, 16, 16);
+        System.out.println("tileX: " + tileX + " tileY: "  + tileY + " x: " + x + " y: " + y);
+
+        Sprite s = new Sprite(_textureManager.Get("wall"), 0, 0, 16 * 2, 16);
+        s.setPosition(x - 16 / 2, y + 16 / 2);
         s.setOrigin(x, y);
 
-        return new Wall(s, _lastGuid++, hitPoints);
+        Wall w = new Wall(s, _lastGuid++, hitPoints);
+
+        w.SplitSprite(16, 16);
+
+        return w;
     }
 
     public PowerUp CreatePowerUp(Wall wall)
@@ -53,9 +70,14 @@ public class EntityBuilder
         float y = wall.GetY();
 
         Sprite s = new Sprite(_textureManager.Get("powerup"), 0, 0, 16 * 7, 16 * 2);
+        s.setPosition(x - 16 / 2, y + 16 / 2);
         s.setOrigin(x, y);
 
-        return new PowerUp(s, _lastGuid++, MathUtils.random(0, PowerUp.NUMBER_OF_TYPES)); // @TODO: All power up types got the same probability to spawn. Maybe change that.
+        PowerUp pu = new PowerUp(s, _lastGuid++, MathUtils.random(0, PowerUp.NUMBER_OF_TYPES)); // @TODO: All power up types got the same probability to spawn. Maybe change that.
+
+        pu.SplitSprite(16, 16);
+
+        return pu;
     }
 
     public Explosion CreateExplosion(Bomb bomb, int tileX, int tileY)
@@ -64,8 +86,13 @@ public class EntityBuilder
         float y = World.GetPositionAtCenterY(tileY);
 
         Sprite s = new Sprite(_textureManager.Get("powerup"), 0, 0, 16 * 9, 16 * 5);
+        s.setPosition(x - 16 / 2, y + 16 / 2);
         s.setOrigin(x, y);
 
-        return new Explosion(s, _lastGuid++, bomb.GetStrength());
+        Explosion e = new Explosion(s, _lastGuid++, bomb.GetStrength());
+
+        e.SplitSprite(16, 16);
+
+        return e;
     }
 }

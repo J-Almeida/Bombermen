@@ -2,6 +2,7 @@ package pt.up.fe.pt.lpoo.bombermen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Bomb extends Entity
 {
@@ -40,5 +41,11 @@ public class Bomb extends Entity
     @Override
     public void OnExplode(Explosion e)
     {
+    }
+
+    @Override
+    public void draw(SpriteBatch batch)
+    {
+        batch.draw(_regions[0][0], _sprite.getX(), _sprite.getY());
     }
 }

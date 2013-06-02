@@ -1,12 +1,12 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
 import pt.up.fe.pt.lpoo.bombermen.messages.*;
-import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.utils.Direction;
 import pt.up.fe.pt.lpoo.utils.Ref;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -34,9 +34,9 @@ public class Game implements Input.Commands, Disposable
 
         _world = new World();
         _builder = new EntityBuilder(_textureManager);
-        
+
         MapLoader builder = new MapLoader(_world, _builder);
-        
+
         Ref<Integer> width = new Ref<Integer>(0);
         Ref<Integer> height = new Ref<Integer>(0);
         builder.TryLoad(0, width, height);
@@ -92,6 +92,11 @@ public class Game implements Input.Commands, Disposable
     private Sender<Message> _sender;
     private Socket _socket;
     private TextureManager _textureManager;
+
+    public void draw(SpriteBatch batch)
+    {
+        _world.draw(batch);
+    }
 
     @Override
     public void MovePlayerDown()

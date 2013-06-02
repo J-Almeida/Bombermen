@@ -1,6 +1,7 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Player extends Entity
 {
@@ -65,5 +66,11 @@ public class Player extends Entity
     @Override
     public void OnExplode(Explosion e)
     {
+    }
+
+    @Override
+    public void draw(SpriteBatch batch)
+    {
+        batch.draw(_regions[0][0], _sprite.getX(), _sprite.getY());
     }
 }

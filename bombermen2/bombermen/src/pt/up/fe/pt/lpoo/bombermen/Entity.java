@@ -1,6 +1,8 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class Entity
 {
@@ -11,7 +13,8 @@ public abstract class Entity
     public static final int TYPE_POWER_UP = 4;
 
     private int _type;
-    private Sprite _sprite;
+    protected Sprite _sprite;
+    protected TextureRegion _regions[][];
     private int _guid;
 
     Entity(int type, Sprite sprite, int guid)
@@ -19,6 +22,11 @@ public abstract class Entity
         _type = type;
         _sprite = sprite;
         _guid = guid;
+    }
+
+    public void SplitSprite(int tileWidth, int tileHeight)
+    {
+        _regions = _sprite.split(tileWidth, tileHeight);
     }
 
     public int GetType() { return _type; }
@@ -48,4 +56,6 @@ public abstract class Entity
     public abstract void OnCollision(Entity other);
     public abstract void OnDestroy();
     public abstract void OnExplode(Explosion e);
+
+    public abstract void draw(SpriteBatch batch);
 }
