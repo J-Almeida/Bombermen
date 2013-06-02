@@ -65,10 +65,12 @@ public class ControlPad implements Disposable
             if (x1 > x2 && x1 < (2 * x2))
             {
                 if (y1 < y2)
-                return Direction.SOUTH;
-            else if (y1 > 2 * y2) return Direction.NORTH;
+                    return Direction.SOUTH;
+                else if (y1 > 2 * y2)
+                    return Direction.NORTH;
             }
-        else if (y1 > y2 && y1 < (2 * y2)) return x1 > x2 ? Direction.EAST : Direction.WEST;
+            else if (y1 > y2 && y1 < (2 * y2))
+                return x1 > x2 ? Direction.EAST : Direction.WEST;
         }
         else if (_bombButtonSprite.getBoundingRectangle().contains(pos.x, pos.y))
         {
@@ -80,14 +82,14 @@ public class ControlPad implements Disposable
 
     public void draw(SpriteBatch spriteBatch)
     {
-        _padTexture.dispose();
-        _bombButtonTexture.dispose();
+        _padSprite.draw(spriteBatch);
+        _bombButtonSprite.draw(spriteBatch);
     }
 
     @Override
     public void dispose()
     {
-        _padSprite.draw(spriteBatch);
-        _bombButtonSprite.draw(spriteBatch);
+        _padTexture.dispose();
+        _bombButtonTexture.dispose();
     }
 }
