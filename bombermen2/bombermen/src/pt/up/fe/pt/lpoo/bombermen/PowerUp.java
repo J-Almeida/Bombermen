@@ -1,7 +1,7 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class PowerUp extends Entity
 {
@@ -12,12 +12,12 @@ public class PowerUp extends Entity
     public static final int TYPE_FIRE = 4; // increase bomb radius
     public static final int TYPE_SKULL = 5; // debuffs (bomberman.wikia.com/wiki/Skull)
     public static final int TYPE_FULL_FIRE = 6; // biggest possible explosion radius
-    
+
     public static final int NUMBER_OF_TYPES = 7;
 
-    public PowerUp(Vector2 pos, int guid, int type)
+    public PowerUp(Sprite sprite, int guid, int type)
     {
-        super(Entity.TYPE_POWER_UP, pos, guid);
+        super(Entity.TYPE_POWER_UP, sprite, guid);
 
         type = _type;
     }

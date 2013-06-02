@@ -1,18 +1,17 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
-import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
-import pt.up.fe.pt.lpoo.bombermen.messages.Message;
-import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
+import pt.up.fe.pt.lpoo.bombermen.messages.*;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.utils.Direction;
+import pt.up.fe.pt.lpoo.utils.Ref;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.Socket;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public class Game implements Input.Commands
+public class Game implements Input.Commands, Disposable
 {
     private static Game _instance = null;
     private MessageHandler _messageHandler;
@@ -25,8 +24,23 @@ public class Game implements Input.Commands
 
     private Game()
     {
+        _textureManager = new TextureManager();
+        _textureManager.Load("bomb");
+        _textureManager.Load("bomberman");
+        _textureManager.Load("dpad");
+        _textureManager.Load("explosion");
+        _textureManager.Load("powerup");
+        _textureManager.Load("wall");
+
         _world = new World();
-        _builder = new EntityBuilder();
+        _builder = new EntityBuilder(_textureManager);
+        
+        MapLoader builder = new MapLoader(_world, _builder);
+        
+        Ref<Integer> width = new Ref<Integer>(0);
+        Ref<Integer> height = new Ref<Integer>(0);
+        builder.TryLoad(0, width, height);
+
         _messageHandler = new MessageHandler()
         {
             @Override
@@ -53,10 +67,9 @@ public class Game implements Input.Commands
 
         try
         {
-            _socket = Gdx.net.newClientSocket(Protocol.TCP, "192.168.1.3", 7777, null);
+            _socket = Gdx.net.newClientSocket(Protocol.TCP, "192.168.1.71", 7777, null);
             _receiver = new Receiver<Message>(_socket);
             _sender = new Sender<Message>(_socket);
-            _sender.Send(new SMSG_PING());
         }
         catch (GdxRuntimeException GdxE)
         {
@@ -84,6 +97,7 @@ public class Game implements Input.Commands
     private Receiver<Message> _receiver;
     private Sender<Message> _sender;
     private Socket _socket;
+    private TextureManager _textureManager;
 
     @Override
     public void MovePlayerDown()
@@ -113,5 +127,13 @@ public class Game implements Input.Commands
     public void PlaceBomb()
     {
         _sender.Send(new CMSG_PLACE_BOMB());
+    }
+
+    @Override
+    public void dispose()
+    {
+        _socket.dispose();
+        _textureManager.dispose();
+        _world.dispose();
     }
 }

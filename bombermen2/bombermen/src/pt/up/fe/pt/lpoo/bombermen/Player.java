@@ -1,12 +1,12 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Player extends Entity
 {
-    Player(Vector2 pos, int guid, String name)
+    Player(Sprite sprite, int guid, String name)
     {
-        super(Entity.TYPE_PLAYER, pos, guid);
+        super(Entity.TYPE_PLAYER, sprite, guid);
 
         _name = name;
         _currentBombs = 0;
@@ -26,7 +26,7 @@ public class Player extends Entity
     {
         return _speed;
     }
-    
+
     public int GetBombRadius()
     {
         return _bombRadius;

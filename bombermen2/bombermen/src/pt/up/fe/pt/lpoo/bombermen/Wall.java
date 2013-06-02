@@ -1,12 +1,12 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Wall extends Entity
 {
-    Wall(Vector2 pos, int guid, int hitPoints)
+    Wall(Sprite sprite, int guid, int hitPoints)
     {
-        super(Entity.TYPE_WALL, pos, guid);
+        super(Entity.TYPE_WALL, sprite, guid);
 
         _hitPoints = hitPoints;
     }

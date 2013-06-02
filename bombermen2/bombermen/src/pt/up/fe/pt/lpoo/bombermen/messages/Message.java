@@ -12,7 +12,7 @@ public abstract class Message implements Serializable
     public static final int CMSG_PLACE_BOMB = 3;
 
     public final int Type;
-    
+
     public Message(int type)
     {
         Type = type;

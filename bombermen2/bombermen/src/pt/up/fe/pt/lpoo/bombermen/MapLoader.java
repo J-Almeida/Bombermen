@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 
-import pt.up.fe.pt.lpoo.utils.Point;
 import pt.up.fe.pt.lpoo.utils.Ref;
 
 public class MapLoader
@@ -14,17 +13,17 @@ public class MapLoader
         _world = w;
         _entityBuilder = entB;
     }
-    
+
     public boolean TryLoad(int number, Ref<Integer> width, Ref<Integer> height)
     {
         FileHandle file = Gdx.files.internal("data/maps/map" + number + ".txt");
-        
+
         if (!file.exists())
             return false;
-        
+
         if (file.isDirectory())
             return false;
-        
+
         String str = file.readString(Constants.DEFAULT_MAP_FILE_CHARSET);
         String lines[] = str.split("\\r?\\n");
         for (int y = 0; y < lines.length; ++y)
@@ -47,20 +46,20 @@ public class MapLoader
                 }
             }
         }
-        
+
         return true;
     }
-    
+
     private World _world;
     private EntityBuilder _entityBuilder;
-    
-    private void ReservePlayerSpace(int x, int y)
+
+    private void ReservePlayerSpace(int tileX, int tileY)
     {
         // @TODO: Implement
     }
-    
-    private void AddWall(int hp, int x, int y)
+
+    private void AddWall(int hp, int tileX, int tileY)
     {
-        _world.AddEntity(_entityBuilder.CreateWall(hp, new Point(x, y)));
+        _world.AddEntity(_entityBuilder.CreateWall(hp, tileX, tileY));
     }
 }

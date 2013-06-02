@@ -1,13 +1,13 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Explosion extends Entity
 {
-    Explosion(Vector2 pos, int guid, int strength)
+    Explosion(Sprite sprite, int guid, int strength)
     {
-        super(Entity.TYPE_EXPLOSION, pos, guid);
-        
+        super(Entity.TYPE_EXPLOSION, sprite, guid);
+
         _strength = strength;
     }
 
