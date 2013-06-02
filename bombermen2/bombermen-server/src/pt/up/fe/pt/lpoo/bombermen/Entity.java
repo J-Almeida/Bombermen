@@ -1,17 +1,11 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import java.awt.Point;
+
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 
 public abstract class Entity
 {
-    @Override
-    public String toString()
-    {
-        return "[Entity - Type: " + _type + " Guid: " + _guid + " Position: " + _sprite.getX() + ", " + _sprite.getY() + " ]";
-    }
-
     public static final int TYPE_PLAYER = 0;
     public static final int TYPE_BOMB = 1;
     public static final int TYPE_EXPLOSION = 2;
@@ -19,20 +13,14 @@ public abstract class Entity
     public static final int TYPE_POWER_UP = 4;
 
     private int _type;
-    protected Sprite _sprite;
-    protected TextureRegion _regions[][];
     private int _guid;
+    private Point _position;
 
-    Entity(int type, Sprite sprite, int guid)
+    Entity(int type, int guid, Point pos)
     {
         _type = type;
-        _sprite = sprite;
         _guid = guid;
-    }
-
-    public void SplitSprite(int tileWidth, int tileHeight)
-    {
-        _regions = _sprite.split(tileWidth, tileHeight);
+        _position = pos;
     }
 
     public int GetType()
@@ -45,39 +33,35 @@ public abstract class Entity
         return _guid;
     }
 
-    public Sprite GetSprite()
+    public void SetX(int x)
     {
-        return _sprite;
+        _position.x = x;
     }
 
-    public float GetX()
+    public void SetY(int y)
     {
-        return _sprite.getX();
+        _position.y = y;
     }
 
-    public float GetY()
+    public int GetX()
     {
-        return _sprite.getY();
+        return _position.x;
     }
 
-    public float GetWidth()
+    public int GetY()
     {
-        return _sprite.getWidth();
+        return _position.y;
     }
 
-    public float GetHeight()
+    public void SetPosition(int x, int y)
     {
-        return _sprite.getHeight();
+        _position.x = x;
+        _position.y = y;
     }
 
-    public void SetX(float x)
+    public Point GetPosition()
     {
-        _sprite.setPosition(x, GetY());
-    }
-
-    public void SetY(float y)
-    {
-        _sprite.setPosition(GetX(), y);
+        return _position;
     }
 
     public boolean IsPlayer()
@@ -130,11 +114,5 @@ public abstract class Entity
         return IsPowerUp() ? (PowerUp) this : null;
     }
 
-    public abstract void OnCollision(Entity other);
-
-    public abstract void OnDestroy();
-
-    public abstract void OnExplode(Explosion e);
-
-    public abstract void draw(SpriteBatch batch);
+    public abstract SMSG_SPAWN GetSpawnMessage();
 }

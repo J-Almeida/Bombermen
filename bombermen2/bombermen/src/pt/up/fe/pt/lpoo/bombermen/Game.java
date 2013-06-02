@@ -1,6 +1,15 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import pt.up.fe.pt.lpoo.bombermen.messages.*;
+import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_JOIN;
+import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
+import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
+import pt.up.fe.pt.lpoo.bombermen.messages.Message;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_BOMB;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_PLAYER;
 import pt.up.fe.pt.lpoo.utils.Direction;
 import pt.up.fe.pt.lpoo.utils.Ref;
 
@@ -44,6 +53,17 @@ public class Game implements Input.Commands, Disposable
         _messageHandler = new MessageHandler()
         {
             @Override
+            protected void SMSG_MOVE_Handler(SMSG_MOVE msg)
+            {
+                System.out.println("Move Handler: " + msg);
+                Entity e = _world.GetEntity(msg.Guid);
+                if (e == null) return;
+                e.SetX(msg.x);
+                e.SetY(msg.y);
+                System.out.println("Move Handler: " + e);
+            }
+
+            @Override
             protected void SMSG_PING_Handler(SMSG_PING msg)
             {
             }
@@ -51,19 +71,70 @@ public class Game implements Input.Commands, Disposable
             @Override
             protected void SMSG_SPAWN_Handler(SMSG_SPAWN msg)
             {
+                switch (msg.EntityType)
+                {
+                    case Entity.TYPE_PLAYER:
+                    {
+                        SMSG_SPAWN_PLAYER playerMsg = (SMSG_SPAWN_PLAYER) msg;
+                        _world.AddEntity(_builder.CreatePlayer(msg.Guid, playerMsg.Name, playerMsg.x, playerMsg.y));
+                        break;
+                    }
+                    case Entity.TYPE_BOMB:
+                    {
+                        SMSG_SPAWN_BOMB bomgMsg = (SMSG_SPAWN_BOMB) msg;
+                        _world.AddEntity(_builder.CreateBomb(msg.Guid, _world.GetEntity(bomgMsg.CreatorId).ToPlayer()));
+                        break;
+                    }
+                    case Entity.TYPE_EXPLOSION:
+                    {
+                        // SMSG_SPAWN_EXPLOSION explosionMsg =
+                        // (SMSG_SPAWN_EXPLOSION) msg;
+                        // _entities.put(msg.Guid,
+                        // _builder.CreateExplosion(msg.Guid, bomb, tileX,
+                        // tileY)
+                        break;
+                    }
+                    case Entity.TYPE_POWER_UP:
+                    {
+                        // SMSG_SPAWN_PLAYER playerMsg = (SMSG_SPAWN_PLAYER)
+                        // msg;
+                        // _entities.put(msg.Guid,
+                        // _builder.CreatePlayer(msg.Guid, playerMsg.Name,
+                        // playerMsg.Position.x, playerMsg.Position.y));
+                        break;
+                    }
+                    case Entity.TYPE_WALL:
+                    {
+                        // SMSG_SPAWN_PLAYER playerMsg = (SMSG_SPAWN_PLAYER)
+                        // msg;
+                        // _entities.put(msg.Guid,
+                        // _builder.CreatePlayer(msg.Guid, playerMsg.Name,
+                        // playerMsg.Position.x, playerMsg.Position.y));
+                        break;
+                    }
+                }
             }
 
             @Override
             protected void Default_Handler(Message msg)
             {
             }
+
+            @Override
+            protected void SMSG_DESTROY_Handler(SMSG_DESTROY msg)
+            {
+                _world.RemoveEntity(msg.Guid);
+
+            }
+
         };
 
         try
         {
-            _socket = Gdx.net.newClientSocket(Protocol.TCP, "192.168.1.71", 7777, null);
+            _socket = Gdx.net.newClientSocket(Protocol.TCP, "192.168.1.3", 7777, null);
             _receiver = new Receiver<Message>(_socket);
             _sender = new Sender<Message>(_socket);
+            _sender.Send(new CMSG_JOIN("Player 1"));
         }
         catch (GdxRuntimeException GdxE)
         {
@@ -134,5 +205,11 @@ public class Game implements Input.Commands, Disposable
         _socket.dispose();
         _textureManager.dispose();
         _world.dispose();
+    }
+
+    public void Update()
+    {
+        while (!_receiver.IsEmpty())
+            _messageHandler.HandleMessage(_receiver.Poll());
     }
 }

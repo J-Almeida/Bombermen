@@ -61,16 +61,25 @@ public class Bombermen implements ApplicationListener
         camera.update();
 
         // center 15 by 13 cells
-        camera.combined.translate(Constants.DEFAULT_WIDTH / 2 - 15 * Constants.CELL_SIZE / 2,
-                Constants.DEFAULT_HEIGHT / 2 - 13 * Constants.CELL_SIZE / 2 - 26, 0);
+        camera.combined.translate(Constants.DEFAULT_WIDTH / 2 - 15 * Constants.CELL_SIZE / 2, Constants.DEFAULT_HEIGHT / 2 - 13 * Constants.CELL_SIZE / 2 - 26, 0);
         batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
 
-        if (_controlPad != null) _controlPad.draw(batch);
-
+        Game.Instance().Update();
         Game.Instance().draw(batch);
 
         batch.end();
+
+        camera.combined.translate(-(Constants.DEFAULT_WIDTH / 2 - 15 * Constants.CELL_SIZE / 2), -(Constants.DEFAULT_HEIGHT / 2 - 13 * Constants.CELL_SIZE / 2 - 26), 0);
+        batch.setProjectionMatrix(camera.combined);
+
+        if (_controlPad != null)
+        {
+            batch.begin();
+            _controlPad.draw(batch);
+            batch.end();
+        }
     }
 
     @Override

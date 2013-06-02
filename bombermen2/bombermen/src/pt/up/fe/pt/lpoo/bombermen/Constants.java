@@ -9,8 +9,8 @@ public final class Constants
     public static final boolean USE_GL20 = true;
 
     // Control Pad
-    public static final int DEFAULT_PAD_WIDTH = 100;
-    public static final int DEFAULT_PAD_HEIGHT = 100;
+    public static final int DEFAULT_PAD_WIDTH = 200;
+    public static final int DEFAULT_PAD_HEIGHT = 200;
     public static final float DEFAULT_PAD_BUTTON_SIZE_MULT = 2.f / 3.f;
 
     // Game

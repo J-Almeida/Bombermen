@@ -27,7 +27,18 @@ public class Sender<T>
         _out.close();
     }
 
-    public void Send(T msg) throws IOException
+    public void Send(T msg)
+    {
+        try
+        {
+            _out.writeObject(msg);
+        }
+        catch (IOException e)
+        {
+        }
+    }
+
+    public void TrySend(T msg) throws IOException
     {
         _out.writeObject(msg);
     }

@@ -1,5 +1,6 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
+import java.awt.Point;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -7,30 +8,35 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_JOIN;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
-import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
-import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_PLAYER;
+import pt.up.fe.pt.lpoo.utils.Direction;
 
 public class BombermenServer implements Runnable
 {
     private ServerSocket _socket = null;
     private int _lastId = 0;
     private HashMap<Integer, ClientHandler> _clients = new HashMap<Integer, ClientHandler>();
+    private HashMap<Integer, Entity> _entities = new HashMap<Integer, Entity>();
     private int _numberOfClients = 0;
     private MessageHandler _messageHandler;
 
-    private Queue<Message> _messageQueue = new LinkedList<Message>();
+    private Queue<ClientMessage> _messageQueue = new LinkedList<ClientMessage>();
 
-    public void PushMessage(Message msg)
+    public void PushMessage(int guid, Message msg)
     {
-        _messageQueue.add(msg);
+        _messageQueue.add(new ClientMessage(guid, msg));
     }
 
     public void Update(int diff)
@@ -45,6 +51,7 @@ public class BombermenServer implements Runnable
 
         synchronized (_clients)
         {
+            ArrayList<Integer> removed = new ArrayList<Integer>();
             Iterator<ClientHandler> it = _clients.values().iterator();
             while (it.hasNext())
             {
@@ -54,8 +61,18 @@ public class BombermenServer implements Runnable
 
                 if (!ch.IsStillConnected())
                 {
+                    removed.add(ch.Guid);
                     it.remove();
                     System.out.println("Client Removed.");
+                }
+            }
+
+            for (Integer i : removed)
+            {
+                SMSG_DESTROY msg = new SMSG_DESTROY(i);
+                for (ClientHandler ch : _clients.values())
+                {
+                    ch.ClientSender.Send(msg);
                 }
             }
         }
@@ -76,21 +93,65 @@ public class BombermenServer implements Runnable
         _messageHandler = new MessageHandler()
         {
             @Override
-            protected void CMSG_MOVE_Handler(CMSG_MOVE msg)
+            protected void CMSG_MOVE_Handler(int guid, CMSG_MOVE msg)
             {
-                System.out.println("Move message received: " + msg);
+                Player p = _entities.get(guid).ToPlayer();
+                if (p == null) return;
+
+                switch (msg.Dir)
+                {
+                    case Direction.NORTH:
+                        p.SetY(p.GetY() + 1);
+                        break;
+                    case Direction.SOUTH:
+                        p.SetY(p.GetY() - 1);
+                        break;
+                    case Direction.EAST:
+                        p.SetX(p.GetX() + 1);
+                        break;
+                    case Direction.WEST:
+                        p.SetX(p.GetX() - 1);
+                        break;
+                }
+
+                SMSG_MOVE msg1 = new SMSG_MOVE(p.GetGuid(), p.GetPosition());
+                for (ClientHandler ch : _clients.values())
+                {
+                    ch.ClientSender.Send(msg1);
+                }
+
+                System.out.println("Move message received from " + guid + " : " + msg + ", new Position: " + p.GetPosition());
             }
 
             @Override
-            protected void CMSG_PLACE_BOMB_Handler(CMSG_PLACE_BOMB msg)
+            protected void CMSG_PLACE_BOMB_Handler(int guid, CMSG_PLACE_BOMB msg)
             {
-                System.out.println("Place bomb message received: " + msg);
+                System.out.println("Place bomb message received from " + guid + " : " + msg);
             }
 
             @Override
-            protected void Default_Handler(Message msg)
+            protected void Default_Handler(int guid, Message msg)
             {
-                System.out.println("Unhandled message received: " + msg);
+                System.out.println("Unhandled message received from " + guid + " : " + msg);
+            }
+
+            @Override
+            protected void CMSG_JOIN_Handler(int guid, CMSG_JOIN msg)
+            {
+                Player p = new Player(guid, msg.Name, new Point(2, 1));
+                _entities.put(guid, p);
+                System.out.println("Player '" + msg.Name + "' (guid: " + guid + ") just joined.");
+                SMSG_SPAWN_PLAYER msg1 = new SMSG_SPAWN_PLAYER(guid, msg.Name, p.GetPosition());
+                for (ClientHandler ch : _clients.values())
+                {
+                    ch.ClientSender.Send(msg1);
+                }
+
+                ClientHandler ch = _clients.get(guid);
+                for (Entity e : _entities.values())
+                {
+                    ch.ClientSender.Send(e.GetSpawnMessage());
+                }
             }
         };
 
@@ -143,9 +204,6 @@ public class BombermenServer implements Runnable
                     _clients.put(clientId, ch);
                 }
 
-                ch.ClientSender.Send(new SMSG_SPAWN());
-                ch.ClientSender.Send(new SMSG_PING());
-
             }
             catch (IOException e)
             {
@@ -188,7 +246,7 @@ class ClientHandler
                         if (_done) break;
                         if (msg == null) continue;
 
-                        _server.PushMessage(msg);
+                        _server.PushMessage(Guid, msg);
 
                     }
                     catch (ClassNotFoundException e)
@@ -240,7 +298,7 @@ class ClientHandler
             _timer = 0;
             try
             {
-                ClientSender.Send(null);
+                ClientSender.TrySend(null);
                 _stillConnected = true;
             }
             catch (IOException e)

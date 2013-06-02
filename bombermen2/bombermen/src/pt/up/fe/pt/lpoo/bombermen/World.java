@@ -45,6 +45,15 @@ public class World implements Disposable
         return _entities.get(guid);
     }
 
+    public void RemoveEntity(int guid)
+    {
+        Entity e = GetEntity(guid);
+        if (e != null)
+        {
+            RemoveEntity(e);
+        }
+    }
+
     public void RemoveEntity(Entity entity)
     {
         entity.OnDestroy();
