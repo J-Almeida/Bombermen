@@ -1,20 +1,17 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
+import pt.up.fe.pt.lpoo.utils.Direction;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Disposable;
 
-public class ControlPad
+public class ControlPad implements Disposable
 {
-    public static final int DIR_NONE = -1;
-    public static final int DIR_UP = 0;
-    public static final int DIR_DOWN = 1;
-    public static final int DIR_LEFT = 2;
-    public static final int DIR_RIGHT = 3;
     public static final int PLACE_BOMB = 4;
-
     private Texture _padTexture;
     private Texture _bombButtonTexture;
     private Sprite _padSprite;
@@ -31,7 +28,6 @@ public class ControlPad
         _bombButtonSprite = new Sprite(_bombButtonTexture);
         _bombButtonSprite.setOrigin(_bombButtonTexture.getWidth(), 0);
         _bombButtonSprite.setPosition(Gdx.graphics.getWidth() - _bombButtonTexture.getWidth(), 0);
-
     }
 
     public float GetWidth()
@@ -69,29 +65,27 @@ public class ControlPad
             if (x1 > x2 && x1 < (2 * x2))
             {
                 if (y1 < y2)
-                    return DIR_DOWN;
-                else if (y1 > 2 * y2) return DIR_UP;
+                return Direction.SOUTH;
+            else if (y1 > 2 * y2) return Direction.NORTH;
             }
-            else if (y1 > y2 && y1 < (2 * y2)) return x1 > x2 ? DIR_RIGHT : DIR_LEFT;
+        else if (y1 > y2 && y1 < (2 * y2)) return x1 > x2 ? Direction.EAST : Direction.WEST;
         }
         else if (_bombButtonSprite.getBoundingRectangle().contains(pos.x, pos.y))
         {
             return PLACE_BOMB;
         }
 
-        return DIR_NONE;
-
-    }
-
-    @Override
-    protected void finalize() throws Throwable
-    {
-        _padTexture.dispose();
-        _bombButtonTexture.dispose();
-        super.finalize();
+        return Direction.NONE;
     }
 
     public void draw(SpriteBatch spriteBatch)
+    {
+        _padTexture.dispose();
+        _bombButtonTexture.dispose();
+    }
+
+    @Override
+    public void dispose()
     {
         _padSprite.draw(spriteBatch);
         _bombButtonSprite.draw(spriteBatch);

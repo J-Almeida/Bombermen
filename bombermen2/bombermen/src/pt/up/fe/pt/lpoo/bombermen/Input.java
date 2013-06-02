@@ -1,5 +1,7 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
+import pt.up.fe.pt.lpoo.utils.Direction;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
@@ -25,18 +27,12 @@ public class Input implements InputProcessor
     private Commands _commands;
     private Camera _camera;
     private ControlPad _controlPad = null;
-
-    public ControlPad GetControlPad()
-    {
-        return _controlPad;
-    }
+    private Vector3 _tempVector = new Vector3();
 
     public void SetControlPad(ControlPad controlPad)
     {
         _controlPad = controlPad;
     }
-
-    private Vector3 _tempVector = new Vector3();
 
     public Input(Commands commands, Camera camera)
     {
@@ -97,23 +93,22 @@ public class Input implements InputProcessor
             if (button == Buttons.LEFT)
             {
                 int dir = _controlPad.Click(_tempVector);
-
-                System.out.println("Direction: " + dir);
+                Gdx.app.debug("Input", "Pad direction " + dir);
 
                 switch (dir)
                 {
-                    case ControlPad.DIR_UP:
+                    case Direction.NORTH:
                         _commands.MovePlayerUp();
-                        break;
-                    case ControlPad.DIR_DOWN:
+                        return true;
+                    case Direction.SOUTH:
                         _commands.MovePlayerDown();
-                        break;
-                    case ControlPad.DIR_LEFT:
+                        return true;
+                    case Direction.WEST:
                         _commands.MovePlayerLeft();
-                        break;
-                    case ControlPad.DIR_RIGHT:
+                        return true;
+                    case Direction.EAST:
                         _commands.MovePlayerRight();
-                        break;
+                        return true;
                     case ControlPad.PLACE_BOMB:
                         _commands.PlaceBomb();
                         break;
@@ -121,12 +116,7 @@ public class Input implements InputProcessor
             }
         }
 
-        // if (_tempVector.x > ... && _tempVector.x < ...
-        // && _tempVector.y > ... && _tempVector.y < ...)
-        // _commands.PlaceBomb();
-        // ...
-
-        return true;
+        return false;
     }
 
     @Override
