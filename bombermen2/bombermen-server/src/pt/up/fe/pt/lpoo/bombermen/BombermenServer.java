@@ -71,9 +71,10 @@ public class BombermenServer implements Runnable
     public BombermenServer(int port) throws IOException
     {
         _socket = new ServerSocket(port);
+        System.out.println("Server created - " + InetAddress.getLocalHost().getHostAddress() + ":" + _socket.getLocalPort());
+
         _messageHandler = new MessageHandler()
         {
-
             @Override
             protected void CMSG_MOVE_Handler(CMSG_MOVE msg)
             {
@@ -91,9 +92,7 @@ public class BombermenServer implements Runnable
             {
                 System.out.println("Unhandled message received: " + msg);
             }
-
         };
-        System.out.println("Server created - " + InetAddress.getLocalHost().getHostAddress() + ":" + _socket.getLocalPort());
 
         new Thread(this).start();
     }

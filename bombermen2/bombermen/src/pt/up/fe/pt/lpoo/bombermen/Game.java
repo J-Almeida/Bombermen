@@ -46,22 +46,16 @@ public class Game implements Input.Commands, Disposable
             @Override
             protected void SMSG_PING_Handler(SMSG_PING msg)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             protected void SMSG_SPAWN_Handler(SMSG_SPAWN msg)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             protected void Default_Handler(Message msg)
             {
-                // TODO Auto-generated method stub
-
             }
         };
 

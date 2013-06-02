@@ -18,8 +18,6 @@ public class Bombermen implements ApplicationListener
 
     private float timeStep;
 
-    private Game _game;
-
     @Override
     public void create()
     {
