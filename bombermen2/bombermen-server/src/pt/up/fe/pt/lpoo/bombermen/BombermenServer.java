@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
+import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
@@ -22,6 +24,7 @@ public class BombermenServer implements Runnable
     private int _lastId = 0;
     private HashMap<Integer, ClientHandler> _clients = new HashMap<Integer, ClientHandler>();
     private int _numberOfClients = 0;
+    private MessageHandler _messageHandler;
 
     private Queue<Message> _messageQueue = new LinkedList<Message>();
 
@@ -36,8 +39,7 @@ public class BombermenServer implements Runnable
         {
             while (!_messageQueue.isEmpty())
             {
-                Message msg = _messageQueue.poll();
-                System.out.println(msg);
+                _messageHandler.HandleMessage(_messageQueue.poll());
             }
         }
 
@@ -69,7 +71,28 @@ public class BombermenServer implements Runnable
     public BombermenServer(int port) throws IOException
     {
         _socket = new ServerSocket(port);
+        _messageHandler = new MessageHandler()
+        {
 
+            @Override
+            protected void CMSG_MOVE_Handler(CMSG_MOVE msg)
+            {
+                System.out.println("Move message received: " + msg);
+            }
+
+            @Override
+            protected void CMSG_PLACE_BOMB_Handler(CMSG_PLACE_BOMB msg)
+            {
+                System.out.println("Place bomb message received: " + msg);
+            }
+
+            @Override
+            protected void Default_Handler(Message msg)
+            {
+                System.out.println("Unhandled message received: " + msg);
+            }
+
+        };
         System.out.println("Server created - " + InetAddress.getLocalHost().getHostAddress() + ":" + _socket.getLocalPort());
 
         new Thread(this).start();

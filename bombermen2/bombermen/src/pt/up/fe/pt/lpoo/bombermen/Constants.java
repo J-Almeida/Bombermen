@@ -11,6 +11,7 @@ public final class Constants
     // Control Pad
     public static final int DEFAULT_PAD_WIDTH = 300;
     public static final int DEFAULT_PAD_HEIGHT = 300;
+    public static final float DEFAULT_PAD_BUTTON_SIZE_MULT = 2.f / 3.f;
 
     // Game
     public static final int INIT_NUM_MAX_BOMBS = 1;

@@ -114,6 +114,9 @@ public class Input implements InputProcessor
                     case ControlPad.DIR_RIGHT:
                         _commands.MovePlayerRight();
                         break;
+                    case ControlPad.PLACE_BOMB:
+                        _commands.PlaceBomb();
+                        break;
                 }
             }
         }

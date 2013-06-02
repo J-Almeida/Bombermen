@@ -4,6 +4,7 @@ import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.utils.Direction;
 
 import com.badlogic.gdx.Gdx;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 public class Game implements Input.Commands
 {
     private static Game _instance = null;
+    private MessageHandler _messageHandler;
 
     public static Game Instance()
     {
@@ -25,6 +27,29 @@ public class Game implements Input.Commands
     {
         _world = new World();
         _builder = new EntityBuilder();
+        _messageHandler = new MessageHandler()
+        {
+            @Override
+            protected void SMSG_PING_Handler(SMSG_PING msg)
+            {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            protected void SMSG_SPAWN_Handler(SMSG_SPAWN msg)
+            {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            protected void Default_Handler(Message msg)
+            {
+                // TODO Auto-generated method stub
+
+            }
+        };
 
         try
         {

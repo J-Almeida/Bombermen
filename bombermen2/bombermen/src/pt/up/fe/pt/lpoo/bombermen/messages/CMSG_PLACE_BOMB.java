@@ -8,4 +8,10 @@ public class CMSG_PLACE_BOMB extends Message
     {
         super(CMSG_PLACE_BOMB);
     }
+
+    @Override
+    public String toString()
+    {
+        return "[CMSG_PLACE_BOMB]";
+    }
 }
