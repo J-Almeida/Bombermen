@@ -17,6 +17,7 @@ public class Bombermen implements ApplicationListener
     private BitmapFont font;
 
     private float timeStep;
+    private Input _input;
 
     @Override
     public void create()
@@ -33,16 +34,16 @@ public class Bombermen implements ApplicationListener
         batch = new SpriteBatch();
         font = new BitmapFont();
 
-        Input in = new Input(Game.Instance(), camera);
+        _input = new Input(Game.Instance(), camera);
 
         if (Gdx.app.getType() == ApplicationType.Android)
         {
             _controlPad = new ControlPad();
             _controlPad.SetSize(Constants.DEFAULT_PAD_WIDTH, Constants.DEFAULT_PAD_HEIGHT);
-            in.SetControlPad(_controlPad);
+            _input.SetControlPad(_controlPad);
         }
 
-        Gdx.input.setInputProcessor(in);
+        Gdx.input.setInputProcessor(_input);
     }
 
     @Override
@@ -66,7 +67,10 @@ public class Bombermen implements ApplicationListener
 
         batch.begin();
 
-        Game.Instance().Update();
+        int dt = (int) (Gdx.graphics.getRawDeltaTime() * 1000.f);
+
+        Game.Instance().Update(dt);
+        _input.Update(dt);
         Game.Instance().draw(batch);
 
         batch.end();

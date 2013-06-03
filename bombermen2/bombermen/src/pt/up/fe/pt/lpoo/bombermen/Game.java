@@ -207,7 +207,7 @@ public class Game implements Input.Commands, Disposable
         _world.dispose();
     }
 
-    public void Update()
+    public void Update(int diff)
     {
         while (!_receiver.IsEmpty())
             _messageHandler.HandleMessage(_receiver.Poll());
