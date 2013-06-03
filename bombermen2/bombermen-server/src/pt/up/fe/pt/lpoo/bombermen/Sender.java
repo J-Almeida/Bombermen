@@ -29,6 +29,7 @@ public class Sender<T>
 
     public void Send(T msg)
     {
+        System.out.println("Sender: " + msg);
         try
         {
             _out.writeObject(msg);

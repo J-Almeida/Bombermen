@@ -1,6 +1,5 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import java.awt.Point;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -22,6 +21,8 @@ import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_PLAYER;
 import pt.up.fe.pt.lpoo.utils.Direction;
+
+import com.badlogic.gdx.math.Vector2;
 
 public class BombermenServer implements Runnable
 {
@@ -49,6 +50,14 @@ public class BombermenServer implements Runnable
             }
         }
 
+        for (Entity e1 : _entities.values())
+            for (Entity e2 : _entities.values())
+            {
+                if (e1.GetGuid() == e2.GetGuid()) continue;
+
+                if (e1.Collides(e2)) e1.OnCollision(e2);
+            }
+
         synchronized (_clients)
         {
             ArrayList<Integer> removed = new ArrayList<Integer>();
@@ -69,6 +78,7 @@ public class BombermenServer implements Runnable
 
             for (Integer i : removed)
             {
+                _entities.remove(i);
                 SMSG_DESTROY msg = new SMSG_DESTROY(i);
                 for (ClientHandler ch : _clients.values())
                 {
@@ -98,29 +108,60 @@ public class BombermenServer implements Runnable
                 Player p = _entities.get(guid).ToPlayer();
                 if (p == null) return;
 
+                boolean moved = true;
+
+                float x = p.GetX();
+                float y = p.GetY();
+
                 switch (msg.Dir)
                 {
                     case Direction.NORTH:
-                        p.SetY(p.GetY() + 1);
+                        p.SetY(p.GetY() + 10);
                         break;
                     case Direction.SOUTH:
-                        p.SetY(p.GetY() - 1);
+                        p.SetY(p.GetY() - 10);
                         break;
                     case Direction.EAST:
-                        p.SetX(p.GetX() + 1);
+                        p.SetX(p.GetX() + 10);
                         break;
                     case Direction.WEST:
-                        p.SetX(p.GetX() - 1);
+                        p.SetX(p.GetX() - 10);
                         break;
+                    default:
+                        moved = false;
                 }
 
-                SMSG_MOVE msg1 = new SMSG_MOVE(p.GetGuid(), p.GetPosition());
-                for (ClientHandler ch : _clients.values())
+                if (moved)
                 {
-                    ch.ClientSender.Send(msg1);
+                    for (Entity e : _entities.values())
+                    {
+
+                        if (p.GetGuid() != e.GetGuid() && p.Collides(e))
+                        {
+                            if (e.IsExplosion())
+                            {
+                                p.OnCollision(e);
+                            }
+                            else
+                            {
+                                moved = false;
+                                p.SetPosition(x, y);
+                            }
+                            break;
+                        }
+                    }
                 }
 
-                System.out.println("Move message received from " + guid + " : " + msg + ", new Position: " + p.GetPosition());
+                if (moved)
+                {
+                    SMSG_MOVE msg1 = new SMSG_MOVE(p.GetGuid(), p.GetPosition());
+                    for (ClientHandler ch : _clients.values())
+                    {
+                        ch.ClientSender.Send(msg1);
+                    }
+
+                    System.out.println("Move message received from " + guid + " : " + msg + ", new Position: " + p.GetPosition());
+                }
             }
 
             @Override
@@ -138,7 +179,7 @@ public class BombermenServer implements Runnable
             @Override
             protected void CMSG_JOIN_Handler(int guid, CMSG_JOIN msg)
             {
-                Player p = new Player(guid, msg.Name, new Point(2, 1));
+                Player p = new Player(guid, msg.Name, new Vector2(-20, 0));
                 _entities.put(guid, p);
                 System.out.println("Player '" + msg.Name + "' (guid: " + guid + ") just joined.");
                 SMSG_SPAWN_PLAYER msg1 = new SMSG_SPAWN_PLAYER(guid, msg.Name, p.GetPosition());

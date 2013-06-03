@@ -81,8 +81,8 @@ public class Game implements Input.Commands, Disposable
                     }
                     case Entity.TYPE_BOMB:
                     {
-                        SMSG_SPAWN_BOMB bomgMsg = (SMSG_SPAWN_BOMB) msg;
-                        _world.AddEntity(_builder.CreateBomb(msg.Guid, _world.GetEntity(bomgMsg.CreatorId).ToPlayer()));
+                        SMSG_SPAWN_BOMB bombMsg = (SMSG_SPAWN_BOMB) msg;
+                        _world.AddEntity(_builder.CreateBomb(msg.Guid, bombMsg.x, bombMsg.y));
                         break;
                     }
                     case Entity.TYPE_EXPLOSION:

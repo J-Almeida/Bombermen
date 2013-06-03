@@ -1,8 +1,9 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import java.awt.Point;
-
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
+
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity
 {
@@ -14,14 +15,29 @@ public abstract class Entity
 
     private int _type;
     private int _guid;
-    private Point _position;
+    private Rectangle _rect;
 
-    Entity(int type, int guid, Point pos)
+    Entity(int type, int guid, Vector2 pos)
     {
         _type = type;
         _guid = guid;
-        _position = pos;
+        Vector2 size = this.GetSize();
+        _rect = new Rectangle(pos.x, pos.y, size.x, size.y);
     }
+
+    public boolean Overlaps(Rectangle r)
+    {
+        return _rect.overlaps(r);
+    }
+
+    public boolean Collides(Entity e)
+    {
+        return Overlaps(e._rect);
+    }
+
+    public abstract void OnCollision(Entity e);
+
+    public abstract Vector2 GetSize();
 
     public int GetType()
     {
@@ -33,35 +49,35 @@ public abstract class Entity
         return _guid;
     }
 
-    public void SetX(int x)
+    public void SetX(float x)
     {
-        _position.x = x;
+        _rect.x = x;
     }
 
-    public void SetY(int y)
+    public void SetY(float y)
     {
-        _position.y = y;
+        _rect.y = y;
     }
 
-    public int GetX()
+    public float GetX()
     {
-        return _position.x;
+        return _rect.x;
     }
 
-    public int GetY()
+    public float GetY()
     {
-        return _position.y;
+        return _rect.y;
     }
 
-    public void SetPosition(int x, int y)
+    public void SetPosition(float x, float y)
     {
-        _position.x = x;
-        _position.y = y;
+        _rect.x = x;
+        _rect.y = y;
     }
 
-    public Point GetPosition()
+    public Vector2 GetPosition()
     {
-        return _position;
+        return new Vector2(_rect.x, _rect.y);
     }
 
     public boolean IsPlayer()

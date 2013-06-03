@@ -1,7 +1,8 @@
 package pt.up.fe.pt.lpoo.bombermen.messages;
 
-import java.awt.Point;
 import java.io.Serializable;
+
+import com.badlogic.gdx.math.Vector2;
 
 public class SMSG_MOVE extends Message implements Serializable
 {
@@ -11,7 +12,7 @@ public class SMSG_MOVE extends Message implements Serializable
     public final float x;
     public final float y;
 
-    public SMSG_MOVE(int guid, Point pos)
+    public SMSG_MOVE(int guid, Vector2 pos)
     {
         super(SMSG_MOVE);
 
@@ -23,6 +24,6 @@ public class SMSG_MOVE extends Message implements Serializable
     @Override
     public String toString()
     {
-        return "[SMSG_MOVE - guid: " + Guid + ", Position: " + x + ", " + y + "]";
+        return "[SMSG_MOVE - guid: " + Guid + ", Position: " + new Vector2(x, y) + "]";
     }
 }

@@ -47,6 +47,8 @@ public class Receiver<T> implements Runnable
                     if (_done) break;
                     if (msg == null) continue;
 
+                    System.out.println("Receiver: " + msg);
+
                     synchronized (_messageQueue)
                     {
                         _messageQueue.add(msg);

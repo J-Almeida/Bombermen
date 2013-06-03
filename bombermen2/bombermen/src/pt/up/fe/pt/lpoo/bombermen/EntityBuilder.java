@@ -12,10 +12,10 @@ public class EntityBuilder
         _textureManager = tm;
     }
 
-    public Bomb CreateBomb(int guid, Player creator)
+    public Bomb CreateBomb(int guid, float px, float py)
     {
-        int tileX = World.GetTileX(creator.GetX());
-        int tileY = World.GetTileY(creator.GetX());
+        int tileX = World.GetTileX(px);
+        int tileY = World.GetTileY(py);
         float x = World.GetPositionAtCenterX(tileX);
         float y = World.GetPositionAtCenterY(tileY);
 
@@ -23,7 +23,7 @@ public class EntityBuilder
         s.setPosition(x - 18 / 2, y + 18 / 2);
         s.setOrigin(x, y);
 
-        Bomb b = new Bomb(s, guid, creator, creator.GetBombRadius(), Constants.DEFAULT_BOMB_STRENGTH, Constants.DEFAULT_BOMB_TIMER);
+        Bomb b = new Bomb(s, guid);
 
         b.SplitSprite(18, 18);
 
@@ -90,16 +90,16 @@ public class EntityBuilder
         return pu;
     }
 
-    public Explosion CreateExplosion(int guid, Bomb bomb, int tileX, int tileY)
+    public Explosion CreateExplosion(int guid, int strength, int tileX, int tileY)
     {
         float x = World.GetPositionAtCenterX(tileX);
         float y = World.GetPositionAtCenterY(tileY);
 
-        Sprite s = new Sprite(_textureManager.Get("powerup"), 0, 0, 16 * 9, 16 * 5);
+        Sprite s = new Sprite(_textureManager.Get("explosion"), 0, 0, 16 * 9, 16 * 5);
         s.setPosition(x - 16 / 2, y + 16 / 2);
         s.setOrigin(x, y);
 
-        Explosion e = new Explosion(s, guid, bomb.GetStrength());
+        Explosion e = new Explosion(s, guid, strength);
 
         e.SplitSprite(16, 16);
 
