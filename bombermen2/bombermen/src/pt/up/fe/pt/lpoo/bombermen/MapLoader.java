@@ -36,13 +36,13 @@ public class MapLoader
                 switch (chars[x])
                 {
                     case ' ': // empty space, can be destroyable wall
-                        if (MathUtils.random() < Constants.WALL_CHANCE) AddWall(1, x, y);
+                        if (MathUtils.random() < Constants.WALL_CHANCE) AddWall(1, x, lines.length - 1 - y);
                         break;
                     case 'X': // undestroyable wall
-                        AddWall(-1, x, y);
+                        AddWall(-1, x, lines.length - 1 - y);
                         break;
                     case '#': // space reserved for players
-                        ReservePlayerSpace(x, y);
+                        ReservePlayerSpace(x, lines.length - 1 - y);
                         break;
                 }
             }
