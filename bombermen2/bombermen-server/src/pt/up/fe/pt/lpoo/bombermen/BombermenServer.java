@@ -151,7 +151,9 @@ public class BombermenServer implements Runnable
             @Override
             protected void CMSG_MOVE_Handler(int guid, CMSG_MOVE msg)
             {
-                Player p = _entities.get(guid).ToPlayer();
+                Entity e = _entities.get(guid);
+                if (e == null) return;
+                Player p = e.ToPlayer();
                 if (p == null) return;
 
                 p.SetMoving(msg.Val, msg.Dir);
