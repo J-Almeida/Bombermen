@@ -54,11 +54,6 @@ public class BombermenServer implements Runnable
         _entitiesToAdd.add(e);
     }
 
-    public int GetLastId()
-    {
-        return _lastId;
-    }
-
     public int IncLastId() // returns previous id
     {
         return _lastId++;
@@ -186,7 +181,7 @@ public class BombermenServer implements Runnable
                 float y = tileY * Constants.CELL_SIZE + 0.1f * Constants.CELL_SIZE;
 
                 Vector2 position = new Vector2(x, y); // (0.9, 0.9)
-                Bomb b = new Bomb(_lastId, p.GetGuid(), position, p.GetExplosionRadius(), BombermenServer.this);
+                Bomb b = new Bomb(BombermenServer.this.IncLastId(), p.GetGuid(), position, p.GetExplosionRadius(), BombermenServer.this);
                 BombermenServer.this.CreateEntityNextUpdate(b);
 
                 SMSG_SPAWN bombMsg = b.GetSpawnMessage();
@@ -266,7 +261,7 @@ public class BombermenServer implements Runnable
             {
                 socket = _socket.accept();
 
-                int clientId = _lastId++;
+                int clientId = IncLastId();
 
                 ClientHandler ch;
 
