@@ -28,8 +28,8 @@ public final class Constants
     public static final float INIT_PLAYER_SPEED = 108f / 1000f;
 
     // Sizes
-    public static final float PLAYER_WIDTH = 18.f * CELL_SIZE * 0.8f / 26f;
-    public static final float PLAYER_HEIGHT = CELL_SIZE * 0.8f;
+    public static final float PLAYER_WIDTH = 18.f * CELL_SIZE * 0.75f / 26f;
+    public static final float PLAYER_HEIGHT = CELL_SIZE * 0.75f;
     
     public static final float BOMB_WIDTH = 0.9f * CELL_SIZE;
     public static final float BOMB_HEIGHT = BOMB_WIDTH;

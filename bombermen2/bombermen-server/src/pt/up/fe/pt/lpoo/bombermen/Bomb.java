@@ -8,15 +8,33 @@ import com.badlogic.gdx.math.Vector2;
 public class Bomb extends Entity
 {
     private static CollisionHandler<Bomb> cHandler = new CollisionHandler<Bomb>()
-    {
-    };
+    {};
 
     private int _explosionRadius;
+    private boolean _justCreated = true;
+    private int _creatorGuid;
+    
+    public int GetCreatorGuid()
+    {
+        return _creatorGuid;
+    }
+    
+    public void SetJustCreated(boolean val)
+    {
+        _justCreated = false;
+    }
+    
+    public boolean JustCreated() 
+    {
+        return _justCreated;
+    }
 
-    Bomb(int guid, Vector2 pos, int explosionRadius, BombermenServer sv)
+    Bomb(int guid, int creatorGuid, Vector2 pos, int explosionRadius, BombermenServer sv)
     {
         super(TYPE_BOMB, guid, pos, sv);
 
+        _creatorGuid = creatorGuid;
+        
         _explosionRadius = explosionRadius;
     }
 
@@ -49,6 +67,6 @@ public class Bomb extends Entity
     public void Update(int diff)
     {
         // TODO Auto-generated method stub
-        
+
     }
 }

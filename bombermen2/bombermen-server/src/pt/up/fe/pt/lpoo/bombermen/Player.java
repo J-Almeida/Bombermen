@@ -155,9 +155,15 @@ public class Player extends Entity
                 {
                     for (Entity e : _server.GetEntities().values())
                     {
-                        if (GetGuid() != e.GetGuid() && Collides(e))
+                        if (e.IsBomb() && e.ToBomb().JustCreated() && e.ToBomb().GetCreatorGuid() == GetGuid())
+                            if (Collides(e))
+                                break;
+                            else
+                                e.ToBomb().SetJustCreated(false);
+                        
+                        if (!e.IsPlayer() && Collides(e))
                         {
-                            if (e.IsExplosion())
+                            if (e.IsExplosion() || e.IsPowerUp())
                             {
                                 OnCollision(e);
                                 e.OnCollision(this);

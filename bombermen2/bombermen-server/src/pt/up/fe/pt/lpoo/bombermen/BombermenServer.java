@@ -155,7 +155,7 @@ public class BombermenServer implements Runnable
                 float y = tileY * Constants.CELL_SIZE + 0.1f * Constants.CELL_SIZE;
 
                 Vector2 position = new Vector2(x, y); // (0.9, 0.9)
-                Bomb b = new Bomb(_lastId, position, p.GetExplosionRadius(), sv);
+                Bomb b = new Bomb(_lastId, p.GetGuid(), position, p.GetExplosionRadius(), sv);
                 _entities.put(_lastId, b);
 
                 SMSG_SPAWN bombMsg = b.GetSpawnMessage();
