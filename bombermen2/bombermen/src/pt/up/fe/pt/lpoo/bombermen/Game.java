@@ -1,5 +1,8 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_JOIN;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
@@ -115,7 +118,7 @@ public class Game implements Input.Commands, Disposable
 
         try
         {
-            _socket = Gdx.net.newClientSocket(Protocol.TCP, "172.30.17.54", 7777, null);
+            _socket = Gdx.net.newClientSocket(Protocol.TCP, InetAddress.getLocalHost().getHostAddress(), 7777, null);
 
             _receiver = new Receiver<Message>(_socket);
             _sender = new Sender<Message>(_socket);
@@ -124,6 +127,10 @@ public class Game implements Input.Commands, Disposable
         catch (GdxRuntimeException GdxE)
         {
             GdxE.printStackTrace();
+        }
+        catch (UnknownHostException e)
+        {
+            e.printStackTrace();
         }
     }
 
