@@ -15,6 +15,7 @@ public class Player extends Entity
     {
         super(TYPE_PLAYER, guid, pos);
         _name = name;
+        _speed = Constants.INIT_PLAYER_SPEED;
     }
 
     public String GetName()
@@ -28,6 +29,17 @@ public class Player extends Entity
     }
 
     private String _name;
+    private float _speed;
+    
+    public float GetSpeed()
+    {
+        return _speed;
+    }
+    
+    public void SetSpeed(float speed)
+    {
+        _speed = speed;
+    }
 
     @Override
     public SMSG_SPAWN GetSpawnMessage()

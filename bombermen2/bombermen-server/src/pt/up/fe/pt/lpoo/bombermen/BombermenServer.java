@@ -53,11 +53,9 @@ public class BombermenServer implements Runnable
 
         for (Entity e1 : _entities.values())
             for (Entity e2 : _entities.values())
-            {
-                if (e1.GetGuid() == e2.GetGuid()) continue;
-
-                if (e1.Collides(e2)) e1.OnCollision(e2);
-            }
+                if (e1.GetGuid() != e2.GetGuid())
+                    if (e1.Collides(e2))
+                        e1.OnCollision(e2);
 
         synchronized (_clients)
         {
@@ -117,16 +115,16 @@ public class BombermenServer implements Runnable
                 switch (msg.Dir)
                 {
                     case Direction.NORTH:
-                        p.SetY(p.GetY() + 1);
+                        p.SetY(p.GetY() + p.GetSpeed());
                         break;
                     case Direction.SOUTH:
-                        p.SetY(p.GetY() - 1);
+                        p.SetY(p.GetY() - p.GetSpeed());
                         break;
                     case Direction.EAST:
-                        p.SetX(p.GetX() + 1);
+                        p.SetX(p.GetX() + p.GetSpeed());
                         break;
                     case Direction.WEST:
-                        p.SetX(p.GetX() - 1);
+                        p.SetX(p.GetX() - p.GetSpeed());
                         break;
                     default:
                         moved = false;
@@ -136,7 +134,6 @@ public class BombermenServer implements Runnable
                 {
                     for (Entity e : _entities.values())
                     {
-
                         if (p.GetGuid() != e.GetGuid() && p.Collides(e))
                         {
                             if (e.IsExplosion())
@@ -157,9 +154,7 @@ public class BombermenServer implements Runnable
                 {
                     SMSG_MOVE msg1 = new SMSG_MOVE(p.GetGuid(), p.GetPosition());
                     for (ClientHandler ch : _clients.values())
-                    {
                         ch.ClientSender.Send(msg1);
-                    }
 
                     System.out.println("Move message received from " + guid + " : " + msg + ", new Position: " + p.GetPosition());
                 }
@@ -185,15 +180,11 @@ public class BombermenServer implements Runnable
                 System.out.println("Player '" + msg.Name + "' (guid: " + guid + ") just joined.");
                 SMSG_SPAWN_PLAYER msg1 = new SMSG_SPAWN_PLAYER(guid, msg.Name, p.GetX(), p.GetY());
                 for (ClientHandler ch : _clients.values())
-                {
                     ch.ClientSender.Send(msg1);
-                }
 
                 ClientHandler ch = _clients.get(guid);
                 for (Entity e : _entities.values())
-                {
                     ch.ClientSender.Send(e.GetSpawnMessage());
-                }
             }
         };
 

@@ -35,5 +35,4 @@ public class Bomb extends Entity
     {
         cHandler.OnCollision(this, e);
     }
-
 }
