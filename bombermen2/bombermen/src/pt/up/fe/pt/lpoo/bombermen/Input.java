@@ -17,7 +17,7 @@ public class Input implements InputProcessor
     public static final int A_RIGHT = 3;
     public static final int A_BOMB = 4;
     public static final int A_NUM_OF_ACTIONS = 5;
-    public static final int TIME_OF_INPUT = 10;
+    public static final int TIME_OF_INPUT = 500;
 
     private int[] _timers = { 0, 0, 0, 0, 0 };
     private boolean[] _actions = { false, false, false, false, false };

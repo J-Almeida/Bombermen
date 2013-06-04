@@ -18,6 +18,6 @@ public class MainActivity extends AndroidApplication
         cfg.useCompass = false;
         cfg.useWakelock = false;
 
-        initialize(new Bombermen(), cfg);
+        initialize(new Bombermen2(), cfg);
     }
 }

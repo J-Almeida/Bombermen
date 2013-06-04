@@ -30,12 +30,12 @@ public class Player extends Entity
 
     private String _name;
     private float _speed;
-    
+
     public float GetSpeed()
     {
         return _speed;
     }
-    
+
     public void SetSpeed(float speed)
     {
         _speed = speed;

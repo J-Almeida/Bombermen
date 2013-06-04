@@ -22,13 +22,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class Game implements Input.Commands, Disposable
 {
-    //private static Game _instance = null;
-    //public static Game Instance()
-    //{
-    //    if (_instance == null) _instance = new Game();
-    //    return _instance;
-    //}
-
     public Game(Stage stage)
     {
         _stage = stage;
@@ -53,13 +46,8 @@ public class Game implements Input.Commands, Disposable
                 Entity e = _world.GetEntity(msg.Guid);
                 if (e == null) return;
 
-                //_stage.getCamera().translate(msg.x - e.GetX(), msg.y - e.GetY(), 0);
-                //_stage.getCamera().lookAt(-10, -10, 0);
-
                 e.setX(msg.x);
                 e.setY(msg.y);
-
-
 
                 System.out.println("Move Handler: " + e);
             }
