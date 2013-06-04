@@ -18,6 +18,8 @@ public class Input implements InputProcessor
     public static final int A_BOMB = 4;
     public static final int A_NUM_OF_ACTIONS = 5;
 
+    private boolean[] _activeActions = { false, false, false, false };
+    
     public interface Commands
     {
         void ExecuteAction(int action, boolean val);
@@ -118,15 +120,19 @@ public class Input implements InputProcessor
                 switch (dir)
                 {
                     case Direction.NORTH:
+                        _activeActions[A_UP] = true;
                         _commands.ExecuteAction(A_UP, true);
                         return true;
                     case Direction.SOUTH:
+                        _activeActions[A_DOWN] = true;
                         _commands.ExecuteAction(A_DOWN, true);
                         return true;
                     case Direction.WEST:
+                        _activeActions[A_LEFT] = true;
                         _commands.ExecuteAction(A_LEFT, true);
                         return true;
                     case Direction.EAST:
+                        _activeActions[A_RIGHT] = true;
                         _commands.ExecuteAction(A_RIGHT, true);
                         return true;
                     case ControlPad.PLACE_BOMB:
@@ -147,7 +153,7 @@ public class Input implements InputProcessor
 
         if (_controlPad != null)
         {
-            if (button == Buttons.LEFT)
+            /*if (button == Buttons.LEFT)
             {
                 int dir = _controlPad.Click(_tempVector);
 
@@ -165,6 +171,15 @@ public class Input implements InputProcessor
                     case Direction.EAST:
                         _commands.ExecuteAction(A_RIGHT, false);
                         return true;
+                }
+            }*/
+            
+            for (int i = 0; i < _activeActions.length; ++i)
+            {
+                if (_activeActions[i])
+                {
+                    _commands.ExecuteAction(i, false);
+                    _activeActions[i] = false;
                 }
             }
         }
