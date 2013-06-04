@@ -11,9 +11,18 @@ public class Bomb extends Entity
     {
     };
 
-    Bomb(int guid, Vector2 pos, BombermenServer sv)
+    private int _explosionRadius;
+
+    Bomb(int guid, Vector2 pos, int explosionRadius, BombermenServer sv)
     {
         super(TYPE_BOMB, guid, pos, sv);
+
+        _explosionRadius = explosionRadius;
+    }
+
+    public int GetExplosionRadius()
+    {
+        return _explosionRadius;
     }
 
     @Override

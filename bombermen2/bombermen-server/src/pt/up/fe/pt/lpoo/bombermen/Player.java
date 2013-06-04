@@ -12,11 +12,21 @@ public class Player extends Entity
     private static CollisionHandler<Player> cHandler = new CollisionHandler<Player>()
     {};
 
+    private String _name;
+    private float _speed;
+    private int _maxBombs;
+    private int _explosionRadius;
+    private int _currentBombs;
+    private boolean[] _moving = { false, false, false, false };
+
     Player(int guid, String name, Vector2 pos, BombermenServer sv)
     {
         super(TYPE_PLAYER, guid, pos, sv);
         _name = name;
         _speed = Constants.INIT_PLAYER_SPEED;
+        _currentBombs = 0;
+        _explosionRadius = Constants.INIT_BOMB_RADIUS;
+        _maxBombs = Constants.INIT_NUM_MAX_BOMBS;
     }
 
     public String GetName()
@@ -29,19 +39,39 @@ public class Player extends Entity
         _name = name;
     }
 
-    private String _name;
-    private float _speed;
-    private boolean[] _moving = { false, false, false, false };
-
-    public void SetMoving(boolean val, int dir)
+    public int GetCurrentBombs()
     {
-        if (dir != Direction.NONE) _moving[dir] = val;
+        return _currentBombs;
     }
 
-    public boolean GetMoving(int dir)
+    public int GetMaxBombs()
     {
-        if (dir == Direction.NONE) return false;
-        return _moving[dir];
+        return _maxBombs;
+    }
+
+    public int GetExplosionRadius()
+    {
+        return _explosionRadius;
+    }
+
+    public void UpdateCurrentBombs(int inc)
+    {
+        _currentBombs += inc;
+    }
+
+    public void UpdateMaxBombs(int inc)
+    {
+        _maxBombs += inc;
+    }
+
+    public void UpdateExplosionRadius(int inc)
+    {
+        _explosionRadius += inc;
+    }
+
+    public void SetExplosionRadius(int val)
+    {
+        _explosionRadius = val;
     }
 
     public float GetSpeed()
@@ -52,6 +82,17 @@ public class Player extends Entity
     public void SetSpeed(float speed)
     {
         _speed = speed;
+    }
+    
+    public void SetMoving(boolean val, int dir)
+    {
+        if (dir != Direction.NONE) _moving[dir] = val;
+    }
+
+    public boolean GetMoving(int dir)
+    {
+        if (dir == Direction.NONE) return false;
+        return _moving[dir];
     }
 
     @Override

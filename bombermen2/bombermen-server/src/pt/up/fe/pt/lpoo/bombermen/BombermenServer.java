@@ -18,9 +18,10 @@ import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
-import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_PLAYER;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.utils.Ref;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class BombermenServer implements Runnable
@@ -128,6 +129,38 @@ public class BombermenServer implements Runnable
             protected void CMSG_PLACE_BOMB_Handler(int guid, CMSG_PLACE_BOMB msg)
             {
                 System.out.println("Place bomb message received from " + guid + " : " + msg);
+
+                Player p = _entities.get(guid).ToPlayer();
+                if (p == null)
+                {
+                    System.out.println("Player sent unknown guid (" + guid + "). Ignored.");
+                    return;
+                }
+
+                if (p.GetCurrentBombs() >= p.GetMaxBombs())
+                {
+                    System.out.println("Player tried to place bomb without max bombs available.");
+                    return;
+                }
+
+                p.UpdateCurrentBombs(1);
+
+                float playerX = p.GetX();
+                float playerY = p.GetY();
+
+                int tileX = MathUtils.floor(playerX / Constants.CELL_SIZE);
+                int tileY = MathUtils.floor(playerY / Constants.CELL_SIZE);
+
+                float x = tileX * Constants.CELL_SIZE + 0.1f * Constants.CELL_SIZE;
+                float y = tileY * Constants.CELL_SIZE + 0.1f * Constants.CELL_SIZE;
+
+                Vector2 position = new Vector2(x, y); // (0.9, 0.9)
+                Bomb b = new Bomb(_lastId, position, p.GetExplosionRadius(), sv);
+                _entities.put(_lastId, b);
+
+                SMSG_SPAWN bombMsg = b.GetSpawnMessage();
+                for (ClientHandler ch : _clients.values())
+                    ch.ClientSender.Send(bombMsg);
             }
 
             @Override
@@ -142,8 +175,8 @@ public class BombermenServer implements Runnable
                 Player p = new Player(guid, msg.Name, new Vector2(40, 40), sv);
                 _entities.put(guid, p);
                 System.out.println("Player '" + msg.Name + "' (guid: " + guid + ") just joined.");
-                
-                SMSG_SPAWN_PLAYER msg1 = new SMSG_SPAWN_PLAYER(guid, msg.Name, p.GetX(), p.GetY());
+
+                SMSG_SPAWN msg1 = p.GetSpawnMessage();
                 for (ClientHandler ch : _clients.values())
                     if (ch.Guid != guid)
                         ch.ClientSender.Send(msg1);
@@ -193,7 +226,6 @@ public class BombermenServer implements Runnable
                 e.printStackTrace();
             }
         }
-
     }
 
     @Override
@@ -326,6 +358,4 @@ class ClientHandler
             }
         }
     }
-
-    
 }
