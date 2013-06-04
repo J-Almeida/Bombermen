@@ -1,8 +1,7 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import pt.up.fe.pt.lpoo.utils.TextureSplitter;
-
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 
 public class EntityBuilder
@@ -19,7 +18,7 @@ public class EntityBuilder
         Texture t = _textureManager.Get("bomb"); // 18 x 18
 
         if (Bomb.Regions == null)
-            Bomb.Regions = TextureSplitter.SplitTexture(t, 1, 3);
+            Bomb.Regions = TextureRegion.split(t, 18, 18);
 
         Bomb b = new Bomb(guid);
         b.setBounds(x, y, Constants.BOMB_WIDTH, Constants.BOMB_HEIGHT);
@@ -32,7 +31,7 @@ public class EntityBuilder
         Texture t = _textureManager.Get("bomberman"); // 18 x 26
 
         if (Player.Regions == null)
-            Player.Regions = TextureSplitter.SplitTexture(t, 1, 8);
+            Player.Regions = TextureRegion.split(t, 18, 26);
 
         Player p = new Player(guid, name);
         p.setBounds(x, y, Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
@@ -45,7 +44,7 @@ public class EntityBuilder
         Texture t = _textureManager.Get("wall"); // 16 x 16
 
         if (Wall.Regions == null)
-            Wall.Regions = TextureSplitter.SplitTexture(t, 1, 4);
+            Wall.Regions = TextureRegion.split(t, 16, 16);
 
         Wall w = new Wall(guid, hitPoints);
         w.setBounds(x, y, Constants.WALL_WIDTH, Constants.WALL_HEIGHT);
@@ -61,7 +60,7 @@ public class EntityBuilder
         Texture t = _textureManager.Get("powerup"); // 16 x 16
 
         if (PowerUp.Regions == null)
-            PowerUp.Regions = TextureSplitter.SplitTexture(t, 2, 7);
+            PowerUp.Regions = TextureRegion.split(t, 16, 16);
 
         PowerUp pu = new PowerUp(guid, MathUtils.random(0, PowerUp.NUMBER_OF_TYPES)); // @TODO: All power up types got the same probability to spawn. Maybe change that.
         pu.setBounds(x, y, Constants.POWER_UP_WIDTH, Constants.POWER_UP_HEIGHT);
@@ -74,7 +73,7 @@ public class EntityBuilder
         Texture t = _textureManager.Get("explosion"); // 16 x 16
 
         if (Explosion.Regions == null)
-            Explosion.Regions = TextureSplitter.SplitTexture(t, 5, 9);
+            Explosion.Regions = TextureRegion.split(t, 16, 16);
 
         Explosion e = new Explosion(guid, direction, end);
         e.setBounds(x, y, Constants.EXPLOSION_WIDTH, Constants.EXPLOSION_HEIGHT);

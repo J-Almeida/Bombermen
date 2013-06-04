@@ -95,7 +95,7 @@ public class Explosion extends Entity
                 break;
         }
 
-        batch.draw(Regions[col][line], getX(), getY(), getOriginX(), getOriginY(),
+        batch.draw(Regions[line][col], getX(), getY(), getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }

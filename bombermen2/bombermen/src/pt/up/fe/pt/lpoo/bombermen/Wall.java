@@ -50,7 +50,7 @@ public class Wall extends Entity
     {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(Regions[IsUndestroyable() ? 1 : 0][0], getX(), getY(), getOriginX(), getOriginY(),
+        batch.draw(Regions[0][IsUndestroyable() ? 1 : 0], getX(), getY(), getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }
