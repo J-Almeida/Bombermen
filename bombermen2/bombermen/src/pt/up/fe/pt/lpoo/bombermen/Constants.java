@@ -24,7 +24,7 @@ public final class Constants
     // Maps
     public static final String DEFAULT_MAP_FILE_CHARSET = "US-ASCII";
     public static final float WALL_CHANCE = 0.1f;
-    public static final float INIT_PLAYER_SPEED = 5f;
+    public static final float INIT_PLAYER_SPEED = 1f;
 
     private Constants()
     {
