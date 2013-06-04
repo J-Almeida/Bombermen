@@ -9,42 +9,6 @@ public class Wall extends Entity
 {
     private static CollisionHandler<Wall> cHandler = new CollisionHandler<Wall>()
     {
-
-        @Override
-        protected void CollideBomb(Wall e1, Bomb b)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        protected void CollidePlayer(Wall e1, Player p)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        protected void CollideWall(Wall e1, Wall w)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        protected void CollideExplosion(Wall e1, Explosion e)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        protected void CollidePowerUp(Wall e1, PowerUp p)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
     };
 
     private int _hp;

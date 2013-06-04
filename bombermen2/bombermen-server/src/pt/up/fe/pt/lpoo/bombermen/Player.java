@@ -9,42 +9,6 @@ public class Player extends Entity
 {
     private static CollisionHandler<Player> cHandler = new CollisionHandler<Player>()
     {
-
-        @Override
-        protected void CollideBomb(Player e1, Bomb b)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        protected void CollidePlayer(Player e1, Player p)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        protected void CollideWall(Player e1, Wall w)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        protected void CollideExplosion(Player e1, Explosion e)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        protected void CollidePowerUp(Player e1, PowerUp p)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
     };
 
     Player(int guid, String name, Vector2 pos)

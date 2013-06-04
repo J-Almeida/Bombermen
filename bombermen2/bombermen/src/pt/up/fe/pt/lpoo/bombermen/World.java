@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.Disposable;
 
 public class World implements Disposable
 {
-    //private IntMap<Entity> _entities = new IntMap<Entity>();
     private Stage _stage;
     private Game _game;
 

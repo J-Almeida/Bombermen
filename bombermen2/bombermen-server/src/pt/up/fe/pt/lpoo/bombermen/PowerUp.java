@@ -9,42 +9,6 @@ public class PowerUp extends Entity
 {
     private static CollisionHandler<PowerUp> cHandler = new CollisionHandler<PowerUp>()
     {
-
-        @Override
-        protected void CollideBomb(PowerUp e1, Bomb b)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        protected void CollidePlayer(PowerUp e1, Player p)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        protected void CollideWall(PowerUp e1, Wall w)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        protected void CollideExplosion(PowerUp e1, Explosion e)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        protected void CollidePowerUp(PowerUp e1, PowerUp p)
-        {
-            // TODO Auto-generated method stub
-
-        }
-
     };
 
     public PowerUp(int guid, Vector2 pos)

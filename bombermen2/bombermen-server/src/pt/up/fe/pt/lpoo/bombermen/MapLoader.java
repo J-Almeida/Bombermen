@@ -12,8 +12,6 @@ import pt.up.fe.pt.lpoo.utils.Ref;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-/* VERY IMPORTANT _lastGuid IS JUST AN HACK */
-
 public class MapLoader
 {
     private int _lastId;
