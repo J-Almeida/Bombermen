@@ -30,6 +30,7 @@ public class Bombermen2 implements ApplicationListener
     @Override
     public void render()
     {
+        Gdx.gl.glClearColor(16f / 255, 120f / 255, 48f / 255, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
         _game.Update(/*Gdx.graphics.getDeltaTime() * 1000f*/);

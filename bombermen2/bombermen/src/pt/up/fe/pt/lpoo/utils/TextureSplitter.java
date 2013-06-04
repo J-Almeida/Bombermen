@@ -13,14 +13,8 @@ public class TextureSplitter
         int height = t.getHeight() / lines;
 
         for (int i = 0, x = 0; x < t.getWidth(); x += width, i++)
-        {
             for (int j = 0, y = 0; y < t.getHeight(); y += height, j++)
-            //for (int j = 0, y = height; y <= t.getHeight(); y += height, j++)
-            {
-                System.out.println("x: " + x + " y: " + y + " i: " + i + " j: " + j);
                 regions[i][j] = new TextureRegion(t, x, y, width, height);
-            }
-        }
 
         return regions;
     }
