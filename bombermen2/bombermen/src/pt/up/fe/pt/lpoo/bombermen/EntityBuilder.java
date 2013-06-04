@@ -1,6 +1,7 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 
@@ -17,8 +18,11 @@ public class EntityBuilder
     {
         Texture t = _textureManager.Get("bomb"); // 18 x 18
 
-        if (Bomb.Regions == null)
+        if (Bomb.Regions == null && Bomb.Animation == null)
+        {
             Bomb.Regions = TextureRegion.split(t, 18, 18);
+            Bomb.Animation = new Animation(1f / 3, Bomb.Regions[0][0], Bomb.Regions[0][1], Bomb.Regions[0][2]);
+        }
 
         Bomb b = new Bomb(guid);
         b.setBounds(x, y, Constants.BOMB_WIDTH, Constants.BOMB_HEIGHT);
