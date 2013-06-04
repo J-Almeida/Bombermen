@@ -190,9 +190,8 @@ public class Player extends Entity
 
     }
 
-    @Override
-    public boolean IsAlive()
+    public void Kill()
     {
-        return true; // @TODO: Fix me
+        _server.RemoveEntityNextUpdate(GetGuid());
     }
 }

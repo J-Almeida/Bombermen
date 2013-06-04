@@ -41,10 +41,4 @@ public class PowerUp extends Entity
     public void Update(int diff)
     {
     }
-
-    @Override
-    public boolean IsAlive()
-    {
-        return true; // @TODO: Fix me
-    }
 }

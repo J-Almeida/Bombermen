@@ -18,7 +18,6 @@ public class Bomb extends Entity
     private int _radius[] = { 0, 0, 0, 0 };
     private boolean _justCreated = true;
     private int _creatorGuid;
-    private boolean _isAlive = true;
 
     public int GetCreatorGuid()
     {
@@ -79,7 +78,6 @@ public class Bomb extends Entity
         {
             // destroy this bomb
             _server.SendAll(new SMSG_DESTROY(GetGuid()));
-            _isAlive = false;
             _server.RemoveEntityNextUpdate(GetGuid());
 
             CalculateRadiuses();
@@ -138,11 +136,5 @@ public class Bomb extends Entity
                 }
             }
         }
-    }
-
-    @Override
-    public boolean IsAlive()
-    {
-        return _isAlive;
     }
 }

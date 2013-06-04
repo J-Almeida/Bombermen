@@ -49,10 +49,4 @@ public class Wall extends Entity
     public void Update(int diff)
     {
     }
-
-    @Override
-    public boolean IsAlive()
-    {
-        return IsUndestroyable() || _hp > 0;
-    }
 }
