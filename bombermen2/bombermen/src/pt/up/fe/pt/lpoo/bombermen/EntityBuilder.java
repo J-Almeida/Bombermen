@@ -1,6 +1,9 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import pt.up.fe.pt.lpoo.utils.TextureSplitter;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 
 public class EntityBuilder
@@ -12,96 +15,60 @@ public class EntityBuilder
         _textureManager = tm;
     }
 
-    public Bomb CreateBomb(int guid, float px, float py)
+    public Bomb CreateBomb(int guid, float x, float y)
     {
-        int tileX = World.GetTileX(px);
-        int tileY = World.GetTileY(py);
-        float x = World.GetPositionAtCenterX(tileX);
-        float y = World.GetPositionAtCenterY(tileY);
+        Texture t = _textureManager.Get("bomb"); // 18 x 18
+        TextureRegion regions[][] = TextureSplitter.SplitTexture(t, 1, 3);
 
-        Sprite s = new Sprite(_textureManager.Get("bomb"), 0, 0, 18 * 3, 18);
-        s.setPosition(x - 18 / 2, y + 18 / 2);
-        s.setOrigin(x, y);
-
-        Bomb b = new Bomb(s, guid);
-
-        b.SplitSprite(18, 18);
+        Bomb b = new Bomb(guid, regions);
+        b.setBounds(x, y, Constants.CELL_SIZE * 0.9f, Constants.CELL_SIZE * 0.9f);
 
         return b;
     }
 
     public Player CreatePlayer(int guid, String name, float x, float y)
     {
-        Sprite s = new Sprite(_textureManager.Get("bomberman"), 0, 0, 18 * 8, 26);
-        s.setPosition(x - 18 / 2, y + 26 / 2);
-        s.setOrigin(x, y);
+        Texture t = _textureManager.Get("bomberman"); // 18 x 26
+        TextureRegion regions[][] = TextureSplitter.SplitTexture(t, 1, 8);
 
-        Player p = new Player(s, guid, name);
-
-        p.SplitSprite(18, 26);
+        Player p = new Player(guid, name, regions);
+        p.setBounds(x, y, 18.f * Constants.CELL_SIZE * 0.9f / 26, Constants.CELL_SIZE * 0.9f);
 
         return p;
     }
 
-    public Wall CreateWall(int guid, int hitPoints, int tileX, int tileY)
+    public Wall CreateWall(int guid, int hitPoints, float x, float y)
     {
-        float x = World.GetPositionAtCenterX(tileX);
-        float y = World.GetPositionAtCenterY(tileY);
+        Texture t = _textureManager.Get("wall"); // 16 x 16
+        TextureRegion regions[][] = TextureSplitter.SplitTexture(t, 1, 4);
 
-        System.out.println("tileX: " + tileX + " tileY: " + tileY + " x: " + x + " y: " + y);
-
-        Sprite s = new Sprite(_textureManager.Get("wall"), 0, 0, 16 * 2, 16);
-        s.setPosition(x - 16 / 2, y + 16 / 2);
-        s.setOrigin(x, y);
-
-        Wall w = new Wall(s, guid, hitPoints);
-
-        w.SplitSprite(16, 16);
+        Wall w = new Wall(guid, hitPoints, regions);
+        w.setBounds(x, y, Constants.CELL_SIZE, Constants.CELL_SIZE);
 
         return w;
     }
 
     public PowerUp CreatePowerUp(int guid, Wall wall)
     {
-        float x = wall.GetX();
-        float y = wall.GetY();
+        float x = wall.getX() + 0.1f * Constants.CELL_SIZE;
+        float y = wall.getY() + 0.1f * Constants.CELL_SIZE;
 
-        Sprite s = new Sprite(_textureManager.Get("powerup"), 0, 0, 16 * 7, 16 * 2);
-        s.setPosition(x - 16 / 2, y + 16 / 2);
-        s.setOrigin(x, y);
+        Texture t = _textureManager.Get("powerup"); // 16 x 16
+        TextureRegion regions[][] = TextureSplitter.SplitTexture(t, 2, 7);
 
-        PowerUp pu = new PowerUp(s, guid, MathUtils.random(0, PowerUp.NUMBER_OF_TYPES)); // @TODO:
-                                                                                         // All
-                                                                                         // power
-                                                                                         // up
-                                                                                         // types
-                                                                                         // got
-                                                                                         // the
-                                                                                         // same
-                                                                                         // probability
-                                                                                         // to
-                                                                                         // spawn.
-                                                                                         // Maybe
-                                                                                         // change
-                                                                                         // that.
-
-        pu.SplitSprite(16, 16);
+        PowerUp pu = new PowerUp(guid, MathUtils.random(0, PowerUp.NUMBER_OF_TYPES), regions); // @TODO: All power up types got the same probability to spawn. Maybe change that.
+        pu.setBounds(x, y, Constants.CELL_SIZE * 0.9f, Constants.CELL_SIZE * 0.9f);
 
         return pu;
     }
 
-    public Explosion CreateExplosion(int guid, int strength, int tileX, int tileY)
+    public Explosion CreateExplosion(int guid, float x, float y)
     {
-        float x = World.GetPositionAtCenterX(tileX);
-        float y = World.GetPositionAtCenterY(tileY);
+        Texture t = _textureManager.Get("explosion"); // 16 x 16
+        TextureRegion regions[][] = TextureSplitter.SplitTexture(t, 5, 9);
 
-        Sprite s = new Sprite(_textureManager.Get("explosion"), 0, 0, 16 * 9, 16 * 5);
-        s.setPosition(x - 16 / 2, y + 16 / 2);
-        s.setOrigin(x, y);
-
-        Explosion e = new Explosion(s, guid, strength);
-
-        e.SplitSprite(16, 16);
+        Explosion e = new Explosion(guid, regions);
+        e.setBounds(x, y, Constants.CELL_SIZE * 0.9f, Constants.CELL_SIZE * 0.9f);
 
         return e;
     }

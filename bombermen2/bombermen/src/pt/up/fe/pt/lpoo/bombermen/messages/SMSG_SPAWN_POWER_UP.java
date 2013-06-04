@@ -6,9 +6,9 @@ public class SMSG_SPAWN_POWER_UP extends SMSG_SPAWN
 {
     private static final long serialVersionUID = 1L;
 
-    public SMSG_SPAWN_POWER_UP(int guid)
+    public SMSG_SPAWN_POWER_UP(int guid, float x, float y)
     {
-        super(Entity.TYPE_POWER_UP, guid);
+        super(Entity.TYPE_POWER_UP, guid, x, y);
     }
 
     @Override

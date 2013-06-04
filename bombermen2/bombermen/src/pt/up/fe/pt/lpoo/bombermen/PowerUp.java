@@ -1,8 +1,9 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class PowerUp extends Entity
 {
@@ -16,9 +17,9 @@ public class PowerUp extends Entity
 
     public static final int NUMBER_OF_TYPES = 7;
 
-    public PowerUp(Sprite sprite, int guid, int type)
+    public PowerUp(int guid, int type, TextureRegion regions[][])
     {
-        super(Entity.TYPE_POWER_UP, sprite, guid);
+        super(Entity.TYPE_POWER_UP, guid, regions);
 
         type = _type;
     }
@@ -65,7 +66,7 @@ public class PowerUp extends Entity
             Player p = other.ToPlayer();
             HandlePowerUp(p);
             Gdx.app.log("PowerUp", "PowerUp picked-up, removed itself.");
-            Game.Instance().GetWorld().RemoveEntity(this);
+            //Game.Instance().GetWorld().RemoveEntity(this);
         }
     }
 
@@ -78,12 +79,15 @@ public class PowerUp extends Entity
     public void OnExplode(Explosion e)
     {
         Gdx.app.log("PowerUp", "PowerUp exploded, removed itself.");
-        Game.Instance().GetWorld().RemoveEntity(this);
+        //Game.Instance().GetWorld().RemoveEntity(this);
     }
 
     @Override
-    public void draw(SpriteBatch batch)
+    public void draw(SpriteBatch batch, float parentAlpha)
     {
-        batch.draw(_regions[0][0], _sprite.getX(), _sprite.getY());
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        batch.draw(_regions[0][0], getX(), getY(), getOriginX(), getOriginY(),
+                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }

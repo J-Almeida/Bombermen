@@ -13,6 +13,6 @@ public class Main
         cfg.width = Constants.DEFAULT_WIDTH;
         cfg.height = Constants.DEFAULT_HEIGHT;
 
-        new LwjglApplication(new Bombermen(), cfg);
+        new LwjglApplication(new Bombermen2(), cfg);
     }
 }

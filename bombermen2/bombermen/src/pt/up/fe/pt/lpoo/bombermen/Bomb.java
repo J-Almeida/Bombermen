@@ -1,13 +1,14 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Bomb extends Entity
 {
-    Bomb(Sprite sprite, int guid)
+    Bomb(int guid, TextureRegion regions[][])
     {
-        super(Entity.TYPE_BOMB, sprite, guid);
+        super(Entity.TYPE_BOMB, guid, regions);
     }
 
     @Override
@@ -26,8 +27,11 @@ public class Bomb extends Entity
     }
 
     @Override
-    public void draw(SpriteBatch batch)
+    public void draw(SpriteBatch batch, float parentAlpha)
     {
-        batch.draw(_regions[0][0], _sprite.getX(), _sprite.getY());
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        batch.draw(_regions[0][0], getX(), getY(), getOriginX(), getOriginY(),
+                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }

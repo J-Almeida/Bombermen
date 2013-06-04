@@ -1,13 +1,25 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.IntMap;
 
 public class World implements Disposable
 {
-    private IntMap<Entity> _entities = new IntMap<Entity>();
+    //private IntMap<Entity> _entities = new IntMap<Entity>();
+    private Stage _stage;
+    private Game _game;
+
+    public World(Stage stage, Game game)
+    {
+        _stage = stage;
+        _game = game;
+    }
 
     public static int GetTileX(float x)
     {
@@ -32,39 +44,72 @@ public class World implements Disposable
     @Override
     public void dispose()
     {
-        _entities.clear();
     }
 
-    public void AddEntity(Entity entity)
+    public void AddEntity(final Entity entity)
     {
-        _entities.put(entity.GetGuid(), entity);
+        _stage.addActor(entity);
+
+        if (entity.IsPlayer())
+        {
+            _stage.addListener(new InputListener()
+            {
+                @Override
+                public boolean keyDown(InputEvent event, int keycode)
+                {
+                    switch (keycode)
+                    {
+                        case Keys.S:
+                            _game.MovePlayerDown();
+                            Gdx.app.debug("Input", "Player move down.");
+                            return true;
+                        case Keys.W:
+                            Gdx.app.debug("Input", "Player move up.");
+                            _game.MovePlayerUp();
+                            return true;
+                        case Keys.A:
+                            Gdx.app.debug("Input", "Player move left.");
+                            _game.MovePlayerLeft();
+                            return true;
+                        case Keys.D:
+                            Gdx.app.debug("Input", "Player move right.");
+                            _game.MovePlayerRight();
+                            return true;
+                        case Keys.SPACE:
+                            Gdx.app.debug("Input", "Player place bomb.");
+                            _game.PlaceBomb();
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+        }
     }
 
     public Entity GetEntity(int guid)
     {
-        return _entities.get(guid);
+        for (Actor a : _stage.getActors())
+        {
+            Entity e = (Entity)a;
+            if (e.GetGuid() == guid)
+                return e;
+        }
+
+        return null;
     }
 
     public void RemoveEntity(int guid)
     {
         Entity e = GetEntity(guid);
         if (e != null)
-        {
             RemoveEntity(e);
-        }
     }
 
     public void RemoveEntity(Entity entity)
     {
-        entity.OnDestroy();
-        _entities.remove(entity.GetGuid());
-    }
-
-    public void draw(SpriteBatch batch)
-    {
-        for (Entity e : _entities.values())
-        {
-            e.draw(batch);
-        }
+        entity.remove();
+        //entity.OnDestroy();
+        //_entities.remove(entity.GetGuid());
     }
 }

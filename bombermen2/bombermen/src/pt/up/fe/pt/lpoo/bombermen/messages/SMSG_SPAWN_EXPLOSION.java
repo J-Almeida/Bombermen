@@ -6,9 +6,9 @@ public class SMSG_SPAWN_EXPLOSION extends SMSG_SPAWN
 {
     private static final long serialVersionUID = 1L;
 
-    public SMSG_SPAWN_EXPLOSION(int guid)
+    public SMSG_SPAWN_EXPLOSION(int guid, float x, float y)
     {
-        super(Entity.TYPE_EXPLOSION, guid);
+        super(Entity.TYPE_EXPLOSION, guid, x, y);
     }
 
     @Override

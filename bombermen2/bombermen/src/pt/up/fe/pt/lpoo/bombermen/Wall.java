@@ -1,13 +1,14 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Wall extends Entity
 {
-    Wall(Sprite sprite, int guid, int hitPoints)
+    Wall(int guid, int hitPoints, TextureRegion regions[][])
     {
-        super(Entity.TYPE_WALL, sprite, guid);
+        super(Entity.TYPE_WALL, guid, regions);
 
         _hitPoints = hitPoints;
     }
@@ -33,17 +34,22 @@ public class Wall extends Entity
     @Override
     public void OnExplode(Explosion e)
     {
+        /*
         if (IsUndestroyable()) return;
 
         int dmg = e.GetStrength();
 
         _hitPoints -= dmg;
         if (_hitPoints < 0) _hitPoints = 0;
+        */
     }
 
     @Override
-    public void draw(SpriteBatch batch)
+    public void draw(SpriteBatch batch, float parentAlpha)
     {
-        batch.draw(_regions[0][IsUndestroyable() ? 1 : 0], _sprite.getX(), _sprite.getY(), Constants.CELL_SIZE, Constants.CELL_SIZE);
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        batch.draw(_regions[IsUndestroyable() ? 1 : 0][0], getX(), getY(), getOriginX(), getOriginY(),
+                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }

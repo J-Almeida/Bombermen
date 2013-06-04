@@ -47,23 +47,27 @@ public class Wall extends Entity
 
     };
 
-    public Wall(int guid, Vector2 pos)
+    private int _hp;
+
+    public Wall(int guid, int hp, Vector2 pos)
     {
         super(TYPE_WALL, guid, pos);
+
+        _hp = hp;
     }
 
     @Override
     public SMSG_SPAWN GetSpawnMessage()
     {
-        return new SMSG_SPAWN_WALL(GetGuid());
+        return new SMSG_SPAWN_WALL(GetGuid(), _hp, GetX(), GetY());
     }
 
-    private static final Vector2 size = new Vector2(Constants.CELL_SIZE, Constants.CELL_SIZE);
+    public static final Vector2 Size = new Vector2(Constants.CELL_SIZE, Constants.CELL_SIZE);
 
     @Override
     public Vector2 GetSize()
     {
-        return size;
+        return Size;
     }
 
     @Override

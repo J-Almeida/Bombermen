@@ -1,22 +1,14 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Explosion extends Entity
 {
-    Explosion(Sprite sprite, int guid, int strength)
+    Explosion(int guid, TextureRegion regions[][])
     {
-        super(Entity.TYPE_EXPLOSION, sprite, guid);
-
-        _strength = strength;
-    }
-
-    private int _strength; // Damage in number of hitpoints
-
-    public int GetStrength()
-    {
-        return _strength;
+        super(Entity.TYPE_EXPLOSION, guid, regions);
     }
 
     @Override
@@ -35,8 +27,11 @@ public class Explosion extends Entity
     }
 
     @Override
-    public void draw(SpriteBatch batch)
+    public void draw(SpriteBatch batch, float parentAlpha)
     {
-        batch.draw(_regions[0][0], _sprite.getX(), _sprite.getY());
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        batch.draw(_regions[0][0], getX(), getY(), getOriginX(), getOriginY(),
+                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }

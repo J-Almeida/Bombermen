@@ -68,7 +68,7 @@ public class Player extends Entity
     @Override
     public SMSG_SPAWN GetSpawnMessage()
     {
-        return new SMSG_SPAWN_PLAYER(GetGuid(), GetName(), GetPosition());
+        return new SMSG_SPAWN_PLAYER(GetGuid(), GetName(), GetX(), GetY());
     }
 
     private static final Vector2 size = new Vector2(18.f * Constants.CELL_SIZE * 0.9f / 26, Constants.CELL_SIZE * 0.9f);

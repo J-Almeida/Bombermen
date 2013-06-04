@@ -12,6 +12,7 @@ public final class Constants
     public static final int DEFAULT_PAD_WIDTH = 200;
     public static final int DEFAULT_PAD_HEIGHT = 200;
     public static final float DEFAULT_PAD_BUTTON_SIZE_MULT = 2.f / 3.f;
+    public static final boolean SHOW_PAD = true;
 
     // Game
     public static final int INIT_NUM_MAX_BOMBS = 1;
@@ -22,7 +23,7 @@ public final class Constants
 
     // Maps
     public static final String DEFAULT_MAP_FILE_CHARSET = "US-ASCII";
-    public static final float WALL_CHANCE = 0.6f;
+    public static final float WALL_CHANCE = 0.1f;
     public static final float INIT_PLAYER_SPEED = 10;
 
     private Constants()

@@ -6,7 +6,6 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Bombermen implements ApplicationListener
@@ -14,9 +13,8 @@ public class Bombermen implements ApplicationListener
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private ControlPad _controlPad = null;
-    private BitmapFont font;
 
-    private float timeStep;
+    //private float timeStep;
     private Input _input;
 
     @Override
@@ -24,19 +22,18 @@ public class Bombermen implements ApplicationListener
     {
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
-        if (Gdx.app.getType() == ApplicationType.Android)
-            timeStep = 1 / 45f;
-        else
-            timeStep = 1 / 60f;
+        //if (Gdx.app.getType() == ApplicationType.Android)
+        //    timeStep = 1 / 45f;
+        //else
+        //    timeStep = 1 / 60f;
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.DEFAULT_WIDTH, Constants.DEFAULT_HEIGHT);
         batch = new SpriteBatch();
-        font = new BitmapFont();
 
         _input = new Input(Game.Instance(), camera);
 
-        if (Gdx.app.getType() == ApplicationType.Android)
+        if (Gdx.app.getType() == ApplicationType.Android || Constants.SHOW_PAD)
         {
             _controlPad = new ControlPad();
             _controlPad.SetSize(Constants.DEFAULT_PAD_WIDTH, Constants.DEFAULT_PAD_HEIGHT);
@@ -50,7 +47,6 @@ public class Bombermen implements ApplicationListener
     public void dispose()
     {
         batch.dispose();
-        font.dispose();
     }
 
     @Override
@@ -71,7 +67,6 @@ public class Bombermen implements ApplicationListener
 
         Game.Instance().Update(dt);
         _input.Update(dt);
-        Game.Instance().draw(batch);
 
         batch.end();
 

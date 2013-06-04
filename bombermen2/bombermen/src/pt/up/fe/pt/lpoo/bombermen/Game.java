@@ -10,29 +10,29 @@ import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_PLAYER;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_WALL;
 import pt.up.fe.pt.lpoo.utils.Direction;
-import pt.up.fe.pt.lpoo.utils.Ref;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.net.Socket;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class Game implements Input.Commands, Disposable
 {
-    private static Game _instance = null;
-    private MessageHandler _messageHandler;
+    //private static Game _instance = null;
+    //public static Game Instance()
+    //{
+    //    if (_instance == null) _instance = new Game();
+    //    return _instance;
+    //}
 
-    public static Game Instance()
+    public Game(Stage stage)
     {
-        if (_instance == null) _instance = new Game();
-        return _instance;
-    }
+        _stage = stage;
 
-    private Game()
-    {
         _textureManager = new TextureManager();
         _textureManager.Load("bomb");
         _textureManager.Load("bomberman");
@@ -41,14 +41,8 @@ public class Game implements Input.Commands, Disposable
         _textureManager.Load("powerup");
         _textureManager.Load("wall");
 
-        _world = new World();
+        _world = new World(_stage, this);
         _builder = new EntityBuilder(_textureManager);
-
-        MapLoader builder = new MapLoader(_world, _builder);
-
-        Ref<Integer> width = new Ref<Integer>(0);
-        Ref<Integer> height = new Ref<Integer>(0);
-        builder.TryLoad(0, width, height);
 
         _messageHandler = new MessageHandler()
         {
@@ -58,8 +52,15 @@ public class Game implements Input.Commands, Disposable
                 System.out.println("Move Handler: " + msg);
                 Entity e = _world.GetEntity(msg.Guid);
                 if (e == null) return;
-                e.SetX(msg.x);
-                e.SetY(msg.y);
+
+                //_stage.getCamera().translate(msg.x - e.GetX(), msg.y - e.GetY(), 0);
+                //_stage.getCamera().lookAt(-10, -10, 0);
+
+                e.setX(msg.x);
+                e.setY(msg.y);
+
+
+
                 System.out.println("Move Handler: " + e);
             }
 
@@ -76,13 +77,13 @@ public class Game implements Input.Commands, Disposable
                     case Entity.TYPE_PLAYER:
                     {
                         SMSG_SPAWN_PLAYER playerMsg = (SMSG_SPAWN_PLAYER) msg;
-                        _world.AddEntity(_builder.CreatePlayer(msg.Guid, playerMsg.Name, playerMsg.x, playerMsg.y));
+                        _world.AddEntity(_builder.CreatePlayer(msg.Guid, playerMsg.Name, playerMsg.X, playerMsg.Y));
                         break;
                     }
                     case Entity.TYPE_BOMB:
                     {
                         SMSG_SPAWN_BOMB bombMsg = (SMSG_SPAWN_BOMB) msg;
-                        _world.AddEntity(_builder.CreateBomb(msg.Guid, bombMsg.x, bombMsg.y));
+                        _world.AddEntity(_builder.CreateBomb(msg.Guid, bombMsg.X, bombMsg.Y));
                         break;
                     }
                     case Entity.TYPE_EXPLOSION:
@@ -105,11 +106,8 @@ public class Game implements Input.Commands, Disposable
                     }
                     case Entity.TYPE_WALL:
                     {
-                        // SMSG_SPAWN_PLAYER playerMsg = (SMSG_SPAWN_PLAYER)
-                        // msg;
-                        // _entities.put(msg.Guid,
-                        // _builder.CreatePlayer(msg.Guid, playerMsg.Name,
-                        // playerMsg.Position.x, playerMsg.Position.y));
+                        SMSG_SPAWN_WALL wallMsg = (SMSG_SPAWN_WALL) msg;
+                        _world.AddEntity(_builder.CreateWall(msg.Guid, wallMsg.HP, wallMsg.X, wallMsg.Y));
                         break;
                     }
                 }
@@ -131,7 +129,7 @@ public class Game implements Input.Commands, Disposable
 
         try
         {
-            _socket = Gdx.net.newClientSocket(Protocol.TCP, "192.168.1.3", 7777, null);
+            _socket = Gdx.net.newClientSocket(Protocol.TCP, "192.168.1.86", 7777, null);
             _receiver = new Receiver<Message>(_socket);
             _sender = new Sender<Message>(_socket);
             _sender.Send(new CMSG_JOIN("Player 1"));
@@ -163,11 +161,8 @@ public class Game implements Input.Commands, Disposable
     private Sender<Message> _sender;
     private Socket _socket;
     private TextureManager _textureManager;
-
-    public void draw(SpriteBatch batch)
-    {
-        _world.draw(batch);
-    }
+    private Stage _stage;
+    private MessageHandler _messageHandler;
 
     @Override
     public void MovePlayerDown()

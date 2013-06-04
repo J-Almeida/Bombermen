@@ -1,27 +1,38 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Player extends Entity
 {
-    Player(Sprite sprite, int guid, String name)
+    Player(int guid, String name, TextureRegion regions[][])
     {
-        super(Entity.TYPE_PLAYER, sprite, guid);
+        super(Entity.TYPE_PLAYER, guid, regions);
 
-        _name = name;
-        _currentBombs = 0;
-        _maxBombs = Constants.INIT_NUM_MAX_BOMBS;
-        _bombRadius = Constants.INIT_BOMB_RADIUS;
+        //_name = name;
+        //_currentBombs = 0;
+        //_maxBombs = Constants.INIT_NUM_MAX_BOMBS;
+        //_bombRadius = Constants.INIT_BOMB_RADIUS;
         _speed = Constants.INIT_PLAYER_SPEED;
     }
 
-    private String _name;
+    //private String _name;
     private int _currentBombs;
     private int _maxBombs;
     private int _bombRadius;
-    private int _direction;
+    //private int _direction;
     private float _speed;
+
+    public int GetCurrentBombs()
+    {
+        return _currentBombs;
+    }
+
+    public int GetMaxBombs()
+    {
+        return _maxBombs;
+    }
 
     public float GetSpeed()
     {
@@ -69,8 +80,11 @@ public class Player extends Entity
     }
 
     @Override
-    public void draw(SpriteBatch batch)
+    public void draw(SpriteBatch batch, float parentAlpha)
     {
-        batch.draw(_regions[0][0], _sprite.getX(), _sprite.getY());
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        batch.draw(_regions[0][0], getX(), getY(), getOriginX(), getOriginY(),
+                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }
