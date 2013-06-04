@@ -48,8 +48,11 @@ public class Wall extends Entity
     @Override
     public void Update(int diff)
     {
-        // TODO Auto-generated method stub
-
     }
 
+    @Override
+    public boolean IsAlive()
+    {
+        return IsUndestroyable() || _hp > 0;
+    }
 }

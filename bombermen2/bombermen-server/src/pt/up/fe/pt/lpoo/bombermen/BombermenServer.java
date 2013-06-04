@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -33,11 +34,24 @@ public class BombermenServer implements Runnable
     private int _numberOfClients = 0;
     private MessageHandler _messageHandler;
 
+    private ArrayList<Entity> _entitiesToAdd = new ArrayList<Entity>();
+    private HashSet<Integer> _entitiesToRemove = new HashSet<Integer>();
+
     private Queue<ClientMessage> _messageQueue = new LinkedList<ClientMessage>();
 
     public HashMap<Integer, Entity> GetEntities()
     {
         return _entities;
+    }
+
+    public void RemoveEntityNextUpdate(int guid)
+    {
+        _entitiesToRemove.add(guid);
+    }
+
+    public void CreateEntityNextUpdate(Entity e)
+    {
+        _entitiesToAdd.add(e);
     }
 
     public int GetLastId()
@@ -68,7 +82,18 @@ public class BombermenServer implements Runnable
         synchronized (_entities)
         {
             for (Entity e : _entities.values())
-                e.Update(diff);
+               e.Update(diff);
+
+            for (Entity e : _entitiesToAdd)
+                _entities.put(e.GetGuid(), e);
+            _entitiesToAdd.clear();
+
+            Iterator<Entity> it = _entities.values().iterator();
+            while (it.hasNext())
+                if (_entitiesToRemove.contains(it.next().GetGuid()))
+                    it.remove();
+
+            _entitiesToRemove.clear();
 
             for (Entity e1 : _entities.values())
                 for (Entity e2 : _entities.values())
@@ -119,8 +144,6 @@ public class BombermenServer implements Runnable
         _socket = new ServerSocket(port);
         System.out.println("Server created - " + InetAddress.getLocalHost().getHostAddress() + ":" + _socket.getLocalPort());
 
-        final BombermenServer sv = this;
-
         _messageHandler = new MessageHandler()
         {
             @Override
@@ -163,8 +186,8 @@ public class BombermenServer implements Runnable
                 float y = tileY * Constants.CELL_SIZE + 0.1f * Constants.CELL_SIZE;
 
                 Vector2 position = new Vector2(x, y); // (0.9, 0.9)
-                Bomb b = new Bomb(_lastId, p.GetGuid(), position, p.GetExplosionRadius(), sv);
-                _entities.put(_lastId, b);
+                Bomb b = new Bomb(_lastId, p.GetGuid(), position, p.GetExplosionRadius(), BombermenServer.this);
+                BombermenServer.this.CreateEntityNextUpdate(b);
 
                 SMSG_SPAWN bombMsg = b.GetSpawnMessage();
                 for (ClientHandler ch : _clients.values())
@@ -180,7 +203,7 @@ public class BombermenServer implements Runnable
             @Override
             protected void CMSG_JOIN_Handler(int guid, CMSG_JOIN msg)
             {
-                Player p = new Player(guid, msg.Name, new Vector2(40, 40), sv);
+                Player p = new Player(guid, msg.Name, new Vector2(40, 40), BombermenServer.this);
                 _entities.put(guid, p);
                 System.out.println("Player '" + msg.Name + "' (guid: " + guid + ") just joined.");
 

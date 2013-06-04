@@ -189,4 +189,10 @@ public class Player extends Entity
         }
 
     }
+
+    @Override
+    public boolean IsAlive()
+    {
+        return true; // @TODO: Fix me
+    }
 }

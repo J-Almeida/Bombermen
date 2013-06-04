@@ -18,6 +18,7 @@ public class Bomb extends Entity
     private int _radius[] = { 0, 0, 0, 0 };
     private boolean _justCreated = true;
     private int _creatorGuid;
+    private boolean _isAlive = true;
 
     public int GetCreatorGuid()
     {
@@ -78,16 +79,17 @@ public class Bomb extends Entity
         {
             // destroy this bomb
             _server.SendAll(new SMSG_DESTROY(GetGuid()));
-            _server.GetEntities().remove(GetGuid());
+            _isAlive = false;
+            _server.RemoveEntityNextUpdate(GetGuid());
 
             CalculateRadiuses();
 
-            Vector2 pos = new Vector2(GetX() - Constants.WALL_WIDTH  - Constants.BOMB_WIDTH,
-                    GetY() - Constants.WALL_HEIGHT - Constants.BOMB_HEIGHT);
+            Vector2 pos = new Vector2(GetX() - (Constants.WALL_WIDTH  - Constants.BOMB_WIDTH),
+                    GetY() - (Constants.WALL_HEIGHT - Constants.BOMB_HEIGHT));
 
             int id = _server.IncLastId();
             Explosion exCenter = new Explosion(id, pos, Direction.NONE, false, _server);
-            _server.GetEntities().put(id, exCenter);
+            _server.CreateEntityNextUpdate(exCenter);
             _server.SendAll(exCenter.GetSpawnMessage());
 
             for (int d : Direction.Directions)
@@ -96,11 +98,11 @@ public class Bomb extends Entity
                 {
                     id = _server.IncLastId();
 
-                    pos.x = Direction.ApplyMovementX(GetX() - Constants.WALL_WIDTH  - Constants.BOMB_WIDTH,  d, (int)(i * Constants.EXPLOSION_WIDTH));
-                    pos.y = Direction.ApplyMovementY(GetY() - Constants.WALL_HEIGHT - Constants.BOMB_HEIGHT, d, (int)(i * Constants.EXPLOSION_HEIGHT));
+                    pos.x = Direction.ApplyMovementX(GetX() - (Constants.WALL_WIDTH  - Constants.BOMB_WIDTH),  d, (int)(i * Constants.EXPLOSION_WIDTH));
+                    pos.y = Direction.ApplyMovementY(GetY() - (Constants.WALL_HEIGHT - Constants.BOMB_HEIGHT), d, (int)(i * Constants.EXPLOSION_HEIGHT));
 
                     Explosion ex = new Explosion(id, pos, d, i == _radius[d], _server);
-                    _server.GetEntities().put(id, ex);
+                    _server.CreateEntityNextUpdate(ex);
                     _server.SendAll(ex.GetSpawnMessage());
                 }
             }
@@ -117,8 +119,8 @@ public class Bomb extends Entity
         {
             for (int d : Direction.Directions)
             {
-                r.x = Direction.ApplyMovementX(GetX() - Constants.WALL_WIDTH  - Constants.EXPLOSION_WIDTH,  d, (int)(i * Constants.EXPLOSION_WIDTH));
-                r.y = Direction.ApplyMovementY(GetY() - Constants.WALL_HEIGHT - Constants.EXPLOSION_HEIGHT, d, (int)(i * Constants.EXPLOSION_HEIGHT));
+                r.x = Direction.ApplyMovementX(GetX() - (Constants.WALL_WIDTH  - Constants.BOMB_WIDTH),  d, (int)(i * Constants.EXPLOSION_WIDTH));
+                r.y = Direction.ApplyMovementY(GetY() - (Constants.WALL_HEIGHT - Constants.BOMB_HEIGHT), d, (int)(i * Constants.EXPLOSION_HEIGHT));
 
                 if (draw[d])
                 {
@@ -136,5 +138,11 @@ public class Bomb extends Entity
                 }
             }
         }
+    }
+
+    @Override
+    public boolean IsAlive()
+    {
+        return _isAlive;
     }
 }

@@ -8,12 +8,12 @@ import com.badlogic.gdx.utils.Disposable;
 public class World implements Disposable
 {
     private Stage _stage;
-    private Game _game;
+    //private Game _game;
 
     public World(Stage stage, Game game)
     {
         _stage = stage;
-        _game = game;
+        //_game = game;
     }
 
     public static int GetTileX(float x)

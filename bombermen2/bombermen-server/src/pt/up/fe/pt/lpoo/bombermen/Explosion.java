@@ -44,8 +44,11 @@ public class Explosion extends Entity
     @Override
     public void Update(int diff)
     {
-        // TODO Auto-generated method stub
-
     }
 
+    @Override
+    public boolean IsAlive()
+    {
+        return true; // @TODO: Fix me
+    }
 }

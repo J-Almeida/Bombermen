@@ -135,4 +135,6 @@ public abstract class Entity
     public abstract void Update(int diff);
 
     public abstract SMSG_SPAWN GetSpawnMessage();
+
+    public abstract boolean IsAlive();
 }
