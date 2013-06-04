@@ -175,7 +175,7 @@ public class BombermenServer implements Runnable
             @Override
             protected void CMSG_JOIN_Handler(int guid, CMSG_JOIN msg)
             {
-                Player p = new Player(guid, msg.Name, new Vector2(-20, 0));
+                Player p = new Player(guid, msg.Name, new Vector2(40, 40));
                 _entities.put(guid, p);
                 System.out.println("Player '" + msg.Name + "' (guid: " + guid + ") just joined.");
                 SMSG_SPAWN_PLAYER msg1 = new SMSG_SPAWN_PLAYER(guid, msg.Name, p.GetX(), p.GetY());
@@ -192,10 +192,7 @@ public class BombermenServer implements Runnable
 
         Ref<Integer> width = new Ref<Integer>(0);
         Ref<Integer> height = new Ref<Integer>(0);
-        Ref<Integer> lastId = new Ref<Integer>(0);
-
-        String current = new java.io.File( "." ).getCanonicalPath();
-        System.out.println("Current dir:" + current);
+        Ref<Integer> lastId = new Ref<Integer>(_lastId);
 
         if (!builder.TryLoad(0, width, height, lastId))
         {

@@ -78,6 +78,7 @@ public class MapLoader
             }
         }
 
+        lastId.Set(_lastId);
         return true;
     }
 

@@ -25,14 +25,9 @@ public abstract class Entity
         _rect = new Rectangle(pos.x, pos.y, size.x, size.y);
     }
 
-    public boolean Overlaps(Rectangle r)
-    {
-        return _rect.overlaps(r);
-    }
-
     public boolean Collides(Entity e)
     {
-        return Overlaps(e._rect);
+        return _rect.overlaps(e._rect);
     }
 
     public abstract void OnCollision(Entity e);
