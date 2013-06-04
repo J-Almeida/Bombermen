@@ -63,8 +63,10 @@ public class Explosion extends Entity
             _intensity = 2;
         else if (_explosionTimer < 534)
             _intensity = 1;
-        else
+        else if (_explosionTimer < 600)
             _intensity = 0;
+        else
+            remove();
     }
 
     @Override
