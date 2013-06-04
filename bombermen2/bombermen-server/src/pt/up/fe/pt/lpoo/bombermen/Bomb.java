@@ -68,6 +68,11 @@ public class Bomb extends Entity
     {
         cHandler.OnCollision(this, e);
     }
+    
+    public void TriggerExplosion()
+    {
+        _bombTimer += Constants.BOMB_TIMER;
+    }
 
     @Override
     public void Update(int diff)

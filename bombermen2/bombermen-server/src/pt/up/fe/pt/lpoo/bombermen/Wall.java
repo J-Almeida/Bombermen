@@ -25,6 +25,15 @@ public class Wall extends Entity
         return _hp == -1;
     }
 
+    public void DecHP(int val)
+    {
+        if (!IsUndestroyable())
+        {
+            _hp -= val;
+            if (_hp < 0) _hp = 0;
+        }
+    }
+    
     @Override
     public SMSG_SPAWN GetSpawnMessage()
     {
@@ -48,5 +57,7 @@ public class Wall extends Entity
     @Override
     public void Update(int diff)
     {
+        if (!IsUndestroyable() && _hp == 0)
+            _server.RemoveEntityNextUpdate(GetGuid());
     }
 }

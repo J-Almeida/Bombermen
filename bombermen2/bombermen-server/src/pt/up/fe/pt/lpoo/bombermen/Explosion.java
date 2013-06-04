@@ -7,8 +7,27 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Explosion extends Entity
 {
+    private int _timer = 0;
+    
     private static CollisionHandler<Explosion> cHandler = new CollisionHandler<Explosion>()
     {
+        @Override
+        protected void CollideBomb(Explosion e1, Bomb b)
+        {
+            b.TriggerExplosion();
+        }
+
+        @Override
+        protected void CollidePlayer(Explosion e1, Player p)
+        {
+            p.Kill();
+        }
+
+        @Override
+        protected void CollideWall(Explosion e1, Wall w)
+        {
+            w.DecHP(1);
+        }
     };
 
     public Explosion(int guid, Vector2 pos, int dir, boolean end, BombermenServer sv)
@@ -44,5 +63,9 @@ public class Explosion extends Entity
     @Override
     public void Update(int diff)
     {
+        _timer += diff;
+        
+        if (_timer >= 600)
+            _server.RemoveEntityNextUpdate(GetGuid());
     }
 }
