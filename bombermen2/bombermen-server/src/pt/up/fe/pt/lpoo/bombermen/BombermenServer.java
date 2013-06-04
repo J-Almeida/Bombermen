@@ -139,6 +139,7 @@ public class BombermenServer implements Runnable
                             if (e.IsExplosion())
                             {
                                 p.OnCollision(e);
+                                e.OnCollision(p);
                             }
                             else
                             {
@@ -178,9 +179,11 @@ public class BombermenServer implements Runnable
                 Player p = new Player(guid, msg.Name, new Vector2(40, 40));
                 _entities.put(guid, p);
                 System.out.println("Player '" + msg.Name + "' (guid: " + guid + ") just joined.");
+                
                 SMSG_SPAWN_PLAYER msg1 = new SMSG_SPAWN_PLAYER(guid, msg.Name, p.GetX(), p.GetY());
                 for (ClientHandler ch : _clients.values())
-                    ch.ClientSender.Send(msg1);
+                    if (ch.Guid != guid)
+                        ch.ClientSender.Send(msg1);
 
                 ClientHandler ch = _clients.get(guid);
                 for (Entity e : _entities.values())
