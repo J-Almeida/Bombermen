@@ -11,9 +11,9 @@ public class Explosion extends Entity
     {
     };
 
-    public Explosion(int guid, Vector2 pos)
+    public Explosion(int guid, Vector2 pos, BombermenServer sv)
     {
-        super(TYPE_EXPLOSION, guid, pos);
+        super(TYPE_EXPLOSION, guid, pos, sv);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class Explosion extends Entity
         return new SMSG_SPAWN_EXPLOSION(GetGuid(), GetX(), GetY());
     }
 
-    private static final Vector2 size = new Vector2(0.9f * Constants.CELL_SIZE, 0.9f * Constants.CELL_SIZE);
+    private static final Vector2 size = new Vector2(Constants.EXPLOSION_WIDTH, Constants.EXPLOSION_HEIGHT);
 
     @Override
     public Vector2 GetSize()
@@ -34,6 +34,13 @@ public class Explosion extends Entity
     public void OnCollision(Entity e)
     {
         cHandler.OnCollision(this, e);
+    }
+
+    @Override
+    public void Update(int diff)
+    {
+        // TODO Auto-generated method stub
+        
     }
 
 }

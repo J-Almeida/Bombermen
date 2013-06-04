@@ -34,6 +34,7 @@ public class Sender<T>
         try
         {
             _out.writeObject(msg);
+            System.out.println("Sent message " + msg);
             Gdx.app.debug("Sender", "Sent message " + msg);
         }
         catch (IOException e)

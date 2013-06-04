@@ -5,12 +5,14 @@ public class CMSG_MOVE extends Message
     private static final long serialVersionUID = 1L;
 
     public final int Dir;
-
-    public CMSG_MOVE(int dir)
+    public final boolean Val;
+    
+    public CMSG_MOVE(int dir, boolean val)
     {
         super(CMSG_MOVE);
 
         Dir = dir;
+        Val = val;
     }
 
     @Override

@@ -18,9 +18,7 @@ import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
-import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_PLAYER;
-import pt.up.fe.pt.lpoo.utils.Direction;
 import pt.up.fe.pt.lpoo.utils.Ref;
 
 import com.badlogic.gdx.math.Vector2;
@@ -36,6 +34,16 @@ public class BombermenServer implements Runnable
 
     private Queue<ClientMessage> _messageQueue = new LinkedList<ClientMessage>();
 
+    public HashMap<Integer, Entity> GetEntities()
+    {
+        return _entities;
+    }
+    
+    public int GetLastId()
+    {
+        return _lastId;
+    }
+    
     public void PushMessage(int guid, Message msg)
     {
         _messageQueue.add(new ClientMessage(guid, msg));
@@ -50,6 +58,9 @@ public class BombermenServer implements Runnable
                 _messageHandler.HandleMessage(_messageQueue.poll());
             }
         }
+        
+        for (Entity e : _entities.values())
+            e.Update(diff);
 
         for (Entity e1 : _entities.values())
             for (Entity e2 : _entities.values())
@@ -99,6 +110,8 @@ public class BombermenServer implements Runnable
         _socket = new ServerSocket(port);
         System.out.println("Server created - " + InetAddress.getLocalHost().getHostAddress() + ":" + _socket.getLocalPort());
 
+        final BombermenServer sv = this;
+        
         _messageHandler = new MessageHandler()
         {
             @Override
@@ -106,59 +119,9 @@ public class BombermenServer implements Runnable
             {
                 Player p = _entities.get(guid).ToPlayer();
                 if (p == null) return;
-
-                boolean moved = true;
-
-                float x = p.GetX();
-                float y = p.GetY();
-
-                switch (msg.Dir)
-                {
-                    case Direction.NORTH:
-                        p.SetY(p.GetY() + p.GetSpeed());
-                        break;
-                    case Direction.SOUTH:
-                        p.SetY(p.GetY() - p.GetSpeed());
-                        break;
-                    case Direction.EAST:
-                        p.SetX(p.GetX() + p.GetSpeed());
-                        break;
-                    case Direction.WEST:
-                        p.SetX(p.GetX() - p.GetSpeed());
-                        break;
-                    default:
-                        moved = false;
-                }
-
-                if (moved)
-                {
-                    for (Entity e : _entities.values())
-                    {
-                        if (p.GetGuid() != e.GetGuid() && p.Collides(e))
-                        {
-                            if (e.IsExplosion())
-                            {
-                                p.OnCollision(e);
-                                e.OnCollision(p);
-                            }
-                            else
-                            {
-                                moved = false;
-                                p.SetPosition(x, y);
-                            }
-                            break;
-                        }
-                    }
-                }
-
-                if (moved)
-                {
-                    SMSG_MOVE msg1 = new SMSG_MOVE(p.GetGuid(), p.GetPosition());
-                    for (ClientHandler ch : _clients.values())
-                        ch.ClientSender.Send(msg1);
-
-                    System.out.println("Move message received from " + guid + " : " + msg + ", new Position: " + p.GetPosition());
-                }
+                
+                p.SetMoving(msg.Val, msg.Dir);
+                
             }
 
             @Override
@@ -176,7 +139,7 @@ public class BombermenServer implements Runnable
             @Override
             protected void CMSG_JOIN_Handler(int guid, CMSG_JOIN msg)
             {
-                Player p = new Player(guid, msg.Name, new Vector2(40, 40));
+                Player p = new Player(guid, msg.Name, new Vector2(40, 40), sv);
                 _entities.put(guid, p);
                 System.out.println("Player '" + msg.Name + "' (guid: " + guid + ") just joined.");
                 
@@ -191,7 +154,7 @@ public class BombermenServer implements Runnable
             }
         };
 
-        MapLoader builder = new MapLoader(_entities, _lastId);
+        MapLoader builder = new MapLoader(this);
 
         Ref<Integer> width = new Ref<Integer>(0);
         Ref<Integer> height = new Ref<Integer>(0);
@@ -261,6 +224,12 @@ public class BombermenServer implements Runnable
             }
         }
         while (true);
+    }
+
+    public void SendAll(Message msg)
+    {
+        for (ClientHandler ch : _clients.values())
+            ch.ClientSender.Send(msg);
     }
 }
 
@@ -358,4 +327,5 @@ class ClientHandler
         }
     }
 
+    
 }

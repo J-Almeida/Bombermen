@@ -13,9 +13,9 @@ public class Wall extends Entity
 
     private int _hp;
 
-    public Wall(int guid, int hp, Vector2 pos)
+    public Wall(int guid, int hp, Vector2 pos, BombermenServer sv)
     {
-        super(TYPE_WALL, guid, pos);
+        super(TYPE_WALL, guid, pos, sv);
 
         _hp = hp;
     }
@@ -26,7 +26,7 @@ public class Wall extends Entity
         return new SMSG_SPAWN_WALL(GetGuid(), _hp, GetX(), GetY());
     }
 
-    public static final Vector2 Size = new Vector2(Constants.CELL_SIZE, Constants.CELL_SIZE);
+    public static final Vector2 Size = new Vector2(Constants.WALL_WIDTH, Constants.WALL_HEIGHT);
 
     @Override
     public Vector2 GetSize()
@@ -38,6 +38,13 @@ public class Wall extends Entity
     public void OnCollision(Entity e)
     {
         cHandler.OnCollision(this, e);
+    }
+
+    @Override
+    public void Update(int diff)
+    {
+        // TODO Auto-generated method stub
+        
     }
 
 }

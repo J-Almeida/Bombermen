@@ -117,7 +117,8 @@ public class Game implements Input.Commands, Disposable
 
         try
         {
-            _socket = Gdx.net.newClientSocket(Protocol.TCP, "192.168.1.86", 7777, null);
+            _socket = Gdx.net.newClientSocket(Protocol.TCP, "172.30.16.139", 7777, null);
+
             _receiver = new Receiver<Message>(_socket);
             _sender = new Sender<Message>(_socket);
             _sender.Send(new CMSG_JOIN("Player 1"));
@@ -153,33 +154,26 @@ public class Game implements Input.Commands, Disposable
     private MessageHandler _messageHandler;
 
     @Override
-    public void MovePlayerDown()
+    public void ExecuteAction(int action, boolean val)
     {
-        _sender.Send(new CMSG_MOVE(Direction.SOUTH));
-    }
-
-    @Override
-    public void MovePlayerUp()
-    {
-        _sender.Send(new CMSG_MOVE(Direction.NORTH));
-    }
-
-    @Override
-    public void MovePlayerLeft()
-    {
-        _sender.Send(new CMSG_MOVE(Direction.WEST));
-    }
-
-    @Override
-    public void MovePlayerRight()
-    {
-        _sender.Send(new CMSG_MOVE(Direction.EAST));
-    }
-
-    @Override
-    public void PlaceBomb()
-    {
-        _sender.Send(new CMSG_PLACE_BOMB());
+        switch (action)
+        {
+            case Input.A_UP:
+                _sender.Send(new CMSG_MOVE(Direction.NORTH, val));
+                break;
+            case Input.A_DOWN:
+                _sender.Send(new CMSG_MOVE(Direction.SOUTH, val));
+                break;
+            case Input.A_LEFT:
+                _sender.Send(new CMSG_MOVE(Direction.WEST, val));
+                break;
+            case Input.A_RIGHT:
+                _sender.Send(new CMSG_MOVE(Direction.EAST, val));
+                break;
+            case Input.A_BOMB:
+                _sender.Send(new CMSG_PLACE_BOMB());
+                break;
+        }
     }
 
     @Override

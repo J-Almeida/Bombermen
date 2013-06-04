@@ -17,60 +17,10 @@ public class Input implements InputProcessor
     public static final int A_RIGHT = 3;
     public static final int A_BOMB = 4;
     public static final int A_NUM_OF_ACTIONS = 5;
-    public static final int TIME_OF_INPUT = 500;
-
-    private int[] _timers = { 0, 0, 0, 0, 0 };
-    private boolean[] _actions = { false, false, false, false, false };
-
-    public void Update(int diff)
-    {
-        for (int i = 0; i < _timers.length; ++i)
-        {
-            if (_actions[i])
-            {
-                _timers[i] += diff;
-                if (_timers[i] > TIME_OF_INPUT)
-                {
-                    _timers[i] = 0;
-                    CallCommand(i);
-                }
-            }
-        }
-    }
-
-    public void CallCommand(int act)
-    {
-        switch (act)
-        {
-            case A_UP:
-                _commands.MovePlayerUp();
-                break;
-            case A_DOWN:
-                _commands.MovePlayerDown();
-                break;
-            case A_LEFT:
-                _commands.MovePlayerLeft();
-                break;
-            case A_RIGHT:
-                _commands.MovePlayerRight();
-                break;
-            case A_BOMB:
-                _commands.PlaceBomb();
-                break;
-        }
-    }
 
     public interface Commands
     {
-        void MovePlayerDown();
-
-        void MovePlayerUp();
-
-        void MovePlayerLeft();
-
-        void MovePlayerRight();
-
-        void PlaceBomb();
+        void ExecuteAction(int action, boolean val);
     }
 
     private Commands _commands;
@@ -95,34 +45,26 @@ public class Input implements InputProcessor
         switch (keycode)
         {
             case Keys.S:
-                _commands.MovePlayerDown();
-                _actions[A_DOWN] = true;
-                _timers[A_DOWN] = 0;
+                _commands.ExecuteAction(A_DOWN, true);
+                System.out.println("Player move down.");
                 Gdx.app.debug("Input", "Player move down.");
                 return true;
             case Keys.W:
                 Gdx.app.debug("Input", "Player move up.");
-                _commands.MovePlayerUp();
-                _actions[A_UP] = true;
-                _timers[A_UP] = 0;
+                System.out.println("Player move up.");
+                _commands.ExecuteAction(A_UP, true);
                 return true;
             case Keys.A:
                 Gdx.app.debug("Input", "Player move left.");
-                _commands.MovePlayerLeft();
-                _actions[A_LEFT] = true;
-                _timers[A_LEFT] = 0;
+                _commands.ExecuteAction(A_LEFT, true);
                 return true;
             case Keys.D:
                 Gdx.app.debug("Input", "Player move right.");
-                _commands.MovePlayerRight();
-                _actions[A_RIGHT] = true;
-                _timers[A_RIGHT] = 0;
+                _commands.ExecuteAction(A_RIGHT, true);
                 return true;
             case Keys.SPACE:
                 Gdx.app.debug("Input", "Player place bomb.");
-                _commands.PlaceBomb();
-                _actions[A_BOMB] = true;
-                _timers[A_BOMB] = 0;
+                _commands.ExecuteAction(A_BOMB, true);
                 return true;
             default:
                 return false;
@@ -135,19 +77,19 @@ public class Input implements InputProcessor
         switch (keycode)
         {
             case Keys.S:
-                _actions[A_DOWN] = false;
+                _commands.ExecuteAction(A_DOWN, false);
                 return true;
             case Keys.W:
-                _actions[A_UP] = false;
+                Gdx.app.debug("Input", "Player move up.");
+                _commands.ExecuteAction(A_UP, false);
                 return true;
             case Keys.A:
-                _actions[A_LEFT] = false;
+                Gdx.app.debug("Input", "Player move left.");
+                _commands.ExecuteAction(A_LEFT, false);
                 return true;
             case Keys.D:
-                _actions[A_RIGHT] = false;
-                return true;
-            case Keys.SPACE:
-                _actions[A_BOMB] = false;
+                Gdx.app.debug("Input", "Player move right.");
+                _commands.ExecuteAction(A_RIGHT, false);
                 return true;
             default:
                 return false;
@@ -176,29 +118,19 @@ public class Input implements InputProcessor
                 switch (dir)
                 {
                     case Direction.NORTH:
-                        _commands.MovePlayerUp();
-                        _actions[A_UP] = true;
-                        _timers[A_UP] = 0;
+                        _commands.ExecuteAction(A_UP, true);
                         return true;
                     case Direction.SOUTH:
-                        _commands.MovePlayerDown();
-                        _actions[A_DOWN] = true;
-                        _timers[A_DOWN] = 0;
+                        _commands.ExecuteAction(A_DOWN, true);
                         return true;
                     case Direction.WEST:
-                        _commands.MovePlayerLeft();
-                        _actions[A_LEFT] = true;
-                        _timers[A_LEFT] = 0;
+                        _commands.ExecuteAction(A_LEFT, true);
                         return true;
                     case Direction.EAST:
-                        _commands.MovePlayerRight();
-                        _actions[A_RIGHT] = true;
-                        _timers[A_RIGHT] = 0;
+                        _commands.ExecuteAction(A_RIGHT, true);
                         return true;
                     case ControlPad.PLACE_BOMB:
-                        _commands.PlaceBomb();
-                        _actions[A_BOMB] = true;
-                        _timers[A_BOMB] = 0;
+                        _commands.ExecuteAction(A_BOMB, true);
                         return true;
                 }
             }
@@ -222,19 +154,16 @@ public class Input implements InputProcessor
                 switch (dir)
                 {
                     case Direction.NORTH:
-                        _actions[A_UP] = false;
+                        _commands.ExecuteAction(A_UP, false);
                         return true;
                     case Direction.SOUTH:
-                        _actions[A_DOWN] = false;
+                        _commands.ExecuteAction(A_DOWN, false);
                         return true;
                     case Direction.WEST:
-                        _actions[A_LEFT] = false;
+                        _commands.ExecuteAction(A_LEFT, false);
                         return true;
                     case Direction.EAST:
-                        _actions[A_RIGHT] = false;
-                        return true;
-                    case ControlPad.PLACE_BOMB:
-                        _actions[A_BOMB] = false;
+                        _commands.ExecuteAction(A_RIGHT, false);
                         return true;
                 }
             }

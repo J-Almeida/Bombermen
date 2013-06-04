@@ -11,9 +11,9 @@ public class Bomb extends Entity
     {
     };
 
-    Bomb(int guid, Vector2 pos)
+    Bomb(int guid, Vector2 pos, BombermenServer sv)
     {
-        super(TYPE_BOMB, guid, pos);
+        super(TYPE_BOMB, guid, pos, sv);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class Bomb extends Entity
         return new SMSG_SPAWN_BOMB(GetGuid(), GetX(), GetY());
     }
 
-    private static final Vector2 size = new Vector2(0.9f * Constants.CELL_SIZE, 0.9f * Constants.CELL_SIZE);
+    private static final Vector2 size = new Vector2(Constants.BOMB_WIDTH, Constants.BOMB_HEIGHT);
 
     @Override
     public Vector2 GetSize()
@@ -34,5 +34,12 @@ public class Bomb extends Entity
     public void OnCollision(Entity e)
     {
         cHandler.OnCollision(this, e);
+    }
+
+    @Override
+    public void Update(int diff)
+    {
+        // TODO Auto-generated method stub
+        
     }
 }

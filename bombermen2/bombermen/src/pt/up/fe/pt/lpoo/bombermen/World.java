@@ -48,42 +48,6 @@ public class World implements Disposable
     public void AddEntity(final Entity entity)
     {
         _stage.addActor(entity);
-
-        if (entity.IsPlayer())
-        {
-            _stage.addListener(new InputListener()
-            {
-                @Override
-                public boolean keyDown(InputEvent event, int keycode)
-                {
-                    switch (keycode)
-                    {
-                        case Keys.S:
-                            _game.MovePlayerDown();
-                            Gdx.app.debug("Input", "Player move down.");
-                            return true;
-                        case Keys.W:
-                            Gdx.app.debug("Input", "Player move up.");
-                            _game.MovePlayerUp();
-                            return true;
-                        case Keys.A:
-                            Gdx.app.debug("Input", "Player move left.");
-                            _game.MovePlayerLeft();
-                            return true;
-                        case Keys.D:
-                            Gdx.app.debug("Input", "Player move right.");
-                            _game.MovePlayerRight();
-                            return true;
-                        case Keys.SPACE:
-                            Gdx.app.debug("Input", "Player place bomb.");
-                            _game.PlaceBomb();
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
-            });
-        }
     }
 
     public Entity GetEntity(int guid)

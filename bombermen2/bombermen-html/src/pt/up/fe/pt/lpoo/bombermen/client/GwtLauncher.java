@@ -1,6 +1,6 @@
 package pt.up.fe.pt.lpoo.bombermen.client;
 
-import pt.up.fe.pt.lpoo.bombermen.Bombermen;
+import pt.up.fe.pt.lpoo.bombermen.Bombermen2;
 import pt.up.fe.pt.lpoo.bombermen.Constants;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -19,6 +19,6 @@ public class GwtLauncher extends GwtApplication
     @Override
     public ApplicationListener getApplicationListener()
     {
-        return new Bombermen();
+        return new Bombermen2();
     }
 }

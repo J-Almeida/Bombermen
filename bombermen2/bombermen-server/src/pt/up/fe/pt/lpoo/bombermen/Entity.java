@@ -16,11 +16,13 @@ public abstract class Entity
     private int _type;
     private int _guid;
     private Rectangle _rect;
+    protected final BombermenServer _server;
 
-    Entity(int type, int guid, Vector2 pos)
+    Entity(int type, int guid, Vector2 pos, BombermenServer sv)
     {
         _type = type;
         _guid = guid;
+        _server = sv;
         Vector2 size = this.GetSize();
         _rect = new Rectangle(pos.x, pos.y, size.x, size.y);
     }
@@ -125,5 +127,7 @@ public abstract class Entity
         return IsPowerUp() ? (PowerUp) this : null;
     }
 
+    public abstract void Update(int diff);
+    
     public abstract SMSG_SPAWN GetSpawnMessage();
 }

@@ -16,11 +16,13 @@ public class MapLoader
 {
     private int _lastId;
     HashMap<Integer, Entity> _entities;
-
-    public MapLoader(HashMap<Integer, Entity> entities, int lastId)
+    protected BombermenServer _server;
+    
+    public MapLoader(BombermenServer sv)
     {
-        _entities = entities;
-        _lastId = lastId;
+        _server = sv;
+        _entities = _server.GetEntities();
+        _lastId = _server.GetLastId();
     }
 
     public boolean TryLoad(int number, Ref<Integer> width, Ref<Integer> height, Ref<Integer> lastId)
@@ -89,7 +91,7 @@ public class MapLoader
 
     private void AddWall(int hp, int tileX, int tileY)
     {
-        _entities.put(_lastId, new Wall(_lastId, hp, new Vector2(tileX * Wall.Size.x, tileY * Wall.Size.y)));
+        _entities.put(_lastId, new Wall(_lastId, hp, new Vector2(tileX * Wall.Size.x, tileY * Wall.Size.y), _server));
         _lastId++;
     }
 }

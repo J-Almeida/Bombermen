@@ -11,9 +11,9 @@ public class PowerUp extends Entity
     {
     };
 
-    public PowerUp(int guid, Vector2 pos)
+    public PowerUp(int guid, Vector2 pos, BombermenServer sv)
     {
-        super(TYPE_POWER_UP, guid, pos);
+        super(TYPE_POWER_UP, guid, pos, sv);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class PowerUp extends Entity
         return new SMSG_SPAWN_POWER_UP(GetGuid(), GetX(), GetY());
     }
 
-    private static final Vector2 size = new Vector2(0.9f * Constants.CELL_SIZE, 0.9f * Constants.CELL_SIZE);
+    private static final Vector2 size = new Vector2(Constants.POWER_UP_WIDTH, Constants.POWER_UP_HEIGHT);
 
     @Override
     public Vector2 GetSize()
@@ -35,5 +35,12 @@ public class PowerUp extends Entity
     {
         cHandler.OnCollision(this, e);
 
+    }
+
+    @Override
+    public void Update(int diff)
+    {
+        // TODO Auto-generated method stub
+        
     }
 }

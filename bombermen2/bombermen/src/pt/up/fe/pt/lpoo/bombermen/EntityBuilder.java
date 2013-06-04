@@ -22,7 +22,7 @@ public class EntityBuilder
             Bomb.Regions = TextureSplitter.SplitTexture(t, 1, 3);
 
         Bomb b = new Bomb(guid);
-        b.setBounds(x, y, Constants.CELL_SIZE * 0.9f, Constants.CELL_SIZE * 0.9f);
+        b.setBounds(x, y, Constants.BOMB_WIDTH, Constants.BOMB_HEIGHT);
 
         return b;
     }
@@ -35,7 +35,7 @@ public class EntityBuilder
             Player.Regions = TextureSplitter.SplitTexture(t, 1, 8);
 
         Player p = new Player(guid, name);
-        p.setBounds(x, y, 18.f * Constants.CELL_SIZE * 0.9f / 26, Constants.CELL_SIZE * 0.9f);
+        p.setBounds(x, y, Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
 
         return p;
     }
@@ -48,7 +48,7 @@ public class EntityBuilder
             Wall.Regions = TextureSplitter.SplitTexture(t, 1, 4);
 
         Wall w = new Wall(guid, hitPoints);
-        w.setBounds(x, y, Constants.CELL_SIZE, Constants.CELL_SIZE);
+        w.setBounds(x, y, Constants.WALL_WIDTH, Constants.WALL_HEIGHT);
 
         return w;
     }
@@ -64,7 +64,7 @@ public class EntityBuilder
             PowerUp.Regions = TextureSplitter.SplitTexture(t, 2, 7);
 
         PowerUp pu = new PowerUp(guid, MathUtils.random(0, PowerUp.NUMBER_OF_TYPES)); // @TODO: All power up types got the same probability to spawn. Maybe change that.
-        pu.setBounds(x, y, Constants.CELL_SIZE * 0.9f, Constants.CELL_SIZE * 0.9f);
+        pu.setBounds(x, y, Constants.POWER_UP_WIDTH, Constants.POWER_UP_HEIGHT);
 
         return pu;
     }
@@ -77,7 +77,7 @@ public class EntityBuilder
             Explosion.Regions = TextureSplitter.SplitTexture(t, 5, 9);
 
         Explosion e = new Explosion(guid);
-        e.setBounds(x, y, Constants.CELL_SIZE * 0.9f, Constants.CELL_SIZE * 0.9f);
+        e.setBounds(x, y, Constants.EXPLOSION_WIDTH, Constants.EXPLOSION_HEIGHT);
 
         return e;
     }

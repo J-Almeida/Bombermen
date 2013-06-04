@@ -45,7 +45,6 @@ public class Bombermen2 implements ApplicationListener
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
         int dt = (int) (Gdx.graphics.getRawDeltaTime() * 1000.f);
-        _input.Update(dt);
         _game.Update(/*dt*/);
 
         _stage.act(Gdx.graphics.getDeltaTime());
