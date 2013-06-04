@@ -17,14 +17,15 @@ public class PowerUp extends Entity
 
     public static final int NUMBER_OF_TYPES = 7;
 
-    public PowerUp(int guid, int type, TextureRegion regions[][])
+    public PowerUp(int guid, int type)
     {
-        super(Entity.TYPE_POWER_UP, guid, regions);
+        super(Entity.TYPE_POWER_UP, guid);
 
         type = _type;
     }
 
     private int _type;
+    public static TextureRegion Regions[][];
 
     public void HandlePowerUp(Player p)
     {
@@ -87,7 +88,7 @@ public class PowerUp extends Entity
     {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(_regions[0][0], getX(), getY(), getOriginX(), getOriginY(),
+        batch.draw(Regions[0][0], getX(), getY(), getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }

@@ -1,25 +1,20 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Bombermen implements ApplicationListener
 {
-    private OrthographicCamera camera;
-    private SpriteBatch batch;
-    private ControlPad _controlPad = null;
+    //private OrthographicCamera camera;
+    //private SpriteBatch batch;
+    //private ControlPad _controlPad = null;
 
     //private float timeStep;
-    private Input _input;
+    //private Input _input;
 
     @Override
     public void create()
     {
+        /*
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
         //if (Gdx.app.getType() == ApplicationType.Android)
@@ -41,17 +36,19 @@ public class Bombermen implements ApplicationListener
         }
 
         Gdx.input.setInputProcessor(_input);
+        */
     }
 
     @Override
     public void dispose()
     {
-        batch.dispose();
+        //batch.dispose();
     }
 
     @Override
     public void render()
     {
+        /*
         Gdx.gl.glClearColor(16f / 255, 120f / 255, 48f / 255, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
@@ -79,6 +76,7 @@ public class Bombermen implements ApplicationListener
             _controlPad.draw(batch);
             batch.end();
         }
+        */
     }
 
     @Override

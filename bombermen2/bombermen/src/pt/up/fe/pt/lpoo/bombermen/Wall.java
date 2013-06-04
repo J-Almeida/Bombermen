@@ -6,14 +6,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Wall extends Entity
 {
-    Wall(int guid, int hitPoints, TextureRegion regions[][])
+    Wall(int guid, int hitPoints)
     {
-        super(Entity.TYPE_WALL, guid, regions);
+        super(Entity.TYPE_WALL, guid);
 
         _hitPoints = hitPoints;
     }
 
     private int _hitPoints;
+    public static TextureRegion Regions[][];
 
     public boolean IsUndestroyable()
     {
@@ -49,7 +50,7 @@ public class Wall extends Entity
     {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(_regions[IsUndestroyable() ? 1 : 0][0], getX(), getY(), getOriginX(), getOriginY(),
+        batch.draw(Regions[IsUndestroyable() ? 1 : 0][0], getX(), getY(), getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }

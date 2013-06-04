@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Player extends Entity
 {
-    Player(int guid, String name, TextureRegion regions[][])
+    Player(int guid, String name)
     {
-        super(Entity.TYPE_PLAYER, guid, regions);
+        super(Entity.TYPE_PLAYER, guid);
 
         //_name = name;
         //_currentBombs = 0;
@@ -23,6 +23,7 @@ public class Player extends Entity
     private int _bombRadius;
     //private int _direction;
     private float _speed;
+    public static TextureRegion Regions[][];
 
     public int GetCurrentBombs()
     {
@@ -84,7 +85,7 @@ public class Player extends Entity
     {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(_regions[0][0], getX(), getY(), getOriginX(), getOriginY(),
+        batch.draw(Regions[0][0], getX(), getY(), getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }

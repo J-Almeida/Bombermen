@@ -6,9 +6,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Bomb extends Entity
 {
-    Bomb(int guid, TextureRegion regions[][])
+    public static TextureRegion Regions[][] = null;
+
+    Bomb(int guid)
     {
-        super(Entity.TYPE_BOMB, guid, regions);
+        super(Entity.TYPE_BOMB, guid);
     }
 
     @Override
@@ -31,7 +33,7 @@ public class Bomb extends Entity
     {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(_regions[0][0], getX(), getY(), getOriginX(), getOriginY(),
+        batch.draw(Regions[0][0], getX(), getY(), getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }

@@ -32,7 +32,7 @@ public class Bombermen2 implements ApplicationListener
     {
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-        _game.Update();
+        _game.Update(/*Gdx.graphics.getDeltaTime() * 1000f*/);
 
         _stage.act(Gdx.graphics.getDeltaTime());
         _stage.draw();

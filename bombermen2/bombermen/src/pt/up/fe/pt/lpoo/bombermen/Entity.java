@@ -1,7 +1,6 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public abstract class Entity extends Actor
@@ -19,12 +18,10 @@ public abstract class Entity extends Actor
     public static final int TYPE_POWER_UP = 4;
 
     private int _type;
-    protected TextureRegion _regions[][];
     private int _guid;
 
-    Entity(int type, int guid, TextureRegion regions[][])
+    Entity(int type, int guid)
     {
-        _regions = regions;
         _type = type;
         _guid = guid;
     }
