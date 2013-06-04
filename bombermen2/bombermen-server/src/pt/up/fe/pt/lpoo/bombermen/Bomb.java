@@ -13,11 +13,17 @@ public class Bomb extends Entity
     private static CollisionHandler<Bomb> cHandler = new CollisionHandler<Bomb>()
     {};
 
+    public interface ExplodeHandler
+    {
+        void OnExplode();
+    }
+
     private int _explosionRadius;
     private int _bombTimer; // ms
     private int _radius[] = { 0, 0, 0, 0 };
     private boolean _justCreated = true;
     private int _creatorGuid;
+    private ExplodeHandler _explodeHandler = null;
 
     public int GetCreatorGuid()
     {
@@ -68,10 +74,15 @@ public class Bomb extends Entity
     {
         cHandler.OnCollision(this, e);
     }
-    
+
     public void TriggerExplosion()
     {
         _bombTimer += Constants.BOMB_TIMER;
+    }
+
+    public void AddOnExplodeHandler(ExplodeHandler eh)
+    {
+        _explodeHandler = eh;
     }
 
     @Override
@@ -109,6 +120,9 @@ public class Bomb extends Entity
                     _server.SendAll(ex.GetSpawnMessage());
                 }
             }
+
+            if (_explodeHandler != null)
+                _explodeHandler.OnExplode();
         }
     }
 

@@ -33,7 +33,7 @@ public class Wall extends Entity
             if (_hp < 0) _hp = 0;
         }
     }
-    
+
     @Override
     public SMSG_SPAWN GetSpawnMessage()
     {

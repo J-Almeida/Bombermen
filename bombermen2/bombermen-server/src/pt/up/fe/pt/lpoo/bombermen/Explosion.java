@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Explosion extends Entity
 {
     private int _timer = 0;
-    
+
     private static CollisionHandler<Explosion> cHandler = new CollisionHandler<Explosion>()
     {
         @Override
@@ -64,7 +64,7 @@ public class Explosion extends Entity
     public void Update(int diff)
     {
         _timer += diff;
-        
+
         if (_timer >= 600)
             _server.RemoveEntityNextUpdate(GetGuid());
     }

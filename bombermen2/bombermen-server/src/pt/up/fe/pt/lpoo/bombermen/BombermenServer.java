@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import pt.up.fe.pt.lpoo.bombermen.Bomb.ExplodeHandler;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_JOIN;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
@@ -91,7 +92,7 @@ public class BombermenServer implements Runnable
                 {
                     if (!e.IsExplosion()) SendAll(new SMSG_DESTROY(e.GetGuid()));
                     it.remove();
-                    
+
                 }
             }
 
@@ -165,7 +166,7 @@ public class BombermenServer implements Runnable
             {
                 System.out.println("Place bomb message received from " + guid + " : " + msg);
 
-                Player p = _entities.get(guid).ToPlayer();
+                final Player p = _entities.get(guid).ToPlayer();
                 if (p == null)
                 {
                     System.out.println("Player sent unknown guid (" + guid + "). Ignored.");
@@ -192,6 +193,15 @@ public class BombermenServer implements Runnable
                 Vector2 position = new Vector2(x, y); // (0.9, 0.9)
                 Bomb b = new Bomb(BombermenServer.this.IncLastId(), p.GetGuid(), position, p.GetExplosionRadius(), BombermenServer.this);
                 BombermenServer.this.CreateEntityNextUpdate(b);
+
+                b.AddOnExplodeHandler(new ExplodeHandler()
+                {
+                    @Override
+                    public void OnExplode()
+                    {
+                        p.UpdateCurrentBombs(-1);
+                    }
+                });
 
                 SMSG_SPAWN bombMsg = b.GetSpawnMessage();
                 for (ClientHandler ch : _clients.values())
