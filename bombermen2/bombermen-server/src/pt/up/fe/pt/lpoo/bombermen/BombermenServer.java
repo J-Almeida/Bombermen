@@ -85,8 +85,15 @@ public class BombermenServer implements Runnable
 
             Iterator<Entity> it = _entities.values().iterator();
             while (it.hasNext())
-                if (_entitiesToRemove.contains(it.next().GetGuid()))
+            {
+                int guid = it.next().GetGuid();
+                if (_entitiesToRemove.contains(guid))
+                {
+                    SendAll(new SMSG_DESTROY(guid));
                     it.remove();
+                    
+                }
+            }
 
             _entitiesToRemove.clear();
 
