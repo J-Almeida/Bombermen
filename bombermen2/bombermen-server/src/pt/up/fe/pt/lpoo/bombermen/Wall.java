@@ -20,6 +20,11 @@ public class Wall extends Entity
         _hp = hp;
     }
 
+    public boolean IsUndestroyable()
+    {
+        return _hp == -1;
+    }
+
     @Override
     public SMSG_SPAWN GetSpawnMessage()
     {
@@ -44,7 +49,7 @@ public class Wall extends Entity
     public void Update(int diff)
     {
         // TODO Auto-generated method stub
-        
+
     }
 
 }

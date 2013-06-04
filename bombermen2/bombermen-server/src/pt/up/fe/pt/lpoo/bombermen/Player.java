@@ -83,7 +83,7 @@ public class Player extends Entity
     {
         _speed = speed;
     }
-    
+
     public void SetMoving(boolean val, int dir)
     {
         if (dir != Direction.NONE) _moving[dir] = val;
@@ -160,7 +160,7 @@ public class Player extends Entity
                                 break;
                             else
                                 e.ToBomb().SetJustCreated(false);
-                        
+
                         if (!e.IsPlayer() && Collides(e))
                         {
                             if (e.IsExplosion() || e.IsPowerUp())

@@ -69,14 +69,14 @@ public class EntityBuilder
         return pu;
     }
 
-    public Explosion CreateExplosion(int guid, float x, float y)
+    public Explosion CreateExplosion(int guid, float x, float y, int direction, boolean end)
     {
         Texture t = _textureManager.Get("explosion"); // 16 x 16
 
         if (Explosion.Regions == null)
             Explosion.Regions = TextureSplitter.SplitTexture(t, 5, 9);
 
-        Explosion e = new Explosion(guid);
+        Explosion e = new Explosion(guid, direction, end);
         e.setBounds(x, y, Constants.EXPLOSION_WIDTH, Constants.EXPLOSION_HEIGHT);
 
         return e;

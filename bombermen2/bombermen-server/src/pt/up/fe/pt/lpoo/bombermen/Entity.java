@@ -32,6 +32,11 @@ public abstract class Entity
         return _rect.overlaps(e._rect);
     }
 
+    public boolean Collides(Rectangle r)
+    {
+        return _rect.overlaps(r);
+    }
+
     public abstract void OnCollision(Entity e);
 
     public abstract Vector2 GetSize();
@@ -128,6 +133,6 @@ public abstract class Entity
     }
 
     public abstract void Update(int diff);
-    
+
     public abstract SMSG_SPAWN GetSpawnMessage();
 }

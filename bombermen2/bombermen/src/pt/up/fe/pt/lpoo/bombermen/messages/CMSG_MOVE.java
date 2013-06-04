@@ -6,7 +6,7 @@ public class CMSG_MOVE extends Message
 
     public final int Dir;
     public final boolean Val;
-    
+
     public CMSG_MOVE(int dir, boolean val)
     {
         super(CMSG_MOVE);

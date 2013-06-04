@@ -39,12 +39,17 @@ public class BombermenServer implements Runnable
     {
         return _entities;
     }
-    
+
     public int GetLastId()
     {
         return _lastId;
     }
-    
+
+    public int IncLastId() // returns previous id
+    {
+        return _lastId++;
+    }
+
     public void PushMessage(int guid, Message msg)
     {
         _messageQueue.add(new ClientMessage(guid, msg));
@@ -59,15 +64,18 @@ public class BombermenServer implements Runnable
                 _messageHandler.HandleMessage(_messageQueue.poll());
             }
         }
-        
-        for (Entity e : _entities.values())
-            e.Update(diff);
 
-        for (Entity e1 : _entities.values())
-            for (Entity e2 : _entities.values())
-                if (e1.GetGuid() != e2.GetGuid())
-                    if (e1.Collides(e2))
-                        e1.OnCollision(e2);
+        synchronized (_entities)
+        {
+            for (Entity e : _entities.values())
+                e.Update(diff);
+
+            for (Entity e1 : _entities.values())
+                for (Entity e2 : _entities.values())
+                    if (e1.GetGuid() != e2.GetGuid())
+                        if (e1.Collides(e2))
+                            e1.OnCollision(e2);
+        }
 
         synchronized (_clients)
         {
@@ -112,7 +120,7 @@ public class BombermenServer implements Runnable
         System.out.println("Server created - " + InetAddress.getLocalHost().getHostAddress() + ":" + _socket.getLocalPort());
 
         final BombermenServer sv = this;
-        
+
         _messageHandler = new MessageHandler()
         {
             @Override
@@ -120,9 +128,9 @@ public class BombermenServer implements Runnable
             {
                 Player p = _entities.get(guid).ToPlayer();
                 if (p == null) return;
-                
+
                 p.SetMoving(msg.Val, msg.Dir);
-                
+
             }
 
             @Override
@@ -191,15 +199,12 @@ public class BombermenServer implements Runnable
 
         Ref<Integer> width = new Ref<Integer>(0);
         Ref<Integer> height = new Ref<Integer>(0);
-        Ref<Integer> lastId = new Ref<Integer>(_lastId);
 
-        if (!builder.TryLoad(0, width, height, lastId))
+        if (!builder.TryLoad(0, width, height))
         {
             System.out.println("Could not load map " + 0);
             return;
         }
-
-        _lastId = lastId.Get();
 
         new Thread(this).start();
     }

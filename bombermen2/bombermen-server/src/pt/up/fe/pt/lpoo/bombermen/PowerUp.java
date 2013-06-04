@@ -41,6 +41,6 @@ public class PowerUp extends Entity
     public void Update(int diff)
     {
         // TODO Auto-generated method stub
-        
+
     }
 }

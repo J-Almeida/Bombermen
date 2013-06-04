@@ -11,15 +11,20 @@ public class Explosion extends Entity
     {
     };
 
-    public Explosion(int guid, Vector2 pos, BombermenServer sv)
+    public Explosion(int guid, Vector2 pos, int dir, boolean end, BombermenServer sv)
     {
         super(TYPE_EXPLOSION, guid, pos, sv);
+        _direction = dir;
+        _end = end;
     }
+
+    private int _direction;
+    private boolean _end;
 
     @Override
     public SMSG_SPAWN GetSpawnMessage()
     {
-        return new SMSG_SPAWN_EXPLOSION(GetGuid(), GetX(), GetY());
+        return new SMSG_SPAWN_EXPLOSION(GetGuid(), GetX(), GetY(), _direction, _end);
     }
 
     private static final Vector2 size = new Vector2(Constants.EXPLOSION_WIDTH, Constants.EXPLOSION_HEIGHT);
@@ -40,7 +45,7 @@ public class Explosion extends Entity
     public void Update(int diff)
     {
         // TODO Auto-generated method stub
-        
+
     }
 
 }

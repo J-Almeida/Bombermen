@@ -9,6 +9,7 @@ import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_BOMB;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_EXPLOSION;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_PLAYER;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_WALL;
 import pt.up.fe.pt.lpoo.utils.Direction;
@@ -71,16 +72,13 @@ public class Game implements Input.Commands, Disposable
                     case Entity.TYPE_BOMB:
                     {
                         SMSG_SPAWN_BOMB bombMsg = (SMSG_SPAWN_BOMB) msg;
-                        _world.AddEntity(_builder.CreateBomb(msg.Guid, bombMsg.X, bombMsg.Y));
+                        _world.AddEntity(_builder.CreateBomb(bombMsg.Guid, bombMsg.X, bombMsg.Y));
                         break;
                     }
                     case Entity.TYPE_EXPLOSION:
                     {
-                        // SMSG_SPAWN_EXPLOSION explosionMsg =
-                        // (SMSG_SPAWN_EXPLOSION) msg;
-                        // _entities.put(msg.Guid,
-                        // _builder.CreateExplosion(msg.Guid, bomb, tileX,
-                        // tileY)
+                        SMSG_SPAWN_EXPLOSION exMsg = (SMSG_SPAWN_EXPLOSION) msg;
+                        _world.AddEntity(_builder.CreateExplosion(exMsg.Guid, exMsg.X, exMsg.Y, exMsg.Direction, exMsg.End));
                         break;
                     }
                     case Entity.TYPE_POWER_UP:
@@ -117,7 +115,7 @@ public class Game implements Input.Commands, Disposable
 
         try
         {
-            _socket = Gdx.net.newClientSocket(Protocol.TCP, "172.30.16.139", 7777, null);
+            _socket = Gdx.net.newClientSocket(Protocol.TCP, "172.30.17.54", 7777, null);
 
             _receiver = new Receiver<Message>(_socket);
             _sender = new Sender<Message>(_socket);

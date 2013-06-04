@@ -1,8 +1,11 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_BOMB;
+import pt.up.fe.pt.lpoo.utils.Direction;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Bomb extends Entity
@@ -11,20 +14,22 @@ public class Bomb extends Entity
     {};
 
     private int _explosionRadius;
+    private int _bombTimer; // ms
+    private int _radius[] = { 0, 0, 0, 0 };
     private boolean _justCreated = true;
     private int _creatorGuid;
-    
+
     public int GetCreatorGuid()
     {
         return _creatorGuid;
     }
-    
+
     public void SetJustCreated(boolean val)
     {
         _justCreated = false;
     }
-    
-    public boolean JustCreated() 
+
+    public boolean JustCreated()
     {
         return _justCreated;
     }
@@ -34,8 +39,9 @@ public class Bomb extends Entity
         super(TYPE_BOMB, guid, pos, sv);
 
         _creatorGuid = creatorGuid;
-        
+
         _explosionRadius = explosionRadius;
+        _bombTimer = 0;
     }
 
     public int GetExplosionRadius()
@@ -66,7 +72,69 @@ public class Bomb extends Entity
     @Override
     public void Update(int diff)
     {
-        // TODO Auto-generated method stub
+        _bombTimer += diff;
 
+        if (_bombTimer > Constants.BOMB_TIMER)
+        {
+            // destroy this bomb
+            _server.SendAll(new SMSG_DESTROY(GetGuid()));
+            _server.GetEntities().remove(GetGuid());
+
+            CalculateRadiuses();
+
+            Vector2 pos = new Vector2(GetX() - Constants.WALL_WIDTH  - Constants.BOMB_WIDTH,
+                    GetY() - Constants.WALL_HEIGHT - Constants.BOMB_HEIGHT);
+
+            int id = _server.IncLastId();
+            Explosion exCenter = new Explosion(id, pos, Direction.NONE, false, _server);
+            _server.GetEntities().put(id, exCenter);
+            _server.SendAll(exCenter.GetSpawnMessage());
+
+            for (int d : Direction.Directions)
+            {
+                for (int i = 1; i <= _radius[d]; ++i)
+                {
+                    id = _server.IncLastId();
+
+                    pos.x = Direction.ApplyMovementX(GetX() - Constants.WALL_WIDTH  - Constants.BOMB_WIDTH,  d, (int)(i * Constants.EXPLOSION_WIDTH));
+                    pos.y = Direction.ApplyMovementY(GetY() - Constants.WALL_HEIGHT - Constants.BOMB_HEIGHT, d, (int)(i * Constants.EXPLOSION_HEIGHT));
+
+                    Explosion ex = new Explosion(id, pos, d, i == _radius[d], _server);
+                    _server.GetEntities().put(id, ex);
+                    _server.SendAll(ex.GetSpawnMessage());
+                }
+            }
+        }
+    }
+
+    public void CalculateRadiuses()
+    {
+        boolean[] draw = { true, true, true, true };
+
+        Rectangle r = new Rectangle(0, 0, Constants.EXPLOSION_WIDTH, Constants.EXPLOSION_HEIGHT);
+
+        for (int i = 1; i <= _explosionRadius; ++i)
+        {
+            for (int d : Direction.Directions)
+            {
+                r.x = Direction.ApplyMovementX(GetX() - Constants.WALL_WIDTH  - Constants.EXPLOSION_WIDTH,  d, (int)(i * Constants.EXPLOSION_WIDTH));
+                r.y = Direction.ApplyMovementY(GetY() - Constants.WALL_HEIGHT - Constants.EXPLOSION_HEIGHT, d, (int)(i * Constants.EXPLOSION_HEIGHT));
+
+                if (draw[d])
+                {
+                    _radius[d]++;
+                    for (Entity e : _server.GetEntities().values())
+                    {
+                        if (e.IsWall() && e.Collides(r))
+                        {
+                            Wall w = e.ToWall();
+                            if (w.IsUndestroyable())
+                                _radius[d]--;
+                            draw[d] = false;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

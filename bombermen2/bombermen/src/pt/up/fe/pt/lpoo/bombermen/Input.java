@@ -19,7 +19,7 @@ public class Input implements InputProcessor
     public static final int A_NUM_OF_ACTIONS = 5;
 
     private boolean[] _activeActions = { false, false, false, false };
-    
+
     public interface Commands
     {
         void ExecuteAction(int action, boolean val);
@@ -173,7 +173,7 @@ public class Input implements InputProcessor
                         return true;
                 }
             }*/
-            
+
             for (int i = 0; i < _activeActions.length; ++i)
             {
                 if (_activeActions[i])

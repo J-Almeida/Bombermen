@@ -18,7 +18,8 @@ public final class Constants
     // Game
     public static final int INIT_NUM_MAX_BOMBS = 1;
     public static final int INIT_BOMB_RADIUS = 2;
-    public static final int DEFAULT_BOMB_TIMER = 3; // 3 seconds
+    public static final int BOMB_TIMER = 3000; // 3 seconds
+    public static final int EXPLOSION_TIMER = 600; // milliseconds
     public static final int DEFAULT_BOMB_STRENGTH = 1; // 1 hp damage
     public static final int CELL_SIZE = 36; // px
 
@@ -30,19 +31,19 @@ public final class Constants
     // Sizes
     public static final float PLAYER_WIDTH = 18.f * CELL_SIZE * 0.75f / 26f;
     public static final float PLAYER_HEIGHT = CELL_SIZE * 0.75f;
-    
+
     public static final float BOMB_WIDTH = 0.9f * CELL_SIZE;
     public static final float BOMB_HEIGHT = BOMB_WIDTH;
-    
-    public static final float EXPLOSION_WIDTH = 0.9f * CELL_SIZE;
+
+    public static final float EXPLOSION_WIDTH = CELL_SIZE;
     public static final float EXPLOSION_HEIGHT = EXPLOSION_WIDTH;
-    
+
     public static final float POWER_UP_WIDTH = 0.9f * CELL_SIZE;
     public static final float POWER_UP_HEIGHT = POWER_UP_WIDTH;
-    
+
     public static final float WALL_WIDTH = CELL_SIZE;
     public static final float WALL_HEIGHT = WALL_WIDTH;
-    
+
     private Constants()
     {
     }
