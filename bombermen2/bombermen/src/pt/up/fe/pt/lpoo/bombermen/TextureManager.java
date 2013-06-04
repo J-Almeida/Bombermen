@@ -23,6 +23,7 @@ public class TextureManager implements Disposable
 
         Texture t = new Texture(fh);
         _textures.put(name, t);
+
         return true;
     }
 

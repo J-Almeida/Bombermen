@@ -21,6 +21,7 @@ import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_PLAYER;
 import pt.up.fe.pt.lpoo.utils.Direction;
+import pt.up.fe.pt.lpoo.utils.Ref;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -116,16 +117,16 @@ public class BombermenServer implements Runnable
                 switch (msg.Dir)
                 {
                     case Direction.NORTH:
-                        p.SetY(p.GetY() + 10);
+                        p.SetY(p.GetY() + 1);
                         break;
                     case Direction.SOUTH:
-                        p.SetY(p.GetY() - 10);
+                        p.SetY(p.GetY() - 1);
                         break;
                     case Direction.EAST:
-                        p.SetX(p.GetX() + 10);
+                        p.SetX(p.GetX() + 1);
                         break;
                     case Direction.WEST:
-                        p.SetX(p.GetX() - 10);
+                        p.SetX(p.GetX() - 1);
                         break;
                     default:
                         moved = false;
@@ -182,7 +183,7 @@ public class BombermenServer implements Runnable
                 Player p = new Player(guid, msg.Name, new Vector2(-20, 0));
                 _entities.put(guid, p);
                 System.out.println("Player '" + msg.Name + "' (guid: " + guid + ") just joined.");
-                SMSG_SPAWN_PLAYER msg1 = new SMSG_SPAWN_PLAYER(guid, msg.Name, p.GetPosition());
+                SMSG_SPAWN_PLAYER msg1 = new SMSG_SPAWN_PLAYER(guid, msg.Name, p.GetX(), p.GetY());
                 for (ClientHandler ch : _clients.values())
                 {
                     ch.ClientSender.Send(msg1);
@@ -195,6 +196,23 @@ public class BombermenServer implements Runnable
                 }
             }
         };
+
+        MapLoader builder = new MapLoader(_entities, _lastId);
+
+        Ref<Integer> width = new Ref<Integer>(0);
+        Ref<Integer> height = new Ref<Integer>(0);
+        Ref<Integer> lastId = new Ref<Integer>(0);
+
+        String current = new java.io.File( "." ).getCanonicalPath();
+        System.out.println("Current dir:" + current);
+
+        if (!builder.TryLoad(0, width, height, lastId))
+        {
+            System.out.println("Could not load map " + 0);
+            return;
+        }
+
+        _lastId = lastId.Get();
 
         new Thread(this).start();
     }
