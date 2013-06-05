@@ -47,8 +47,8 @@ public final class Constants
     public static final float WALL_WIDTH = CELL_SIZE;
     public static final float WALL_HEIGHT = WALL_WIDTH;
     
-    public static final float WALL_BOUNDING_WIDTH = WALL_WIDTH * 0.925f;
-    public static final float WALL_BOUNDING_HEIGHT = WALL_HEIGHT * 0.925f;
+    public static final float WALL_BOUNDING_WIDTH = WALL_WIDTH * 0.95f;
+    public static final float WALL_BOUNDING_HEIGHT = WALL_HEIGHT * 0.95f;
 
     // PowerUp types
     public static final int POWER_UP_TYPE_BOMB_UP = 0; // increase amount of bombs by 1
