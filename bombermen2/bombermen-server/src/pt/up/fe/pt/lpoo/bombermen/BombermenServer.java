@@ -181,8 +181,8 @@ public class BombermenServer implements Runnable
 
                 p.UpdateCurrentBombs(1);
 
-                float playerX = p.GetX();
-                float playerY = p.GetY();
+                float playerX = p.GetX() + Constants.PLAYER_WIDTH / 2.f;
+                float playerY = p.GetY() + Constants.PLAYER_HEIGHT / 2.f;
 
                 int tileX = MathUtils.floor(playerX / Constants.CELL_SIZE);
                 int tileY = MathUtils.floor(playerY / Constants.CELL_SIZE);
