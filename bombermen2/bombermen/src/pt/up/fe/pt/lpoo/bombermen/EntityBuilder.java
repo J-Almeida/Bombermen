@@ -59,13 +59,12 @@ public class EntityBuilder
     {
         Texture t = _textureManager.Get("powerup"); // 16 x 16
 
-        if (PowerUp.Regions == null && PowerUp.Animation == null)
+        if (PowerUp.Regions == null)
         {
             PowerUp.Regions = TextureRegion.split(t, 16, 16);
-            PowerUp.Animation = new Animation(0.5f, PowerUp.Regions[0][powerUpType], PowerUp.Regions[1][powerUpType]);
         }
 
-        PowerUp pu = new PowerUp(guid, powerUpType);
+        PowerUp pu = new PowerUp(guid, powerUpType, new Animation(0.5f, PowerUp.Regions[0][powerUpType], PowerUp.Regions[1][powerUpType]));
         pu.setBounds(x, y, Constants.POWER_UP_WIDTH, Constants.POWER_UP_HEIGHT);
 
         return pu;

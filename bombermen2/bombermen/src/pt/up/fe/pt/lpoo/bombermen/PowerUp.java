@@ -7,18 +7,25 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class PowerUp extends Entity
 {
-    public PowerUp(int guid, int type)
+    @Override
+    public void act(float delta)
+    {
+        _stateTime += delta;
+    }
+
+    public PowerUp(int guid, int type, Animation anim)
     {
         super(Entity.TYPE_POWER_UP, guid);
 
         _type = type;
         _stateTime = 0;
+        _animation = anim;
     }
 
     private int _type;
     private float _stateTime;
     public static TextureRegion Regions[][];
-    public static Animation Animation = null;
+    public Animation _animation = null;
 
     @Override
     public void OnCollision(Entity other)
@@ -40,7 +47,7 @@ public class PowerUp extends Entity
     {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(Animation.getKeyFrame(_stateTime, true), getX(), getY(), getOriginX(), getOriginY(),
+        batch.draw(_animation.getKeyFrame(_stateTime, true), getX(), getY(), getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }
