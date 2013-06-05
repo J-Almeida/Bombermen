@@ -21,6 +21,7 @@ import pt.up.fe.pt.lpoo.utils.Direction;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.Socket;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -39,7 +40,6 @@ public class Game implements Input.Commands, Disposable
         _textureManager.Load("powerup");
         _textureManager.Load("wall");
 
-        _world = new World(_stage, this);
         _builder = new EntityBuilder(_textureManager);
 
         _messageHandler = new MessageHandler()
@@ -48,7 +48,7 @@ public class Game implements Input.Commands, Disposable
             protected void SMSG_MOVE_Handler(SMSG_MOVE msg)
             {
                 System.out.println("Move Handler: " + msg);
-                Entity e = _world.GetEntity(msg.Guid);
+                Entity e = GetEntity(msg.Guid);
                 if (e == null) return;
 
                 e.setX(msg.X);
@@ -70,31 +70,31 @@ public class Game implements Input.Commands, Disposable
                     case Entity.TYPE_PLAYER:
                     {
                         SMSG_SPAWN_PLAYER playerMsg = (SMSG_SPAWN_PLAYER) msg;
-                        _world.AddEntity(_builder.CreatePlayer(msg.Guid, playerMsg.Name, playerMsg.X, playerMsg.Y));
+                        AddEntity(_builder.CreatePlayer(msg.Guid, playerMsg.Name, playerMsg.X, playerMsg.Y));
                         break;
                     }
                     case Entity.TYPE_BOMB:
                     {
                         SMSG_SPAWN_BOMB bombMsg = (SMSG_SPAWN_BOMB) msg;
-                        _world.AddEntity(_builder.CreateBomb(bombMsg.Guid, bombMsg.X, bombMsg.Y));
+                        AddEntity(_builder.CreateBomb(bombMsg.Guid, bombMsg.X, bombMsg.Y));
                         break;
                     }
                     case Entity.TYPE_EXPLOSION:
                     {
                         SMSG_SPAWN_EXPLOSION exMsg = (SMSG_SPAWN_EXPLOSION) msg;
-                        _world.AddEntity(_builder.CreateExplosion(exMsg.Guid, exMsg.X, exMsg.Y, exMsg.Direction, exMsg.End));
+                        AddEntity(_builder.CreateExplosion(exMsg.Guid, exMsg.X, exMsg.Y, exMsg.Direction, exMsg.End));
                         break;
                     }
                     case Entity.TYPE_POWER_UP:
                     {
                         SMSG_SPAWN_POWER_UP puMsg = (SMSG_SPAWN_POWER_UP) msg;
-                        _world.AddEntity(_builder.CreatePowerUp(puMsg.Guid, puMsg.X, puMsg.Y, puMsg.Type));
+                        AddEntity(_builder.CreatePowerUp(puMsg.Guid, puMsg.X, puMsg.Y, puMsg.Type));
                         break;
                     }
                     case Entity.TYPE_WALL:
                     {
                         SMSG_SPAWN_WALL wallMsg = (SMSG_SPAWN_WALL) msg;
-                        _world.AddEntity(_builder.CreateWall(msg.Guid, wallMsg.HP, wallMsg.X, wallMsg.Y));
+                        AddEntity(_builder.CreateWall(msg.Guid, wallMsg.HP, wallMsg.X, wallMsg.Y));
                         break;
                     }
                 }
@@ -108,8 +108,7 @@ public class Game implements Input.Commands, Disposable
             @Override
             protected void SMSG_DESTROY_Handler(SMSG_DESTROY msg)
             {
-                _world.RemoveEntity(msg.Guid);
-
+                RemoveEntity(msg.Guid);
             }
 
         };
@@ -132,9 +131,33 @@ public class Game implements Input.Commands, Disposable
         }
     }
 
-    public World GetWorld()
+    public void AddEntity(final Entity entity)
     {
-        return _world;
+        _stage.addActor(entity);
+    }
+
+    public Entity GetEntity(int guid)
+    {
+        for (Actor a : _stage.getActors())
+        {
+            Entity e = (Entity)a;
+            if (e.GetGuid() == guid)
+                return e;
+        }
+
+        return null;
+    }
+
+    public void RemoveEntity(int guid)
+    {
+        Entity e = GetEntity(guid);
+        if (e != null)
+            RemoveEntity(e);
+    }
+
+    public void RemoveEntity(Entity entity)
+    {
+        entity.remove();
     }
 
     public EntityBuilder GetBuilder()
@@ -147,7 +170,6 @@ public class Game implements Input.Commands, Disposable
         return _sender;
     }
 
-    private World _world;
     private EntityBuilder _builder;
     private Receiver<Message> _receiver;
     private Sender<Message> _sender;
@@ -184,7 +206,6 @@ public class Game implements Input.Commands, Disposable
     {
         _socket.dispose();
         _textureManager.dispose();
-        _world.dispose();
     }
 
     public void Update(/*int diff*/)
