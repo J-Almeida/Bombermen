@@ -92,7 +92,6 @@ public class BombermenServer implements Runnable
                 {
                     if (!e.IsExplosion()) SendAll(new SMSG_DESTROY(e.GetGuid()));
                     it.remove();
-
                 }
             }
 

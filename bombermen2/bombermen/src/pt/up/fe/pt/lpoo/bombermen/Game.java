@@ -14,6 +14,7 @@ import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_EXPLOSION;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_PLAYER;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_POWER_UP;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_WALL;
 import pt.up.fe.pt.lpoo.utils.Direction;
 
@@ -86,11 +87,8 @@ public class Game implements Input.Commands, Disposable
                     }
                     case Entity.TYPE_POWER_UP:
                     {
-                        // SMSG_SPAWN_PLAYER playerMsg = (SMSG_SPAWN_PLAYER)
-                        // msg;
-                        // _entities.put(msg.Guid,
-                        // _builder.CreatePlayer(msg.Guid, playerMsg.Name,
-                        // playerMsg.Position.x, playerMsg.Position.y));
+                        SMSG_SPAWN_POWER_UP puMsg = (SMSG_SPAWN_POWER_UP) msg;
+                        _world.AddEntity(_builder.CreatePowerUp(puMsg.Guid, puMsg.X, puMsg.Y, puMsg.Type));
                         break;
                     }
                     case Entity.TYPE_WALL:

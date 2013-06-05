@@ -44,6 +44,16 @@ public final class Constants
     public static final float WALL_WIDTH = CELL_SIZE;
     public static final float WALL_HEIGHT = WALL_WIDTH;
 
+    // PowerUp types
+    public static final int POWER_UP_TYPE_BOMB_UP = 0; // increase amount of bombs by 1
+    public static final int POWER_UP_TYPE_SKATE = 1; // increase speed by 1
+    public static final int POWER_UP_TYPE_KICK = 2; // send bomb sliding across the stage until it collides with a wall/player/bomb
+    public static final int POWER_UP_TYPE_PUNCH = 3; // knock them away (out of screen or screen wrap to the other side)
+    public static final int POWER_UP_TYPE_FIRE = 4; // increase bomb radius
+    public static final int POWER_UP_TYPE_SKULL = 5; // debuffs (bomberman.wikia.com/wiki/Skull)
+    public static final int POWER_UP_TYPE_FULL_FIRE = 6; // biggest possible explosion radius
+    public static final int NUMBER_OF_POWER_UP_TYPES = 7;
+
     private Constants()
     {
     }

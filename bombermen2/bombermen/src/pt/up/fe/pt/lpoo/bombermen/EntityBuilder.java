@@ -3,7 +3,6 @@ package pt.up.fe.pt.lpoo.bombermen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 
 public class EntityBuilder
 {
@@ -56,17 +55,17 @@ public class EntityBuilder
         return w;
     }
 
-    public PowerUp CreatePowerUp(int guid, Wall wall)
+    public PowerUp CreatePowerUp(int guid, float x, float y, int powerUpType)
     {
-        float x = wall.getX() + 0.1f * Constants.CELL_SIZE;
-        float y = wall.getY() + 0.1f * Constants.CELL_SIZE;
-
         Texture t = _textureManager.Get("powerup"); // 16 x 16
 
-        if (PowerUp.Regions == null)
+        if (PowerUp.Regions == null && PowerUp.Animation == null)
+        {
             PowerUp.Regions = TextureRegion.split(t, 16, 16);
+            PowerUp.Animation = new Animation(0.5f, PowerUp.Regions[0][powerUpType], PowerUp.Regions[1][powerUpType]);
+        }
 
-        PowerUp pu = new PowerUp(guid, MathUtils.random(0, PowerUp.NUMBER_OF_TYPES)); // @TODO: All power up types got the same probability to spawn. Maybe change that.
+        PowerUp pu = new PowerUp(guid, powerUpType);
         pu.setBounds(x, y, Constants.POWER_UP_WIDTH, Constants.POWER_UP_HEIGHT);
 
         return pu;

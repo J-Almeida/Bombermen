@@ -1,74 +1,28 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class PowerUp extends Entity
 {
-    public static final int TYPE_BOMB_UP = 0; // increase amount of bombs by 1
-    public static final int TYPE_SKATE = 1; // increase speed by 1
-    public static final int TYPE_KICK = 2; // send bomb sliding across the stage until it collides with a wall/player/bomb
-    public static final int TYPE_PUNCH = 3; // knock them away (out of screen or screen wrap to the other side)
-    public static final int TYPE_FIRE = 4; // increase bomb radius
-    public static final int TYPE_SKULL = 5; // debuffs (bomberman.wikia.com/wiki/Skull)
-    public static final int TYPE_FULL_FIRE = 6; // biggest possible explosion radius
-
-    public static final int NUMBER_OF_TYPES = 7;
-
     public PowerUp(int guid, int type)
     {
         super(Entity.TYPE_POWER_UP, guid);
 
         type = _type;
+        _stateTime = 0;
     }
 
     private int _type;
+    private float _stateTime;
     public static TextureRegion Regions[][];
-
-    public void HandlePowerUp(Player p)
-    {
-        Gdx.app.debug("PowerUp", "Handling PowerUp [Guid: " + GetGuid() + ", Owner: " + p.GetGuid() + "]");
-
-        switch (_type)
-        {
-            case TYPE_BOMB_UP:
-                p.UpdateMaxBombs(1);
-                break;
-            case TYPE_FIRE:
-                p.UpdateBombRadius(1);
-                break;
-            case TYPE_FULL_FIRE:
-                p.SetBombRadius(Integer.MAX_VALUE);
-                break;
-            case TYPE_KICK:
-                Gdx.app.debug("PowerUp", "Kick not implemented.");
-                break;
-            case TYPE_PUNCH:
-                Gdx.app.debug("PowerUp", "Punch not implemented.");
-                break;
-            case TYPE_SKATE:
-                Gdx.app.debug("PowerUp", "Skate not implemented.");
-                break;
-            case TYPE_SKULL:
-                Gdx.app.debug("PowerUp", "Skull not implemented.");
-                break;
-            default:
-                Gdx.app.error("PowerUp", "PowerUp type " + _type + " not valid.");
-        }
-    }
+    public static Animation Animation = null;
 
     @Override
     public void OnCollision(Entity other)
     {
-        if (other.IsPlayer())
-        {
-            Player p = other.ToPlayer();
-            HandlePowerUp(p);
-            Gdx.app.log("PowerUp", "PowerUp picked-up, removed itself.");
-            //Game.Instance().GetWorld().RemoveEntity(this);
-        }
     }
 
     @Override
@@ -79,8 +33,6 @@ public class PowerUp extends Entity
     @Override
     public void OnExplode(Explosion e)
     {
-        Gdx.app.log("PowerUp", "PowerUp exploded, removed itself.");
-        //Game.Instance().GetWorld().RemoveEntity(this);
     }
 
     @Override
@@ -88,7 +40,7 @@ public class PowerUp extends Entity
     {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(Regions[0][0], getX(), getY(), getOriginX(), getOriginY(),
+        batch.draw(Animation.getKeyFrame(_stateTime, true), getX(), getY(), getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 }
