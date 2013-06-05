@@ -1,5 +1,7 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
+import pt.up.fe.pt.lpoo.utils.Direction;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -35,6 +37,32 @@ public class EntityBuilder
 
         if (Player.Regions == null)
             Player.Regions = TextureRegion.split(t, 18, 26);
+        
+        for (int d : Direction.Directions)
+        {
+            if (Player.Animations[d] == null)
+            {
+                int col = 0;
+                switch (d)
+                {
+                    case Direction.NORTH:
+                        col = 4;
+                        break;
+                    case Direction.SOUTH:
+                        col = 0;
+                        break;
+                    case Direction.EAST:
+                        col = 2;
+                        break;
+                    case Direction.WEST:
+                        col = 6;
+                        break;
+                }
+                
+                Player.Animations[d] = new Animation(1f / 5, Player.Regions[0][col], Player.Regions[0][col+1]);
+            }
+            
+        }
 
         Player p = new Player(guid, name);
         p.setBounds(x, y, Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
