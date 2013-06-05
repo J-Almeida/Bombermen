@@ -8,16 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class EntityBuilder
 {
-    private TextureManager _textureManager;
-
-    public EntityBuilder(TextureManager tm)
+    public static Bomb CreateBomb(int guid, float x, float y)
     {
-        _textureManager = tm;
-    }
-
-    public Bomb CreateBomb(int guid, float x, float y)
-    {
-        Texture t = _textureManager.Get("bomb"); // 18 x 18
+        Texture t = AssetManagerHelper.GetTexture("bomb"); // 18 x 18
 
         if (Bomb.Regions == null && Bomb.Animation == null)
         {
@@ -31,9 +24,9 @@ public class EntityBuilder
         return b;
     }
 
-    public Player CreatePlayer(int guid, String name, float x, float y)
+    public static Player CreatePlayer(int guid, String name, float x, float y)
     {
-        Texture t = _textureManager.Get("bomberman"); // 18 x 26
+        Texture t = AssetManagerHelper.GetTexture("bomberman"); // 18 x 26
 
         if (Player.Regions == null)
             Player.Regions = TextureRegion.split(t, 18, 26);
@@ -70,9 +63,9 @@ public class EntityBuilder
         return p;
     }
 
-    public Wall CreateWall(int guid, int hitPoints, float x, float y)
+    public static Wall CreateWall(int guid, int hitPoints, float x, float y)
     {
-        Texture t = _textureManager.Get("wall"); // 16 x 16
+        Texture t = AssetManagerHelper.GetTexture("wall"); // 16 x 16
 
         if (Wall.Regions == null)
             Wall.Regions = TextureRegion.split(t, 16, 16);
@@ -83,9 +76,9 @@ public class EntityBuilder
         return w;
     }
 
-    public PowerUp CreatePowerUp(int guid, float x, float y, int powerUpType)
+    public static PowerUp CreatePowerUp(int guid, float x, float y, int powerUpType)
     {
-        Texture t = _textureManager.Get("powerup"); // 16 x 16
+        Texture t = AssetManagerHelper.GetTexture("powerup"); // 16 x 16
 
         if (PowerUp.Regions == null)
         {
@@ -98,9 +91,9 @@ public class EntityBuilder
         return pu;
     }
 
-    public Explosion CreateExplosion(int guid, float x, float y, int direction, boolean end)
+    public static Explosion CreateExplosion(int guid, float x, float y, int direction, boolean end)
     {
-        Texture t = _textureManager.Get("explosion"); // 16 x 16
+        Texture t = AssetManagerHelper.GetTexture("explosion"); // 16 x 16
 
         if (Explosion.Regions == null)
             Explosion.Regions = TextureRegion.split(t, 16, 16);

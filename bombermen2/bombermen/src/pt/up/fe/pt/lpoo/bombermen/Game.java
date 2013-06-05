@@ -32,16 +32,6 @@ public class Game implements Input.Commands, Disposable
     {
         _stage = stage;
 
-        _textureManager = new TextureManager();
-        _textureManager.Load("bomb");
-        _textureManager.Load("bomberman");
-        _textureManager.Load("dpad");
-        _textureManager.Load("explosion");
-        _textureManager.Load("powerup");
-        _textureManager.Load("wall");
-
-        _builder = new EntityBuilder(_textureManager);
-
         _messageHandler = new MessageHandler()
         {
             @Override
@@ -70,31 +60,31 @@ public class Game implements Input.Commands, Disposable
                     case Entity.TYPE_PLAYER:
                     {
                         SMSG_SPAWN_PLAYER playerMsg = (SMSG_SPAWN_PLAYER) msg;
-                        AddEntity(_builder.CreatePlayer(msg.Guid, playerMsg.Name, playerMsg.X, playerMsg.Y));
+                        AddEntity(EntityBuilder.CreatePlayer(msg.Guid, playerMsg.Name, playerMsg.X, playerMsg.Y));
                         break;
                     }
                     case Entity.TYPE_BOMB:
                     {
                         SMSG_SPAWN_BOMB bombMsg = (SMSG_SPAWN_BOMB) msg;
-                        AddEntity(_builder.CreateBomb(bombMsg.Guid, bombMsg.X, bombMsg.Y));
+                        AddEntity(EntityBuilder.CreateBomb(bombMsg.Guid, bombMsg.X, bombMsg.Y));
                         break;
                     }
                     case Entity.TYPE_EXPLOSION:
                     {
                         SMSG_SPAWN_EXPLOSION exMsg = (SMSG_SPAWN_EXPLOSION) msg;
-                        AddEntity(_builder.CreateExplosion(exMsg.Guid, exMsg.X, exMsg.Y, exMsg.Direction, exMsg.End));
+                        AddEntity(EntityBuilder.CreateExplosion(exMsg.Guid, exMsg.X, exMsg.Y, exMsg.Direction, exMsg.End));
                         break;
                     }
                     case Entity.TYPE_POWER_UP:
                     {
                         SMSG_SPAWN_POWER_UP puMsg = (SMSG_SPAWN_POWER_UP) msg;
-                        AddEntity(_builder.CreatePowerUp(puMsg.Guid, puMsg.X, puMsg.Y, puMsg.Type));
+                        AddEntity(EntityBuilder.CreatePowerUp(puMsg.Guid, puMsg.X, puMsg.Y, puMsg.Type));
                         break;
                     }
                     case Entity.TYPE_WALL:
                     {
                         SMSG_SPAWN_WALL wallMsg = (SMSG_SPAWN_WALL) msg;
-                        AddEntity(_builder.CreateWall(msg.Guid, wallMsg.HP, wallMsg.X, wallMsg.Y));
+                        AddEntity(EntityBuilder.CreateWall(msg.Guid, wallMsg.HP, wallMsg.X, wallMsg.Y));
                         break;
                     }
                 }
@@ -160,21 +150,14 @@ public class Game implements Input.Commands, Disposable
         entity.remove();
     }
 
-    public EntityBuilder GetBuilder()
-    {
-        return _builder;
-    }
-
     public Sender<Message> GetSender()
     {
         return _sender;
     }
 
-    private EntityBuilder _builder;
     private Receiver<Message> _receiver;
     private Sender<Message> _sender;
     private Socket _socket;
-    private TextureManager _textureManager;
     private Stage _stage;
     private MessageHandler _messageHandler;
 
@@ -205,7 +188,6 @@ public class Game implements Input.Commands, Disposable
     public void dispose()
     {
         _socket.dispose();
-        _textureManager.dispose();
     }
 
     public void Update(/*int diff*/)

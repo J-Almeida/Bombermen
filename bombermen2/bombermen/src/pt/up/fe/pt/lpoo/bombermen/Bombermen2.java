@@ -3,8 +3,12 @@ package pt.up.fe.pt.lpoo.bombermen;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class Bombermen2 implements ApplicationListener
@@ -32,6 +36,34 @@ public class Bombermen2 implements ApplicationListener
             _controlPad.SetSize(Constants.DEFAULT_PAD_WIDTH, Constants.DEFAULT_PAD_HEIGHT);
             _input.SetControlPad(_controlPad);
         }
+
+        AssetManager manager = new AssetManager();
+        AssetManagerHelper.Manager = manager;
+        // Texture.setAssetManager(manager);
+        
+        manager.load("data/images/bomb.png", Texture.class);
+        manager.load("data/images/bombButton.png", Texture.class);
+        manager.load("data/images/bomberman.png", Texture.class);
+        manager.load("data/images/dpad.png", Texture.class);
+        manager.load("data/images/explosion.png", Texture.class);
+        manager.load("data/images/powerup.png", Texture.class);
+        manager.load("data/images/wall.png", Texture.class);
+        
+        manager.load("data/musics/bgm_01.mp3", Music.class);
+        manager.load("data/musics/bgm_02.mp3", Music.class);
+        manager.load("data/musics/bgm_03.mp3", Music.class);
+        manager.load("data/musics/bgm_menu.mp3", Music.class);
+        manager.load("data/musics/bgm_startGame.mp3", Music.class);
+        
+        manager.load("data/sounds/bomb_explosion.wav", Sound.class);
+        manager.load("data/sounds/bomb_place.wav", Sound.class);
+        manager.load("data/sounds/dying.wav", Sound.class);
+        manager.load("data/sounds/menu_back.wav", Sound.class);
+        manager.load("data/sounds/menu_select.wav", Sound.class);
+        manager.load("data/sounds/powerup.wav", Sound.class);
+        manager.load("data/sounds/victory.wav", Sound.class);
+
+        manager.finishLoading(); // loads all assets (proper way should be to call manager.update() in render method
     }
 
     @Override
