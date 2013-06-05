@@ -13,16 +13,14 @@ public class PowerUp extends Entity
         _stateTime += delta;
     }
 
-    public PowerUp(int guid, int type, Animation anim)
+    public PowerUp(int guid, Animation anim)
     {
         super(Entity.TYPE_POWER_UP, guid);
 
-        _type = type;
         _stateTime = 0;
         _animation = anim;
     }
 
-    private int _type;
     private float _stateTime;
     public static TextureRegion Regions[][];
     public Animation _animation = null;
