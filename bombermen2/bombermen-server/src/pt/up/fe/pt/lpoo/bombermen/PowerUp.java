@@ -9,7 +9,6 @@ public class PowerUp extends Entity
 {
     private static CollisionHandler<PowerUp> cHandler = new CollisionHandler<PowerUp>()
     {
-
         @Override
         protected void CollidePlayer(PowerUp e1, Player p)
         {

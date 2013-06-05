@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Wall extends Entity
 {
-    
     @Override
     public Rectangle GetBoundingRectangle()
     {
@@ -83,7 +82,7 @@ public class Wall extends Entity
         if (MathUtils.random() < Constants.POWER_UP_SPAWN_CHANCE)
         {
             PowerUp pu = new PowerUp(_server.IncLastId(),
-                    new Vector2(GetX(), GetY()),
+                    new Vector2(GetX() + 0.05f * Constants.WALL_WIDTH, GetY() + 0.05f * Constants.WALL_HEIGHT),
                     MathUtils.random(0, Constants.NUMBER_OF_POWER_UP_TYPES - 1), _server);
 
             SMSG_SPAWN spawnMessage = pu.GetSpawnMessage();
