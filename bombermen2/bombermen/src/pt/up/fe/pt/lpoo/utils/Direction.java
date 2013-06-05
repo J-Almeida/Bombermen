@@ -10,7 +10,7 @@ public class Direction
 
     public static final int Directions[] = { NORTH, EAST, SOUTH, WEST };
 
-    public static float ApplyMovementX(float x, int dir, int inc)
+    public static float ApplyMovementX(float x, int dir, float inc)
     {
         switch (dir)
         {
@@ -23,7 +23,7 @@ public class Direction
         }
     }
 
-    public static float ApplyMovementY(float y, int dir, int inc)
+    public static float ApplyMovementY(float y, int dir, float inc)
     {
         switch (dir)
         {
