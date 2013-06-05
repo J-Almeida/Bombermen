@@ -86,6 +86,11 @@ public class Player extends Entity
         _explosionRadius += inc;
     }
 
+    public void UpdateSpeed(float inc)
+    {
+        _speed += inc;
+    }
+
     public void SetExplosionRadius(int val)
     {
         _explosionRadius = val;

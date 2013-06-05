@@ -97,7 +97,7 @@ public class PowerUp extends Entity
                 System.out.println("Punch not implemented.");
                 break;
             case Constants.POWER_UP_TYPE_SKATE:
-                System.out.println("Skate not implemented.");
+                p.UpdateSpeed(18f / 1000); // half cell per second
                 break;
             case Constants.POWER_UP_TYPE_SKULL:
                 System.out.println("Skull not implemented.");
