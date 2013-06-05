@@ -1,5 +1,10 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
+import pt.up.fe.pt.lpoo.bombermen.entities.Bomb;
+import pt.up.fe.pt.lpoo.bombermen.entities.Explosion;
+import pt.up.fe.pt.lpoo.bombermen.entities.Player;
+import pt.up.fe.pt.lpoo.bombermen.entities.PowerUp;
+import pt.up.fe.pt.lpoo.bombermen.entities.Wall;
 import pt.up.fe.pt.lpoo.utils.Direction;
 
 import com.badlogic.gdx.graphics.Texture;

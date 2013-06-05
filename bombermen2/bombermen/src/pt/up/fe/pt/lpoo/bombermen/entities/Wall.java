@@ -1,4 +1,6 @@
-package pt.up.fe.pt.lpoo.bombermen;
+package pt.up.fe.pt.lpoo.bombermen.entities;
+
+import pt.up.fe.pt.lpoo.bombermen.Entity;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -6,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Wall extends Entity
 {
-    Wall(int guid, int hitPoints)
+    public Wall(int guid, int hitPoints)
     {
         super(Entity.TYPE_WALL, guid);
 

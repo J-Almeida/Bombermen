@@ -1,5 +1,11 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
+import pt.up.fe.pt.lpoo.bombermen.entities.Bomb;
+import pt.up.fe.pt.lpoo.bombermen.entities.Explosion;
+import pt.up.fe.pt.lpoo.bombermen.entities.Player;
+import pt.up.fe.pt.lpoo.bombermen.entities.PowerUp;
+import pt.up.fe.pt.lpoo.bombermen.entities.Wall;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -20,7 +26,7 @@ public abstract class Entity extends Actor
     private int _type;
     private int _guid;
 
-    Entity(int type, int guid)
+    public Entity(int type, int guid)
     {
         _type = type;
         _guid = guid;

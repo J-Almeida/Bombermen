@@ -1,4 +1,6 @@
-package pt.up.fe.pt.lpoo.bombermen;
+package pt.up.fe.pt.lpoo.bombermen.entities;
+
+import pt.up.fe.pt.lpoo.bombermen.Entity;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -12,7 +14,7 @@ public class Bomb extends Entity
 
     private float _stateTime;
 
-    Bomb(int guid)
+    public Bomb(int guid)
     {
         super(Entity.TYPE_BOMB, guid);
         _stateTime = 0;

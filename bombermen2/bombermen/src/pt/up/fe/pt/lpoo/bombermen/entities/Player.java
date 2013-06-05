@@ -1,5 +1,6 @@
-package pt.up.fe.pt.lpoo.bombermen;
+package pt.up.fe.pt.lpoo.bombermen.entities;
 
+import pt.up.fe.pt.lpoo.bombermen.Entity;
 import pt.up.fe.pt.lpoo.utils.Direction;
 
 import com.badlogic.gdx.graphics.Color;
@@ -44,7 +45,7 @@ public class Player extends Entity
         _moveAnimationTimer += 2;
     }
 
-    Player(int guid, String name)
+    public Player(int guid, String name)
     {
         super(Entity.TYPE_PLAYER, guid);
 
@@ -57,8 +58,6 @@ public class Player extends Entity
     @Override
     public void draw(SpriteBatch batch, float parentAlpha)
     {
-        
-        
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 

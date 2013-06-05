@@ -1,5 +1,6 @@
-package pt.up.fe.pt.lpoo.bombermen;
+package pt.up.fe.pt.lpoo.bombermen.entities;
 
+import pt.up.fe.pt.lpoo.bombermen.Entity;
 import pt.up.fe.pt.lpoo.utils.Direction;
 
 import com.badlogic.gdx.graphics.Color;
@@ -15,7 +16,7 @@ public class Explosion extends Entity
     private int _intensity;
     private int _explosionTimer;
 
-    Explosion(int guid, int direction, boolean end)
+    public Explosion(int guid, int direction, boolean end)
     {
         super(Entity.TYPE_EXPLOSION, guid);
 

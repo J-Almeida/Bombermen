@@ -1,4 +1,6 @@
-package pt.up.fe.pt.lpoo.bombermen;
+package pt.up.fe.pt.lpoo.bombermen.entities;
+
+import pt.up.fe.pt.lpoo.bombermen.Entity;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
