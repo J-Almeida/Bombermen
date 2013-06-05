@@ -18,6 +18,6 @@ public class CMSG_MOVE extends Message
     @Override
     public String toString()
     {
-        return "[CMSG_MOVE - dir: " + Dir + "]";
+        return "[CMSG_MOVE - Dir: " + Dir + ", Val: " + Val + "]";
     }
 }

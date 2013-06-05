@@ -17,6 +17,6 @@ public class SMSG_SPAWN_POWER_UP extends SMSG_SPAWN
     @Override
     public String toString()
     {
-        return "[SMSG_SPAWN_POWER_UP]";
+        return "[SMSG_SPAWN_POWER_UP - Guid: " + Guid + ", X: " + X + ", Y: " + Y + ", Type: " + Type + "]";
     }
 }

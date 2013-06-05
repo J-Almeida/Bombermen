@@ -51,8 +51,8 @@ public class Game implements Input.Commands, Disposable
                 Entity e = _world.GetEntity(msg.Guid);
                 if (e == null) return;
 
-                e.setX(msg.x);
-                e.setY(msg.y);
+                e.setX(msg.X);
+                e.setY(msg.Y);
 
                 System.out.println("Move Handler: " + e);
             }

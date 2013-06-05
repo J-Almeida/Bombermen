@@ -19,6 +19,6 @@ public class SMSG_SPAWN_EXPLOSION extends SMSG_SPAWN
     @Override
     public String toString()
     {
-        return "[SMSG_SPAWN_EXPLOSION]";
+        return "[SMSG_SPAWN_EXPLOSION - Guid: " + Guid + ", X: " + X + ", Y: " + Y + ", Direction: " + Direction + ", End: " + End + "]";
     }
 }

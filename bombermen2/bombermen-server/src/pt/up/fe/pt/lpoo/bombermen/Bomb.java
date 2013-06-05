@@ -154,7 +154,7 @@ public class Bomb extends Entity
                         }
                     }
                 }
-                
+
                 if (!draw[d]) break;
             }
         }

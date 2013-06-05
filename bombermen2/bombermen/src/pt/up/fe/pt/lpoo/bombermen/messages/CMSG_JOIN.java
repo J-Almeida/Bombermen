@@ -12,4 +12,9 @@ public class CMSG_JOIN extends Message
 
     public final String Name;
 
+    @Override
+    public String toString()
+    {
+        return "[CMSG_JOIN - Name: " + Name + "]";
+    }
 }

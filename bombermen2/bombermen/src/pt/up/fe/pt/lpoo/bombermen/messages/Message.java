@@ -20,4 +20,7 @@ public abstract class Message implements Serializable
     {
         Type = type;
     }
+
+    @Override
+    public abstract String toString();
 }

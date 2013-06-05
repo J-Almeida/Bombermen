@@ -19,8 +19,5 @@ public abstract class SMSG_SPAWN extends Message
     }
 
     @Override
-    public String toString()
-    {
-        return "[SMSG_SPAWN]";
-    }
+    public abstract String toString();
 }

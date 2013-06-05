@@ -11,4 +11,10 @@ public class SMSG_DESTROY extends Message
         super(SMSG_DESTROY);
         Guid = guid;
     }
+
+    @Override
+    public String toString()
+    {
+        return "[SMSG_DESTROY - Guid: " + Guid + "]";
+    }
 }

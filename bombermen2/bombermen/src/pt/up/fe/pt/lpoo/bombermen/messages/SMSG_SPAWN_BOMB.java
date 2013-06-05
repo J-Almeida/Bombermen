@@ -14,6 +14,6 @@ public class SMSG_SPAWN_BOMB extends SMSG_SPAWN
     @Override
     public String toString()
     {
-        return "[SMSG_SPAWN_BOMB]";
+        return "[SMSG_SPAWN_BOMB - Guid: " + Guid + ", X: " + X + ", Y: " + Y + "]";
     }
 }
