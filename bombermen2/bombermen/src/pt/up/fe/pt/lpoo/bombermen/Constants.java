@@ -33,8 +33,8 @@ public final class Constants
     public static final float PLAYER_WIDTH = 18.f * CELL_SIZE * 0.75f / 26f;
     public static final float PLAYER_HEIGHT = CELL_SIZE * 0.75f;
 
-    public static final float PLAYER_BOUNDING_WIDTH = 14.f * CELL_SIZE * 0.65f / 24.f;
-    public static final float PLAYER_BOUNDING_HEIGHT = CELL_SIZE * 0.65f;
+    public static final float PLAYER_BOUNDING_WIDTH = PLAYER_WIDTH * 0.8f;
+    public static final float PLAYER_BOUNDING_HEIGHT = PLAYER_HEIGHT * 0.8f;
 
     public static final float BOMB_WIDTH = 0.9f * CELL_SIZE;
     public static final float BOMB_HEIGHT = BOMB_WIDTH;
@@ -48,8 +48,8 @@ public final class Constants
     public static final float WALL_WIDTH = CELL_SIZE;
     public static final float WALL_HEIGHT = WALL_WIDTH;
 
-    public static final float WALL_BOUNDING_WIDTH = WALL_WIDTH * 0.95f;
-    public static final float WALL_BOUNDING_HEIGHT = WALL_HEIGHT * 0.95f;
+    public static final float WALL_BOUNDING_WIDTH = WALL_WIDTH;
+    public static final float WALL_BOUNDING_HEIGHT = WALL_HEIGHT;
 
     // PowerUp types
     public static final int POWER_UP_TYPE_BOMB_UP = 0; // increase amount of bombs by 1
