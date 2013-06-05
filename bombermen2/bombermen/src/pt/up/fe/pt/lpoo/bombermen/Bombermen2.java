@@ -3,6 +3,7 @@ package pt.up.fe.pt.lpoo.bombermen;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -12,12 +13,14 @@ public class Bombermen2 implements ApplicationListener
     private Game _game;
     private Input _input;
     private ControlPad _controlPad;
+    private FPSLogger _fpsLogger;
 
     @Override
     public void create()
     {
         _stage = new Stage();
         _game = new Game(_stage);
+        _fpsLogger = new FPSLogger();
 
         _input = new Input(_game, _stage.getCamera());
         //Gdx.input.setInputProcessor(_stage);
@@ -57,6 +60,8 @@ public class Bombermen2 implements ApplicationListener
             _controlPad.draw(_stage.getSpriteBatch());
             _stage.getSpriteBatch().end();
         }
+
+        _fpsLogger.log();
     }
 
     @Override
