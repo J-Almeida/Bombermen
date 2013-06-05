@@ -5,10 +5,19 @@ import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_PLAYER;
 import pt.up.fe.pt.lpoo.utils.Direction;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Entity
 {
+    @Override
+    public Rectangle GetBoundingRectangle()
+    {
+        _boundingRectangle.x = GetX() + offsetWidth;
+        _boundingRectangle.y = GetY() + offsetHeight;
+        return _boundingRectangle;
+    }
+
     private static CollisionHandler<Player> cHandler = new CollisionHandler<Player>()
     {};
 
@@ -18,6 +27,11 @@ public class Player extends Entity
     private int _explosionRadius;
     private int _currentBombs;
     private boolean[] _moving = { false, false, false, false };
+
+    private static final float offsetWidth = (Constants.PLAYER_WIDTH - Constants.PLAYER_BOUNDING_WIDTH) / 2.f;
+    private static final float offsetHeight = (Constants.PLAYER_HEIGHT - Constants.PLAYER_BOUNDING_HEIGHT) / 2.f;
+
+    private Rectangle _boundingRectangle = new Rectangle(0, 0, Constants.PLAYER_BOUNDING_WIDTH, Constants.PLAYER_BOUNDING_HEIGHT);
 
     Player(int guid, String name, Vector2 pos, BombermenServer sv)
     {
@@ -155,11 +169,10 @@ public class Player extends Entity
                 {
                     for (Entity e : _server.GetEntities().values())
                     {
-                        if (e.IsBomb() && e.ToBomb().JustCreated() && e.ToBomb().GetCreatorGuid() == GetGuid())
-                            if (Collides(e))
-                                break;
-                            else
-                                e.ToBomb().SetJustCreated(false);
+                        if (e.IsBomb() && e.ToBomb().JustCreated() && e.ToBomb().GetCreatorGuid() == GetGuid()) if (Collides(e))
+                            break;
+                        else
+                            e.ToBomb().SetJustCreated(false);
 
                         if (!e.IsPlayer() && Collides(e))
                         {

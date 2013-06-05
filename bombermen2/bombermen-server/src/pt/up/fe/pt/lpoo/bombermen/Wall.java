@@ -3,10 +3,25 @@ package pt.up.fe.pt.lpoo.bombermen;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_WALL;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Wall extends Entity
 {
+    
+    @Override
+    public Rectangle GetBoundingRectangle()
+    {
+        _boundingRectangle.x = GetX() + offsetWidth;
+        _boundingRectangle.y = GetY() + offsetHeight;
+        return _boundingRectangle;
+    }
+
+    private static final float offsetWidth = (Constants.WALL_WIDTH - Constants.WALL_BOUNDING_WIDTH) / 2.f;
+    private static final float offsetHeight = (Constants.WALL_HEIGHT - Constants.WALL_BOUNDING_HEIGHT) / 2.f;
+    
+    private Rectangle _boundingRectangle = new Rectangle(0, 0, Constants.WALL_BOUNDING_WIDTH, Constants.WALL_BOUNDING_HEIGHT);
+    
     private static CollisionHandler<Wall> cHandler = new CollisionHandler<Wall>()
     {
     };

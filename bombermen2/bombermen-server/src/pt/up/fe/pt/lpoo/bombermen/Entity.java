@@ -15,9 +15,14 @@ public abstract class Entity
 
     private int _type;
     private int _guid;
-    private Rectangle _rect;
+    protected Rectangle _rect;
     protected final BombermenServer _server;
 
+    public Rectangle GetBoundingRectangle() 
+    {
+        return _rect; 
+    }
+    
     Entity(int type, int guid, Vector2 pos, BombermenServer sv)
     {
         _type = type;
@@ -29,12 +34,12 @@ public abstract class Entity
 
     public boolean Collides(Entity e)
     {
-        return _rect.overlaps(e._rect);
+        return GetBoundingRectangle().overlaps(e.GetBoundingRectangle());
     }
 
     public boolean Collides(Rectangle r)
     {
-        return _rect.overlaps(r);
+        return GetBoundingRectangle().overlaps(r);
     }
 
     public abstract void OnCollision(Entity e);
