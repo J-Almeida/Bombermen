@@ -11,7 +11,7 @@ public class PowerUp extends Entity
     {
         super(Entity.TYPE_POWER_UP, guid);
 
-        type = _type;
+        _type = type;
         _stateTime = 0;
     }
 

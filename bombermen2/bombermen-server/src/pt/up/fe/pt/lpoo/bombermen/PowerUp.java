@@ -7,9 +7,15 @@ import com.badlogic.gdx.math.Vector2;
 
 public class PowerUp extends Entity
 {
-    //private static CollisionHandler<PowerUp> cHandler = new CollisionHandler<PowerUp>()
-    //{
-    //};
+    private static CollisionHandler<PowerUp> cHandler = new CollisionHandler<PowerUp>()
+    {
+
+        @Override
+        protected void CollidePlayer(PowerUp e1, Player p)
+        {
+            e1.HandlePowerUp(p);
+        }
+    };
 
     private int _powerUpType;
     private boolean _justCreated;
@@ -56,7 +62,7 @@ public class PowerUp extends Entity
     @Override
     public void OnCollision(Entity e)
     {
-        //cHandler.OnCollision(this, e);
+        cHandler.OnCollision(this, e);
     }
 
     @Override
