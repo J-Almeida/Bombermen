@@ -42,10 +42,6 @@ public abstract class Entity
         return GetBoundingRectangle().overlaps(r);
     }
 
-    public abstract void OnCollision(Entity e);
-
-    public abstract Vector2 GetSize();
-
     public int GetType()
     {
         return _type;
@@ -140,4 +136,10 @@ public abstract class Entity
     public abstract void Update(int diff);
 
     public abstract SMSG_SPAWN GetSpawnMessage();
+
+    public abstract void OnCollision(Entity e);
+
+    public abstract Vector2 GetSize();
+
+    public abstract void OnDestroy();
 }

@@ -207,4 +207,9 @@ public class Player extends Entity
     {
         _server.RemoveEntityNextUpdate(GetGuid());
     }
+
+    @Override
+    public void OnDestroy()
+    {
+    }
 }

@@ -91,6 +91,7 @@ public class BombermenServer implements Runnable
                 if (_entitiesToRemove.contains(e.GetGuid()))
                 {
                     if (!e.IsExplosion()) SendAll(new SMSG_DESTROY(e.GetGuid()));
+                    e.OnDestroy(); // last chance to do anything
                     it.remove();
                 }
             }

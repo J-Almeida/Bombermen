@@ -12,12 +12,31 @@ public class PowerUp extends Entity
     //};
 
     private int _powerUpType;
+    private boolean _justCreated;
+    private int _timer;
 
     public PowerUp(int guid, Vector2 pos, int powerUpType, BombermenServer sv)
     {
         super(TYPE_POWER_UP, guid, pos, sv);
 
         _powerUpType = powerUpType;
+        _justCreated = true;
+        _timer = 0;
+    }
+
+    public void SetJustCreated(boolean b)
+    {
+        _justCreated = b;
+    }
+
+    public boolean JustCreated()
+    {
+        return _justCreated;
+    }
+
+    public void Kill()
+    {
+        _server.RemoveEntityNextUpdate(GetGuid());
     }
 
     @Override
@@ -46,16 +65,22 @@ public class PowerUp extends Entity
             System.out.println("PowerUp picked-up, removed itself.");
             _server.RemoveEntityNextUpdate(GetGuid());
         }
-        else if (e.IsExplosion())
-        {
-            System.out.println("PowerUp exploded, removed itself.");
-            _server.RemoveEntityNextUpdate(GetGuid());
-        }
+        //else if (e.IsExplosion())
+        //{
+        //    System.out.println("PowerUp exploded, removed itself.");
+        //    _server.RemoveEntityNextUpdate(GetGuid());
+        //}
     }
 
     @Override
     public void Update(int diff)
     {
+        _timer += diff;
+        if (_timer > 600)
+        {
+            _justCreated = false;
+            _timer = 0;
+        }
     }
 
     public void HandlePowerUp(Player p)
@@ -88,5 +113,10 @@ public class PowerUp extends Entity
             default:
                 System.out.println("PowerUp type " + _powerUpType + " not valid.");
         }
+    }
+
+    @Override
+    public void OnDestroy()
+    {
     }
 }

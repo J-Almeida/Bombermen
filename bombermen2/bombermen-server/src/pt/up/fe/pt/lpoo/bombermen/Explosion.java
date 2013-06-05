@@ -12,6 +12,13 @@ public class Explosion extends Entity
     private static CollisionHandler<Explosion> cHandler = new CollisionHandler<Explosion>()
     {
         @Override
+        protected void CollidePowerUp(Explosion e1, PowerUp p)
+        {
+            if (!p.JustCreated())
+                p.Kill();
+        }
+
+        @Override
         protected void CollideBomb(Explosion e1, Bomb b)
         {
             b.TriggerExplosion();
@@ -67,5 +74,10 @@ public class Explosion extends Entity
 
         if (_timer >= 600)
             _server.RemoveEntityNextUpdate(GetGuid());
+    }
+
+    @Override
+    public void OnDestroy()
+    {
     }
 }

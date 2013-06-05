@@ -3,6 +3,7 @@ package pt.up.fe.pt.lpoo.bombermen;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_WALL;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -74,5 +75,21 @@ public class Wall extends Entity
     {
         if (!IsUndestroyable() && _hp == 0)
             _server.RemoveEntityNextUpdate(GetGuid());
+    }
+
+    @Override
+    public void OnDestroy()
+    {
+        if (MathUtils.random() < Constants.POWER_UP_SPAWN_CHANCE)
+        {
+            PowerUp pu = new PowerUp(_server.IncLastId(),
+                    new Vector2(GetX(), GetY()),
+                    MathUtils.random(0, Constants.NUMBER_OF_POWER_UP_TYPES - 1), _server);
+
+            SMSG_SPAWN spawnMessage = pu.GetSpawnMessage();
+
+            _server.SendAll(spawnMessage);
+            _server.CreateEntityNextUpdate(pu);
+        }
     }
 }

@@ -22,10 +22,11 @@ public final class Constants
     public static final int EXPLOSION_TIMER = 600; // milliseconds
     public static final int DEFAULT_BOMB_STRENGTH = 1; // 1 hp damage
     public static final int CELL_SIZE = 36; // px
+    public static final float POWER_UP_SPAWN_CHANCE = 0.8f;
 
     // Maps
     public static final String DEFAULT_MAP_FILE_CHARSET = "US-ASCII";
-    public static final float WALL_CHANCE = 0.1f;
+    public static final float WALL_CHANCE = 0.5f;
     public static final float INIT_PLAYER_SPEED = 108f / 1000f;
 
     // Sizes
