@@ -14,7 +14,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import pt.up.fe.pt.lpoo.bombermen.Bomb.ExplodeHandler;
+import pt.fe.up.pt.lpoo.bombermen.entities.Bomb;
+import pt.fe.up.pt.lpoo.bombermen.entities.Bomb.ExplodeHandler;
+import pt.fe.up.pt.lpoo.bombermen.entities.Player;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_JOIN;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;

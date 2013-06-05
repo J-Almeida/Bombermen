@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import pt.fe.up.pt.lpoo.bombermen.entities.Wall;
 import pt.up.fe.pt.lpoo.utils.Ref;
 
 import com.badlogic.gdx.math.MathUtils;

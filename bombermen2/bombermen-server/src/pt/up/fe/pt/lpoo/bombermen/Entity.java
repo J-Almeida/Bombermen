@@ -1,5 +1,10 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
+import pt.fe.up.pt.lpoo.bombermen.entities.Bomb;
+import pt.fe.up.pt.lpoo.bombermen.entities.Explosion;
+import pt.fe.up.pt.lpoo.bombermen.entities.Player;
+import pt.fe.up.pt.lpoo.bombermen.entities.PowerUp;
+import pt.fe.up.pt.lpoo.bombermen.entities.Wall;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 
 import com.badlogic.gdx.math.Rectangle;
@@ -23,7 +28,7 @@ public abstract class Entity
         return _rect;
     }
 
-    Entity(int type, int guid, Vector2 pos, BombermenServer sv)
+    public Entity(int type, int guid, Vector2 pos, BombermenServer sv)
     {
         _type = type;
         _guid = guid;

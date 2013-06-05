@@ -1,5 +1,11 @@
 package pt.up.fe.pt.lpoo.bombermen;
 
+import pt.fe.up.pt.lpoo.bombermen.entities.Bomb;
+import pt.fe.up.pt.lpoo.bombermen.entities.Explosion;
+import pt.fe.up.pt.lpoo.bombermen.entities.Player;
+import pt.fe.up.pt.lpoo.bombermen.entities.PowerUp;
+import pt.fe.up.pt.lpoo.bombermen.entities.Wall;
+
 public abstract class CollisionHandler<T extends Entity>
 {
     public final void OnCollision(T e1, Entity e2)

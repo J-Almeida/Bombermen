@@ -1,5 +1,9 @@
-package pt.up.fe.pt.lpoo.bombermen;
+package pt.fe.up.pt.lpoo.bombermen.entities;
 
+import pt.up.fe.pt.lpoo.bombermen.BombermenServer;
+import pt.up.fe.pt.lpoo.bombermen.CollisionHandler;
+import pt.up.fe.pt.lpoo.bombermen.Constants;
+import pt.up.fe.pt.lpoo.bombermen.Entity;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_EXPLOSION;
 

@@ -1,5 +1,9 @@
-package pt.up.fe.pt.lpoo.bombermen;
+package pt.fe.up.pt.lpoo.bombermen.entities;
 
+import pt.up.fe.pt.lpoo.bombermen.BombermenServer;
+import pt.up.fe.pt.lpoo.bombermen.CollisionHandler;
+import pt.up.fe.pt.lpoo.bombermen.Constants;
+import pt.up.fe.pt.lpoo.bombermen.Entity;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_PLAYER;
@@ -33,7 +37,7 @@ public class Player extends Entity
 
     private Rectangle _boundingRectangle = new Rectangle(0, 0, Constants.PLAYER_BOUNDING_WIDTH, Constants.PLAYER_BOUNDING_HEIGHT);
 
-    Player(int guid, String name, Vector2 pos, BombermenServer sv)
+    public Player(int guid, String name, Vector2 pos, BombermenServer sv)
     {
         super(TYPE_PLAYER, guid, pos, sv);
         _name = name;
