@@ -130,15 +130,15 @@ public class Bomb extends Entity
     {
         boolean[] draw = { true, true, true, true };
 
-        Rectangle r = new Rectangle(0, 0, Constants.EXPLOSION_WIDTH, Constants.EXPLOSION_HEIGHT);
+        Rectangle r = new Rectangle(0, 0, Constants.EXPLOSION_WIDTH - 4, Constants.EXPLOSION_HEIGHT - 4); // Magic number 4 -> Bounding Box emulation (TODO: Implement bounding boxes)
 
         for (int i = 1; i <= _explosionRadius; ++i)
         {
             for (int d : Direction.Directions)
             {
-                r.x = Direction.ApplyMovementX(GetX() - (Constants.WALL_WIDTH  - Constants.BOMB_WIDTH),  d, (int)(i * Constants.EXPLOSION_WIDTH));
-                r.y = Direction.ApplyMovementY(GetY() - (Constants.WALL_HEIGHT - Constants.BOMB_HEIGHT), d, (int)(i * Constants.EXPLOSION_HEIGHT));
-
+                r.x = Direction.ApplyMovementX(GetX() - (Constants.WALL_WIDTH  - Constants.BOMB_WIDTH),  d, (int)(i * Constants.EXPLOSION_WIDTH)) + 2;  // Magic number 2 ->
+                r.y = Direction.ApplyMovementY(GetY() - (Constants.WALL_HEIGHT - Constants.BOMB_HEIGHT), d, (int)(i * Constants.EXPLOSION_HEIGHT)) + 2; // -> Bounding Box emulation
+                
                 if (draw[d])
                 {
                     _radius[d]++;
@@ -150,6 +150,7 @@ public class Bomb extends Entity
                             if (w.IsUndestroyable())
                                 _radius[d]--;
                             draw[d] = false;
+                            break;
                         }
                     }
                 }
