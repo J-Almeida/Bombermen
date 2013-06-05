@@ -57,19 +57,6 @@ public class PowerUp extends Entity
     public void OnCollision(Entity e)
     {
         //cHandler.OnCollision(this, e);
-
-        if (e.IsPlayer())
-        {
-            Player p = e.ToPlayer();
-            HandlePowerUp(p);
-            System.out.println("PowerUp picked-up, removed itself.");
-            _server.RemoveEntityNextUpdate(GetGuid());
-        }
-        //else if (e.IsExplosion())
-        //{
-        //    System.out.println("PowerUp exploded, removed itself.");
-        //    _server.RemoveEntityNextUpdate(GetGuid());
-        //}
     }
 
     @Override
@@ -113,6 +100,8 @@ public class PowerUp extends Entity
             default:
                 System.out.println("PowerUp type " + _powerUpType + " not valid.");
         }
+
+        _server.RemoveEntityNextUpdate(GetGuid());
     }
 
     @Override

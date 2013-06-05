@@ -80,6 +80,9 @@ public class Player extends Entity
 
     public void UpdateExplosionRadius(int inc)
     {
+        if (_explosionRadius >= Integer.MAX_VALUE)
+            return;
+
         _explosionRadius += inc;
     }
 

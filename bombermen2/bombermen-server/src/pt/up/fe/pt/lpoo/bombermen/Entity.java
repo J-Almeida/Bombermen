@@ -18,11 +18,11 @@ public abstract class Entity
     protected Rectangle _rect;
     protected final BombermenServer _server;
 
-    public Rectangle GetBoundingRectangle() 
+    public Rectangle GetBoundingRectangle()
     {
-        return _rect; 
+        return _rect;
     }
-    
+
     Entity(int type, int guid, Vector2 pos, BombermenServer sv)
     {
         _type = type;

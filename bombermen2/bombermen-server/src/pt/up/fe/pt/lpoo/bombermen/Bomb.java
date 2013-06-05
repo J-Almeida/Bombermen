@@ -138,7 +138,7 @@ public class Bomb extends Entity
             {
                 r.x = Direction.ApplyMovementX(GetX() - (Constants.WALL_WIDTH  - Constants.BOMB_WIDTH),  d, i * Constants.EXPLOSION_WIDTH) + 2;  // Magic number 2 ->
                 r.y = Direction.ApplyMovementY(GetY() - (Constants.WALL_HEIGHT - Constants.BOMB_HEIGHT), d, i * Constants.EXPLOSION_HEIGHT) + 2; // -> Bounding Box emulation
-                
+
                 if (draw[d])
                 {
                     _radius[d]++;
