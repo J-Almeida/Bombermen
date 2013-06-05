@@ -138,13 +138,16 @@ public class Player extends Entity
     }
 
     private int _timer = 0;
-
+    private int _timer2 = 0;
+    
+    private boolean _prevMoved = false;
+    
     @Override
     public void Update(int diff)
     {
         _timer += diff;
 
-        if (_timer >= 75)
+        if (_timer >= 35)
         {
             for (int i = 0; i < _moving.length; ++i)
             {
@@ -199,11 +202,16 @@ public class Player extends Entity
                     }
                 }
 
-                if (moved)
+                if ((moved || _prevMoved) && _timer2 == 1)
                 {
-
                     _server.SendAll(new SMSG_MOVE(GetGuid(), GetPosition()));
-
+                    _timer2 = 0;
+                    _prevMoved = false;
+                }
+                else if (_timer2 == 0)
+                {
+                    _timer2++;
+                    _prevMoved = moved;
                 }
             }
             _timer = 0;
