@@ -105,21 +105,6 @@ public class Player extends Entity
     }
 
     @Override
-    public void OnCollision(Entity other)
-    {
-    }
-
-    @Override
-    public void OnDestroy()
-    {
-    }
-
-    @Override
-    public void OnExplode(Explosion e)
-    {
-    }
-
-    @Override
     public void draw(SpriteBatch batch, float parentAlpha)
     {
         

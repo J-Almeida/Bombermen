@@ -26,21 +26,6 @@ public class Explosion extends Entity
     }
 
     @Override
-    public void OnCollision(Entity other)
-    {
-    }
-
-    @Override
-    public void OnDestroy()
-    {
-    }
-
-    @Override
-    public void OnExplode(Explosion e)
-    {
-    }
-
-    @Override
     public void act(float delta)
     {
         super.act(delta);

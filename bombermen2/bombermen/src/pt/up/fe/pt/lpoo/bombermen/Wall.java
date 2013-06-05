@@ -22,30 +22,6 @@ public class Wall extends Entity
     }
 
     @Override
-    public void OnCollision(Entity other)
-    {
-    }
-
-    @Override
-    public void OnDestroy()
-    {
-        // @TODO: Spawn random powerup
-    }
-
-    @Override
-    public void OnExplode(Explosion e)
-    {
-        /*
-        if (IsUndestroyable()) return;
-
-        int dmg = e.GetStrength();
-
-        _hitPoints -= dmg;
-        if (_hitPoints < 0) _hitPoints = 0;
-        */
-    }
-
-    @Override
     public void draw(SpriteBatch batch, float parentAlpha)
     {
         Color color = getColor();

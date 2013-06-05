@@ -26,21 +26,6 @@ public class PowerUp extends Entity
     public Animation _animation = null;
 
     @Override
-    public void OnCollision(Entity other)
-    {
-    }
-
-    @Override
-    public void OnDestroy()
-    {
-    }
-
-    @Override
-    public void OnExplode(Explosion e)
-    {
-    }
-
-    @Override
     public void draw(SpriteBatch batch, float parentAlpha)
     {
         Color color = getColor();

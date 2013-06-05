@@ -85,11 +85,5 @@ public abstract class Entity extends Actor
         return IsPowerUp() ? (PowerUp) this : null;
     }
 
-    public abstract void OnCollision(Entity other);
-
-    public abstract void OnDestroy();
-
-    public abstract void OnExplode(Explosion e);
-
     public abstract void draw(SpriteBatch batch, float parentAlpha);
 }
