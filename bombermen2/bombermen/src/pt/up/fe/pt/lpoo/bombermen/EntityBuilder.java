@@ -15,7 +15,7 @@ public class EntityBuilder
 {
     public static Bomb CreateBomb(int guid, float x, float y)
     {
-        Texture t = AssetManagerHelper.GetTexture("bomb"); // 18 x 18
+        Texture t = Assets.GetTexture("bomb"); // 18 x 18
 
         if (Bomb.Regions == null && Bomb.Animation == null)
         {
@@ -31,7 +31,7 @@ public class EntityBuilder
 
     public static Player CreatePlayer(int guid, String name, float x, float y)
     {
-        Texture t = AssetManagerHelper.GetTexture("bomberman"); // 18 x 26
+        Texture t = Assets.GetTexture("bomberman"); // 18 x 26
 
         if (Player.Regions == null)
             Player.Regions = TextureRegion.split(t, 18, 26);
@@ -70,7 +70,7 @@ public class EntityBuilder
 
     public static Wall CreateWall(int guid, int hitPoints, float x, float y)
     {
-        Texture t = AssetManagerHelper.GetTexture("wall"); // 16 x 16
+        Texture t = Assets.GetTexture("wall"); // 16 x 16
 
         if (Wall.Regions == null)
             Wall.Regions = TextureRegion.split(t, 16, 16);
@@ -83,7 +83,7 @@ public class EntityBuilder
 
     public static PowerUp CreatePowerUp(int guid, float x, float y, int powerUpType)
     {
-        Texture t = AssetManagerHelper.GetTexture("powerup"); // 16 x 16
+        Texture t = Assets.GetTexture("powerup"); // 16 x 16
 
         if (PowerUp.Regions == null)
         {
@@ -98,7 +98,7 @@ public class EntityBuilder
 
     public static Explosion CreateExplosion(int guid, float x, float y, int direction, boolean end)
     {
-        Texture t = AssetManagerHelper.GetTexture("explosion"); // 16 x 16
+        Texture t = Assets.GetTexture("explosion"); // 16 x 16
 
         if (Explosion.Regions == null)
             Explosion.Regions = TextureRegion.split(t, 16, 16);

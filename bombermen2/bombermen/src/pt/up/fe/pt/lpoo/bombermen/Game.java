@@ -70,7 +70,7 @@ public class Game implements Input.Commands, Disposable
                     {
                         SMSG_SPAWN_BOMB bombMsg = (SMSG_SPAWN_BOMB) msg;
                         AddEntity(EntityBuilder.CreateBomb(bombMsg.Guid, bombMsg.X, bombMsg.Y));
-                        AssetManagerHelper.GetSound("bomb_place").play();
+                        Assets.PlaySound("bomb_place");
                         break;
                     }
                     case Entity.TYPE_EXPLOSION:
@@ -103,19 +103,19 @@ public class Game implements Input.Commands, Disposable
             @Override
             protected void SMSG_DEATH_Handler(SMSG_DEATH msg)
             {
-                AssetManagerHelper.GetSound("dying").play();
+                Assets.PlaySound("dying");
             }
 
             @Override
             protected void SMSG_VICTORY_Handler(SMSG_VICTORY msg)
             {
-                AssetManagerHelper.GetSound("victory").play();
+                Assets.PlaySound("victory");
             }
 
             @Override
             protected void SMSG_POWER_UP_Handler(SMSG_POWER_UP msg)
             {
-                AssetManagerHelper.GetSound("powerup").play();
+                Assets.PlaySound("powerup");
                 // TODO: add this to UI
             }
 

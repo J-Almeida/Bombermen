@@ -1,6 +1,6 @@
 package pt.up.fe.pt.lpoo.bombermen.entities;
 
-import pt.up.fe.pt.lpoo.bombermen.AssetManagerHelper;
+import pt.up.fe.pt.lpoo.bombermen.Assets;
 import pt.up.fe.pt.lpoo.bombermen.Entity;
 
 import com.badlogic.gdx.graphics.Color;
@@ -15,7 +15,7 @@ public class Bomb extends Entity
     {
         if (super.remove())
         {
-            AssetManagerHelper.GetSound("bomb_explosion").play();
+            Assets.PlaySound("bomb_explosion");
             return true;
         }
 

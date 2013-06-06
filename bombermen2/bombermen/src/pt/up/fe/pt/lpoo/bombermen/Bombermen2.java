@@ -38,7 +38,7 @@ public class Bombermen2 implements ApplicationListener
         }
 
         AssetManager manager = new AssetManager();
-        AssetManagerHelper.Manager = manager;
+        Assets.Manager = manager;
         // Texture.setAssetManager(manager);
 
         manager.load("data/images/bomb.png", Texture.class);
