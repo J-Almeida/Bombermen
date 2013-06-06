@@ -2,6 +2,7 @@ package pt.up.fe.pt.lpoo.bombermen;
 
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_JOIN;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
+import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PING;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
 
@@ -20,6 +21,9 @@ public abstract class MessageHandler
             case Message.CMSG_JOIN:
                 CMSG_JOIN_Handler(CMsg.Guid, (CMSG_JOIN) CMsg.Msg);
                 break;
+            case Message.CMSG_PING:
+                CMSG_PING_Handler(CMsg.Guid, (CMSG_PING) CMsg.Msg);
+                break;
             default:
                 Default_Handler(CMsg.Guid, CMsg.Msg);
                 break;
@@ -31,6 +35,8 @@ public abstract class MessageHandler
     protected abstract void CMSG_PLACE_BOMB_Handler(int guid, CMSG_PLACE_BOMB msg);
 
     protected abstract void CMSG_JOIN_Handler(int guid, CMSG_JOIN msg);
+    
+    protected abstract void CMSG_PING_Handler(int guid, CMSG_PING msg);
 
     protected abstract void Default_Handler(int guid, Message msg);
 }

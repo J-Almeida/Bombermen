@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
 
 public class ClientHandler
 {
@@ -23,6 +24,9 @@ public class ClientHandler
     private boolean _stillConnected = true;
     private int _timer = 0;
 
+    private long _timePingSent;
+    private long _ping = 0;
+    
     public String GetIp()
     {
         return _socket.getInetAddress().getHostAddress();
@@ -95,12 +99,30 @@ public class ClientHandler
         return _stillConnected;
     }
 
+    public long GetPing()
+    {
+        return _ping;
+    }
+    
+    public void OnPingSent()
+    {
+        _timePingSent = System.currentTimeMillis();
+    }
+    
+    public void OnPingReceived()
+    {
+        _ping = System.currentTimeMillis() - _timePingSent;
+    }
+    
     public void Update(int diff)
     {
         _timer += diff;
-
+        
         if (_timer >= 1000)
         {
+            ClientSender.Send(new SMSG_PING());
+            OnPingSent();
+            
             _timer = 0;
             try
             {

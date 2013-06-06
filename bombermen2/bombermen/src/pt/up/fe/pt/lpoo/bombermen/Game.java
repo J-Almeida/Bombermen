@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import pt.up.fe.pt.lpoo.bombermen.entities.Player;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_JOIN;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
+import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PING;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DEATH;
@@ -57,6 +58,7 @@ public class Game implements Input.Commands, Disposable
             @Override
             protected void SMSG_PING_Handler(SMSG_PING msg)
             {
+                _sender.Send(new CMSG_PING());
             }
 
             @Override

@@ -16,6 +16,7 @@ import pt.fe.up.pt.lpoo.bombermen.entities.Bomb.ExplodeHandler;
 import pt.fe.up.pt.lpoo.bombermen.entities.Player;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_JOIN;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
+import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PING;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
@@ -42,6 +43,11 @@ public class BombermenServer implements Runnable
 
     private Queue<ClientMessage> _messageQueue = new LinkedList<ClientMessage>();
 
+    public ClientHandler GetClient(int guid)
+    {
+        return _clients.get(guid);
+    }
+    
     public void SetClientListener(ClientListener cl)
     {
         _clientListener = cl;
@@ -240,6 +246,15 @@ public class BombermenServer implements Runnable
                 for (Entity e : _entities.values())
                     ch.ClientSender.Send(e.GetSpawnMessage());
                 
+                if (_clientListener != null) _clientListener.UpdateClient(guid);
+            }
+
+            @Override
+            protected void CMSG_PING_Handler(int guid, CMSG_PING msg)
+            {
+                ClientHandler ch = _clients.get(guid);
+                
+                ch.OnPingReceived();
                 if (_clientListener != null) _clientListener.UpdateClient(guid);
             }
         };

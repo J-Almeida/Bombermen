@@ -342,7 +342,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
     @Override
     public void AddClient(ClientHandler ch)
     {
-        lstClients.add(Integer.toString(ch.Guid) + " - " + ch.GetIp());
+        lstClients.add(Integer.toString(ch.Guid) + " - " + ch.GetIp() + " - " + ch.GetPing() + " ms");
     }
 
     @Override
@@ -369,6 +369,8 @@ public class BombermenServerGui extends JFrame implements ClientListener
         Player p = e.ToPlayer();
         if (p == null) return;
         
+        ClientHandler ch = Server.GetClient(guid);
+        
         String[] items = lstClients.getItems();
         String guidStr = Integer.toString(guid);
         
@@ -381,7 +383,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
         
         lstClients.remove(i);
         
-        lstClients.add(guidStr + " - " + p.GetName());
+        lstClients.add(guidStr + " - " + p.GetName() + " - " + ch.GetPing() + " ms");
         
     }
 
