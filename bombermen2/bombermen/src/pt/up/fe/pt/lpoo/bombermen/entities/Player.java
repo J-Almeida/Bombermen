@@ -63,16 +63,16 @@ public class Player extends Entity
             switch (i)
             {
                 case Direction.NORTH:
-                    setY(getY() + Constants.INIT_PLAYER_SPEED * delta);
+                    setY(getY() + _speed * delta);
                     break;
                 case Direction.SOUTH:
-                    setY(getY() - Constants.INIT_PLAYER_SPEED * delta);
+                    setY(getY() - _speed * delta);
                     break;
                 case Direction.EAST:
-                    setX(getX() + Constants.INIT_PLAYER_SPEED * delta);
+                    setX(getX() + _speed * delta);
                     break;
                 case Direction.WEST:
-                    setX(getX() - Constants.INIT_PLAYER_SPEED * delta);
+                    setX(getX() - _speed * delta);
                     break;
                 default:
                     moved = false;
@@ -134,6 +134,18 @@ public class Player extends Entity
         BoundRect.setHeight(Constants.PLAYER_BOUNDING_HEIGHT);
     }
 
+    private float _speed = Constants.INIT_PLAYER_SPEED;
+    
+    public void SetSpeed(float val)
+    {
+        _speed = val;
+    }
+    
+    public float GetSpeed()
+    {
+        return _speed;
+    }
+    
     private int _direction;
     public static TextureRegion Regions[][];
 

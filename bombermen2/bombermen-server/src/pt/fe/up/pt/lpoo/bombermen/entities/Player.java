@@ -6,6 +6,7 @@ import pt.up.fe.pt.lpoo.bombermen.Constants;
 import pt.up.fe.pt.lpoo.bombermen.Entity;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DEATH;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PLAYER_SPEED;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_PLAYER;
 import pt.up.fe.pt.lpoo.utils.Direction;
@@ -94,6 +95,7 @@ public class Player extends Entity
     public void UpdateSpeed(float inc)
     {
         _speed += inc;
+        _server.SendAll(new SMSG_PLAYER_SPEED(GetGuid(), _speed));
     }
 
     public void SetExplosionRadius(int val)

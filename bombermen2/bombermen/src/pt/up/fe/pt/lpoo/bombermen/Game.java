@@ -14,6 +14,7 @@ import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE_DIR;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PLAYER_SPEED;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_POWER_UP;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_BOMB;
@@ -134,6 +135,15 @@ public class Game implements Input.Commands, Disposable
                 if (p == null) return;
                 
                 p.SetMoving(msg.Dir, msg.Val);
+            }
+            
+            protected void SMSG_PLAYER_SPEED_Handler(SMSG_PLAYER_SPEED msg)
+            {
+                Entity e = GetEntity(msg.Guid);
+                if (e == null) return;
+                Player p = e.ToPlayer();
+                if (p == null) return;
+                p.SetSpeed(msg.Speed);
             }
             
             @Override
