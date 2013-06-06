@@ -58,13 +58,6 @@ public class Bombermen2 implements ApplicationListener
         multiplexer.addProcessor(_input);
         Gdx.input.setInputProcessor(multiplexer);
 
-        if (Gdx.app.getType() == ApplicationType.Android || Constants.SHOW_PAD)
-        {
-            _controlPad = new ControlPad();
-            _controlPad.SetSize(Constants.DEFAULT_PAD_WIDTH, Constants.DEFAULT_PAD_HEIGHT);
-            _input.SetControlPad(_controlPad);
-        }
-
         AssetManager manager = new AssetManager();
         Assets.Manager = manager;
         // Texture.setAssetManager(manager);
@@ -93,6 +86,13 @@ public class Bombermen2 implements ApplicationListener
 
         manager.finishLoading(); // loads all assets (proper way should be to call manager.update() in render method)
 
+        if (Gdx.app.getType() == ApplicationType.Android || Constants.SHOW_PAD)
+        {
+            _controlPad = new ControlPad();
+            _controlPad.SetSize(Constants.DEFAULT_PAD_WIDTH, Constants.DEFAULT_PAD_HEIGHT);
+            _input.SetControlPad(_controlPad);
+        }
+        
         Assets.PlayMusic("bgm_02", true); // todo: move me somewhere else
     }
 

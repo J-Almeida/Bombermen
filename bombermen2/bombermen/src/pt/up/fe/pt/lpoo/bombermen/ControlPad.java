@@ -19,13 +19,13 @@ public class ControlPad implements Disposable
 
     public ControlPad()
     {
-        _padTexture = new Texture(Gdx.files.internal("data/dpad.png"));
+        _padTexture = Assets.GetTexture("dpad");
         _padSprite = new Sprite(_padTexture);
         _padSprite.setOrigin(0, 0);
 
         _padSprite.setPosition(0, 0);
 
-        _bombButtonTexture = new Texture(Gdx.files.internal("data/bombButton.png"));
+        _bombButtonTexture = Assets.GetTexture("bombButton");
         _bombButtonSprite = new Sprite(_bombButtonTexture);
         _bombButtonSprite.setOrigin(_bombButtonTexture.getWidth(), 0);
         _bombButtonSprite.setPosition(Constants.DEFAULT_WIDTH - _bombButtonTexture.getWidth(), 0);
