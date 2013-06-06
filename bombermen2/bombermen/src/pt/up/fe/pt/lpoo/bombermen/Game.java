@@ -192,7 +192,8 @@ public class Game implements Input.Commands, Disposable
 
     public void Update(/*int diff*/)
     {
-        while (!_receiver.IsEmpty())
-            _messageHandler.HandleMessage(_receiver.Poll());
+        if (_receiver != null)
+            while (!_receiver.IsEmpty())
+                _messageHandler.HandleMessage(_receiver.Poll());
     }
 }

@@ -36,7 +36,8 @@ public class BombermenServer implements Runnable
     private HashMap<Integer, Entity> _entities = new HashMap<Integer, Entity>();
     private int _numberOfClients = 0;
     private MessageHandler _messageHandler;
-
+    private boolean _running = true;
+    
     private ArrayList<Entity> _entitiesToAdd = new ArrayList<Entity>();
     private HashSet<Integer> _entitiesToRemove = new HashSet<Integer>();
 
@@ -294,12 +295,16 @@ public class BombermenServer implements Runnable
                 }
 
             }
+            catch (java.net.SocketException e)
+            {
+                _running = false;
+            }
             catch (IOException e)
             {
                 e.printStackTrace();
             }
         }
-        while (true);
+        while (_running);
     }
 
     public void SendAll(Message msg)
@@ -307,10 +312,30 @@ public class BombermenServer implements Runnable
         for (ClientHandler ch : _clients.values())
             ch.ClientSender.Send(msg);
     }
+
+    public void Stop()
+    {
+        _running = false;
+        _clients.clear();
+        try
+        {
+            _socket.close();
+        }
+        catch (IOException e)
+        {
+        }
+    }
 }
 
 class ClientHandler
 {
+    @Override
+    protected void finalize() throws Throwable
+    {
+        ClientReceiver.Finish();
+        super.finalize();
+    }
+
     public final int Guid;
     private Socket _socket;
     private final BombermenServer _server;
