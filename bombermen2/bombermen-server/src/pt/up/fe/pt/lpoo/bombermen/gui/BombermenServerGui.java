@@ -383,7 +383,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
         
         lstClients.remove(i);
         
-        lstClients.add(guidStr + " - " + p.GetName() + " - " + ch.GetPing() + " ms");
+        lstClients.add(guidStr + " - " + p.GetName() + " - " + ch.GetPing() + " ms", i);
         
     }
 
