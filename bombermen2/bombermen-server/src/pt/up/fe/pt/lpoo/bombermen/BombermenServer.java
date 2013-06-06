@@ -47,12 +47,12 @@ public class BombermenServer implements Runnable
     {
         return _clients.get(guid);
     }
-    
+
     public void SetClientListener(ClientListener cl)
     {
         _clientListener = cl;
     }
-    
+
     public HashMap<Integer, Entity> GetEntities()
     {
         return _entities;
@@ -172,7 +172,7 @@ public class BombermenServer implements Runnable
                 if (p == null) return;
 
                 p.SetMoving(msg.Val, msg.Dir);
-                
+
                 SendAll(new SMSG_MOVE_DIR(guid, msg.Dir, msg.Val));
 
             }
@@ -245,7 +245,7 @@ public class BombermenServer implements Runnable
                 ClientHandler ch = _clients.get(guid);
                 for (Entity e : _entities.values())
                     ch.ClientSender.Send(e.GetSpawnMessage());
-                
+
                 if (_clientListener != null) _clientListener.UpdateClient(guid);
             }
 
@@ -253,7 +253,7 @@ public class BombermenServer implements Runnable
             protected void CMSG_PING_Handler(int guid, CMSG_PING msg)
             {
                 ClientHandler ch = _clients.get(guid);
-                
+
                 ch.OnPingReceived();
                 if (_clientListener != null) _clientListener.UpdateClient(guid);
             }
@@ -317,7 +317,7 @@ public class BombermenServer implements Runnable
                 {
                     _clients.put(clientId, ch);
                 }
-                
+
                 if (_clientListener != null) _clientListener.AddClient(ch);
 
             }

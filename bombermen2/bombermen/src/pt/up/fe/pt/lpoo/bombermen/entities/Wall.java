@@ -14,7 +14,7 @@ public class Wall extends Entity
         super(Entity.TYPE_WALL, guid);
 
         _hitPoints = hitPoints;
-        
+
         BoundRect.setWidth(Constants.WALL_BOUNDING_WIDTH);
         BoundRect.setHeight(Constants.WALL_BOUNDING_HEIGHT);
     }

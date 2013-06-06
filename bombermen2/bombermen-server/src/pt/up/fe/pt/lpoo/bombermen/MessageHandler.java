@@ -35,7 +35,7 @@ public abstract class MessageHandler
     protected abstract void CMSG_PLACE_BOMB_Handler(int guid, CMSG_PLACE_BOMB msg);
 
     protected abstract void CMSG_JOIN_Handler(int guid, CMSG_JOIN msg);
-    
+
     protected abstract void CMSG_PING_Handler(int guid, CMSG_PING msg);
 
     protected abstract void Default_Handler(int guid, Message msg);

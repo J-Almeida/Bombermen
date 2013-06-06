@@ -7,7 +7,7 @@ public class SMSG_MOVE_DIR extends Message
     public final int Guid;
     public final int Dir;
     public final boolean Val;
-    
+
     public SMSG_MOVE_DIR(int guid, int dir, boolean val)
     {
         super(SMSG_MOVE_DIR);

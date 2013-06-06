@@ -210,7 +210,7 @@ public class Player extends Entity
                 _timer = 0;
             }
         }
-        
+
 
  }
 

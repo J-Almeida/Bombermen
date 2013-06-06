@@ -33,7 +33,7 @@ public class Bombermen2 implements ApplicationListener
         _game = new Game(_stage);
         _fpsLogger = new FPSLogger();
 
-        _skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+        _skin = new Skin(Gdx.files.internal("data/skins/uiskin.json"));
         _skin.getAtlas().getTextures().iterator().next().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
         Slider slider = new Slider(0, 1, 0.05f, false, _skin);
@@ -92,7 +92,7 @@ public class Bombermen2 implements ApplicationListener
             _controlPad.SetSize(Constants.DEFAULT_PAD_WIDTH, Constants.DEFAULT_PAD_HEIGHT);
             _input.SetControlPad(_controlPad);
         }
-        
+
         Assets.PlayMusic("bgm_02", true); // todo: move me somewhere else
     }
 

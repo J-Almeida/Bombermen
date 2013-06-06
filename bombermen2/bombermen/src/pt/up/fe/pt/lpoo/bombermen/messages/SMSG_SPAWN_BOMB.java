@@ -11,9 +11,9 @@ public class SMSG_SPAWN_BOMB extends SMSG_SPAWN
         super(Entity.TYPE_BOMB, guid, x, y);
         CreatorGuid = creatorGuid;
     }
-    
+
     public final int CreatorGuid;
-    
+
     @Override
     public String toString()
     {

@@ -25,7 +25,7 @@ public class Explosion extends Entity
         _end = end;
         _intensity = 0;
         _explosionTimer = 0;
-        
+
         BoundRect.setWidth(Constants.EXPLOSION_WIDTH);
         BoundRect.setHeight(Constants.EXPLOSION_HEIGHT);
     }

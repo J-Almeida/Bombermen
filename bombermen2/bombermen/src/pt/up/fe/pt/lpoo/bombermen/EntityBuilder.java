@@ -77,7 +77,7 @@ public class EntityBuilder
 
         Wall w = new Wall(guid, hitPoints);
         w.setBounds(x, y, Constants.WALL_WIDTH, Constants.WALL_HEIGHT);
-        
+
         return w;
     }
 

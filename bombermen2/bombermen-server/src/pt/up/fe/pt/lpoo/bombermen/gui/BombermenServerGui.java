@@ -151,7 +151,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
     private final JTextArea txtConsoleOut;
 
     private final List lstClients;
-    
+
     private void Stop()
     {
         Server.Stop();
@@ -160,7 +160,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
         Server = null;
         System.gc();
     }
-    
+
     /**
      * Create the frame.
      *
@@ -240,7 +240,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
         spnPort.setEditor(new JSpinner.NumberEditor(spnPort, "#####"));
 
         panel_1.add(spnPort);
-        
+
 
 
         final JButton btnStop = new JButton("Stop Server");
@@ -325,17 +325,17 @@ public class BombermenServerGui extends JFrame implements ClientListener
         JPanel panel_3 = new JPanel();
         panel_2.add(panel_3, "1, 1, fill, fill");
         panel_3.setLayout(new BorderLayout(0, 0));
-        
+
         txtConsoleOut = new JTextArea();
         txtConsoleOut.setEditable(false);
         panel_3.add(txtConsoleOut);
         JScrollPane scroll = new JScrollPane(txtConsoleOut, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         panel_3.add(scroll);
-        
+
         lstClients = new List();
         panel_2.add(lstClients, "2, 1, fill, fill");
-        
+
         redirectSystemStreams();
     }
 
@@ -350,14 +350,14 @@ public class BombermenServerGui extends JFrame implements ClientListener
     {
         String[] items = lstClients.getItems();
         String guidStr = Integer.toString(guid);
-        
+
         int i;
         for (i = 0; i < items.length; ++i)
         {
             if (items[i].startsWith(guidStr))
                 break;
         }
-        
+
         lstClients.remove(i);
     }
 
@@ -368,23 +368,23 @@ public class BombermenServerGui extends JFrame implements ClientListener
         if (e == null) return;
         Player p = e.ToPlayer();
         if (p == null) return;
-        
+
         ClientHandler ch = Server.GetClient(guid);
-        
+
         String[] items = lstClients.getItems();
         String guidStr = Integer.toString(guid);
-        
+
         int i;
         for (i = 0; i < items.length; ++i)
         {
             if (items[i].startsWith(guidStr))
                 break;
         }
-        
+
         lstClients.remove(i);
-        
+
         lstClients.add(guidStr + " - " + p.GetName() + " - " + ch.GetPing() + " ms", i);
-        
+
     }
 
 }

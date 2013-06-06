@@ -26,12 +26,12 @@ public class ClientHandler
 
     private long _timePingSent;
     private long _ping = 0;
-    
+
     public String GetIp()
     {
         return _socket.getInetAddress().getHostAddress();
     }
-    
+
     public final Sender<Message> ClientSender;
 
     public class ServerReceiver extends Receiver<Message>
@@ -103,27 +103,27 @@ public class ClientHandler
     {
         return _ping;
     }
-    
+
     public void OnPingSent()
     {
         _timePingSent = System.currentTimeMillis();
     }
-    
+
     public void OnPingReceived()
     {
         _ping = System.currentTimeMillis() - _timePingSent;
         _ping /= 2;
     }
-    
+
     public void Update(int diff)
     {
         _timer += diff;
-        
+
         if (_timer >= 1000)
         {
             ClientSender.Send(new SMSG_PING());
             OnPingSent();
-            
+
             _timer = 0;
             try
             {

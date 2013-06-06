@@ -65,9 +65,9 @@ public abstract class MessageHandler
     protected abstract void SMSG_VICTORY_Handler(SMSG_VICTORY msg);
 
     protected abstract void SMSG_POWER_UP_Handler(SMSG_POWER_UP msg);
-    
+
     protected abstract void SMSG_MOVE_DIR_Handler(SMSG_MOVE_DIR msg);
-    
+
     protected abstract void SMSG_PLAYER_SPEED_Handler(SMSG_PLAYER_SPEED msg);
 
     protected abstract void Default_Handler(Message msg);

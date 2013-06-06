@@ -19,14 +19,14 @@ public abstract class Entity extends Actor
     }
 
     protected Rectangle BoundRect = new Rectangle(0, 0, getWidth(), getHeight());
-    
+
     public Rectangle GetBoundingRectangle()
     {
         BoundRect.x = getX();
         BoundRect.y = getY();
         return BoundRect;
     }
-    
+
     public boolean Collides(Entity e)
     {
         Rectangle my = GetBoundingRectangle();
@@ -38,7 +38,7 @@ public abstract class Entity extends Actor
     {
         return GetBoundingRectangle().overlaps(r);
     }
-    
+
     public static final int TYPE_PLAYER = 0;
     public static final int TYPE_BOMB = 1;
     public static final int TYPE_EXPLOSION = 2;

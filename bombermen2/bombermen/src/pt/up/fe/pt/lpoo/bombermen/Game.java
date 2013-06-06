@@ -133,10 +133,10 @@ public class Game implements Input.Commands, Disposable
                 if (e == null) return;
                 Player p = e.ToPlayer();
                 if (p == null) return;
-                
+
                 p.SetMoving(msg.Dir, msg.Val);
             }
-            
+
             protected void SMSG_PLAYER_SPEED_Handler(SMSG_PLAYER_SPEED msg)
             {
                 Entity e = GetEntity(msg.Guid);
@@ -145,7 +145,7 @@ public class Game implements Input.Commands, Disposable
                 if (p == null) return;
                 p.SetSpeed(msg.Speed);
             }
-            
+
             @Override
             protected void Default_Handler(Message msg)
             {
@@ -176,7 +176,7 @@ public class Game implements Input.Commands, Disposable
     }
 
     private Array<Entity> _entities = new Array<Entity>();
-    
+
     public Array<Entity> GetEntities()
     {
         _entities.clear();
@@ -189,7 +189,7 @@ public class Game implements Input.Commands, Disposable
 
         return _entities;
     }
-    
+
     public Entity GetEntity(int guid)
     {
         for (Actor a : _stage.getActors())
