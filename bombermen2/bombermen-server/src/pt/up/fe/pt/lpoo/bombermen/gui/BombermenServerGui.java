@@ -5,8 +5,8 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -33,9 +33,18 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
+import pt.fe.up.pt.lpoo.bombermen.entities.Player;
 import pt.up.fe.pt.lpoo.bombermen.BombermenServer;
+import pt.up.fe.pt.lpoo.bombermen.ClientHandler;
+import pt.up.fe.pt.lpoo.bombermen.ClientListener;
+import pt.up.fe.pt.lpoo.bombermen.Entity;
 
-public class BombermenServerGui extends JFrame
+import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
+
+public class BombermenServerGui extends JFrame implements ClientListener
 {
     @Override
     protected void finalize() throws Throwable
@@ -141,6 +150,8 @@ public class BombermenServerGui extends JFrame
     private static Color backgroundColor = new Color(240, 240, 240);
     private final JTextArea txtConsoleOut;
 
+    private final List lstClients;
+    
     private void Stop()
     {
         Server.Stop();
@@ -243,7 +254,7 @@ public class BombermenServerGui extends JFrame
                 try
                 {
                     Server = new BombermenServer(Integer.parseInt(spnPort.getValue().toString()));
-
+                    Server.SetClientListener(BombermenServerGui.this);
                     ServerThread = new Thread(new Runnable()
                     {
 
@@ -304,15 +315,73 @@ public class BombermenServerGui extends JFrame
 
         JPanel panel_2 = new JPanel();
         contentPane.add(panel_2, BorderLayout.CENTER);
-        panel_2.setLayout(new GridLayout(1, 0, 0, 0));
+        panel_2.setLayout(new FormLayout(new ColumnSpec[] {
+                ColumnSpec.decode("0px:grow(3)"),
+                FormFactory.GLUE_COLSPEC,},
+            new RowSpec[] {
+                FormFactory.GLUE_ROWSPEC,}));
 
+        JPanel panel_3 = new JPanel();
+        panel_2.add(panel_3, "1, 1, fill, fill");
+        panel_3.setLayout(new BorderLayout(0, 0));
+        
         txtConsoleOut = new JTextArea();
         txtConsoleOut.setEditable(false);
-        panel_2.add(txtConsoleOut);
+        panel_3.add(txtConsoleOut);
         JScrollPane scroll = new JScrollPane(txtConsoleOut, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-        panel_2.add(scroll);
+        panel_3.add(scroll);
+        
+        lstClients = new List();
+        panel_2.add(lstClients, "2, 1, fill, fill");
+        
         redirectSystemStreams();
+    }
+
+    @Override
+    public void AddClient(ClientHandler ch)
+    {
+        lstClients.add(Integer.toString(ch.Guid) + " - " + ch.GetIp());
+    }
+
+    @Override
+    public void RemoveClient(int guid)
+    {
+        String[] items = lstClients.getItems();
+        String guidStr = Integer.toString(guid);
+        
+        int i;
+        for (i = 0; i < items.length; ++i)
+        {
+            if (items[i].startsWith(guidStr))
+                break;
+        }
+        
+        lstClients.remove(i);
+    }
+
+    @Override
+    public void UpdateClient(int guid)
+    {
+        Entity e = Server.GetEntities().get(guid);
+        if (e == null) return;
+        Player p = e.ToPlayer();
+        if (p == null) return;
+        
+        String[] items = lstClients.getItems();
+        String guidStr = Integer.toString(guid);
+        
+        int i;
+        for (i = 0; i < items.length; ++i)
+        {
+            if (items[i].startsWith(guidStr))
+                break;
+        }
+        
+        lstClients.remove(i);
+        
+        lstClients.add(guidStr + " - " + p.GetName());
+        
     }
 
 }
