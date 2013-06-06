@@ -3,13 +3,19 @@ package pt.up.fe.pt.lpoo.bombermen;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class Bombermen2 implements ApplicationListener
 {
@@ -18,6 +24,7 @@ public class Bombermen2 implements ApplicationListener
     private Input _input;
     private ControlPad _controlPad;
     private FPSLogger _fpsLogger;
+    private Skin _skin;
 
     @Override
     public void create()
@@ -26,9 +33,30 @@ public class Bombermen2 implements ApplicationListener
         _game = new Game(_stage);
         _fpsLogger = new FPSLogger();
 
+        _skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+        _skin.getAtlas().getTextures().iterator().next().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+
+        Slider slider = new Slider(0, 1, 0.05f, false, _skin);
+        slider.setBounds(-180, 400, 100, 100);
+        slider.setValue(Assets.GetSoundVolume());
+        slider.addListener(new ChangeListener()
+        {
+            @Override
+            public void changed(ChangeEvent event, Actor actor)
+            {
+                Assets.ChangeSoundVolume(((Slider)actor).getValue());
+                Assets.ChangeMusicVolume(((Slider)actor).getValue());
+            }
+        });
+
+        _stage.addActor(slider);
+
         _input = new Input(_game, _stage.getCamera());
-        //Gdx.input.setInputProcessor(_stage);
-        Gdx.input.setInputProcessor(_input);
+
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(_stage);
+        multiplexer.addProcessor(_input);
+        Gdx.input.setInputProcessor(multiplexer);
 
         if (Gdx.app.getType() == ApplicationType.Android || Constants.SHOW_PAD)
         {
@@ -63,7 +91,9 @@ public class Bombermen2 implements ApplicationListener
         manager.load("data/sounds/powerup.wav", Sound.class);
         manager.load("data/sounds/victory.wav", Sound.class);
 
-        manager.finishLoading(); // loads all assets (proper way should be to call manager.update() in render method
+        manager.finishLoading(); // loads all assets (proper way should be to call manager.update() in render method)
+
+        Assets.PlayMusic("bgm_02", true); // todo: move me somewhere else
     }
 
     @Override
@@ -110,5 +140,7 @@ public class Bombermen2 implements ApplicationListener
     public void dispose()
     {
         _stage.dispose();
+        Assets.Manager.dispose();
+        _skin.dispose();
     }
 }

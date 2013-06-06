@@ -26,6 +26,7 @@ import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
@@ -152,6 +153,8 @@ public class Game implements Input.Commands, Disposable
     {
         for (Actor a : _stage.getActors())
         {
+            if (a instanceof Slider)
+                continue;
             Entity e = (Entity)a;
             if (e.GetGuid() == guid)
                 return e;
