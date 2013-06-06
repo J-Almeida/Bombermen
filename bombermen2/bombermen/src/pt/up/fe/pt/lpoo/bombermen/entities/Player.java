@@ -143,8 +143,11 @@ public class Player extends Entity
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 
-        batch.draw(Animations[_direction].getKeyFrame((_moveAnimationTimer > 0 ? _stateTime : 0), true), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-        _moveAnimationTimer -= _moveAnimationTimer > 0 ? 1 : 0;
+        boolean m = false;
+        for (boolean m1 : _moving)
+            m = m || m1;
+        
+        batch.draw(Animations[_direction].getKeyFrame((m ? _stateTime : 0), true), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
 
         font.draw(batch, getName(), getX() - Constants.PLAYER_WIDTH / 2f, getY() + Constants.PLAYER_HEIGHT * 3f / 2f);
 

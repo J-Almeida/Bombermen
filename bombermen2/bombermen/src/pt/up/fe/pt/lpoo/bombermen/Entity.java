@@ -30,9 +30,7 @@ public abstract class Entity extends Actor
     public boolean Collides(Entity e)
     {
         Rectangle my = GetBoundingRectangle();
-        System.out.println("My rect: " + my);
         Rectangle other = e.GetBoundingRectangle();
-        System.out.println("Other rect: " + other);
         return my.overlaps(other);
     }
 
