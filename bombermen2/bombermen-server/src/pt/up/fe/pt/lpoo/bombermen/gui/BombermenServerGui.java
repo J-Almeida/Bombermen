@@ -37,6 +37,13 @@ import pt.up.fe.pt.lpoo.bombermen.BombermenServer;
 
 public class BombermenServerGui extends JFrame
 {
+    @Override
+    protected void finalize() throws Throwable
+    {
+        Stop();
+        super.finalize();
+    }
+
     private static final long serialVersionUID = 1L;
 
     private JPanel contentPane;
@@ -134,6 +141,15 @@ public class BombermenServerGui extends JFrame
     private static Color backgroundColor = new Color(240, 240, 240);
     private final JTextArea txtConsoleOut;
 
+    private void Stop()
+    {
+        Server.Stop();
+        ServerRunning = false;
+        ServerThread.interrupt();
+        Server = null;
+        System.gc();
+    }
+    
     /**
      * Create the frame.
      * 
@@ -213,7 +229,6 @@ public class BombermenServerGui extends JFrame
         spnPort.setEditor(new JSpinner.NumberEditor(spnPort, "#####"));
 
         panel_1.add(spnPort);
-
         
         
         final JButton btnStop = new JButton("Stop Server");
@@ -271,11 +286,7 @@ public class BombermenServerGui extends JFrame
         {
             public void actionPerformed(ActionEvent arg0)
             {
-                Server.Stop();
-                ServerRunning = false;
-                ServerThread.interrupt();
-                Server = null;
-                System.gc();
+                Stop();
                 btnStart.setEnabled(true);
                 btnStop.setEnabled(false);
             }
