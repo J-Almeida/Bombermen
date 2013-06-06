@@ -56,8 +56,8 @@ public class ClientHandler
                         if (_done) break;
                         if (msg == null) continue;
 
+                        System.out.println("Receiver: " + msg);
                         _server.PushMessage(Guid, msg);
-
                     }
                     catch (ClassNotFoundException e)
                     {
