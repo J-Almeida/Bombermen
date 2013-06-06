@@ -158,7 +158,7 @@ public class BombermenServerGui extends JFrame
     public BombermenServerGui() throws Exception
     {
         setTitle("Bombermen Server");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 800, 600);
 
         JMenuBar menuBar = new JMenuBar();
@@ -172,7 +172,7 @@ public class BombermenServerGui extends JFrame
         {
             public void actionPerformed(ActionEvent arg0)
             {
-                BombermenServerGui.this.dispose();
+                System.exit(0);
             }
         });
         mnFile.add(mntmExit);
