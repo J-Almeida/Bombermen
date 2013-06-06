@@ -6,9 +6,22 @@ import pt.up.fe.pt.lpoo.bombermen.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Wall extends Entity
 {
+    private static final float offsetWidth = (Constants.WALL_WIDTH - Constants.WALL_BOUNDING_WIDTH) / 2.f;
+    private static final float offsetHeight = (Constants.WALL_HEIGHT - Constants.WALL_BOUNDING_HEIGHT) / 2.f;
+    
+    @Override
+    public Rectangle GetBoundingRectangle()
+    {
+        Rectangle rect = super.GetBoundingRectangle();
+        rect.x += offsetWidth;
+        rect.y += offsetHeight;
+        return rect;
+    }
+
     public Wall(int guid, int hitPoints)
     {
         super(Entity.TYPE_WALL, guid);
