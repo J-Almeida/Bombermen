@@ -112,6 +112,7 @@ public class ClientHandler
     public void OnPingReceived()
     {
         _ping = System.currentTimeMillis() - _timePingSent;
+        _ping /= 2;
     }
     
     public void Update(int diff)
