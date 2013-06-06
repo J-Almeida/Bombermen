@@ -4,6 +4,7 @@ import pt.up.fe.pt.lpoo.bombermen.BombermenServer;
 import pt.up.fe.pt.lpoo.bombermen.CollisionHandler;
 import pt.up.fe.pt.lpoo.bombermen.Constants;
 import pt.up.fe.pt.lpoo.bombermen.Entity;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DEATH;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_PLAYER;
@@ -143,9 +144,9 @@ public class Player extends Entity
 
     private int _timer = 0;
     private int _timer2 = 0;
-    
+
     private boolean _prevMoved = false;
-    
+
     @Override
     public void Update(int diff)
     {
@@ -231,5 +232,6 @@ public class Player extends Entity
     @Override
     public void OnDestroy()
     {
+        _server.SendTo(GetGuid(), new SMSG_DEATH());
     }
 }

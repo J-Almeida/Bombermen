@@ -7,15 +7,18 @@ import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_JOIN;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DEATH;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_POWER_UP;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_EXPLOSION;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_PLAYER;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_POWER_UP;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_WALL;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_VICTORY;
 import pt.up.fe.pt.lpoo.utils.Direction;
 
 import com.badlogic.gdx.Gdx;
@@ -67,6 +70,7 @@ public class Game implements Input.Commands, Disposable
                     {
                         SMSG_SPAWN_BOMB bombMsg = (SMSG_SPAWN_BOMB) msg;
                         AddEntity(EntityBuilder.CreateBomb(bombMsg.Guid, bombMsg.X, bombMsg.Y));
+                        AssetManagerHelper.GetSound("bomb_place").play();
                         break;
                     }
                     case Entity.TYPE_EXPLOSION:
@@ -91,16 +95,34 @@ public class Game implements Input.Commands, Disposable
             }
 
             @Override
-            protected void Default_Handler(Message msg)
-            {
-            }
-
-            @Override
             protected void SMSG_DESTROY_Handler(SMSG_DESTROY msg)
             {
                 RemoveEntity(msg.Guid);
             }
 
+            @Override
+            protected void SMSG_DEATH_Handler(SMSG_DEATH msg)
+            {
+                AssetManagerHelper.GetSound("dying").play();
+            }
+
+            @Override
+            protected void SMSG_VICTORY_Handler(SMSG_VICTORY msg)
+            {
+                AssetManagerHelper.GetSound("victory").play();
+            }
+
+            @Override
+            protected void SMSG_POWER_UP_Handler(SMSG_POWER_UP msg)
+            {
+                AssetManagerHelper.GetSound("powerup").play();
+                // TODO: add this to UI
+            }
+
+            @Override
+            protected void Default_Handler(Message msg)
+            {
+            }
         };
 
         try

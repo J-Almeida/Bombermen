@@ -37,7 +37,7 @@ public class BombermenServer implements Runnable
     private int _numberOfClients = 0;
     private MessageHandler _messageHandler;
     private boolean _running = true;
-    
+
     private ArrayList<Entity> _entitiesToAdd = new ArrayList<Entity>();
     private HashSet<Integer> _entitiesToRemove = new HashSet<Integer>();
 
@@ -310,6 +310,13 @@ public class BombermenServer implements Runnable
     public void SendAll(Message msg)
     {
         for (ClientHandler ch : _clients.values())
+            ch.ClientSender.Send(msg);
+    }
+
+    public void SendTo(int guid, Message msg)
+    {
+        ClientHandler ch = _clients.get(guid);
+        if (ch != null)
             ch.ClientSender.Send(msg);
     }
 

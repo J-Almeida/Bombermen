@@ -1,5 +1,6 @@
 package pt.up.fe.pt.lpoo.bombermen.entities;
 
+import pt.up.fe.pt.lpoo.bombermen.AssetManagerHelper;
 import pt.up.fe.pt.lpoo.bombermen.Entity;
 
 import com.badlogic.gdx.graphics.Color;
@@ -9,6 +10,18 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Bomb extends Entity
 {
+    @Override
+    public boolean remove()
+    {
+        if (super.remove())
+        {
+            AssetManagerHelper.GetSound("bomb_explosion").play();
+            return true;
+        }
+
+        return false;
+    }
+
     public static TextureRegion Regions[][] = null;
     public static Animation Animation = null;
 

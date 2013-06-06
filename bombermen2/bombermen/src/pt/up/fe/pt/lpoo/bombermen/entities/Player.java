@@ -11,9 +11,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Player extends Entity
 {
     public static Animation[] Animations = { null, null, null, null };
-    
+
     private int _moveAnimationTimer = 0;
-    
+
     @Override
     public void act(float delta)
     {
@@ -22,7 +22,7 @@ public class Player extends Entity
     }
 
     private float _stateTime;
-    
+
     @Override
     public void setX(float x)
     {

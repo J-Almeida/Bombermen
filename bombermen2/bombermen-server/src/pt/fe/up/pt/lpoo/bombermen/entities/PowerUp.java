@@ -4,6 +4,7 @@ import pt.up.fe.pt.lpoo.bombermen.BombermenServer;
 import pt.up.fe.pt.lpoo.bombermen.CollisionHandler;
 import pt.up.fe.pt.lpoo.bombermen.Constants;
 import pt.up.fe.pt.lpoo.bombermen.Entity;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_POWER_UP;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN_POWER_UP;
 
@@ -111,6 +112,7 @@ public class PowerUp extends Entity
         }
 
         _server.RemoveEntityNextUpdate(GetGuid());
+        _server.SendTo(p.GetGuid(), new SMSG_POWER_UP(_powerUpType));
     }
 
     @Override

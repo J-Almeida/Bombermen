@@ -13,6 +13,9 @@ public abstract class Message implements Serializable
     public static final int CMSG_MOVE = 4;
     public static final int CMSG_PLACE_BOMB = 5;
     public static final int CMSG_JOIN = 6;
+    public static final int SMSG_DEATH = 7;
+    public static final int SMSG_VICTORY = 8;
+    public static final int SMSG_POWER_UP = 9;
 
     public final int Type;
 

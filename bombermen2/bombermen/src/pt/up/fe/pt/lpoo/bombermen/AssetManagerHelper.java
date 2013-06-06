@@ -8,17 +8,17 @@ import com.badlogic.gdx.graphics.Texture;
 public class AssetManagerHelper
 {
     public static AssetManager Manager;
-    
+
     public static Sound GetSound(String name)
     {
         return Manager.get("data/sounds/" + name + ".wav");
     }
-    
+
     public static Music GetMusic(String name)
     {
         return Manager.get("data/musics/" + name + ".mp3");
     }
-    
+
     public static Texture GetTexture(String name)
     {
         return Manager.get("data/images/" + name + ".png");

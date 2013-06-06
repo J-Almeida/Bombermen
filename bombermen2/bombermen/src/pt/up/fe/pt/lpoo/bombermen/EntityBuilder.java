@@ -35,7 +35,7 @@ public class EntityBuilder
 
         if (Player.Regions == null)
             Player.Regions = TextureRegion.split(t, 18, 26);
-        
+
         for (int d : Direction.Directions)
         {
             if (Player.Animations[d] == null)
@@ -56,10 +56,10 @@ public class EntityBuilder
                         col = 6;
                         break;
                 }
-                
+
                 Player.Animations[d] = new Animation(1f / 5, Player.Regions[0][col], Player.Regions[0][col+1]);
             }
-            
+
         }
 
         Player p = new Player(guid, name);

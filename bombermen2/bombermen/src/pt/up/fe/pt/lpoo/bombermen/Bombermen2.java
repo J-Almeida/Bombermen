@@ -40,7 +40,7 @@ public class Bombermen2 implements ApplicationListener
         AssetManager manager = new AssetManager();
         AssetManagerHelper.Manager = manager;
         // Texture.setAssetManager(manager);
-        
+
         manager.load("data/images/bomb.png", Texture.class);
         manager.load("data/images/bombButton.png", Texture.class);
         manager.load("data/images/bomberman.png", Texture.class);
@@ -48,13 +48,13 @@ public class Bombermen2 implements ApplicationListener
         manager.load("data/images/explosion.png", Texture.class);
         manager.load("data/images/powerup.png", Texture.class);
         manager.load("data/images/wall.png", Texture.class);
-        
+
         manager.load("data/musics/bgm_01.mp3", Music.class);
         manager.load("data/musics/bgm_02.mp3", Music.class);
         manager.load("data/musics/bgm_03.mp3", Music.class);
         manager.load("data/musics/bgm_menu.mp3", Music.class);
         manager.load("data/musics/bgm_startGame.mp3", Music.class);
-        
+
         manager.load("data/sounds/bomb_explosion.wav", Sound.class);
         manager.load("data/sounds/bomb_place.wav", Sound.class);
         manager.load("data/sounds/dying.wav", Sound.class);

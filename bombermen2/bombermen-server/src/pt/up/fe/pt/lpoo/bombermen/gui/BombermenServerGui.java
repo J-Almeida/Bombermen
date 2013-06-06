@@ -137,7 +137,7 @@ public class BombermenServerGui extends JFrame
     private BombermenServer Server;
     private Thread ServerThread;
     private boolean ServerRunning = false;
-    
+
     private static Color backgroundColor = new Color(240, 240, 240);
     private final JTextArea txtConsoleOut;
 
@@ -152,7 +152,7 @@ public class BombermenServerGui extends JFrame
     
     /**
      * Create the frame.
-     * 
+     *
      * @throws Exception
      */
     public BombermenServerGui() throws Exception
@@ -230,7 +230,8 @@ public class BombermenServerGui extends JFrame
 
         panel_1.add(spnPort);
         
-        
+
+
         final JButton btnStop = new JButton("Stop Server");
         final JButton btnStart = new JButton("Start Server");
         btnStart.addActionListener(new ActionListener()
