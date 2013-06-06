@@ -238,6 +238,7 @@ public class BombermenServerGui extends JFrame
         {
             public void actionPerformed(ActionEvent arg0)
             {
+                spnPort.setEnabled(false);
                 txtConsoleOut.setText("");
                 try
                 {
@@ -290,6 +291,7 @@ public class BombermenServerGui extends JFrame
                 Stop();
                 btnStart.setEnabled(true);
                 btnStop.setEnabled(false);
+                spnPort.setEnabled(true);
             }
         });
         btnStop.setEnabled(false);
