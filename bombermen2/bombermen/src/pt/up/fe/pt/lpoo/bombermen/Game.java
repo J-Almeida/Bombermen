@@ -3,6 +3,7 @@ package pt.up.fe.pt.lpoo.bombermen;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import pt.up.fe.pt.lpoo.bombermen.entities.Player;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_JOIN;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
@@ -10,6 +11,7 @@ import pt.up.fe.pt.lpoo.bombermen.messages.Message;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DEATH;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE_DIR;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_POWER_UP;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
@@ -27,6 +29,7 @@ import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
@@ -70,7 +73,7 @@ public class Game implements Input.Commands, Disposable
                     case Entity.TYPE_BOMB:
                     {
                         SMSG_SPAWN_BOMB bombMsg = (SMSG_SPAWN_BOMB) msg;
-                        AddEntity(EntityBuilder.CreateBomb(bombMsg.Guid, bombMsg.X, bombMsg.Y));
+                        AddEntity(EntityBuilder.CreateBomb(bombMsg.Guid, bombMsg.CreatorGuid, bombMsg.X, bombMsg.Y));
                         Assets.PlaySound("bomb_place");
                         break;
                     }
@@ -121,6 +124,17 @@ public class Game implements Input.Commands, Disposable
             }
 
             @Override
+            protected void SMSG_MOVE_DIR_Handler(SMSG_MOVE_DIR msg)
+            {
+                Entity e = GetEntity(msg.Guid);
+                if (e == null) return;
+                Player p = e.ToPlayer();
+                if (p == null) return;
+                
+                p.SetMoving(msg.Dir, msg.Val);
+            }
+            
+            @Override
             protected void Default_Handler(Message msg)
             {
             }
@@ -149,6 +163,21 @@ public class Game implements Input.Commands, Disposable
         _stage.addActor(entity);
     }
 
+    private Array<Entity> _entities = new Array<Entity>();
+    
+    public Array<Entity> GetEntities()
+    {
+        _entities.clear();
+        for (Actor a : _stage.getActors())
+        {
+            if (!(a instanceof Entity))
+                continue;
+            _entities.add((Entity)a);
+        }
+
+        return _entities;
+    }
+    
     public Entity GetEntity(int guid)
     {
         for (Actor a : _stage.getActors())

@@ -1,5 +1,6 @@
 package pt.up.fe.pt.lpoo.bombermen.entities;
 
+import pt.up.fe.pt.lpoo.bombermen.Constants;
 import pt.up.fe.pt.lpoo.bombermen.Entity;
 import pt.up.fe.pt.lpoo.utils.Direction;
 
@@ -24,6 +25,9 @@ public class Explosion extends Entity
         _end = end;
         _intensity = 0;
         _explosionTimer = 0;
+        
+        BoundRect.setWidth(Constants.EXPLOSION_WIDTH);
+        BoundRect.setHeight(Constants.EXPLOSION_HEIGHT);
     }
 
     @Override

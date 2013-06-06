@@ -6,11 +6,14 @@ public class SMSG_SPAWN_BOMB extends SMSG_SPAWN
 {
     private static final long serialVersionUID = 1L;
 
-    public SMSG_SPAWN_BOMB(int guid, float x, float y)
+    public SMSG_SPAWN_BOMB(int guid, int creatorGuid, float x, float y)
     {
         super(Entity.TYPE_BOMB, guid, x, y);
+        CreatorGuid = creatorGuid;
     }
-
+    
+    public final int CreatorGuid;
+    
     @Override
     public String toString()
     {

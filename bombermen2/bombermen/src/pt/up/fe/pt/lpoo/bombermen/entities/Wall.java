@@ -1,5 +1,6 @@
 package pt.up.fe.pt.lpoo.bombermen.entities;
 
+import pt.up.fe.pt.lpoo.bombermen.Constants;
 import pt.up.fe.pt.lpoo.bombermen.Entity;
 
 import com.badlogic.gdx.graphics.Color;
@@ -13,6 +14,9 @@ public class Wall extends Entity
         super(Entity.TYPE_WALL, guid);
 
         _hitPoints = hitPoints;
+        
+        BoundRect.setWidth(Constants.WALL_BOUNDING_WIDTH);
+        BoundRect.setHeight(Constants.WALL_BOUNDING_HEIGHT);
     }
 
     private int _hitPoints;

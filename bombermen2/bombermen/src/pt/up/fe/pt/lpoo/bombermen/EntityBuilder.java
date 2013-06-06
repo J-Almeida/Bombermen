@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class EntityBuilder
 {
-    public static Bomb CreateBomb(int guid, float x, float y)
+    public static Bomb CreateBomb(int guid, int creatorGuid, float x, float y)
     {
         Texture t = Assets.GetTexture("bomb"); // 18 x 18
 
@@ -23,7 +23,7 @@ public class EntityBuilder
             Bomb.Animation = new Animation(1f / 3, Bomb.Regions[0][0], Bomb.Regions[0][1], Bomb.Regions[0][2]);
         }
 
-        Bomb b = new Bomb(guid);
+        Bomb b = new Bomb(guid, creatorGuid);
         b.setBounds(x, y, Constants.BOMB_WIDTH, Constants.BOMB_HEIGHT);
 
         return b;
@@ -77,7 +77,7 @@ public class EntityBuilder
 
         Wall w = new Wall(guid, hitPoints);
         w.setBounds(x, y, Constants.WALL_WIDTH, Constants.WALL_HEIGHT);
-
+        
         return w;
     }
 

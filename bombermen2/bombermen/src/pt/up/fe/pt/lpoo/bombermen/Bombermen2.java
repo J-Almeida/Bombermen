@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 public class Bombermen2 implements ApplicationListener
 {
     private Stage _stage;
-    private Game _game;
+    public static Game _game;
     private Input _input;
     private ControlPad _controlPad;
     private FPSLogger _fpsLogger;

@@ -143,86 +143,74 @@ public class Player extends Entity
     }
 
     private int _timer = 0;
-    private int _timer2 = 0;
-
-    private boolean _prevMoved = false;
 
     @Override
     public void Update(int diff)
     {
         _timer += diff;
 
-        if (_timer >= 35)
+        for (int i = 0; i < _moving.length; ++i)
         {
-            for (int i = 0; i < _moving.length; ++i)
+            if (!_moving[i]) continue;
+
+            boolean moved = true;
+
+            float x = GetX();
+            float y = GetY();
+
+            switch (i)
             {
-                if (!_moving[i]) continue;
+                case Direction.NORTH:
+                    SetY(GetY() + GetSpeed() * diff);
+                    break;
+                case Direction.SOUTH:
+                    SetY(GetY() - GetSpeed() * diff);
+                    break;
+                case Direction.EAST:
+                    SetX(GetX() + GetSpeed() * diff);
+                    break;
+                case Direction.WEST:
+                    SetX(GetX() - GetSpeed() * diff);
+                    break;
+                default:
+                    moved = false;
+            }
 
-                boolean moved = true;
-
-                float x = GetX();
-                float y = GetY();
-
-                switch (i)
+            if (moved)
+            {
+                for (Entity e : _server.GetEntities().values())
                 {
-                    case Direction.NORTH:
-                        SetY(GetY() + GetSpeed() * _timer);
+                    if (e.IsBomb() && e.ToBomb().JustCreated() && e.ToBomb().GetCreatorGuid() == GetGuid()) if (Collides(e))
                         break;
-                    case Direction.SOUTH:
-                        SetY(GetY() - GetSpeed() * _timer);
-                        break;
-                    case Direction.EAST:
-                        SetX(GetX() + GetSpeed() * _timer);
-                        break;
-                    case Direction.WEST:
-                        SetX(GetX() - GetSpeed() * _timer);
-                        break;
-                    default:
-                        moved = false;
-                }
+                    else
+                        e.ToBomb().SetJustCreated(false);
 
-                if (moved)
-                {
-                    for (Entity e : _server.GetEntities().values())
+                    if (!e.IsPlayer() && Collides(e))
                     {
-                        if (e.IsBomb() && e.ToBomb().JustCreated() && e.ToBomb().GetCreatorGuid() == GetGuid()) if (Collides(e))
-                            break;
-                        else
-                            e.ToBomb().SetJustCreated(false);
-
-                        if (!e.IsPlayer() && Collides(e))
+                        if (e.IsExplosion() || e.IsPowerUp())
                         {
-                            if (e.IsExplosion() || e.IsPowerUp())
-                            {
-                                OnCollision(e);
-                                e.OnCollision(this);
-                            }
-                            else
-                            {
-                                moved = false;
-                                SetPosition(x, y);
-                            }
-                            break;
+                            OnCollision(e);
+                            e.OnCollision(this);
                         }
+                        else
+                        {
+                            moved = false;
+                            SetPosition(x, y);
+                        }
+                        break;
                     }
                 }
-
-                if ((moved || _prevMoved) && _timer2 == 1)
-                {
-                    _server.SendAll(new SMSG_MOVE(GetGuid(), GetPosition()));
-                    _timer2 = 0;
-                    _prevMoved = false;
-                }
-                else if (_timer2 == 0)
-                {
-                    _timer2++;
-                    _prevMoved = moved;
-                }
             }
-            _timer = 0;
-        }
 
-    }
+            if (_timer >= 200)
+            {
+                _server.SendAll(new SMSG_MOVE(GetGuid(), GetPosition()));
+                _timer = 0;
+            }
+        }
+        
+
+ }
 
     public void Kill()
     {

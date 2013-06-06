@@ -1,5 +1,6 @@
 package pt.up.fe.pt.lpoo.bombermen.entities;
 
+import pt.up.fe.pt.lpoo.bombermen.Constants;
 import pt.up.fe.pt.lpoo.bombermen.Entity;
 
 import com.badlogic.gdx.graphics.Color;
@@ -21,6 +22,9 @@ public class PowerUp extends Entity
 
         _stateTime = 0;
         _animation = anim;
+        
+        BoundRect.setWidth(Constants.POWER_UP_WIDTH);
+        BoundRect.setHeight(Constants.POWER_UP_HEIGHT);
     }
 
     private float _stateTime;

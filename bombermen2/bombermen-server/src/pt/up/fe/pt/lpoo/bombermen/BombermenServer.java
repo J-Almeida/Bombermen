@@ -19,6 +19,7 @@ import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE_DIR;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.utils.Ref;
 
@@ -165,6 +166,8 @@ public class BombermenServer implements Runnable
                 if (p == null) return;
 
                 p.SetMoving(msg.Val, msg.Dir);
+                
+                SendAll(new SMSG_MOVE_DIR(guid, msg.Dir, msg.Val));
 
             }
 

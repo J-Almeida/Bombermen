@@ -1,6 +1,7 @@
 package pt.up.fe.pt.lpoo.bombermen.entities;
 
 import pt.up.fe.pt.lpoo.bombermen.Assets;
+import pt.up.fe.pt.lpoo.bombermen.Constants;
 import pt.up.fe.pt.lpoo.bombermen.Entity;
 
 import com.badlogic.gdx.graphics.Color;
@@ -26,13 +27,35 @@ public class Bomb extends Entity
     public static Animation Animation = null;
 
     private float _stateTime;
-
-    public Bomb(int guid)
+    private int _creatorGuid;
+    
+    public Bomb(int guid, int creatorGuid)
     {
         super(Entity.TYPE_BOMB, guid);
         _stateTime = 0;
+        _creatorGuid = creatorGuid;
+        
+        BoundRect.setWidth(Constants.EXPLOSION_WIDTH);
+        BoundRect.setHeight(Constants.EXPLOSION_HEIGHT);
     }
-
+    
+    public int GetCreatorGuid()
+    {
+        return _creatorGuid;
+    }
+    
+    private boolean _justCreated = true;
+    
+    public void SetJustCreated(boolean val)
+    {
+        _justCreated = val;
+    }
+    
+    public boolean JustCreated()
+    {
+        return _justCreated;
+    }
+    
     @Override
     public void act(float delta)
     {

@@ -7,6 +7,7 @@ import pt.up.fe.pt.lpoo.bombermen.entities.PowerUp;
 import pt.up.fe.pt.lpoo.bombermen.entities.Wall;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public abstract class Entity extends Actor
@@ -17,6 +18,29 @@ public abstract class Entity extends Actor
         return "[Entity - Type: " + _type + " Guid: " + _guid + " Position: " + getX() + ", " + getY() + " ]";
     }
 
+    protected Rectangle BoundRect = new Rectangle(0, 0, getWidth(), getHeight());
+    
+    public Rectangle GetBoundingRectangle()
+    {
+        BoundRect.x = getX();
+        BoundRect.y = getY();
+        return BoundRect;
+    }
+    
+    public boolean Collides(Entity e)
+    {
+        Rectangle my = GetBoundingRectangle();
+        System.out.println("My rect: " + my);
+        Rectangle other = e.GetBoundingRectangle();
+        System.out.println("Other rect: " + other);
+        return my.overlaps(other);
+    }
+
+    public boolean Collides(Rectangle r)
+    {
+        return GetBoundingRectangle().overlaps(r);
+    }
+    
     public static final int TYPE_PLAYER = 0;
     public static final int TYPE_BOMB = 1;
     public static final int TYPE_EXPLOSION = 2;

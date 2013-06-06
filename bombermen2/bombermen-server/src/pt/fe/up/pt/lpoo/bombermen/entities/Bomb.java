@@ -62,7 +62,7 @@ public class Bomb extends Entity
     @Override
     public SMSG_SPAWN GetSpawnMessage()
     {
-        return new SMSG_SPAWN_BOMB(GetGuid(), GetX(), GetY());
+        return new SMSG_SPAWN_BOMB(GetGuid(), _creatorGuid, GetX(), GetY());
     }
 
     private static final Vector2 size = new Vector2(Constants.BOMB_WIDTH, Constants.BOMB_HEIGHT);
