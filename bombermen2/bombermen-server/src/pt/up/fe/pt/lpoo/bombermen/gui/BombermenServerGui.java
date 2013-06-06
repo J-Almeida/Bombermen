@@ -303,6 +303,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
                 btnStart.setEnabled(true);
                 btnStop.setEnabled(false);
                 spnPort.setEnabled(true);
+                lstClients.removeAll();
             }
         });
         btnStop.setEnabled(false);
