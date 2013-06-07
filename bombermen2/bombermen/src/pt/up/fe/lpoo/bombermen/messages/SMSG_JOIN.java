@@ -1,4 +1,4 @@
-package pt.up.fe.pt.lpoo.bombermen.messages;
+package pt.up.fe.lpoo.bombermen.messages;
 
 public class SMSG_JOIN extends Message
 {

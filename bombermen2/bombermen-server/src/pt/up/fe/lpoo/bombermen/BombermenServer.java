@@ -19,6 +19,7 @@ import pt.up.fe.lpoo.bombermen.entities.Player;
 import pt.up.fe.lpoo.bombermen.entities.Bomb.ExplodeHandler;
 import pt.up.fe.lpoo.bombermen.messages.CMSG_JOIN;
 import pt.up.fe.lpoo.bombermen.messages.CMSG_MOVE;
+import pt.up.fe.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.lpoo.bombermen.messages.CMSG_PING;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_JOIN;
 import pt.up.fe.lpoo.bombermen.messages.Message;

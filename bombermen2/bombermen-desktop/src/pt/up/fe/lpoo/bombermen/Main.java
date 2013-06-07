@@ -1,6 +1,5 @@
 package pt.up.fe.lpoo.bombermen;
 
-import pt.up.fe.lpoo.bombermen.Bombermen;
 import pt.up.fe.lpoo.bombermen.Constants;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;

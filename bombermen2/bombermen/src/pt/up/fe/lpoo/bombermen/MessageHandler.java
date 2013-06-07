@@ -4,6 +4,7 @@ import pt.up.fe.lpoo.bombermen.messages.Message;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_DEATH;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_DESTROY;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_JOIN;
+import pt.up.fe.lpoo.bombermen.messages.SMSG_MOVE;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_MOVE_DIR;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_PING;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_PLAYER_SPEED;

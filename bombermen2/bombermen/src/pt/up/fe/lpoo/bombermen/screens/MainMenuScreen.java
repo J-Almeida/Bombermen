@@ -109,7 +109,7 @@ public class MainMenuScreen implements Screen
             {
                 try
                 {
-                    Process p = Runtime.getRuntime().exec("jva -classpath ..\\bombermen-server\\bin;..\\bombermen\\bin;..\\bombermen-server\\forms-1.3.0.jar pt.up.fe.lpoo.bombermen.gui.BombermenServerGui");
+                    Runtime.getRuntime().exec("jva -classpath ..\\bombermen-server\\bin;..\\bombermen\\bin;..\\bombermen-server\\forms-1.3.0.jar pt.up.fe.lpoo.bombermen.gui.BombermenServerGui");
                 }
                 catch (IOException e)
                 {
