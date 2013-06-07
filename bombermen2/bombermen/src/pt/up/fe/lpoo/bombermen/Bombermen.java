@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import pt.up.fe.lpoo.bombermen.screens.MainMenuScreen;
 import pt.up.fe.lpoo.bombermen.screens.SelectServerScreen;
+import pt.up.fe.lpoo.bombermen.screens.SettingsScreen;
 
 public class Bombermen extends Game
 {
@@ -18,6 +19,7 @@ public class Bombermen extends Game
 
     private MainMenuScreen _mainMenuScreen;
     private SelectServerScreen _selectServerScreen;
+    private SettingsScreen _settingsScreen;
 
     @Override
     public void create()
@@ -58,6 +60,7 @@ public class Bombermen extends Game
 
         _mainMenuScreen = new MainMenuScreen(this);
         _selectServerScreen = new SelectServerScreen(this);
+        _settingsScreen = new SettingsScreen(this);
         setScreen(_mainMenuScreen);
     }
 
@@ -86,5 +89,10 @@ public class Bombermen extends Game
     public SelectServerScreen GetSelectServerScreen()
     {
         return _selectServerScreen;
+    }
+
+    public SettingsScreen GetSettingsScreen()
+    {
+        return _settingsScreen;
     }
 }

@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class Bombermen2 implements ApplicationListener
 {
-    
+
     private Stage _stage;
     public static Game _game;
     private Input _input;
@@ -99,8 +99,8 @@ public class Bombermen2 implements ApplicationListener
         Assets.PlayMusic("bgm_02", true); // todo: move me somewhere else
     }
 
-    
-    
+
+
     @Override
     public void resize(int width, int height)
     {
@@ -112,10 +112,10 @@ public class Bombermen2 implements ApplicationListener
     private static float offsetMaxY = Constants.MAP_MAX_LATERAL_SIZE * Constants.CELL_SIZE - Constants.DEFAULT_HEIGHT;
     private static float offsetMinX = 0;
     private static float offsetMinY = 0;
-    
+
     private float _oldCamX = 0;
     private float _oldCamY = 0;
-    
+
     @Override
     public void render()
     {
@@ -124,30 +124,30 @@ public class Bombermen2 implements ApplicationListener
 
         //int dt = (int) (Gdx.graphics.getRawDeltaTime() * 1000.f);
         _game.Update(/*dt*/);
-        
+
         _stage.getCamera().update();
-        
+
         _stage.getCamera().translate(-_oldCamX, -_oldCamY, 0f);
-        
+
         Player p =_game.GetCurrentPlayer();
         if (p != null)
         {
             float camX = p.getX() - Constants.DEFAULT_WIDTH / 2f;
             float camY = p.getY() - Constants.DEFAULT_HEIGHT / 2f;
-        
+
             if (camX > offsetMaxX)
                 camX = offsetMaxX;
             else if (camX < offsetMinX)
                 camX = offsetMinX;
-            
+
             if (camY > offsetMaxY)
                 camY = offsetMaxY;
             else if (camY < offsetMinY)
                 camY = offsetMinY;
-            
+
             _oldCamX = camX;
             _oldCamY = camY;
-            
+
             _stage.getCamera().translate(camX, camY, 0f);
         }
         _stage.act(Gdx.graphics.getDeltaTime());

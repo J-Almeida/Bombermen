@@ -249,7 +249,7 @@ public class BombermenServer implements Runnable
                 ClientHandler ch = _clients.get(guid);
                 for (Entity e : _entities.values())
                     ch.ClientSender.Send(e.GetSpawnMessage());
-                
+
                 ch.ClientSender.Send(new SMSG_JOIN(guid));
 
                 if (_clientListener != null) _clientListener.UpdateClient(guid);

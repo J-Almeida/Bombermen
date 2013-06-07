@@ -8,6 +8,7 @@ import pt.up.fe.lpoo.bombermen.Assets;
 import pt.up.fe.lpoo.bombermen.Bombermen;
 import pt.up.fe.lpoo.bombermen.Constants;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
@@ -96,7 +97,6 @@ public class MainMenuScreen implements Screen
             @Override
             public void changed(ChangeEvent event, Actor actor)
             {
-                event.cancel();
                 if (((TextButton)actor).isPressed())
                     _game.setScreen(_game.GetSelectServerScreen());
             }
@@ -125,6 +125,29 @@ public class MainMenuScreen implements Screen
             }
         });
 
+        _settingsButton.addListener(new ChangeListener()
+        {
+            @Override
+            public void changed(ChangeEvent event, Actor actor)
+            {
+                if (((TextButton)actor).isPressed())
+                    _game.setScreen(_game.GetSettingsScreen());
+            }
+        });
+
+        _exitButton.addListener(new ChangeListener()
+        {
+            @Override
+            public void changed(ChangeEvent event, Actor actor)
+            {
+                Gdx.app.exit();
+            }
+        });
+
+        if (Gdx.app.getType() != ApplicationType.Desktop)
+            _createServerButton.setDisabled(true);
+
+        Assets.PlayMusic("bgm_03", true);
         _game.GetStage().addAction(sequence(alpha(0), fadeIn(3)));
     }
 

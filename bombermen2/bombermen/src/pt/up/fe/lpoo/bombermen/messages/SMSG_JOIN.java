@@ -3,9 +3,9 @@ package pt.up.fe.lpoo.bombermen.messages;
 public class SMSG_JOIN extends Message
 {
     private static final long serialVersionUID = 1L;
-    
+
     public final int Guid;
-    
+
     public SMSG_JOIN(int guid)
     {
         super(SMSG_JOIN);
