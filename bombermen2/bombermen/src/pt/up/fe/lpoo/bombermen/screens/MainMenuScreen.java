@@ -13,6 +13,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -27,12 +28,7 @@ public class MainMenuScreen implements Screen
 
     // Actors
     private Image _backgroundImage;
-    private Table _buttonsTable;
-    private TextButton _playButton;
-    private TextButton _createServerButton;
-    private TextButton _settingsButton;
-    private TextButton _exitButton;
-    private Label _feupLabel;
+    private Group _uiGroup;
 
     public MainMenuScreen(Bombermen game)
     {
@@ -59,54 +55,57 @@ public class MainMenuScreen implements Screen
     @Override
     public void show()
     {
+        _uiGroup = new Group();
+        
         _backgroundImage = new Image(Assets.GetTexture("background"));
         _backgroundImage.setBounds(0, 0, _game.GetStage().getWidth(), _game.GetStage().getHeight());
         _backgroundImage.setTouchable(Touchable.disabled);
         _game.GetStage().addActor(_backgroundImage);
 
-        _playButton = new TextButton("Play", _game.GetSkin());
-        _createServerButton = new TextButton("Create Server", _game.GetSkin());
-        _settingsButton = new TextButton("Settings", _game.GetSkin());
-        _exitButton = new TextButton("Exit", _game.GetSkin());
+        TextButton playButton = new TextButton("Play", _game.GetSkin());
+        TextButton createServerButton = new TextButton("Create Server", _game.GetSkin());
+        TextButton settingsButton = new TextButton("Settings", _game.GetSkin());
+        TextButton exitButton = new TextButton("Exit", _game.GetSkin());
 
-        _buttonsTable = new Table(_game.GetSkin());
+        Table buttonsTable = new Table(_game.GetSkin());
+        buttonsTable.add(playButton).left();
+        buttonsTable.row();
+        buttonsTable.add().height(10);
+        buttonsTable.row();
+        buttonsTable.add(createServerButton).left();
+        buttonsTable.row();
+        buttonsTable.add().height(10);
+        buttonsTable.row();
+        buttonsTable.add(settingsButton).left();
+        buttonsTable.row();
+        buttonsTable.add().height(10);
+        buttonsTable.row();
+        buttonsTable.add(exitButton).left();
+        buttonsTable.setPosition(80, 100);
+        _uiGroup.addActor(buttonsTable);
 
-        _buttonsTable.add(_playButton).left();
-        _buttonsTable.row();
-        _buttonsTable.add().height(10);
-        _buttonsTable.row();
-        _buttonsTable.add(_createServerButton).left();
-        _buttonsTable.row();
-        _buttonsTable.add().height(10);
-        _buttonsTable.row();
-        _buttonsTable.add(_settingsButton).left();
-        _buttonsTable.row();
-        _buttonsTable.add().height(10);
-        _buttonsTable.row();
-        _buttonsTable.add(_exitButton).left();
+        Label feupLabel = new Label("FEUP 2013/2013 - MIEIC", _game.GetSkin());
+        feupLabel.setPosition(620, 5);
+        _uiGroup.addActor(feupLabel);
 
-        _buttonsTable.setPosition(80, 100);
-        _game.GetStage().addActor(_buttonsTable);
-
-        _feupLabel = new Label("FEUP 2013/2013 - MIEIC", _game.GetSkin());
-        _feupLabel.setPosition(620, 5);
-        _game.GetStage().addActor(_feupLabel);
-
-        _playButton.addListener(new ChangeListener()
+        playButton.addListener(new ChangeListener()
         {
             @Override
             public void changed(ChangeEvent event, Actor actor)
             {
-                if (((TextButton)actor).isPressed())
-                    _game.setScreen(_game.GetSelectServerScreen());
+                Assets.PlaySound("menu_select");
+
+                _game.setScreen(_game.GetSelectServerScreen());
             }
         });
 
-        _createServerButton.addListener(new ChangeListener()
+        createServerButton.addListener(new ChangeListener()
         {
             @Override
             public void changed(ChangeEvent event, Actor actor)
             {
+                Assets.PlaySound("menu_select");
+                
                 try
                 {
                     Runtime.getRuntime().exec("jva -classpath ..\\bombermen-server\\bin;..\\bombermen\\bin;..\\bombermen-server\\forms-1.3.0.jar pt.up.fe.lpoo.bombermen.gui.BombermenServerGui");
@@ -125,38 +124,40 @@ public class MainMenuScreen implements Screen
             }
         });
 
-        _settingsButton.addListener(new ChangeListener()
+        settingsButton.addListener(new ChangeListener()
         {
             @Override
             public void changed(ChangeEvent event, Actor actor)
             {
-                if (((TextButton)actor).isPressed())
-                    _game.setScreen(_game.GetSettingsScreen());
+                Assets.PlaySound("menu_select");
+
+                _game.setScreen(_game.GetSettingsScreen());
             }
         });
 
-        _exitButton.addListener(new ChangeListener()
+        exitButton.addListener(new ChangeListener()
         {
             @Override
             public void changed(ChangeEvent event, Actor actor)
             {
+                Assets.PlaySound("menu_select");
+
                 Gdx.app.exit();
             }
         });
 
         if (Gdx.app.getType() != ApplicationType.Desktop)
-            _createServerButton.setDisabled(true);
+            createServerButton.setDisabled(true);
 
-        Assets.PlayMusic("bgm_03", true);
-        _game.GetStage().addAction(sequence(alpha(0), fadeIn(3)));
+        _uiGroup.addAction(sequence(alpha(0), fadeIn(1)));
+        _game.GetStage().addActor(_uiGroup);
     }
 
     @Override
     public void hide()
     {
+        _uiGroup.addAction(sequence(fadeOut(1), removeActor()));
         _backgroundImage.remove();
-        _buttonsTable.remove();
-        _feupLabel.remove();
     }
 
     @Override
