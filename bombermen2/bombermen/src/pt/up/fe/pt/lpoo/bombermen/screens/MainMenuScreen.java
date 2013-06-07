@@ -1,10 +1,12 @@
-package pt.up.fe.pt.lpoo.bombermen.screens;
+package pt.up.fe.lpoo.bombermen.screens;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
-import pt.up.fe.pt.lpoo.bombermen.Assets;
-import pt.up.fe.pt.lpoo.bombermen.Bombermen;
-import pt.up.fe.pt.lpoo.bombermen.Constants;
+import java.io.IOException;
+
+import pt.up.fe.lpoo.bombermen.Assets;
+import pt.up.fe.lpoo.bombermen.Bombermen;
+import pt.up.fe.lpoo.bombermen.Constants;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
