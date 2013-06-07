@@ -20,6 +20,7 @@ import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PING;
 import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_JOIN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE_DIR;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.pt.lpoo.utils.Ref;
@@ -245,6 +246,8 @@ public class BombermenServer implements Runnable
                 ClientHandler ch = _clients.get(guid);
                 for (Entity e : _entities.values())
                     ch.ClientSender.Send(e.GetSpawnMessage());
+                
+                ch.ClientSender.Send(new SMSG_JOIN(guid));
 
                 if (_clientListener != null) _clientListener.UpdateClient(guid);
             }

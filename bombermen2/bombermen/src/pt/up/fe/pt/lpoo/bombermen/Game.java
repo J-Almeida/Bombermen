@@ -11,6 +11,7 @@ import pt.up.fe.pt.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DEATH;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_JOIN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE_DIR;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
@@ -37,6 +38,14 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class Game implements Input.Commands, Disposable
 {
+    private int _playerGuid = -1;
+
+    public Player GetCurrentPlayer()
+    {
+        Entity e = GetEntity(_playerGuid);
+        return e == null ? null : e.ToPlayer();
+    }
+
     public Game(Stage stage)
     {
         _stage = stage;
@@ -147,8 +156,15 @@ public class Game implements Input.Commands, Disposable
             }
 
             @Override
+            protected void SMSG_JOIN_Handler(SMSG_JOIN msg)
+            {
+                _playerGuid = msg.Guid;
+            }
+
+            @Override
             protected void Default_Handler(Message msg)
             {
+
             }
         };
 

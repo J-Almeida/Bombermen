@@ -19,6 +19,7 @@ public abstract class Message implements Serializable
     public static final int SMSG_POWER_UP = 10;
     public static final int SMSG_MOVE_DIR = 11;
     public static final int SMSG_PLAYER_SPEED = 12;
+    public static final int SMSG_JOIN = 13;
 
     public final int Type;
 

@@ -3,6 +3,7 @@ package pt.up.fe.pt.lpoo.bombermen;
 import pt.up.fe.pt.lpoo.bombermen.messages.Message;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DEATH;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_DESTROY;
+import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_JOIN;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_MOVE_DIR;
 import pt.up.fe.pt.lpoo.bombermen.messages.SMSG_PING;
@@ -46,6 +47,9 @@ public abstract class MessageHandler
             case Message.SMSG_PLAYER_SPEED:
                 SMSG_PLAYER_SPEED_Handler((SMSG_PLAYER_SPEED) msg);
                 break;
+            case Message.SMSG_JOIN:
+                SMSG_JOIN_Handler((SMSG_JOIN) msg);
+                break;
             default:
                 Default_Handler(msg);
                 break;
@@ -69,6 +73,8 @@ public abstract class MessageHandler
     protected abstract void SMSG_MOVE_DIR_Handler(SMSG_MOVE_DIR msg);
 
     protected abstract void SMSG_PLAYER_SPEED_Handler(SMSG_PLAYER_SPEED msg);
+    
+    protected abstract void SMSG_JOIN_Handler(SMSG_JOIN msg);
 
     protected abstract void Default_Handler(Message msg);
 
