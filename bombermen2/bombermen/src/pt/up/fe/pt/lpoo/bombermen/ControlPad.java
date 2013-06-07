@@ -2,7 +2,6 @@ package pt.up.fe.pt.lpoo.bombermen;
 
 import pt.up.fe.pt.lpoo.utils.Direction;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
