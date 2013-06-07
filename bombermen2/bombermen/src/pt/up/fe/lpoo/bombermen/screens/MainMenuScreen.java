@@ -11,9 +11,9 @@ import pt.up.fe.lpoo.bombermen.Constants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -101,9 +101,31 @@ public class MainMenuScreen implements Screen
                     _game.setScreen(_game.GetSelectServerScreen());
             }
         });
-        
-        _game.GetStage().addAction(alpha(0));
-        _game.GetStage().addAction(fadeIn(5, Interpolation.bounce));
+
+        _createServerButton.addListener(new ChangeListener()
+        {
+            @Override
+            public void changed(ChangeEvent event, Actor actor)
+            {
+                try
+                {
+                    Process p = Runtime.getRuntime().exec("jva -classpath ..\\bombermen-server\\bin;..\\bombermen\\bin;..\\bombermen-server\\forms-1.3.0.jar pt.up.fe.lpoo.bombermen.gui.BombermenServerGui");
+                }
+                catch (IOException e)
+                {
+                    Dialog dialog = new Dialog("Error", _game.GetSkin());
+                    dialog.text("Could not launch server process.\nDetails printed to console.");
+                    dialog.button("Okay");
+                    dialog.pack();
+                    dialog.setPosition(800/2 - dialog.getWidth() / 2, 480/2 - dialog.getHeight() / 2);
+                    _game.GetStage().addActor(dialog);
+
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        _game.GetStage().addAction(sequence(alpha(0), fadeIn(3)));
     }
 
     @Override

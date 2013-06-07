@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.GL10;
 public class SelectServerScreen implements Screen
 {
     private Bombermen _game;
-    
+
     public SelectServerScreen(Bombermen game)
     {
         _game = game;

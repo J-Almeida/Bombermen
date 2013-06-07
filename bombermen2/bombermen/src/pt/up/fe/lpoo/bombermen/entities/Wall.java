@@ -12,7 +12,7 @@ public class Wall extends Entity
 {
     private static final float offsetWidth = (Constants.WALL_WIDTH - Constants.WALL_BOUNDING_WIDTH) / 2.f;
     private static final float offsetHeight = (Constants.WALL_HEIGHT - Constants.WALL_BOUNDING_HEIGHT) / 2.f;
-    
+
     @Override
     public Rectangle GetBoundingRectangle()
     {
