@@ -8,6 +8,8 @@ public final class Constants
     public static final int DEFAULT_WIDTH = 800;
     public static final int DEFAULT_HEIGHT = 480;
     public static final boolean USE_GL20 = true;
+    public static final int WINDOW_XMARGIN = 200;
+    public static final int MAP_MAX_LATERAL_SIZE = 47;
 
     // Control Pad
     public static final int DEFAULT_PAD_WIDTH = 200;
