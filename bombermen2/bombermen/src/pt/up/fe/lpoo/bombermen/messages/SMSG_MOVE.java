@@ -2,6 +2,8 @@ package pt.up.fe.lpoo.bombermen.messages;
 
 import java.io.Serializable;
 
+import pt.up.fe.lpoo.bombermen.ClientMessageHandler;
+
 import com.badlogic.gdx.math.Vector2;
 
 public class SMSG_MOVE extends Message implements Serializable
@@ -25,5 +27,11 @@ public class SMSG_MOVE extends Message implements Serializable
     public String toString()
     {
         return "[SMSG_MOVE - Guid: " + Guid + ", X: " + X + ", Y: " + Y + "]";
+    }
+
+    @Override
+    public void Handle(ClientMessageHandler cmh)
+    {
+        cmh.SMSG_MOVE_Handler(this);
     }
 }

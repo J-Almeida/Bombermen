@@ -66,6 +66,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
     {
         EventQueue.invokeLater(new Runnable()
         {
+            @Override
             public void run()
             {
                 try
@@ -111,6 +112,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
     {
         SwingUtilities.invokeLater(new Runnable()
         {
+            @Override
             public void run()
             {
                 txtConsoleOut.append(text);
@@ -149,7 +151,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
     private Thread ServerThread;
     private boolean ServerRunning = false;
     private Choice cmbBoxMap;
-    
+
     private static Color backgroundColor = new Color(240, 240, 240);
     private final JTextArea txtConsoleOut;
 
@@ -166,7 +168,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
 
     /**
      * Create the frame.
-     *
+     * 
      * @throws Exception
      */
     public BombermenServerGui() throws Exception
@@ -184,6 +186,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
         JMenuItem mntmExit = new JMenuItem("Exit");
         mntmExit.addActionListener(new ActionListener()
         {
+            @Override
             public void actionPerformed(ActionEvent arg0)
             {
                 System.exit(0);
@@ -244,12 +247,11 @@ public class BombermenServerGui extends JFrame implements ClientListener
 
         panel_1.add(spnPort);
 
-
-
         final JButton btnStop = new JButton("Stop Server");
         final JButton btnStart = new JButton("Start Server");
         btnStart.addActionListener(new ActionListener()
         {
+            @Override
             public void actionPerformed(ActionEvent arg0)
             {
                 txtConsoleOut.setText("");
@@ -293,14 +295,14 @@ public class BombermenServerGui extends JFrame implements ClientListener
                 }
                 catch (IOException e1)
                 {
-                   // e1.printStackTrace();
+                    // e1.printStackTrace();
                 }
             }
         });
-        
+
         cmbBoxMap = new Choice();
         cmbBoxMap.setSize(100, cmbBoxMap.getHeight());
-        
+
         // Directory path here
         String path = "maps";
 
@@ -319,12 +321,13 @@ public class BombermenServerGui extends JFrame implements ClientListener
                 }
             }
         }
-        
+
         panel_1.add(cmbBoxMap);
         panel_1.add(btnStart);
 
         btnStop.addActionListener(new ActionListener()
         {
+            @Override
             public void actionPerformed(ActionEvent arg0)
             {
                 Stop();
@@ -345,11 +348,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
 
         JPanel panel_2 = new JPanel();
         contentPane.add(panel_2, BorderLayout.CENTER);
-        panel_2.setLayout(new FormLayout(new ColumnSpec[] {
-                ColumnSpec.decode("0px:grow(3)"),
-                FormFactory.GLUE_COLSPEC,},
-            new RowSpec[] {
-                FormFactory.GLUE_ROWSPEC,}));
+        panel_2.setLayout(new FormLayout(new ColumnSpec[] { ColumnSpec.decode("0px:grow(3)"), FormFactory.GLUE_COLSPEC, }, new RowSpec[] { FormFactory.GLUE_ROWSPEC, }));
 
         JPanel panel_3 = new JPanel();
         panel_2.add(panel_3, "1, 1, fill, fill");
@@ -371,7 +370,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
     @Override
     public void AddClient(ClientHandler ch)
     {
-        lstClients.add(Integer.toString(ch.Guid) + " - " + ch.GetIp() + " - " + ch.GetPing() + " ms");
+        lstClients.add(Integer.toString(ch.Guid) + " - Ping: " + ch.GetIp() + " - " + ch.GetPing() + " ms");
     }
 
     @Override
@@ -383,8 +382,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
         int i;
         for (i = 0; i < items.length; ++i)
         {
-            if (items[i].startsWith(guidStr))
-                break;
+            if (items[i].startsWith(guidStr)) break;
         }
 
         lstClients.remove(i);
@@ -406,13 +404,12 @@ public class BombermenServerGui extends JFrame implements ClientListener
         int i;
         for (i = 0; i < items.length; ++i)
         {
-            if (items[i].startsWith(guidStr))
-                break;
+            if (items[i].startsWith(guidStr)) break;
         }
 
         lstClients.remove(i);
 
-        lstClients.add(guidStr + " - " + p.GetName() + " - " + ch.GetPing() + " ms", i);
+        lstClients.add(guidStr + " - " + p.GetName() + " - Score: " + p.GetScore() + " - Ping: " + ch.GetPing() + " ms", i);
 
     }
 

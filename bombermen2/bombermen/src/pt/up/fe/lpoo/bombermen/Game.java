@@ -11,12 +11,14 @@ import pt.up.fe.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.lpoo.bombermen.messages.Message;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_DEATH;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_DESTROY;
+import pt.up.fe.lpoo.bombermen.messages.SMSG_DISCONNECT;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_JOIN;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_MOVE;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_MOVE_DIR;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_PING;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_PLAYER_SPEED;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_POWER_UP;
+import pt.up.fe.lpoo.bombermen.messages.SMSG_SCORE;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_SPAWN_BOMB;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_SPAWN_EXPLOSION;
@@ -42,17 +44,17 @@ public class Game implements Input.Commands, Disposable
 
     private int _mapWidth = 0;
     private int _mapHeight = 0;
-    
+
     public int GetMapWidth()
     {
         return _mapWidth;
     }
-    
+
     public int GetMapHeight()
     {
         return _mapHeight;
     }
-    
+
     public Player GetCurrentPlayer()
     {
         Entity e = GetEntity(_playerGuid);
@@ -63,10 +65,10 @@ public class Game implements Input.Commands, Disposable
     {
         _stage = stage;
 
-        _messageHandler = new MessageHandler()
+        _messageHandler = new ClientMessageHandler()
         {
             @Override
-            protected void SMSG_MOVE_Handler(SMSG_MOVE msg)
+            public void SMSG_MOVE_Handler(SMSG_MOVE msg)
             {
                 System.out.println("Move Handler: " + msg);
                 Entity e = GetEntity(msg.Guid);
@@ -79,20 +81,20 @@ public class Game implements Input.Commands, Disposable
             }
 
             @Override
-            protected void SMSG_PING_Handler(SMSG_PING msg)
+            public void SMSG_PING_Handler(SMSG_PING msg)
             {
                 _sender.Send(new CMSG_PING());
             }
 
             @Override
-            protected void SMSG_SPAWN_Handler(SMSG_SPAWN msg)
+            public void SMSG_SPAWN_Handler(SMSG_SPAWN msg)
             {
                 switch (msg.EntityType)
                 {
                     case Entity.TYPE_PLAYER:
                     {
                         SMSG_SPAWN_PLAYER playerMsg = (SMSG_SPAWN_PLAYER) msg;
-                        AddEntity(EntityBuilder.CreatePlayer(msg.Guid, playerMsg.Name, playerMsg.X, playerMsg.Y));
+                        AddEntity(EntityBuilder.CreatePlayer(msg.Guid, playerMsg.Name, playerMsg.Score, playerMsg.X, playerMsg.Y));
                         break;
                     }
                     case Entity.TYPE_BOMB:
@@ -124,32 +126,32 @@ public class Game implements Input.Commands, Disposable
             }
 
             @Override
-            protected void SMSG_DESTROY_Handler(SMSG_DESTROY msg)
+            public void SMSG_DESTROY_Handler(SMSG_DESTROY msg)
             {
                 RemoveEntity(msg.Guid);
             }
 
             @Override
-            protected void SMSG_DEATH_Handler(SMSG_DEATH msg)
+            public void SMSG_DEATH_Handler(SMSG_DEATH msg)
             {
                 Assets.PlaySound("dying");
             }
 
             @Override
-            protected void SMSG_VICTORY_Handler(SMSG_VICTORY msg)
+            public void SMSG_VICTORY_Handler(SMSG_VICTORY msg)
             {
                 Assets.PlaySound("victory");
             }
 
             @Override
-            protected void SMSG_POWER_UP_Handler(SMSG_POWER_UP msg)
+            public void SMSG_POWER_UP_Handler(SMSG_POWER_UP msg)
             {
                 Assets.PlaySound("powerup");
                 // TODO: add this to UI
             }
 
             @Override
-            protected void SMSG_MOVE_DIR_Handler(SMSG_MOVE_DIR msg)
+            public void SMSG_MOVE_DIR_Handler(SMSG_MOVE_DIR msg)
             {
                 Entity e = GetEntity(msg.Guid);
                 if (e == null) return;
@@ -159,7 +161,8 @@ public class Game implements Input.Commands, Disposable
                 p.SetMoving(msg.Dir, msg.Val);
             }
 
-            protected void SMSG_PLAYER_SPEED_Handler(SMSG_PLAYER_SPEED msg)
+            @Override
+            public void SMSG_PLAYER_SPEED_Handler(SMSG_PLAYER_SPEED msg)
             {
                 Entity e = GetEntity(msg.Guid);
                 if (e == null) return;
@@ -169,7 +172,7 @@ public class Game implements Input.Commands, Disposable
             }
 
             @Override
-            protected void SMSG_JOIN_Handler(SMSG_JOIN msg)
+            public void SMSG_JOIN_Handler(SMSG_JOIN msg)
             {
                 _playerGuid = msg.Guid;
                 _mapWidth = msg.MapWidth;
@@ -177,8 +180,27 @@ public class Game implements Input.Commands, Disposable
             }
 
             @Override
-            protected void Default_Handler(Message msg)
+            public void Default_Handler(Message msg)
             {
+
+            }
+
+            @Override
+            public void SMSG_SCORE_Handler(SMSG_SCORE msg)
+            {
+                Entity e = GetEntity(msg.Guid);
+                if (e == null) return;
+                Player p = e.ToPlayer();
+                if (p == null) return;
+                p.SetScore(msg.Score);
+
+            }
+
+            @Override
+            public void SMSG_DISCONNECT_Handler(SMSG_DISCONNECT msg)
+            {
+                System.out.println("The server was shutdown.");
+                _stage.clear();
 
             }
         };
@@ -213,9 +235,8 @@ public class Game implements Input.Commands, Disposable
         _entities.clear();
         for (Actor a : _stage.getActors())
         {
-            if (!(a instanceof Entity))
-                continue;
-            _entities.add((Entity)a);
+            if (!(a instanceof Entity)) continue;
+            _entities.add((Entity) a);
         }
 
         return _entities;
@@ -225,11 +246,9 @@ public class Game implements Input.Commands, Disposable
     {
         for (Actor a : _stage.getActors())
         {
-            if (a instanceof Slider)
-                continue;
-            Entity e = (Entity)a;
-            if (e.GetGuid() == guid)
-                return e;
+            if (a instanceof Slider) continue;
+            Entity e = (Entity) a;
+            if (e.GetGuid() == guid) return e;
         }
 
         return null;
@@ -238,8 +257,7 @@ public class Game implements Input.Commands, Disposable
     public void RemoveEntity(int guid)
     {
         Entity e = GetEntity(guid);
-        if (e != null)
-            RemoveEntity(e);
+        if (e != null) RemoveEntity(e);
     }
 
     public void RemoveEntity(Entity entity)
@@ -256,7 +274,7 @@ public class Game implements Input.Commands, Disposable
     private Sender<Message> _sender;
     private Socket _socket;
     private Stage _stage;
-    private MessageHandler _messageHandler;
+    private ClientMessageHandler _messageHandler;
 
     @Override
     public void ExecuteAction(int action, boolean val)
@@ -287,10 +305,9 @@ public class Game implements Input.Commands, Disposable
         _socket.dispose();
     }
 
-    public void Update(/*int diff*/)
+    public void Update(/* int diff */)
     {
-        if (_receiver != null)
-            while (!_receiver.IsEmpty())
-                _messageHandler.HandleMessage(_receiver.Poll());
+        if (_receiver != null) while (!_receiver.IsEmpty())
+            _messageHandler.HandleMessage(_receiver.Poll());
     }
 }

@@ -32,6 +32,7 @@ public class Player extends Entity
     private int _maxBombs;
     private int _explosionRadius;
     private int _currentBombs;
+    private int _score;
     private boolean[] _moving = { false, false, false, false };
 
     private static final float offsetWidth = (Constants.PLAYER_WIDTH - Constants.PLAYER_BOUNDING_WIDTH) / 2.f;
@@ -39,7 +40,7 @@ public class Player extends Entity
 
     private Rectangle _boundingRectangle = new Rectangle(0, 0, Constants.PLAYER_BOUNDING_WIDTH, Constants.PLAYER_BOUNDING_HEIGHT);
 
-    public Player(int guid, String name, Vector2 pos, BombermenServer sv)
+    public Player(int guid, String name, Vector2 pos, int initScore, BombermenServer sv)
     {
         super(TYPE_PLAYER, guid, pos, sv);
         _name = name;
@@ -47,6 +48,18 @@ public class Player extends Entity
         _currentBombs = 0;
         _explosionRadius = Constants.INIT_BOMB_RADIUS;
         _maxBombs = Constants.INIT_NUM_MAX_BOMBS;
+        _score = initScore;
+    }
+
+    public int GetScore()
+    {
+        return _score;
+    }
+
+    public int ChangeScore(int amount)
+    {
+        _score += amount;
+        return _score;
     }
 
     public String GetName()
@@ -86,8 +99,7 @@ public class Player extends Entity
 
     public void UpdateExplosionRadius(int inc)
     {
-        if (_explosionRadius >= Integer.MAX_VALUE)
-            return;
+        if (_explosionRadius >= Integer.MAX_VALUE) return;
 
         _explosionRadius += inc;
     }
@@ -127,7 +139,7 @@ public class Player extends Entity
     @Override
     public SMSG_SPAWN GetSpawnMessage()
     {
-        return new SMSG_SPAWN_PLAYER(GetGuid(), GetName(), GetX(), GetY());
+        return new SMSG_SPAWN_PLAYER(GetGuid(), GetName(), GetScore(), GetX(), GetY());
     }
 
     private static final Vector2 size = new Vector2(Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
@@ -211,8 +223,7 @@ public class Player extends Entity
             }
         }
 
-
- }
+    }
 
     public void Kill()
     {

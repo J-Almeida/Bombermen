@@ -18,6 +18,7 @@ public class PowerUp extends Entity
         protected void CollidePlayer(PowerUp e1, Player p)
         {
             e1.HandlePowerUp(p);
+            e1._server.ChangePlayerScore(p.GetGuid(), Constants.POWER_UP_SCORE);
         }
     };
 

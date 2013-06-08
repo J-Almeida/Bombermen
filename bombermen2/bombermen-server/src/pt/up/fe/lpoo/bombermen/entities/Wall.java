@@ -27,8 +27,7 @@ public class Wall extends Entity
     private Rectangle _boundingRectangle = new Rectangle(0, 0, Constants.WALL_BOUNDING_WIDTH, Constants.WALL_BOUNDING_HEIGHT);
 
     private static CollisionHandler<Wall> cHandler = new CollisionHandler<Wall>()
-    {
-    };
+    {};
 
     private int _hp;
 
@@ -51,6 +50,11 @@ public class Wall extends Entity
             _hp -= val;
             if (_hp < 0) _hp = 0;
         }
+    }
+
+    public boolean IsAlive()
+    {
+        return IsUndestroyable() || _hp > 0;
     }
 
     @Override
@@ -76,8 +80,7 @@ public class Wall extends Entity
     @Override
     public void Update(int diff)
     {
-        if (!IsUndestroyable() && _hp == 0)
-            _server.RemoveEntityNextUpdate(GetGuid());
+        if (!IsUndestroyable() && _hp == 0) _server.RemoveEntityNextUpdate(GetGuid());
     }
 
     @Override
@@ -85,9 +88,7 @@ public class Wall extends Entity
     {
         if (MathUtils.random() < Constants.POWER_UP_SPAWN_CHANCE)
         {
-            PowerUp pu = new PowerUp(_server.IncLastId(),
-                    new Vector2(GetX() + 0.05f * Constants.WALL_WIDTH, GetY() + 0.05f * Constants.WALL_HEIGHT),
-                    MathUtils.random(0, Constants.NUMBER_OF_POWER_UP_TYPES - 1), _server);
+            PowerUp pu = new PowerUp(_server.IncLastId(), new Vector2(GetX() + 0.05f * Constants.WALL_WIDTH, GetY() + 0.05f * Constants.WALL_HEIGHT), MathUtils.random(0, Constants.NUMBER_OF_POWER_UP_TYPES - 1), _server);
 
             SMSG_SPAWN spawnMessage = pu.GetSpawnMessage();
 

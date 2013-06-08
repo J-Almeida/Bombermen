@@ -102,11 +102,10 @@ public class Bomb extends Entity
 
             CalculateRadiuses();
 
-            Vector2 pos = new Vector2(GetX() - (Constants.WALL_WIDTH  - Constants.BOMB_WIDTH),
-                    GetY() - (Constants.WALL_HEIGHT - Constants.BOMB_HEIGHT));
+            Vector2 pos = new Vector2(GetX() - (Constants.WALL_WIDTH - Constants.BOMB_WIDTH), GetY() - (Constants.WALL_HEIGHT - Constants.BOMB_HEIGHT));
 
             int id = _server.IncLastId();
-            Explosion exCenter = new Explosion(id, pos, Direction.NONE, false, _server);
+            Explosion exCenter = new Explosion(id, _creatorGuid, pos, Direction.NONE, false, _server);
             _server.CreateEntityNextUpdate(exCenter);
             _server.SendAll(exCenter.GetSpawnMessage());
 
@@ -116,17 +115,16 @@ public class Bomb extends Entity
                 {
                     id = _server.IncLastId();
 
-                    pos.x = Direction.ApplyMovementX(GetX() - (Constants.WALL_WIDTH  - Constants.BOMB_WIDTH),  d, i * Constants.EXPLOSION_WIDTH);
+                    pos.x = Direction.ApplyMovementX(GetX() - (Constants.WALL_WIDTH - Constants.BOMB_WIDTH), d, i * Constants.EXPLOSION_WIDTH);
                     pos.y = Direction.ApplyMovementY(GetY() - (Constants.WALL_HEIGHT - Constants.BOMB_HEIGHT), d, i * Constants.EXPLOSION_HEIGHT);
 
-                    Explosion ex = new Explosion(id, pos, d, i == _radius[d], _server);
+                    Explosion ex = new Explosion(id, _creatorGuid, pos, d, i == _radius[d], _server);
                     _server.CreateEntityNextUpdate(ex);
                     _server.SendAll(ex.GetSpawnMessage());
                 }
             }
 
-            if (_explodeHandler != null)
-                _explodeHandler.OnExplode();
+            if (_explodeHandler != null) _explodeHandler.OnExplode();
         }
     }
 
@@ -140,7 +138,7 @@ public class Bomb extends Entity
         {
             for (int i = 1; i <= _explosionRadius; ++i)
             {
-                r.x = Direction.ApplyMovementX(GetX() - (Constants.WALL_WIDTH  - Constants.BOMB_WIDTH),  d, i * Constants.EXPLOSION_WIDTH) + 2;  // Magic number 2 ->
+                r.x = Direction.ApplyMovementX(GetX() - (Constants.WALL_WIDTH - Constants.BOMB_WIDTH), d, i * Constants.EXPLOSION_WIDTH) + 2; // Magic number 2 ->
                 r.y = Direction.ApplyMovementY(GetY() - (Constants.WALL_HEIGHT - Constants.BOMB_HEIGHT), d, i * Constants.EXPLOSION_HEIGHT) + 2; // -> Bounding Box emulation
 
                 if (draw[d])
@@ -151,8 +149,7 @@ public class Bomb extends Entity
                         if (e.IsWall() && e.Collides(r))
                         {
                             Wall w = e.ToWall();
-                            if (w.IsUndestroyable())
-                                _radius[d]--;
+                            if (w.IsUndestroyable()) _radius[d]--;
                             draw[d] = false;
                             break;
                         }

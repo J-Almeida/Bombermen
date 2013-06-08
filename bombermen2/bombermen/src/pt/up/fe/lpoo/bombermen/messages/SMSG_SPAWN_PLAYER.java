@@ -7,11 +7,13 @@ public class SMSG_SPAWN_PLAYER extends SMSG_SPAWN
     private static final long serialVersionUID = 1L;
 
     public final String Name;
+    public final int Score;
 
-    public SMSG_SPAWN_PLAYER(int guid, String name, float x, float y)
+    public SMSG_SPAWN_PLAYER(int guid, String name, int score, float x, float y)
     {
         super(Entity.TYPE_PLAYER, guid, x, y);
         Name = name;
+        Score = score;
     }
 
     @Override

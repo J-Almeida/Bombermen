@@ -18,6 +18,17 @@ public class Player extends Entity
 
     private static final float offsetWidth = (Constants.PLAYER_WIDTH - Constants.PLAYER_BOUNDING_WIDTH) / 2.f;
     private static final float offsetHeight = (Constants.PLAYER_HEIGHT - Constants.PLAYER_BOUNDING_HEIGHT) / 2.f;
+    private int _score;
+
+    public void SetScore(int score)
+    {
+        _score = score;
+    }
+
+    public int GetScore()
+    {
+        return _score;
+    }
 
     @Override
     public Rectangle GetBoundingRectangle()
@@ -119,12 +130,13 @@ public class Player extends Entity
         super.setY(y);
     }
 
-    public Player(int guid, String name)
+    public Player(int guid, String name, int score)
     {
         super(Entity.TYPE_PLAYER, guid);
 
         _direction = Direction.SOUTH;
         setName(name);
+        _score = score;
 
         BoundRect.setWidth(Constants.PLAYER_BOUNDING_WIDTH);
         BoundRect.setHeight(Constants.PLAYER_BOUNDING_HEIGHT);
@@ -157,7 +169,9 @@ public class Player extends Entity
 
         batch.draw(Animations[_direction].getKeyFrame((m ? _stateTime : 0), true), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
 
-        font.draw(batch, getName(), getX() - Constants.PLAYER_WIDTH / 2f, getY() + Constants.PLAYER_HEIGHT * 3f / 2f);
+        String s = getName() + " (" + GetScore() + " pts)";
+
+        font.draw(batch, s, getX() - Constants.PLAYER_WIDTH / 2f - s.length(), getY() + Constants.PLAYER_HEIGHT * 3f / 2f);
 
     }
 }

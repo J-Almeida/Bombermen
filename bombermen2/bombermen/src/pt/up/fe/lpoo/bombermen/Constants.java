@@ -1,6 +1,5 @@
 package pt.up.fe.lpoo.bombermen;
 
-
 public final class Constants
 {
     // Window
@@ -62,6 +61,13 @@ public final class Constants
     public static final int POWER_UP_TYPE_SKULL = 5; // debuffs (bomberman.wikia.com/wiki/Skull)
     public static final int POWER_UP_TYPE_FULL_FIRE = 6; // biggest possible explosion radius
     public static final int NUMBER_OF_POWER_UP_TYPES = 7;
+
+    // Scores
+    public static final int PLAYER_KILL_SCORE = 10;
+    public static final int WALL_DESTROY_SCORE = 1;
+    public static final int POWER_UP_SCORE = Math.round((1 - POWER_UP_SPAWN_CHANCE) * 10);
+
+    public static final int INIT_PLAYER_SCORE = 0;
 
     private Constants()
     {

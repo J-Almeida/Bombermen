@@ -23,6 +23,7 @@ import pt.up.fe.lpoo.bombermen.messages.Message;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_DESTROY;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_JOIN;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_MOVE_DIR;
+import pt.up.fe.lpoo.bombermen.messages.SMSG_SCORE;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.lpoo.utils.Ref;
 
@@ -39,7 +40,7 @@ public class BombermenServer implements Runnable
     private HashMap<Integer, ClientHandler> _clients = new HashMap<Integer, ClientHandler>();
     private HashMap<Integer, Entity> _entities = new HashMap<Integer, Entity>();
     private int _numberOfClients = 0;
-    private MessageHandler _messageHandler;
+    private ServerMessageHandler _messageHandler;
     private boolean _running = true;
     private MapLoader _builder;
 
@@ -138,7 +139,8 @@ public class BombermenServer implements Runnable
 
                     if (e.IsPlayer())
                     {
-                        Player p = new Player(e.GetGuid(), e.ToPlayer().GetName(), GetNewPlayerPosition(), this);
+                        int score = e.ToPlayer().ChangeScore(-Constants.PLAYER_KILL_SCORE);
+                        Player p = new Player(e.GetGuid(), e.ToPlayer().GetName(), GetNewPlayerPosition(), score, this);
                         CreateEntityNextUpdate(p);
                         SendAll(p.GetSpawnMessage());
                     }
@@ -199,10 +201,10 @@ public class BombermenServer implements Runnable
         _mapName = mapName;
         System.out.println("Server created - " + InetAddress.getLocalHost().getHostAddress() + ":" + _socket.getLocalPort());
 
-        _messageHandler = new MessageHandler()
+        _messageHandler = new ServerMessageHandler()
         {
             @Override
-            protected void CMSG_MOVE_Handler(int guid, CMSG_MOVE msg)
+            public void CMSG_MOVE_Handler(int guid, CMSG_MOVE msg)
             {
                 Entity e = _entities.get(guid);
                 if (e == null) return;
@@ -216,7 +218,7 @@ public class BombermenServer implements Runnable
             }
 
             @Override
-            protected void CMSG_PLACE_BOMB_Handler(int guid, CMSG_PLACE_BOMB msg)
+            public void CMSG_PLACE_BOMB_Handler(int guid, CMSG_PLACE_BOMB msg)
             {
                 System.out.println("Place bomb message received from " + guid + " : " + msg);
 
@@ -263,19 +265,19 @@ public class BombermenServer implements Runnable
             }
 
             @Override
-            protected void Default_Handler(int guid, Message msg)
+            public void Default_Handler(int guid, Message msg)
             {
                 System.out.println("Unhandled message received from " + guid + " : " + msg);
             }
 
             @Override
-            protected void CMSG_JOIN_Handler(int guid, CMSG_JOIN msg)
+            public void CMSG_JOIN_Handler(int guid, CMSG_JOIN msg)
             {
                 if (_numberOfPlayers == _playersPositions.size()) return; // Send message informing that the server is full
-                
+
                 Vector2 pos = GetNewPlayerPosition();
 
-                Player p = new Player(guid, msg.Name, pos, BombermenServer.this);
+                Player p = new Player(guid, msg.Name, pos, Constants.INIT_PLAYER_SCORE, BombermenServer.this);
                 _entities.put(guid, p);
                 System.out.println("Player '" + msg.Name + "' (guid: " + guid + ") just joined.");
 
@@ -295,7 +297,7 @@ public class BombermenServer implements Runnable
             }
 
             @Override
-            protected void CMSG_PING_Handler(int guid, CMSG_PING msg)
+            public void CMSG_PING_Handler(int guid, CMSG_PING msg)
             {
                 ClientHandler ch = _clients.get(guid);
 
@@ -393,6 +395,9 @@ public class BombermenServer implements Runnable
     public void Stop()
     {
         _running = false;
+        for (ClientHandler ch : _clients.values())
+            ch.Stop();
+
         _clients.clear();
         try
         {
@@ -401,5 +406,16 @@ public class BombermenServer implements Runnable
         catch (IOException e)
         {
         }
+    }
+
+    public void ChangePlayerScore(int guid, int amount)
+    {
+        Entity e = _entities.get(guid);
+        if (e == null) return;
+        Player p = e.ToPlayer();
+        if (p == null) return;
+        int newScore = p.ChangeScore(amount);
+        if (_clientListener != null) _clientListener.UpdateClient(guid);
+        SendAll(new SMSG_SCORE(guid, newScore));
     }
 }

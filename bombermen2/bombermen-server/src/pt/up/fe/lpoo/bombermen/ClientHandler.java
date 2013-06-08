@@ -6,18 +6,16 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
-import pt.up.fe.lpoo.bombermen.Receiver;
-import pt.up.fe.lpoo.bombermen.Sender;
 import pt.up.fe.lpoo.bombermen.messages.Message;
+import pt.up.fe.lpoo.bombermen.messages.SMSG_DISCONNECT;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_PING;
 
 public class ClientHandler
 {
-    @Override
-    protected void finalize() throws Throwable
+    public void Stop()
     {
+        ClientSender.Send(new SMSG_DISCONNECT());
         ClientReceiver.Finish();
-        super.finalize();
     }
 
     public final int Guid;

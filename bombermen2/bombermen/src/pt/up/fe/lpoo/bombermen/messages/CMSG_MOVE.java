@@ -1,5 +1,7 @@
 package pt.up.fe.lpoo.bombermen.messages;
 
+import pt.up.fe.lpoo.bombermen.ServerMessageHandler;
+
 public class CMSG_MOVE extends Message
 {
     private static final long serialVersionUID = 1L;
@@ -19,5 +21,11 @@ public class CMSG_MOVE extends Message
     public String toString()
     {
         return "[CMSG_MOVE - Dir: " + Dir + ", Val: " + Val + "]";
+    }
+
+    @Override
+    public void Handle(int guid, ServerMessageHandler cmh)
+    {
+        cmh.CMSG_MOVE_Handler(guid, this);
     }
 }

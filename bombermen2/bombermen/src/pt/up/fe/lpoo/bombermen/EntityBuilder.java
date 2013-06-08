@@ -29,12 +29,11 @@ public class EntityBuilder
         return b;
     }
 
-    public static Player CreatePlayer(int guid, String name, float x, float y)
+    public static Player CreatePlayer(int guid, String name, int score, float x, float y)
     {
         Texture t = Assets.GetTexture("bomberman"); // 18 x 26
 
-        if (Player.Regions == null)
-            Player.Regions = TextureRegion.split(t, 18, 26);
+        if (Player.Regions == null) Player.Regions = TextureRegion.split(t, 18, 26);
 
         for (int d : Direction.Directions)
         {
@@ -57,12 +56,12 @@ public class EntityBuilder
                         break;
                 }
 
-                Player.Animations[d] = new Animation(1f / 5, Player.Regions[0][col], Player.Regions[0][col+1]);
+                Player.Animations[d] = new Animation(1f / 5, Player.Regions[0][col], Player.Regions[0][col + 1]);
             }
 
         }
 
-        Player p = new Player(guid, name);
+        Player p = new Player(guid, name, score);
         p.setBounds(x, y, Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
 
         return p;
@@ -72,8 +71,7 @@ public class EntityBuilder
     {
         Texture t = Assets.GetTexture("wall"); // 16 x 16
 
-        if (Wall.Regions == null)
-            Wall.Regions = TextureRegion.split(t, 16, 16);
+        if (Wall.Regions == null) Wall.Regions = TextureRegion.split(t, 16, 16);
 
         Wall w = new Wall(guid, hitPoints);
         w.setBounds(x, y, Constants.WALL_WIDTH, Constants.WALL_HEIGHT);
@@ -85,8 +83,7 @@ public class EntityBuilder
     {
         Texture t = Assets.GetTexture("powerup"); // 16 x 16
 
-        if (PowerUp.Regions == null)
-            PowerUp.Regions = TextureRegion.split(t, 16, 16);
+        if (PowerUp.Regions == null) PowerUp.Regions = TextureRegion.split(t, 16, 16);
 
         PowerUp pu = new PowerUp(guid, new Animation(0.5f, PowerUp.Regions[0][powerUpType], PowerUp.Regions[1][powerUpType]));
         pu.setBounds(x, y, Constants.POWER_UP_WIDTH, Constants.POWER_UP_HEIGHT);
@@ -98,8 +95,7 @@ public class EntityBuilder
     {
         Texture t = Assets.GetTexture("explosion"); // 16 x 16
 
-        if (Explosion.Regions == null)
-            Explosion.Regions = TextureRegion.split(t, 16, 16);
+        if (Explosion.Regions == null) Explosion.Regions = TextureRegion.split(t, 16, 16);
 
         Explosion e = new Explosion(guid, direction, end);
         e.setBounds(x, y, Constants.EXPLOSION_WIDTH, Constants.EXPLOSION_HEIGHT);

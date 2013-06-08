@@ -1,5 +1,7 @@
 package pt.up.fe.lpoo.bombermen.messages;
 
+import pt.up.fe.lpoo.bombermen.ClientMessageHandler;
+
 public abstract class SMSG_SPAWN extends Message
 {
     private static final long serialVersionUID = 1L;
@@ -20,4 +22,10 @@ public abstract class SMSG_SPAWN extends Message
 
     @Override
     public abstract String toString();
+
+    @Override
+    public void Handle(ClientMessageHandler cmh)
+    {
+        cmh.SMSG_SPAWN_Handler(this);
+    }
 }

@@ -12,14 +12,13 @@ import com.badlogic.gdx.math.Vector2;
 public class Explosion extends Entity
 {
     private int _timer = 0;
-
+    private int _creatorGuid;
     private static CollisionHandler<Explosion> cHandler = new CollisionHandler<Explosion>()
     {
         @Override
         protected void CollidePowerUp(Explosion e1, PowerUp p)
         {
-            if (!p.JustCreated())
-                p.Kill();
+            if (!p.JustCreated()) p.Kill();
         }
 
         @Override
@@ -32,20 +31,23 @@ public class Explosion extends Entity
         protected void CollidePlayer(Explosion e1, Player p)
         {
             p.Kill();
+            if (e1._creatorGuid != p.GetGuid()) e1._server.ChangePlayerScore(e1._creatorGuid, Constants.PLAYER_KILL_SCORE);
         }
 
         @Override
         protected void CollideWall(Explosion e1, Wall w)
         {
             w.DecHP(1);
+            if (!w.IsAlive()) e1._server.ChangePlayerScore(e1._creatorGuid, Constants.WALL_DESTROY_SCORE);
         }
     };
 
-    public Explosion(int guid, Vector2 pos, int dir, boolean end, BombermenServer sv)
+    public Explosion(int guid, int creatorGuid, Vector2 pos, int dir, boolean end, BombermenServer sv)
     {
         super(TYPE_EXPLOSION, guid, pos, sv);
         _direction = dir;
         _end = end;
+        _creatorGuid = creatorGuid;
     }
 
     private int _direction;
@@ -76,8 +78,7 @@ public class Explosion extends Entity
     {
         _timer += diff;
 
-        if (_timer >= 600)
-            _server.RemoveEntityNextUpdate(GetGuid());
+        if (_timer >= 600) _server.RemoveEntityNextUpdate(GetGuid());
     }
 
     @Override

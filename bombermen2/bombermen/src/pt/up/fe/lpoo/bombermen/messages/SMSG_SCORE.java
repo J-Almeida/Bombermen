@@ -2,29 +2,32 @@ package pt.up.fe.lpoo.bombermen.messages;
 
 import pt.up.fe.lpoo.bombermen.ClientMessageHandler;
 
-public class SMSG_PLAYER_SPEED extends Message
+public class SMSG_SCORE extends Message
 {
     private static final long serialVersionUID = 1L;
 
-    public final float Speed;
     public final int Guid;
+    public final int Score;
 
-    public SMSG_PLAYER_SPEED(int guid, float speed)
+    public SMSG_SCORE(int guid, int score)
     {
-        super(SMSG_PLAYER_SPEED);
+        super(SMSG_SCORE);
+
         Guid = guid;
-        Speed = speed;
+        Score = score;
     }
 
     @Override
     public String toString()
     {
-        return "[SMSG_PLAYER_SPEED - Speed : " + Speed + "]";
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public void Handle(ClientMessageHandler cmh)
     {
-        cmh.SMSG_PLAYER_SPEED_Handler(this);
+        cmh.SMSG_SCORE_Handler(this);
     }
+
 }
