@@ -125,6 +125,7 @@ public class SettingsScreen implements Screen
                 _game.setScreen(_game.GetMainMenu());
             }
         });
+        _uiGroup.addActor(b);
 
         Table soundTable = new Table(_game.GetSkin());
 
@@ -139,10 +140,7 @@ public class SettingsScreen implements Screen
         soundTable.row();
         soundTable.add("Keys:").right().padRight(10);
         soundTable.add(keysBox).left();
-
         soundTable.setPosition(150, 350);
-
-        _uiGroup.addActor(b);
         _uiGroup.addActor(soundTable);
 
         _uiGroup.addAction(sequence(alpha(0), fadeIn(1)));
