@@ -86,9 +86,7 @@ public class EntityBuilder
         Texture t = Assets.GetTexture("powerup"); // 16 x 16
 
         if (PowerUp.Regions == null)
-        {
             PowerUp.Regions = TextureRegion.split(t, 16, 16);
-        }
 
         PowerUp pu = new PowerUp(guid, new Animation(0.5f, PowerUp.Regions[0][powerUpType], PowerUp.Regions[1][powerUpType]));
         pu.setBounds(x, y, Constants.POWER_UP_WIDTH, Constants.POWER_UP_HEIGHT);

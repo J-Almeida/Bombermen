@@ -56,7 +56,7 @@ public class MainMenuScreen implements Screen
     public void show()
     {
         _uiGroup = new Group();
-        
+
         _backgroundImage = new Image(Assets.GetTexture("background"));
         _backgroundImage.setBounds(0, 0, _game.GetStage().getWidth(), _game.GetStage().getHeight());
         _backgroundImage.setTouchable(Touchable.disabled);
@@ -105,7 +105,7 @@ public class MainMenuScreen implements Screen
             public void changed(ChangeEvent event, Actor actor)
             {
                 Assets.PlaySound("menu_select");
-                
+
                 try
                 {
                     Runtime.getRuntime().exec("jva -classpath ..\\bombermen-server\\bin;..\\bombermen\\bin;..\\bombermen-server\\forms-1.3.0.jar pt.up.fe.lpoo.bombermen.gui.BombermenServerGui");

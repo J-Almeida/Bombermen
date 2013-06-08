@@ -41,10 +41,52 @@ public class Input implements InputProcessor
         _camera = camera;
     }
 
+    private static int ConvertKeycode(int keycode)
+    {
+        switch (Settings.Keys)
+        {
+            case Settings.KEYS_IJKL:
+            {
+                switch (keycode)
+                {
+                    case Keys.I:
+                        return Keys.W;
+                    case Keys.J:
+                        return Keys.A;
+                    case Keys.S:
+                        return Keys.K;
+                    case Keys.D:
+                        return Keys.L;
+                    default:
+                        return keycode;
+                }
+            }
+            case Settings.KEYS_ARROWS:
+            {
+                switch (keycode)
+                {
+                    case Keys.UP:
+                        return Keys.W;
+                    case Keys.LEFT:
+                        return Keys.A;
+                    case Keys.DOWN:
+                        return Keys.S;
+                    case Keys.RIGHT:
+                        return Keys.D;
+                    default:
+                        return keycode;
+                }
+            }
+            case Settings.KEYS_WASD:
+            default:
+                return keycode;
+        }
+    }
+
     @Override
     public boolean keyDown(int keycode)
     {
-        switch (keycode)
+        switch (ConvertKeycode(keycode))
         {
             case Keys.S:
                 _commands.ExecuteAction(A_DOWN, true);
@@ -76,7 +118,7 @@ public class Input implements InputProcessor
     @Override
     public boolean keyUp(int keycode)
     {
-        switch (keycode)
+        switch (ConvertKeycode(keycode))
         {
             case Keys.S:
                 _commands.ExecuteAction(A_DOWN, false);
@@ -153,27 +195,6 @@ public class Input implements InputProcessor
 
         if (_controlPad != null)
         {
-            /*if (button == Buttons.LEFT)
-            {
-                int dir = _controlPad.Click(_tempVector);
-
-                switch (dir)
-                {
-                    case Direction.NORTH:
-                        _commands.ExecuteAction(A_UP, false);
-                        return true;
-                    case Direction.SOUTH:
-                        _commands.ExecuteAction(A_DOWN, false);
-                        return true;
-                    case Direction.WEST:
-                        _commands.ExecuteAction(A_LEFT, false);
-                        return true;
-                    case Direction.EAST:
-                        _commands.ExecuteAction(A_RIGHT, false);
-                        return true;
-                }
-            }*/
-
             for (int i = 0; i < _activeActions.length; ++i)
             {
                 if (_activeActions[i])

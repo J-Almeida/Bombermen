@@ -24,6 +24,9 @@ public class Bombermen extends Game
     @Override
     public void create()
     {
+        Settings.Load();
+        Gdx.graphics.setDisplayMode(Constants.DEFAULT_WIDTH, Constants.DEFAULT_HEIGHT, Settings.Fullscreen);
+
         _stage = new Stage(Constants.DEFAULT_WIDTH, Constants.DEFAULT_HEIGHT, true);
         Gdx.input.setInputProcessor(_stage);
 
@@ -84,6 +87,8 @@ public class Bombermen extends Game
     {
         super.dispose();
         _stage.dispose();
+
+        Settings.Save();
     }
 
     public SelectServerScreen GetSelectServerScreen()
