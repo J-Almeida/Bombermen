@@ -43,13 +43,15 @@ public class BombermenServer implements Runnable
     private boolean _running = true;
     private MapLoader _builder;
 
+    private int _numberOfPlayers = 0;
+
     private String _mapName;
-    
+
     public String GetMapName()
     {
         return _mapName;
     }
-    
+
     private ArrayList<Entity> _entitiesToAdd = new ArrayList<Entity>();
     private HashSet<Integer> _entitiesToRemove = new HashSet<Integer>();
 
@@ -57,14 +59,21 @@ public class BombermenServer implements Runnable
 
     public void AddNewPlayerPosition(Vector2 v)
     {
-        _playersPositions.add(v);
+        _playersPositions.add(new Vector2(v.x * Constants.CELL_SIZE + 4, v.y * Constants.CELL_SIZE + 4));
     }
-    
+
+    private Vector2 GetNewPlayerPosition()
+    {
+        Vector2 result = _playersPositions.get(_nextPlayerPositionIndex++);
+        _nextPlayerPositionIndex %= _playersPositions.size();
+        return result;
+    }
+
     public void ShufflePlayerPositions()
     {
         Collections.shuffle(_playersPositions);
     }
-    
+
     public ClientHandler GetClient(int guid)
     {
         return _clients.get(guid);
@@ -113,7 +122,7 @@ public class BombermenServer implements Runnable
         synchronized (_entities)
         {
             for (Entity e : _entities.values())
-               e.Update(diff);
+                e.Update(diff);
 
             for (Entity e : _entitiesToAdd)
                 _entities.put(e.GetGuid(), e);
@@ -126,6 +135,14 @@ public class BombermenServer implements Runnable
                 if (_entitiesToRemove.contains(e.GetGuid()))
                 {
                     if (!e.IsExplosion()) SendAll(new SMSG_DESTROY(e.GetGuid()));
+
+                    if (e.IsPlayer())
+                    {
+                        Player p = new Player(e.GetGuid(), e.ToPlayer().GetName(), GetNewPlayerPosition(), this);
+                        CreateEntityNextUpdate(p);
+                        SendAll(p.GetSpawnMessage());
+                    }
+
                     e.OnDestroy(); // last chance to do anything
                     it.remove();
                 }
@@ -135,9 +152,7 @@ public class BombermenServer implements Runnable
 
             for (Entity e1 : _entities.values())
                 for (Entity e2 : _entities.values())
-                    if (e1.GetGuid() != e2.GetGuid())
-                        if (e1.Collides(e2))
-                            e1.OnCollision(e2);
+                    if (e1.GetGuid() != e2.GetGuid()) if (e1.Collides(e2)) e1.OnCollision(e2);
         }
 
         synchronized (_clients)
@@ -256,24 +271,17 @@ public class BombermenServer implements Runnable
             @Override
             protected void CMSG_JOIN_Handler(int guid, CMSG_JOIN msg)
             {
-                if (_nextPlayerPositionIndex == _playersPositions.size()) return;
+                if (_numberOfPlayers == _playersPositions.size()) return; // Send message informing that the server is full
                 
-                Vector2 pos = _playersPositions.get(_nextPlayerPositionIndex++);
-                _nextPlayerPositionIndex %= _playersPositions.size();
-                
-                pos.x *= Constants.CELL_SIZE;
-                pos.y *= Constants.CELL_SIZE;
-                pos.x += 4;
-                pos.y += 4;
-                
+                Vector2 pos = GetNewPlayerPosition();
+
                 Player p = new Player(guid, msg.Name, pos, BombermenServer.this);
                 _entities.put(guid, p);
                 System.out.println("Player '" + msg.Name + "' (guid: " + guid + ") just joined.");
 
                 SMSG_SPAWN msg1 = p.GetSpawnMessage();
                 for (ClientHandler ch : _clients.values())
-                    if (ch.Guid != guid)
-                        ch.ClientSender.Send(msg1);
+                    if (ch.Guid != guid) ch.ClientSender.Send(msg1);
 
                 ClientHandler ch = _clients.get(guid);
                 for (Entity e : _entities.values())
@@ -282,6 +290,8 @@ public class BombermenServer implements Runnable
                 ch.ClientSender.Send(new SMSG_JOIN(guid, _builder.GetMaxWidth(), _builder.GetMaxHeight()));
 
                 if (_clientListener != null) _clientListener.UpdateClient(guid);
+
+                _numberOfPlayers++;
             }
 
             @Override
@@ -377,8 +387,7 @@ public class BombermenServer implements Runnable
     public void SendTo(int guid, Message msg)
     {
         ClientHandler ch = _clients.get(guid);
-        if (ch != null)
-            ch.ClientSender.Send(msg);
+        if (ch != null) ch.ClientSender.Send(msg);
     }
 
     public void Stop()
