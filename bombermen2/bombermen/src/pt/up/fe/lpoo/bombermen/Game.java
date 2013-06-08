@@ -40,6 +40,19 @@ public class Game implements Input.Commands, Disposable
 {
     private int _playerGuid = -1;
 
+    private int _mapWidth = 0;
+    private int _mapHeight = 0;
+    
+    public int GetMapWidth()
+    {
+        return _mapWidth;
+    }
+    
+    public int GetMapHeight()
+    {
+        return _mapHeight;
+    }
+    
     public Player GetCurrentPlayer()
     {
         Entity e = GetEntity(_playerGuid);
@@ -159,6 +172,8 @@ public class Game implements Input.Commands, Disposable
             protected void SMSG_JOIN_Handler(SMSG_JOIN msg)
             {
                 _playerGuid = msg.Guid;
+                _mapWidth = msg.MapWidth;
+                _mapHeight = msg.MapHeight;
             }
 
             @Override

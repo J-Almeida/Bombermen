@@ -1,6 +1,7 @@
 package pt.up.fe.lpoo.bombermen.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Choice;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
@@ -10,6 +11,7 @@ import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -146,7 +148,8 @@ public class BombermenServerGui extends JFrame implements ClientListener
     private BombermenServer Server;
     private Thread ServerThread;
     private boolean ServerRunning = false;
-
+    private Choice cmbBoxMap;
+    
     private static Color backgroundColor = new Color(240, 240, 240);
     private final JTextArea txtConsoleOut;
 
@@ -249,11 +252,10 @@ public class BombermenServerGui extends JFrame implements ClientListener
         {
             public void actionPerformed(ActionEvent arg0)
             {
-                spnPort.setEnabled(false);
                 txtConsoleOut.setText("");
                 try
                 {
-                    Server = new BombermenServer(Integer.parseInt(spnPort.getValue().toString()));
+                    Server = new BombermenServer(Integer.parseInt(spnPort.getValue().toString()), cmbBoxMap.getSelectedItem());
                     Server.SetClientListener(BombermenServerGui.this);
                     ServerThread = new Thread(new Runnable()
                     {
@@ -285,6 +287,8 @@ public class BombermenServerGui extends JFrame implements ClientListener
                     ServerThread.start();
 
                     btnStart.setEnabled(false);
+                    cmbBoxMap.setEnabled(false);
+                    spnPort.setEnabled(false);
                     btnStop.setEnabled(true);
                 }
                 catch (IOException e1)
@@ -293,6 +297,30 @@ public class BombermenServerGui extends JFrame implements ClientListener
                 }
             }
         });
+        
+        cmbBoxMap = new Choice();
+        cmbBoxMap.setSize(100, cmbBoxMap.getHeight());
+        
+        // Directory path here
+        String path = "maps";
+
+        String files;
+        File folder = new File(path);
+        File[] listOfFiles = folder.listFiles();
+
+        for (int i = 0; i < listOfFiles.length; i++)
+        {
+            if (listOfFiles[i].isFile())
+            {
+                files = listOfFiles[i].getName();
+                if (files.endsWith(".bombmap"))
+                {
+                    cmbBoxMap.add(files.replace(".bombmap", ""));
+                }
+            }
+        }
+        
+        panel_1.add(cmbBoxMap);
         panel_1.add(btnStart);
 
         btnStop.addActionListener(new ActionListener()
@@ -303,6 +331,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
                 btnStart.setEnabled(true);
                 btnStop.setEnabled(false);
                 spnPort.setEnabled(true);
+                cmbBoxMap.setEnabled(true);
                 lstClients.removeAll();
             }
         });

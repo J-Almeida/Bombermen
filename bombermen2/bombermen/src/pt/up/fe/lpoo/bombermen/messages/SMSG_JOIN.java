@@ -5,18 +5,21 @@ public class SMSG_JOIN extends Message
     private static final long serialVersionUID = 1L;
 
     public final int Guid;
-
-    public SMSG_JOIN(int guid)
+    public final int MapWidth;
+    public final int MapHeight;
+    
+    public SMSG_JOIN(int guid, int mapWidth, int mapHeight)
     {
         super(SMSG_JOIN);
         Guid = guid;
+        MapWidth = mapWidth;
+        MapHeight = mapHeight;
     }
 
     @Override
     public String toString()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return "[SMSG_JOIN - Guid: " + Guid + " - MapWidth: " + MapWidth + " - MapHeight: " + MapHeight + "]";
     }
 
 }

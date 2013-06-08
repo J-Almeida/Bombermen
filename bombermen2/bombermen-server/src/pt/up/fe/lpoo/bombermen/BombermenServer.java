@@ -5,25 +5,23 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import pt.up.fe.lpoo.bombermen.Constants;
-import pt.up.fe.lpoo.bombermen.Entity;
-import pt.up.fe.lpoo.bombermen.MessageHandler;
 import pt.up.fe.lpoo.bombermen.entities.Bomb;
-import pt.up.fe.lpoo.bombermen.entities.Player;
 import pt.up.fe.lpoo.bombermen.entities.Bomb.ExplodeHandler;
+import pt.up.fe.lpoo.bombermen.entities.Player;
 import pt.up.fe.lpoo.bombermen.messages.CMSG_JOIN;
 import pt.up.fe.lpoo.bombermen.messages.CMSG_MOVE;
-import pt.up.fe.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.lpoo.bombermen.messages.CMSG_PING;
-import pt.up.fe.lpoo.bombermen.messages.SMSG_JOIN;
+import pt.up.fe.lpoo.bombermen.messages.CMSG_PLACE_BOMB;
 import pt.up.fe.lpoo.bombermen.messages.Message;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_DESTROY;
+import pt.up.fe.lpoo.bombermen.messages.SMSG_JOIN;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_MOVE_DIR;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_SPAWN;
 import pt.up.fe.lpoo.utils.Ref;
@@ -33,6 +31,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class BombermenServer implements Runnable
 {
+    private ArrayList<Vector2> _playersPositions = new ArrayList<Vector2>();
+    private int _nextPlayerPositionIndex = 0;
     private ClientListener _clientListener = null;
     private ServerSocket _socket = null;
     private int _lastId = 0;
@@ -41,12 +41,30 @@ public class BombermenServer implements Runnable
     private int _numberOfClients = 0;
     private MessageHandler _messageHandler;
     private boolean _running = true;
+    private MapLoader _builder;
 
+    private String _mapName;
+    
+    public String GetMapName()
+    {
+        return _mapName;
+    }
+    
     private ArrayList<Entity> _entitiesToAdd = new ArrayList<Entity>();
     private HashSet<Integer> _entitiesToRemove = new HashSet<Integer>();
 
     private Queue<ClientMessage> _messageQueue = new LinkedList<ClientMessage>();
 
+    public void AddNewPlayerPosition(Vector2 v)
+    {
+        _playersPositions.add(v);
+    }
+    
+    public void ShufflePlayerPositions()
+    {
+        Collections.shuffle(_playersPositions);
+    }
+    
     public ClientHandler GetClient(int guid)
     {
         return _clients.get(guid);
@@ -160,9 +178,10 @@ public class BombermenServer implements Runnable
 
     }
 
-    public BombermenServer(int port) throws IOException
+    public BombermenServer(int port, String mapName) throws IOException
     {
         _socket = new ServerSocket(port);
+        _mapName = mapName;
         System.out.println("Server created - " + InetAddress.getLocalHost().getHostAddress() + ":" + _socket.getLocalPort());
 
         _messageHandler = new MessageHandler()
@@ -237,7 +256,17 @@ public class BombermenServer implements Runnable
             @Override
             protected void CMSG_JOIN_Handler(int guid, CMSG_JOIN msg)
             {
-                Player p = new Player(guid, msg.Name, new Vector2(40, 40), BombermenServer.this);
+                if (_nextPlayerPositionIndex == _playersPositions.size()) return;
+                
+                Vector2 pos = _playersPositions.get(_nextPlayerPositionIndex++);
+                _nextPlayerPositionIndex %= _playersPositions.size();
+                
+                pos.x *= Constants.CELL_SIZE;
+                pos.y *= Constants.CELL_SIZE;
+                pos.x += 4;
+                pos.y += 4;
+                
+                Player p = new Player(guid, msg.Name, pos, BombermenServer.this);
                 _entities.put(guid, p);
                 System.out.println("Player '" + msg.Name + "' (guid: " + guid + ") just joined.");
 
@@ -250,7 +279,7 @@ public class BombermenServer implements Runnable
                 for (Entity e : _entities.values())
                     ch.ClientSender.Send(e.GetSpawnMessage());
 
-                ch.ClientSender.Send(new SMSG_JOIN(guid));
+                ch.ClientSender.Send(new SMSG_JOIN(guid, _builder.GetMaxWidth(), _builder.GetMaxHeight()));
 
                 if (_clientListener != null) _clientListener.UpdateClient(guid);
             }
@@ -265,12 +294,12 @@ public class BombermenServer implements Runnable
             }
         };
 
-        MapLoader builder = new MapLoader(this);
+        _builder = new MapLoader(this);
 
         Ref<Integer> width = new Ref<Integer>(0);
         Ref<Integer> height = new Ref<Integer>(0);
 
-        if (!builder.TryLoad(1, width, height))
+        if (!_builder.TryLoad(mapName, width, height))
         {
             System.out.println("Could not load map " + 0);
             return;
@@ -281,7 +310,7 @@ public class BombermenServer implements Runnable
 
     public static void main(String[] args) throws IOException
     {
-        BombermenServer sv = new BombermenServer(7777);
+        BombermenServer sv = new BombermenServer(7777, "map0");
 
         long millis = System.currentTimeMillis();
 

@@ -108,8 +108,6 @@ public class Bombermen2 implements ApplicationListener
         _stage.getCamera().translate(- Constants.WINDOW_XMARGIN, 0, 0);
     }
 
-    private static float offsetMaxX = Constants.MAP_MAX_LATERAL_SIZE * Constants.CELL_SIZE - Constants.DEFAULT_WIDTH + 2*Constants.WINDOW_XMARGIN;
-    private static float offsetMaxY = Constants.MAP_MAX_LATERAL_SIZE * Constants.CELL_SIZE - Constants.DEFAULT_HEIGHT;
     private static float offsetMinX = 0;
     private static float offsetMinY = 0;
 
@@ -134,7 +132,10 @@ public class Bombermen2 implements ApplicationListener
         {
             float camX = p.getX() - Constants.DEFAULT_WIDTH / 2f;
             float camY = p.getY() - Constants.DEFAULT_HEIGHT / 2f;
-
+            
+            float offsetMaxX = _game.GetMapWidth() * Constants.CELL_SIZE - Constants.DEFAULT_WIDTH + 2*Constants.WINDOW_XMARGIN;;
+            float offsetMaxY = _game.GetMapHeight() * Constants.CELL_SIZE - Constants.DEFAULT_HEIGHT;
+            
             if (camX > offsetMaxX)
                 camX = offsetMaxX;
             else if (camX < offsetMinX)

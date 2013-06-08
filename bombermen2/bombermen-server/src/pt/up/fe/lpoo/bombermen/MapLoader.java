@@ -17,18 +17,31 @@ public class MapLoader
 {
     protected BombermenServer _server;
 
+    private int _maxWidth = 0;
+    private int _maxHeight = 0;
+    
+    public int GetMaxWidth()
+    {
+        return _maxWidth;
+    }
+    
+    public int GetMaxHeight()
+    {
+        return _maxHeight;
+    }
+    
     public MapLoader(BombermenServer sv)
     {
         _server = sv;
     }
 
-    public boolean TryLoad(int number, Ref<Integer> width, Ref<Integer> height)
+    public boolean TryLoad(String mapName, Ref<Integer> width, Ref<Integer> height)
     {
         BufferedReader br = null;
 
         try
         {
-            br = new BufferedReader(new FileReader("maps/map" + number + ".txt"));
+            br = new BufferedReader(new FileReader("maps/" + mapName + ".bombmap"));
         }
         catch (FileNotFoundException e)
         {
@@ -57,9 +70,15 @@ public class MapLoader
             // really?
         }
 
+        _maxHeight = lines.size();
+        
         for (int y = 0; y < lines.size(); ++y)
         {
             char[] chars = lines.get(y).toCharArray();
+            
+            if (chars.length > _maxWidth)
+                _maxWidth = chars.length;
+            
             for (int x = 0; x < chars.length; ++x)
             {
                 switch (chars[x])
@@ -77,12 +96,14 @@ public class MapLoader
             }
         }
 
+        _server.ShufflePlayerPositions();
+        
         return true;
     }
 
     private void ReservePlayerSpace(int tileX, int tileY)
     {
-        // @TODO: Implement
+        _server.AddNewPlayerPosition(new Vector2(tileX, tileY));
     }
 
     private void AddWall(int hp, int tileX, int tileY)
