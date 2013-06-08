@@ -15,7 +15,7 @@ public class Main
         cfg.width = Constants.DEFAULT_WIDTH;
         cfg.height = Constants.DEFAULT_HEIGHT;
         cfg.resizable = true;
-        cfg.fullscreen = false; // todo: configurable
+        cfg.fullscreen = Settings.Fullscreen;
 
         new LwjglApplication(new Bombermen2(), cfg);
     }
