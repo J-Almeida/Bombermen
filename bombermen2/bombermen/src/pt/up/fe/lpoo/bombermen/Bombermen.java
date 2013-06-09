@@ -103,14 +103,14 @@ public class Bombermen extends Game
     {
         return _settingsScreen;
     }
-    
+
     public PlayScreen GetPlayScreen(String ip)
     {
         _playScreen.SetServerIPAddress(ip);
         // how to see if server exists? try catch?
-        
+
         return null;
-        
+
         // return _playScreen;
     }
 }

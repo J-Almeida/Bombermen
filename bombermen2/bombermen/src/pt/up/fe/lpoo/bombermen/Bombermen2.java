@@ -132,10 +132,10 @@ public class Bombermen2 implements ApplicationListener
         {
             float camX = p.getX() - Constants.DEFAULT_WIDTH / 2f;
             float camY = p.getY() - Constants.DEFAULT_HEIGHT / 2f;
-            
+
             float offsetMaxX = _game.GetMapWidth() * Constants.CELL_SIZE - Constants.DEFAULT_WIDTH + 2*Constants.WINDOW_XMARGIN;;
             float offsetMaxY = _game.GetMapHeight() * Constants.CELL_SIZE - Constants.DEFAULT_HEIGHT;
-            
+
             if (camX > offsetMaxX)
                 camX = offsetMaxX;
             else if (camX < offsetMinX)

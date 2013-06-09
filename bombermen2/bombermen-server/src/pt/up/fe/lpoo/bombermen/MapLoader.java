@@ -19,17 +19,17 @@ public class MapLoader
 
     private int _maxWidth = 0;
     private int _maxHeight = 0;
-    
+
     public int GetMaxWidth()
     {
         return _maxWidth;
     }
-    
+
     public int GetMaxHeight()
     {
         return _maxHeight;
     }
-    
+
     public MapLoader(BombermenServer sv)
     {
         _server = sv;
@@ -71,14 +71,14 @@ public class MapLoader
         }
 
         _maxHeight = lines.size();
-        
+
         for (int y = 0; y < lines.size(); ++y)
         {
             char[] chars = lines.get(y).toCharArray();
-            
+
             if (chars.length > _maxWidth)
                 _maxWidth = chars.length;
-            
+
             for (int x = 0; x < chars.length; ++x)
             {
                 switch (chars[x])
@@ -97,7 +97,7 @@ public class MapLoader
         }
 
         _server.ShufflePlayerPositions();
-        
+
         return true;
     }
 

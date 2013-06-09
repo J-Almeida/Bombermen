@@ -30,7 +30,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
 public class SelectServerScreen implements Screen
 {
@@ -44,7 +43,7 @@ public class SelectServerScreen implements Screen
     {
         _game = game;
     }
-    
+
     boolean changed = false;
 
     @Override
@@ -74,7 +73,7 @@ public class SelectServerScreen implements Screen
         _backgroundImage.setBounds(0, 0, _game.GetStage().getWidth(), _game.GetStage().getHeight());
         _backgroundImage.setTouchable(Touchable.disabled);
         _game.GetStage().addActor(_backgroundImage);
-        
+
         Button b = new Button(_game.GetSkin());
         b.add("Back");
         b.pack();
@@ -91,43 +90,43 @@ public class SelectServerScreen implements Screen
             }
         });
         _uiGroup.addActor(b);
-        
+
 
         final List serverNamesList = new List(new String[] { }, _game.GetSkin());
         serverNamesList.setPosition(150, 350);
         serverNamesList.pack();
         _uiGroup.addActor(serverNamesList);
-        
+
         final List ipsList = new List(new String[] { }, _game.GetSkin());
         ipsList.setPosition(330, 350 - ipsList.getHeight() / 2);
         ipsList.setSelection("");
         ipsList.setTouchable(Touchable.disabled);
         ipsList.pack();
         _uiGroup.addActor(ipsList);
-        
+
         final List playersList = new List(new String[] { }, _game.GetSkin());
         playersList.setPosition(550, 350);
         playersList.setSelection("");
         playersList.setTouchable(Touchable.disabled);
         playersList.pack();
         _uiGroup.addActor(playersList);
-        
+
         Label serverLabel = new Label("Server", _game.GetSkin());
         serverLabel.setPosition(150, 360);
         _uiGroup.addActor(serverLabel);
-        
+
         Label ipLabel = new Label("IP Address", _game.GetSkin());
         ipLabel.setPosition(330, 360);
         _uiGroup.addActor(ipLabel);
-        
+
         Label playersLabel = new Label("Players", _game.GetSkin());
         playersLabel.setPosition(550, 360);
         _uiGroup.addActor(playersLabel);
-        
+
         Label addIpLabel = new Label("Add IP:", _game.GetSkin());
         addIpLabel.setPosition(200, 100);
         _uiGroup.addActor(addIpLabel);
-        
+
         final TextField enterIpField = new TextField("", _game.GetSkin());
         final Button enterIpButton = new Button(_game.GetSkin());
 
@@ -145,11 +144,11 @@ public class SelectServerScreen implements Screen
             }
         });
         _uiGroup.addActor(enterIpField);
-        
+
         enterIpButton.add("Ok");
         enterIpButton.setPosition(260 + 180 + 5, 100);
         enterIpButton.pack();
-        
+
         enterIpField.addListener(new InputListener()
         {
             @Override
@@ -160,18 +159,18 @@ public class SelectServerScreen implements Screen
                     enterIpButton.toggle();
                     return true;
                 }
-                
+
                 return false;
             }
         });
-        
+
         enterIpButton.addListener(new ChangeListener()
         {
             @Override
             public void changed(ChangeEvent event, Actor actor)
             {
                 String ip = enterIpField.getText();
-                
+
                 if (!Pattern.matches("[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}:[0-9]{1,5}", ip))
                 {
                     Dialog d = new Dialog("Error", _game.GetSkin());
@@ -189,25 +188,25 @@ public class SelectServerScreen implements Screen
                 }
             }
         });
-        
+
         _uiGroup.addActor(enterIpButton);
 
         _uiGroup.addAction(sequence(alpha(0), fadeIn(1)));
         _game.GetStage().addActor(_uiGroup);
-        
+
         Button playButton = new Button(_game.GetSkin());
         playButton.add("Play!");
         playButton.pack();
         playButton.setPosition(500, 100);
         _uiGroup.addActor(playButton);
-        
+
         playButton.addListener(new ChangeListener()
         {
             @Override
             public void changed(ChangeEvent event, Actor actor)
             {
                 Assets.PlaySound("menu_select");
-                
+
                 int index = serverNamesList.getSelectedIndex();
                 String ip = ipsList.getItems()[index];
                 Screen s = _game.GetPlayScreen(ip);
@@ -253,12 +252,12 @@ public class SelectServerScreen implements Screen
     public void dispose()
     {
     }
-    
+
     private void GetServerNameAndPlayers(String ip, final List nameList, final List playerList)
     {
         String name = "unknown";
         String players = "X";
-        
+
         AddItem(nameList, name);
         AddItem(playerList, players);
     }
@@ -266,7 +265,7 @@ public class SelectServerScreen implements Screen
     private void AddItem(final List list, String newItem)
     {
         String[] currItems = list.getItems();
-        
+
         String[] newItems = new String[Math.min(7, currItems.length + 1)];
         for (int i = 0; i < newItems.length - 1; ++i)
             newItems[i + 1] = currItems[i];

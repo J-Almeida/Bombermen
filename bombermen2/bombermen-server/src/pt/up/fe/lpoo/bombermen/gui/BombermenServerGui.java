@@ -168,7 +168,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
 
     /**
      * Create the frame.
-     * 
+     *
      * @throws Exception
      */
     public BombermenServerGui() throws Exception

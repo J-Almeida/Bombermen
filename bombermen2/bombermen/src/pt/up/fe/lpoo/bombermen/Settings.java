@@ -39,7 +39,7 @@ public final class Settings
         MusicVolume = prefs.getFloat("music_volume", 0.5f);
         Fullscreen = prefs.getBoolean("fullscreen", false);
         Keys = prefs.getInteger("keys", KEYS_WASD);
-        
+
         SavedServers = new HashMap<String, String>();
         for (int i = 0; i < Constants.MAX_SERVERS_STORED; ++i)
         {
@@ -48,7 +48,7 @@ public final class Settings
                 SavedServers.put("server" + i, s);
         }
     }
-    
+
     public static void SaveServers(String[] ipAddresses)
     {
         for (int i = 0; i < ipAddresses.length && i < Constants.MAX_SERVERS_STORED; ++i)
