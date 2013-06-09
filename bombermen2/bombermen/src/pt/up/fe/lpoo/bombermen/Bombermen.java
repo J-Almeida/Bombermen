@@ -1,5 +1,10 @@
 package pt.up.fe.lpoo.bombermen;
 
+import pt.up.fe.lpoo.bombermen.screens.MainMenuScreen;
+import pt.up.fe.lpoo.bombermen.screens.PlayScreen;
+import pt.up.fe.lpoo.bombermen.screens.SelectServerScreen;
+import pt.up.fe.lpoo.bombermen.screens.SettingsScreen;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -8,11 +13,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
-import pt.up.fe.lpoo.bombermen.screens.MainMenuScreen;
-import pt.up.fe.lpoo.bombermen.screens.PlayScreen;
-import pt.up.fe.lpoo.bombermen.screens.SelectServerScreen;
-import pt.up.fe.lpoo.bombermen.screens.SettingsScreen;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class Bombermen extends Game
 {
@@ -107,10 +108,21 @@ public class Bombermen extends Game
     public PlayScreen GetPlayScreen(String ip)
     {
         _playScreen.SetServerIPAddress(ip);
-        // how to see if server exists? try catch?
 
-        return null;
+        int indexOfPortSeparator = ip.indexOf(':');
 
-        // return _playScreen;
+        String ipStr = ip.substring(0, indexOfPortSeparator);
+        int port = Integer.parseInt(ip.substring(indexOfPortSeparator + 1));
+
+        try
+        {
+            _playScreen = new PlayScreen(this).SetServerIPAddress(ipStr).SetServerPort(port);
+            _playScreen.Connect();
+            return _playScreen;
+        }
+        catch (GdxRuntimeException e)
+        {
+            return null;
+        }
     }
 }

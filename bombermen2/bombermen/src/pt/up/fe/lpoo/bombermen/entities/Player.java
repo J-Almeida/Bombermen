@@ -1,8 +1,8 @@
 package pt.up.fe.lpoo.bombermen.entities;
 
-import pt.up.fe.lpoo.bombermen.Bombermen2;
 import pt.up.fe.lpoo.bombermen.Constants;
 import pt.up.fe.lpoo.bombermen.Entity;
+import pt.up.fe.lpoo.bombermen.screens.PlayScreen;
 import pt.up.fe.lpoo.utils.Direction;
 
 import com.badlogic.gdx.graphics.Color;
@@ -58,7 +58,7 @@ public class Player extends Entity
 
         delta *= 1000;
 
-        Array<Entity> entities = Bombermen2._game.GetEntities();
+        Array<Entity> entities = PlayScreen._gameImpl.GetEntities();
 
         for (int i = 0; i < _moving.length; ++i)
         {

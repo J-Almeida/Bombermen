@@ -33,7 +33,6 @@ import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -65,146 +64,6 @@ public class Game implements Input.Commands, Disposable
     {
         _stage = stage;
 
-        _messageHandler = new ClientMessageHandler()
-        {
-            @Override
-            public void SMSG_MOVE_Handler(SMSG_MOVE msg)
-            {
-                System.out.println("Move Handler: " + msg);
-                Entity e = GetEntity(msg.Guid);
-                if (e == null) return;
-
-                e.setX(msg.X);
-                e.setY(msg.Y);
-
-                System.out.println("Move Handler: " + e);
-            }
-
-            @Override
-            public void SMSG_PING_Handler(SMSG_PING msg)
-            {
-                _sender.Send(new CMSG_PING());
-            }
-
-            @Override
-            public void SMSG_SPAWN_Handler(SMSG_SPAWN msg)
-            {
-                switch (msg.EntityType)
-                {
-                    case Entity.TYPE_PLAYER:
-                    {
-                        SMSG_SPAWN_PLAYER playerMsg = (SMSG_SPAWN_PLAYER) msg;
-                        AddEntity(EntityBuilder.CreatePlayer(msg.Guid, playerMsg.Name, playerMsg.Score, playerMsg.X, playerMsg.Y));
-                        break;
-                    }
-                    case Entity.TYPE_BOMB:
-                    {
-                        SMSG_SPAWN_BOMB bombMsg = (SMSG_SPAWN_BOMB) msg;
-                        AddEntity(EntityBuilder.CreateBomb(bombMsg.Guid, bombMsg.CreatorGuid, bombMsg.X, bombMsg.Y));
-                        Assets.PlaySound("bomb_place");
-                        break;
-                    }
-                    case Entity.TYPE_EXPLOSION:
-                    {
-                        SMSG_SPAWN_EXPLOSION exMsg = (SMSG_SPAWN_EXPLOSION) msg;
-                        AddEntity(EntityBuilder.CreateExplosion(exMsg.Guid, exMsg.X, exMsg.Y, exMsg.Direction, exMsg.End));
-                        break;
-                    }
-                    case Entity.TYPE_POWER_UP:
-                    {
-                        SMSG_SPAWN_POWER_UP puMsg = (SMSG_SPAWN_POWER_UP) msg;
-                        AddEntity(EntityBuilder.CreatePowerUp(puMsg.Guid, puMsg.X, puMsg.Y, puMsg.Type));
-                        break;
-                    }
-                    case Entity.TYPE_WALL:
-                    {
-                        SMSG_SPAWN_WALL wallMsg = (SMSG_SPAWN_WALL) msg;
-                        AddEntity(EntityBuilder.CreateWall(msg.Guid, wallMsg.HP, wallMsg.X, wallMsg.Y));
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void SMSG_DESTROY_Handler(SMSG_DESTROY msg)
-            {
-                RemoveEntity(msg.Guid);
-            }
-
-            @Override
-            public void SMSG_DEATH_Handler(SMSG_DEATH msg)
-            {
-                Assets.PlaySound("dying");
-            }
-
-            @Override
-            public void SMSG_VICTORY_Handler(SMSG_VICTORY msg)
-            {
-                Assets.PlaySound("victory");
-            }
-
-            @Override
-            public void SMSG_POWER_UP_Handler(SMSG_POWER_UP msg)
-            {
-                Assets.PlaySound("powerup");
-                // TODO: add this to UI
-            }
-
-            @Override
-            public void SMSG_MOVE_DIR_Handler(SMSG_MOVE_DIR msg)
-            {
-                Entity e = GetEntity(msg.Guid);
-                if (e == null) return;
-                Player p = e.ToPlayer();
-                if (p == null) return;
-
-                p.SetMoving(msg.Dir, msg.Val);
-            }
-
-            @Override
-            public void SMSG_PLAYER_SPEED_Handler(SMSG_PLAYER_SPEED msg)
-            {
-                Entity e = GetEntity(msg.Guid);
-                if (e == null) return;
-                Player p = e.ToPlayer();
-                if (p == null) return;
-                p.SetSpeed(msg.Speed);
-            }
-
-            @Override
-            public void SMSG_JOIN_Handler(SMSG_JOIN msg)
-            {
-                _playerGuid = msg.Guid;
-                _mapWidth = msg.MapWidth;
-                _mapHeight = msg.MapHeight;
-            }
-
-            @Override
-            public void Default_Handler(Message msg)
-            {
-
-            }
-
-            @Override
-            public void SMSG_SCORE_Handler(SMSG_SCORE msg)
-            {
-                Entity e = GetEntity(msg.Guid);
-                if (e == null) return;
-                Player p = e.ToPlayer();
-                if (p == null) return;
-                p.SetScore(msg.Score);
-
-            }
-
-            @Override
-            public void SMSG_DISCONNECT_Handler(SMSG_DISCONNECT msg)
-            {
-                System.out.println("The server was shutdown.");
-                _stage.clear();
-
-            }
-        };
-
         try
         {
             _socket = Gdx.net.newClientSocket(Protocol.TCP, InetAddress.getLocalHost().getHostAddress(), 7777, null);
@@ -221,6 +80,15 @@ public class Game implements Input.Commands, Disposable
         {
             e.printStackTrace();
         }
+    }
+
+    public Game(Stage stage, Socket s)
+    {
+        _stage = stage;
+        _socket = s;
+        _receiver = new Receiver<Message>(_socket);
+        _sender = new Sender<Message>(_socket);
+        _sender.Send(new CMSG_JOIN("Player 1"));
     }
 
     public void AddEntity(final Entity entity)
@@ -246,7 +114,7 @@ public class Game implements Input.Commands, Disposable
     {
         for (Actor a : _stage.getActors())
         {
-            if (a instanceof Slider) continue;
+            if (!(a instanceof Entity)) continue;
             Entity e = (Entity) a;
             if (e.GetGuid() == guid) return e;
         }
@@ -274,7 +142,145 @@ public class Game implements Input.Commands, Disposable
     private Sender<Message> _sender;
     private Socket _socket;
     private Stage _stage;
-    private ClientMessageHandler _messageHandler;
+    private ClientMessageHandler _messageHandler = new ClientMessageHandler()
+    {
+        @Override
+        public void SMSG_MOVE_Handler(SMSG_MOVE msg)
+        {
+            System.out.println("Move Handler: " + msg);
+            Entity e = GetEntity(msg.Guid);
+            if (e == null) return;
+
+            e.setX(msg.X);
+            e.setY(msg.Y);
+
+            System.out.println("Move Handler: " + e);
+        }
+
+        @Override
+        public void SMSG_PING_Handler(SMSG_PING msg)
+        {
+            _sender.Send(new CMSG_PING());
+        }
+
+        @Override
+        public void SMSG_SPAWN_Handler(SMSG_SPAWN msg)
+        {
+            switch (msg.EntityType)
+            {
+                case Entity.TYPE_PLAYER:
+                {
+                    SMSG_SPAWN_PLAYER playerMsg = (SMSG_SPAWN_PLAYER) msg;
+                    AddEntity(EntityBuilder.CreatePlayer(msg.Guid, playerMsg.Name, playerMsg.Score, playerMsg.X, playerMsg.Y));
+                    break;
+                }
+                case Entity.TYPE_BOMB:
+                {
+                    SMSG_SPAWN_BOMB bombMsg = (SMSG_SPAWN_BOMB) msg;
+                    AddEntity(EntityBuilder.CreateBomb(bombMsg.Guid, bombMsg.CreatorGuid, bombMsg.X, bombMsg.Y));
+                    Assets.PlaySound("bomb_place");
+                    break;
+                }
+                case Entity.TYPE_EXPLOSION:
+                {
+                    SMSG_SPAWN_EXPLOSION exMsg = (SMSG_SPAWN_EXPLOSION) msg;
+                    AddEntity(EntityBuilder.CreateExplosion(exMsg.Guid, exMsg.X, exMsg.Y, exMsg.Direction, exMsg.End));
+                    break;
+                }
+                case Entity.TYPE_POWER_UP:
+                {
+                    SMSG_SPAWN_POWER_UP puMsg = (SMSG_SPAWN_POWER_UP) msg;
+                    AddEntity(EntityBuilder.CreatePowerUp(puMsg.Guid, puMsg.X, puMsg.Y, puMsg.Type));
+                    break;
+                }
+                case Entity.TYPE_WALL:
+                {
+                    SMSG_SPAWN_WALL wallMsg = (SMSG_SPAWN_WALL) msg;
+                    AddEntity(EntityBuilder.CreateWall(msg.Guid, wallMsg.HP, wallMsg.X, wallMsg.Y));
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public void SMSG_DESTROY_Handler(SMSG_DESTROY msg)
+        {
+            RemoveEntity(msg.Guid);
+        }
+
+        @Override
+        public void SMSG_DEATH_Handler(SMSG_DEATH msg)
+        {
+            Assets.PlaySound("dying");
+        }
+
+        @Override
+        public void SMSG_VICTORY_Handler(SMSG_VICTORY msg)
+        {
+            Assets.PlaySound("victory");
+        }
+
+        @Override
+        public void SMSG_POWER_UP_Handler(SMSG_POWER_UP msg)
+        {
+            Assets.PlaySound("powerup");
+            // TODO: add this to UI
+        }
+
+        @Override
+        public void SMSG_MOVE_DIR_Handler(SMSG_MOVE_DIR msg)
+        {
+            Entity e = GetEntity(msg.Guid);
+            if (e == null) return;
+            Player p = e.ToPlayer();
+            if (p == null) return;
+
+            p.SetMoving(msg.Dir, msg.Val);
+        }
+
+        @Override
+        public void SMSG_PLAYER_SPEED_Handler(SMSG_PLAYER_SPEED msg)
+        {
+            Entity e = GetEntity(msg.Guid);
+            if (e == null) return;
+            Player p = e.ToPlayer();
+            if (p == null) return;
+            p.SetSpeed(msg.Speed);
+        }
+
+        @Override
+        public void SMSG_JOIN_Handler(SMSG_JOIN msg)
+        {
+            _playerGuid = msg.Guid;
+            _mapWidth = msg.MapWidth;
+            _mapHeight = msg.MapHeight;
+        }
+
+        @Override
+        public void Default_Handler(Message msg)
+        {
+
+        }
+
+        @Override
+        public void SMSG_SCORE_Handler(SMSG_SCORE msg)
+        {
+            Entity e = GetEntity(msg.Guid);
+            if (e == null) return;
+            Player p = e.ToPlayer();
+            if (p == null) return;
+            p.SetScore(msg.Score);
+
+        }
+
+        @Override
+        public void SMSG_DISCONNECT_Handler(SMSG_DISCONNECT msg)
+        {
+            System.out.println("The server was shutdown.");
+            _stage.clear();
+
+        }
+    };
 
     @Override
     public void ExecuteAction(int action, boolean val)
