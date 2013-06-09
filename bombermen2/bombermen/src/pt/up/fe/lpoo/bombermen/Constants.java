@@ -66,8 +66,10 @@ public final class Constants
     public static final int PLAYER_KILL_SCORE = 10;
     public static final int WALL_DESTROY_SCORE = 1;
     public static final int POWER_UP_SCORE = Math.round((1 - POWER_UP_SPAWN_CHANCE) * 10);
-
     public static final int INIT_PLAYER_SCORE = 0;
+    
+    // Screens
+    public static final int MAX_SERVERS_STORED = 7;
 
     private Constants()
     {

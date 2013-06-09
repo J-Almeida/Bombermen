@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import pt.up.fe.lpoo.bombermen.screens.MainMenuScreen;
+import pt.up.fe.lpoo.bombermen.screens.PlayScreen;
 import pt.up.fe.lpoo.bombermen.screens.SelectServerScreen;
 import pt.up.fe.lpoo.bombermen.screens.SettingsScreen;
 
@@ -20,6 +21,7 @@ public class Bombermen extends Game
     private MainMenuScreen _mainMenuScreen;
     private SelectServerScreen _selectServerScreen;
     private SettingsScreen _settingsScreen;
+    private PlayScreen _playScreen;
 
     @Override
     public void create()
@@ -64,6 +66,7 @@ public class Bombermen extends Game
         _mainMenuScreen = new MainMenuScreen(this);
         _selectServerScreen = new SelectServerScreen(this);
         _settingsScreen = new SettingsScreen(this);
+        _playScreen = new PlayScreen(this);
         setScreen(_mainMenuScreen);
     }
 
@@ -99,5 +102,15 @@ public class Bombermen extends Game
     public SettingsScreen GetSettingsScreen()
     {
         return _settingsScreen;
+    }
+    
+    public PlayScreen GetPlayScreen(String ip)
+    {
+        _playScreen.SetServerIPAddress(ip);
+        // how to see if server exists? try catch?
+        
+        return null;
+        
+        // return _playScreen;
     }
 }
