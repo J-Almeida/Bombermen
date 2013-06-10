@@ -105,10 +105,8 @@ public class Bombermen extends Game
         return _settingsScreen;
     }
 
-    public PlayScreen GetPlayScreen(String ip)
+    public PlayScreen GetPlayScreen(String ip, String playerName)
     {
-        _playScreen.SetServerIPAddress(ip);
-
         int indexOfPortSeparator = ip.indexOf(':');
 
         String ipStr = ip.substring(0, indexOfPortSeparator);
@@ -116,7 +114,9 @@ public class Bombermen extends Game
 
         try
         {
-            _playScreen = new PlayScreen(this).SetServerIPAddress(ipStr).SetServerPort(port);
+            _playScreen.SetServerIPAddress(ipStr);
+            _playScreen.SetServerPort(port);
+            _playScreen.SetPlayerName(playerName);
             _playScreen.Connect();
             return _playScreen;
         }

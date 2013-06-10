@@ -1,8 +1,5 @@
 package pt.up.fe.lpoo.bombermen;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import pt.up.fe.lpoo.bombermen.entities.Player;
 import pt.up.fe.lpoo.bombermen.messages.CMSG_JOIN;
 import pt.up.fe.lpoo.bombermen.messages.CMSG_MOVE;
@@ -28,14 +25,11 @@ import pt.up.fe.lpoo.bombermen.messages.SMSG_SPAWN_WALL;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_VICTORY;
 import pt.up.fe.lpoo.utils.Direction;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class Game implements Input.Commands, Disposable
 {
@@ -60,35 +54,13 @@ public class Game implements Input.Commands, Disposable
         return e == null ? null : e.ToPlayer();
     }
 
-    public Game(Stage stage)
-    {
-        _stage = stage;
-
-        try
-        {
-            _socket = Gdx.net.newClientSocket(Protocol.TCP, InetAddress.getLocalHost().getHostAddress(), 7777, null);
-
-            _receiver = new Receiver<Message>(_socket);
-            _sender = new Sender<Message>(_socket);
-            _sender.Send(new CMSG_JOIN("Player 1"));
-        }
-        catch (GdxRuntimeException GdxE)
-        {
-            GdxE.printStackTrace();
-        }
-        catch (UnknownHostException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    public Game(Stage stage, Socket s)
+    public Game(Stage stage, Socket s, String playerName)
     {
         _stage = stage;
         _socket = s;
         _receiver = new Receiver<Message>(_socket);
         _sender = new Sender<Message>(_socket);
-        _sender.Send(new CMSG_JOIN("Player 1"));
+        _sender.Send(new CMSG_JOIN(playerName));
     }
 
     public void AddEntity(final Entity entity)

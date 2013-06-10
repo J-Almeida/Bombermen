@@ -29,10 +29,10 @@ public class PlayScreen implements Screen
     private String _ip;
     private int _port;
     private Socket _socket;
-
     private Input _input;
     private ControlPad _controlPad;
     private FPSLogger _fpsLogger;
+    private String _name;
 
     public PlayScreen(Bombermen game)
     {
@@ -96,7 +96,7 @@ public class PlayScreen implements Screen
     @Override
     public void show()
     {
-        _gameImpl = new Game(_game.GetStage(), _socket);
+        _gameImpl = new Game(_game.GetStage(), _socket, _name);
 
         _fpsLogger = new FPSLogger();
 
@@ -165,16 +165,19 @@ public class PlayScreen implements Screen
     {
     }
 
-    public PlayScreen SetServerIPAddress(String ip)
+    public void SetServerIPAddress(String ip)
     {
         _ip = ip;
-        return this;
     }
 
-    public PlayScreen SetServerPort(int port)
+    public void SetServerPort(int port)
     {
         _port = port;
-        return this;
+    }
+    
+    public void SetPlayerName(String name)
+    {
+        _name = name;
     }
 
     public Socket Connect() throws GdxRuntimeException

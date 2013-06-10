@@ -1,6 +1,5 @@
 package pt.up.fe.lpoo.bombermen;
 
-import pt.up.fe.lpoo.bombermen.Bombermen2;
 import pt.up.fe.lpoo.bombermen.Constants;
 import android.os.Bundle;
 
@@ -20,6 +19,6 @@ public class MainActivity extends AndroidApplication
         cfg.useCompass = false;
         cfg.useWakelock = false;
 
-        initialize(new Bombermen2(), cfg);
+        initialize(new Bombermen(), cfg);
     }
 }

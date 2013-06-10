@@ -208,19 +208,44 @@ public class SelectServerScreen implements Screen
             public void changed(ChangeEvent event, Actor actor)
             {
                 Assets.PlaySound("menu_select");
-
-                int index = serverNamesList.getSelectedIndex();
-                String ip = ipsList.getItems()[index];
-                Screen s = _game.GetPlayScreen(ip);
-                if (s != null)
-                    _game.setScreen(s);
-                else
+                
+                final TextField playerNameField = new TextField("", skin);
+                
+                final Dialog d = new Dialog("Name", skin);
+                d.add(playerNameField);
+                d.add();
+                d.button("Ok");
+                d.show(_game.GetStage());
+                d.addListener(new ChangeListener()
                 {
-                    Dialog d = new Dialog("Error", skin);
-                    d.text("Could not connect to server " + serverNamesList.getSelection() + " (" + ip + ")");
-                    d.button("Ok").key(Keys.ENTER, null);
-                    d.show(_game.GetStage());
-                }
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor)
+                    {
+                        if (playerNameField.getText().length() == 0)
+                        {
+                            Dialog d2 = new Dialog("Error", skin);
+                            d2.text("Name cannot be empty.");
+                            d2.button("Ok").key(Keys.ENTER, null);
+                            d2.show(_game.GetStage());
+                            d.cancel();
+                        }
+                        else
+                        {
+                            int index = serverNamesList.getSelectedIndex();
+                            String ip = ipsList.getItems()[index];
+                            Screen s = _game.GetPlayScreen(ip, playerNameField.getText());
+                            if (s != null)
+                                _game.setScreen(s);
+                            else
+                            {
+                                Dialog d3 = new Dialog("Error", skin);
+                                d3.text("Could not connect to server " + serverNamesList.getSelection() + " (" + ip + ")");
+                                d3.button("Ok").key(Keys.ENTER, null);
+                                d3.show(_game.GetStage());
+                            }
+                        }
+                    }
+                });
             }
         });
 
