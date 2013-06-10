@@ -20,9 +20,6 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.net.Socket;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class PlayScreen implements Screen
@@ -102,21 +99,6 @@ public class PlayScreen implements Screen
         _gameImpl = new Game(_game.GetStage(), _socket);
 
         _fpsLogger = new FPSLogger();
-
-        Slider slider = new Slider(0, 1, 0.05f, false, _game.GetSkin());
-        slider.setBounds(-180, 400, 100, 100);
-        slider.setValue(Assets.GetSoundVolume());
-        slider.addListener(new ChangeListener()
-        {
-            @Override
-            public void changed(ChangeEvent event, Actor actor)
-            {
-                Assets.ChangeSoundVolume(((Slider) actor).getValue());
-                Assets.ChangeMusicVolume(((Slider) actor).getValue());
-            }
-        });
-
-        _game.GetStage().addActor(slider);
 
         _input = new Input(_gameImpl, _game.GetStage().getCamera());
 

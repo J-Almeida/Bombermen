@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -68,13 +69,14 @@ public class SelectServerScreen implements Screen
     {
         Settings.Load(); // saved server ipaddresses
         _uiGroup = new Group();
+        final Skin skin = _game.GetSkin();
 
         _backgroundImage = new Image(Assets.GetTexture("background"));
         _backgroundImage.setBounds(0, 0, _game.GetStage().getWidth(), _game.GetStage().getHeight());
         _backgroundImage.setTouchable(Touchable.disabled);
         _game.GetStage().addActor(_backgroundImage);
 
-        Button b = new Button(_game.GetSkin());
+        Button b = new Button(skin);
         b.add("Back");
         b.pack();
         b.setPosition(750, 10);
@@ -92,43 +94,43 @@ public class SelectServerScreen implements Screen
         _uiGroup.addActor(b);
 
 
-        final List serverNamesList = new List(new String[] { }, _game.GetSkin());
+        final List serverNamesList = new List(new String[] { }, skin);
         serverNamesList.setPosition(150, 350);
         serverNamesList.pack();
         _uiGroup.addActor(serverNamesList);
 
-        final List ipsList = new List(new String[] { }, _game.GetSkin());
+        final List ipsList = new List(new String[] { }, skin);
         ipsList.setPosition(330, 350 - ipsList.getHeight() / 2);
         ipsList.setSelection("");
         ipsList.setTouchable(Touchable.disabled);
         ipsList.pack();
         _uiGroup.addActor(ipsList);
 
-        final List playersList = new List(new String[] { }, _game.GetSkin());
+        final List playersList = new List(new String[] { }, skin);
         playersList.setPosition(550, 350);
         playersList.setSelection("");
         playersList.setTouchable(Touchable.disabled);
         playersList.pack();
         _uiGroup.addActor(playersList);
 
-        Label serverLabel = new Label("Server", _game.GetSkin());
+        Label serverLabel = new Label("Server", skin);
         serverLabel.setPosition(150, 360);
         _uiGroup.addActor(serverLabel);
 
-        Label ipLabel = new Label("IP Address", _game.GetSkin());
+        Label ipLabel = new Label("IP Address", skin);
         ipLabel.setPosition(330, 360);
         _uiGroup.addActor(ipLabel);
 
-        Label playersLabel = new Label("Players", _game.GetSkin());
+        Label playersLabel = new Label("Players", skin);
         playersLabel.setPosition(550, 360);
         _uiGroup.addActor(playersLabel);
 
-        Label addIpLabel = new Label("Add IP:", _game.GetSkin());
+        Label addIpLabel = new Label("Add IP:", skin);
         addIpLabel.setPosition(200, 100);
         _uiGroup.addActor(addIpLabel);
 
-        final TextField enterIpField = new TextField("", _game.GetSkin());
-        final Button enterIpButton = new Button(_game.GetSkin());
+        final TextField enterIpField = new TextField("", skin);
+        final Button enterIpButton = new Button(skin);
 
         enterIpField.setPosition(260, 98);
         enterIpField.setWidth(180);
@@ -173,7 +175,7 @@ public class SelectServerScreen implements Screen
 
                 if (!Pattern.matches("[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}:[0-9]{1,5}", ip))
                 {
-                    Dialog d = new Dialog("Error", _game.GetSkin());
+                    Dialog d = new Dialog("Error", skin);
                     d.text("Invalid IP Address specified.\nValid IP example: 127.0.0.1:7777");
                     d.button("Ok").key(Keys.ENTER, null);
                     d.show(_game.GetStage());
@@ -194,7 +196,7 @@ public class SelectServerScreen implements Screen
         _uiGroup.addAction(sequence(alpha(0), fadeIn(1)));
         _game.GetStage().addActor(_uiGroup);
 
-        Button playButton = new Button(_game.GetSkin());
+        Button playButton = new Button(skin);
         playButton.add("Play!");
         playButton.pack();
         playButton.setPosition(500, 100);
@@ -214,7 +216,7 @@ public class SelectServerScreen implements Screen
                     _game.setScreen(s);
                 else
                 {
-                    Dialog d = new Dialog("Error", _game.GetSkin());
+                    Dialog d = new Dialog("Error", skin);
                     d.text("Could not connect to server " + serverNamesList.getSelection() + " (" + ip + ")");
                     d.button("Ok").key(Keys.ENTER, null);
                     d.show(_game.GetStage());
