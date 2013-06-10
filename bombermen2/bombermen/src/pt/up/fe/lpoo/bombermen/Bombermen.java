@@ -15,15 +15,29 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
+/**
+ * Main class of our game, stores screens
+ */
 public class Bombermen extends Game
 {
+    /** The stage. */
     private Stage _stage;
 
+    /** The main menu screen. */
     private MainMenuScreen _mainMenuScreen;
+
+    /** The select server screen. */
     private SelectServerScreen _selectServerScreen;
+
+    /** The settings screen. */
     private SettingsScreen _settingsScreen;
+
+    /** The play screen. */
     private PlayScreen _playScreen;
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.ApplicationListener#create()
+     */
     @Override
     public void create()
     {
@@ -71,21 +85,39 @@ public class Bombermen extends Game
         setScreen(_mainMenuScreen);
     }
 
+    /**
+     * Gets the stage.
+     *
+     * @return the stage
+     */
     public Stage GetStage()
     {
         return _stage;
     }
 
+    /**
+     * Gets the skin.
+     *
+     * @return the skin
+     */
     public Skin GetSkin()
     {
         return Assets.GetSkin("uiskin");
     }
 
+    /**
+     * Gets the main menu.
+     *
+     * @return the main menu screen
+     */
     public MainMenuScreen GetMainMenu()
     {
         return _mainMenuScreen;
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Game#dispose()
+     */
     @Override
     public void dispose()
     {
@@ -95,16 +127,33 @@ public class Bombermen extends Game
         Settings.Save();
     }
 
+    /**
+     * Gets the select server screen.
+     *
+     * @return the select server screen
+     */
     public SelectServerScreen GetSelectServerScreen()
     {
         return _selectServerScreen;
     }
 
+    /**
+     * Gets the settings screen.
+     *
+     * @return the settings screen
+     */
     public SettingsScreen GetSettingsScreen()
     {
         return _settingsScreen;
     }
 
+    /**
+     * Gets the play screen.
+     *
+     * @param ip the ip with port
+     * @param playerName the player name
+     * @return the play screen
+     */
     public PlayScreen GetPlayScreen(String ip, String playerName)
     {
         int indexOfPortSeparator = ip.indexOf(':');

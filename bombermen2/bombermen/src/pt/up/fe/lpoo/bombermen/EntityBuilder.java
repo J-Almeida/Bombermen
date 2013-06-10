@@ -11,8 +11,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/**
+ * The Class EntityBuilder.
+ */
 public class EntityBuilder
 {
+    /**
+     * Creates the bomb.
+     *
+     * @param guid the guid
+     * @param creatorGuid the creator guid
+     * @param x the x
+     * @param y the y
+     * @return the bomb
+     */
     public static Bomb CreateBomb(int guid, int creatorGuid, float x, float y)
     {
         Texture t = Assets.GetTexture("bomb"); // 18 x 18
@@ -29,6 +41,16 @@ public class EntityBuilder
         return b;
     }
 
+    /**
+     * Creates the player.
+     *
+     * @param guid the guid
+     * @param name the name
+     * @param score the score
+     * @param x the x
+     * @param y the y
+     * @return the player
+     */
     public static Player CreatePlayer(int guid, String name, int score, float x, float y)
     {
         Texture t = Assets.GetTexture("bomberman"); // 18 x 26
@@ -67,6 +89,15 @@ public class EntityBuilder
         return p;
     }
 
+    /**
+     * Creates the wall.
+     *
+     * @param guid the guid
+     * @param hitPoints the hit points
+     * @param x the x
+     * @param y the y
+     * @return the wall
+     */
     public static Wall CreateWall(int guid, int hitPoints, float x, float y)
     {
         Texture t = Assets.GetTexture("wall"); // 16 x 16
@@ -79,6 +110,15 @@ public class EntityBuilder
         return w;
     }
 
+    /**
+     * Creates the power up.
+     *
+     * @param guid the guid
+     * @param x the x
+     * @param y the y
+     * @param powerUpType the power up type
+     * @return the power up
+     */
     public static PowerUp CreatePowerUp(int guid, float x, float y, int powerUpType)
     {
         Texture t = Assets.GetTexture("powerup"); // 16 x 16
@@ -91,6 +131,16 @@ public class EntityBuilder
         return pu;
     }
 
+    /**
+     * Creates the explosion.
+     *
+     * @param guid the guid
+     * @param x the x
+     * @param y the y
+     * @param direction the direction
+     * @param end the end
+     * @return the explosion
+     */
     public static Explosion CreateExplosion(int guid, float x, float y, int direction, boolean end)
     {
         Texture t = Assets.GetTexture("explosion"); // 16 x 16

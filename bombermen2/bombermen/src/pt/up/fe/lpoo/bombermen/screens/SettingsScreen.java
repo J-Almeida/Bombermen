@@ -20,19 +20,35 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+/**
+ * The Class SettingsScreen.
+ */
 public class SettingsScreen implements Screen
 {
+
+    /** The game. */
     private Bombermen _game;
 
     // Actors
+    /** The background image. */
     private Image _backgroundImage;
+
+    /** The ui group. */
     private Group _uiGroup;
 
+    /**
+     * Instantiates a new settings screen.
+     *
+     * @param game the game
+     */
     public SettingsScreen(Bombermen game)
     {
         _game = game;
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#render(float)
+     */
     @Override
     public void render(float delta)
     {
@@ -43,6 +59,9 @@ public class SettingsScreen implements Screen
         _game.GetStage().draw();
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#resize(int, int)
+     */
     @Override
     public void resize(int width, int height)
     {
@@ -50,6 +69,9 @@ public class SettingsScreen implements Screen
         _game.GetStage().getCamera().translate(-_game.GetStage().getGutterWidth(), -_game.GetStage().getGutterHeight(), 0);
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#show()
+     */
     @Override
     public void show()
     {
@@ -144,6 +166,9 @@ public class SettingsScreen implements Screen
         _game.GetStage().addActor(_uiGroup);
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#hide()
+     */
     @Override
     public void hide()
     {
@@ -151,16 +176,25 @@ public class SettingsScreen implements Screen
         _backgroundImage.remove();
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#pause()
+     */
     @Override
     public void pause()
     {
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#resume()
+     */
     @Override
     public void resume()
     {
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#dispose()
+     */
     @Override
     public void dispose()
     {

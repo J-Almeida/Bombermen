@@ -9,10 +9,19 @@ import pt.up.fe.lpoo.bombermen.messages.SMSG_SPAWN_EXPLOSION;
 
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * The Class Explosion.
+ */
 public class Explosion extends Entity
 {
+
+    /** The timer. */
     private int _timer = 0;
+
+    /** The creator guid. */
     private int _creatorGuid;
+
+    /** The c handler. */
     private static CollisionHandler<Explosion> cHandler = new CollisionHandler<Explosion>()
     {
         @Override
@@ -42,6 +51,16 @@ public class Explosion extends Entity
         }
     };
 
+    /**
+     * Instantiates a new explosion.
+     *
+     * @param guid the guid
+     * @param creatorGuid the creator guid
+     * @param pos the pos
+     * @param dir the dir
+     * @param end the end
+     * @param sv the sv
+     */
     public Explosion(int guid, int creatorGuid, Vector2 pos, int dir, boolean end, BombermenServer sv)
     {
         super(TYPE_EXPLOSION, guid, pos, sv);
@@ -50,29 +69,45 @@ public class Explosion extends Entity
         _creatorGuid = creatorGuid;
     }
 
+    /** The direction. */
     private int _direction;
+
+    /** The end. */
     private boolean _end;
 
+    /* (non-Javadoc)
+     * @see pt.up.fe.lpoo.bombermen.Entity#GetSpawnMessage()
+     */
     @Override
     public SMSG_SPAWN GetSpawnMessage()
     {
         return new SMSG_SPAWN_EXPLOSION(GetGuid(), GetX(), GetY(), _direction, _end);
     }
 
+    /** The Constant size. */
     private static final Vector2 size = new Vector2(Constants.EXPLOSION_WIDTH, Constants.EXPLOSION_HEIGHT);
 
+    /* (non-Javadoc)
+     * @see pt.up.fe.lpoo.bombermen.Entity#GetSize()
+     */
     @Override
     public Vector2 GetSize()
     {
         return size;
     }
 
+    /* (non-Javadoc)
+     * @see pt.up.fe.lpoo.bombermen.Entity#OnCollision(pt.up.fe.lpoo.bombermen.Entity)
+     */
     @Override
     public void OnCollision(Entity e)
     {
         cHandler.OnCollision(this, e);
     }
 
+    /* (non-Javadoc)
+     * @see pt.up.fe.lpoo.bombermen.Entity#Update(int)
+     */
     @Override
     public void Update(int diff)
     {
@@ -81,6 +116,9 @@ public class Explosion extends Entity
         if (_timer >= 600) _server.RemoveEntityNextUpdate(GetGuid());
     }
 
+    /* (non-Javadoc)
+     * @see pt.up.fe.lpoo.bombermen.Entity#OnDestroy()
+     */
     @Override
     public void OnDestroy()
     {

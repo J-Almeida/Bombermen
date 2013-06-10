@@ -13,23 +13,43 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
+/**
+ * The Class Player.
+ */
 public class Player extends Entity
 {
-
+    /** The Constant offsetWidth. */
     private static final float offsetWidth = (Constants.PLAYER_WIDTH - Constants.PLAYER_BOUNDING_WIDTH) / 2.f;
+
+    /** The Constant offsetHeight. */
     private static final float offsetHeight = (Constants.PLAYER_HEIGHT - Constants.PLAYER_BOUNDING_HEIGHT) / 2.f;
+
+    /** The score. */
     private int _score;
 
+    /**
+     * Sets the score.
+     *
+     * @param score the score
+     */
     public void SetScore(int score)
     {
         _score = score;
     }
 
+    /**
+     * Gets the score.
+     *
+     * @return the int
+     */
     public int GetScore()
     {
         return _score;
     }
 
+    /* (non-Javadoc)
+     * @see pt.up.fe.lpoo.bombermen.Entity#GetBoundingRectangle()
+     */
     @Override
     public Rectangle GetBoundingRectangle()
     {
@@ -39,17 +59,29 @@ public class Player extends Entity
         return rect;
     }
 
+    /** The Animations. */
     public static Animation[] Animations = { null, null, null, null };
 
+    /** The font to draw player name and score. */
     private static BitmapFont font = new BitmapFont();
 
+    /**
+     * Sets the moving.
+     *
+     * @param dir the dir
+     * @param val true if pressing key, false if releasing key
+     */
     public void SetMoving(int dir, boolean val)
     {
         _moving[dir] = val;
     }
 
+    /** The moving. */
     private boolean[] _moving = { false, false, false, false };
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.scenes.scene2d.Actor#act(float)
+     */
     @Override
     public void act(float delta)
     {
@@ -110,8 +142,12 @@ public class Player extends Entity
 
     }
 
+    /** The animation state time. */
     private float _stateTime;
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.scenes.scene2d.Actor#setX(float)
+     */
     @Override
     public void setX(float x)
     {
@@ -121,6 +157,9 @@ public class Player extends Entity
         super.setX(x);
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.scenes.scene2d.Actor#setY(float)
+     */
     @Override
     public void setY(float y)
     {
@@ -130,6 +169,13 @@ public class Player extends Entity
         super.setY(y);
     }
 
+    /**
+     * Instantiates a new player.
+     *
+     * @param guid the guid
+     * @param name the name
+     * @param score the score
+     */
     public Player(int guid, String name, int score)
     {
         super(Entity.TYPE_PLAYER, guid);
@@ -142,21 +188,38 @@ public class Player extends Entity
         BoundRect.setHeight(Constants.PLAYER_BOUNDING_HEIGHT);
     }
 
+    /** The speed. */
     private float _speed = Constants.INIT_PLAYER_SPEED;
 
+    /**
+     * Sets the speed.
+     *
+     * @param val the val
+     */
     public void SetSpeed(float val)
     {
         _speed = val;
     }
 
+    /**
+     * Gets the speed.
+     *
+     * @return the float
+     */
     public float GetSpeed()
     {
         return _speed;
     }
 
+    /** The direction. */
     private int _direction;
+
+    /** The texture regions. */
     public static TextureRegion Regions[][];
 
+    /* (non-Javadoc)
+     * @see pt.up.fe.lpoo.bombermen.Entity#draw(com.badlogic.gdx.graphics.g2d.SpriteBatch, float)
+     */
     @Override
     public void draw(SpriteBatch batch, float parentAlpha)
     {

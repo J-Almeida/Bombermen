@@ -30,39 +30,84 @@ import pt.up.fe.lpoo.utils.Ref;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Main class for the server
+ */
 public class BombermenServer implements Runnable
 {
+    /** The spawn players positions. */
     private ArrayList<Vector2> _playersPositions = new ArrayList<Vector2>();
+
+    /** The next spawn player position index. */
     private int _nextPlayerPositionIndex = 0;
+
+    /** The client listener. */
     private ClientListener _clientListener = null;
+
+    /** The socket. */
     private ServerSocket _socket = null;
+
+    /** The last guid. */
     private int _lastId = 0;
+
+    /** The clients. */
     private HashMap<Integer, ClientHandler> _clients = new HashMap<Integer, ClientHandler>();
+
+    /** The entities. */
     private HashMap<Integer, Entity> _entities = new HashMap<Integer, Entity>();
+
+    /** The number of clients. */
     private int _numberOfClients = 0;
+
+    /** The message handler. */
     private ServerMessageHandler _messageHandler;
+
+    /** True if running. */
     private boolean _running = true;
+
+    /** The map builder. */
     private MapLoader _builder;
 
+    /** The number of players. */
     private int _numberOfPlayers = 0;
 
+    /** The map name. */
     private String _mapName;
 
+    /**
+     * Gets the map name.
+     *
+     * @return the string
+     */
     public String GetMapName()
     {
         return _mapName;
     }
 
+    /** The entities to add next update. */
     private ArrayList<Entity> _entitiesToAdd = new ArrayList<Entity>();
+
+    /** The entities to remove next update. */
     private HashSet<Integer> _entitiesToRemove = new HashSet<Integer>();
 
+    /** The message queue. */
     private Queue<ClientMessage> _messageQueue = new LinkedList<ClientMessage>();
 
+    /**
+     * Adds the new player position.
+     *
+     * @param v the v
+     */
     public void AddNewPlayerPosition(Vector2 v)
     {
         _playersPositions.add(new Vector2(v.x * Constants.CELL_SIZE + 4, v.y * Constants.CELL_SIZE + 4));
     }
 
+    /**
+     * Gets the new player position.
+     *
+     * @return the vector2
+     */
     private Vector2 GetNewPlayerPosition()
     {
         Vector2 result = _playersPositions.get(_nextPlayerPositionIndex++);
@@ -70,46 +115,91 @@ public class BombermenServer implements Runnable
         return result;
     }
 
+    /**
+     * Shuffle player positions.
+     */
     public void ShufflePlayerPositions()
     {
         Collections.shuffle(_playersPositions);
     }
 
+    /**
+     * Gets the client.
+     *
+     * @param guid the guid
+     * @return the client handler
+     */
     public ClientHandler GetClient(int guid)
     {
         return _clients.get(guid);
     }
 
+    /**
+     * Sets the client listener.
+     *
+     * @param cl the cl
+     */
     public void SetClientListener(ClientListener cl)
     {
         _clientListener = cl;
     }
 
+    /**
+     * Gets the entities.
+     *
+     * @return the hash map
+     */
     public HashMap<Integer, Entity> GetEntities()
     {
         return _entities;
     }
 
+    /**
+     * Removes the entity next update.
+     *
+     * @param guid the guid
+     */
     public void RemoveEntityNextUpdate(int guid)
     {
         _entitiesToRemove.add(guid);
     }
 
+    /**
+     * Creates the entity next update.
+     *
+     * @param e the e
+     */
     public void CreateEntityNextUpdate(Entity e)
     {
         _entitiesToAdd.add(e);
     }
 
+    /**
+     * Inc last id.
+     *
+     * @return the int
+     */
     public int IncLastId() // returns previous id
     {
         return _lastId++;
     }
 
+    /**
+     * Push message.
+     *
+     * @param guid the guid
+     * @param msg the msg
+     */
     public void PushMessage(int guid, Message msg)
     {
         _messageQueue.add(new ClientMessage(guid, msg));
     }
 
+    /**
+     * Update.
+     *
+     * @param diff the diff
+     */
     public void Update(int diff)
     {
         synchronized (_messageQueue)
@@ -195,6 +285,13 @@ public class BombermenServer implements Runnable
 
     }
 
+    /**
+     * Instantiates a new bombermen server.
+     *
+     * @param port the port
+     * @param mapName the map name
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public BombermenServer(int port, String mapName) throws IOException
     {
         _socket = new ServerSocket(port);
@@ -320,6 +417,12 @@ public class BombermenServer implements Runnable
         new Thread(this).start();
     }
 
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static void main(String[] args) throws IOException
     {
         BombermenServer sv = new BombermenServer(7777, "map0");
@@ -344,6 +447,9 @@ public class BombermenServer implements Runnable
         }
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Runnable#run()
+     */
     @Override
     public void run()
     {
@@ -379,18 +485,32 @@ public class BombermenServer implements Runnable
         } while (_running);
     }
 
+    /**
+     * Send all.
+     *
+     * @param msg the msg
+     */
     public void SendAll(Message msg)
     {
         for (ClientHandler ch : _clients.values())
             ch.ClientSender.Send(msg);
     }
 
+    /**
+     * Send to.
+     *
+     * @param guid the guid
+     * @param msg the msg
+     */
     public void SendTo(int guid, Message msg)
     {
         ClientHandler ch = _clients.get(guid);
         if (ch != null) ch.ClientSender.Send(msg);
     }
 
+    /**
+     * Stop.
+     */
     public void Stop()
     {
         _running = false;
@@ -407,6 +527,12 @@ public class BombermenServer implements Runnable
         }
     }
 
+    /**
+     * Change player score.
+     *
+     * @param guid the guid
+     * @param amount the amount
+     */
     public void ChangePlayerScore(int guid, int amount)
     {
         Entity e = _entities.get(guid);

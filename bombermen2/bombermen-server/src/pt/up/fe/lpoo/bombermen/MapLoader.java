@@ -13,28 +13,58 @@ import pt.up.fe.lpoo.utils.Ref;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * The Class MapLoader.
+ */
 public class MapLoader
 {
+    /** The server. */
     protected BombermenServer _server;
 
+    /** The max width. */
     private int _maxWidth = 0;
+
+    /** The max height. */
     private int _maxHeight = 0;
 
+    /**
+     * Gets the max width.
+     *
+     * @return the int
+     */
     public int GetMaxWidth()
     {
         return _maxWidth;
     }
 
+    /**
+     * Gets the max height.
+     *
+     * @return the int
+     */
     public int GetMaxHeight()
     {
         return _maxHeight;
     }
 
+    /**
+     * Instantiates a new map loader.
+     *
+     * @param sv the sv
+     */
     public MapLoader(BombermenServer sv)
     {
         _server = sv;
     }
 
+    /**
+     * Try load.
+     *
+     * @param mapName the map name
+     * @param width the width
+     * @param height the height
+     * @return true, if successful
+     */
     public boolean TryLoad(String mapName, Ref<Integer> width, Ref<Integer> height)
     {
         BufferedReader br = null;
@@ -100,11 +130,24 @@ public class MapLoader
         return true;
     }
 
+    /**
+     * Reserve player space.
+     *
+     * @param tileX the tile x
+     * @param tileY the tile y
+     */
     private void ReservePlayerSpace(int tileX, int tileY)
     {
         _server.AddNewPlayerPosition(new Vector2(tileX, tileY));
     }
 
+    /**
+     * Adds the wall.
+     *
+     * @param hp the hp
+     * @param tileX the tile x
+     * @param tileY the tile y
+     */
     private void AddWall(int hp, int tileX, int tileY)
     {
         int id = _server.IncLastId();

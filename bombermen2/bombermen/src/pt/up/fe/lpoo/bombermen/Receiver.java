@@ -9,13 +9,31 @@ import java.util.Queue;
 
 import com.badlogic.gdx.net.Socket;
 
+/**
+ * The Class Receiver.
+ *
+ * @param <T> the generic type
+ */
 public class Receiver<T> implements Runnable
 {
+
+    /** The socket. */
     private Socket _socket;
+
+    /** The done. */
     protected boolean _done;
+
+    /** The thread. */
     private Thread _thread;
+
+    /** The message queue. */
     private Queue<T> _messageQueue = new LinkedList<T>();
 
+    /**
+     * Instantiates a new receiver.
+     *
+     * @param socket the socket
+     */
     public Receiver(Socket socket)
     {
         _socket = socket;
@@ -26,11 +44,17 @@ public class Receiver<T> implements Runnable
         _thread.start();
     }
 
+    /**
+     * Finish.
+     */
     void Finish()
     {
         _done = true;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Runnable#run()
+     */
     @Override
     public void run()
     {
@@ -78,6 +102,11 @@ public class Receiver<T> implements Runnable
 
     }
 
+    /**
+     * Poll.
+     *
+     * @return the t
+     */
     public T Poll()
     {
         synchronized (_messageQueue)
@@ -88,6 +117,11 @@ public class Receiver<T> implements Runnable
         }
     }
 
+    /**
+     * Checks if is empty.
+     *
+     * @return true, if successful
+     */
     public boolean IsEmpty()
     {
         synchronized (_messageQueue)

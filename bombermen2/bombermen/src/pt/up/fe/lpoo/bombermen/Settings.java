@@ -6,18 +6,38 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
+/**
+ * The Class Settings.
+ */
 public final class Settings
 {
+    /** The Constant KEYS_WASD. */
     public static final int KEYS_WASD = 0;
+
+    /** The Constant KEYS_IJKL. */
     public static final int KEYS_IJKL = 1;
+
+    /** The Constant KEYS_ARROWS. */
     public static final int KEYS_ARROWS = 2;
 
+    /** The Sound volume. */
     public static float SoundVolume;
+
+    /** The Music volume. */
     public static float MusicVolume;
+
+    /** True if fullscreen. */
     public static boolean Fullscreen;
+
+    /** The Keys. */
     public static int Keys;
+
+    /** The Saved servers. */
     public static Map<String, String> SavedServers;
 
+    /**
+     * Save settings to file.
+     */
     public static void Save()
     {
         Preferences prefs = Gdx.app.getPreferences("bombermen_settings");
@@ -31,6 +51,9 @@ public final class Settings
         prefs.flush();
     }
 
+    /**
+     * Load settings from file.
+     */
     public static void Load()
     {
         Preferences prefs = Gdx.app.getPreferences("bombermen_settings");
@@ -48,6 +71,11 @@ public final class Settings
         }
     }
 
+    /**
+     * Save servers.
+     *
+     * @param ipAddresses the ip addresses
+     */
     public static void SaveServers(String[] ipAddresses)
     {
         for (int i = 0; i < ipAddresses.length && i < Constants.MAX_SERVERS_STORED; ++i)
@@ -55,6 +83,9 @@ public final class Settings
         Save();
     }
 
+    /**
+     * Private constructor.
+     */
     private Settings()
     {
     }

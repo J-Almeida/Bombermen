@@ -8,14 +8,26 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/**
+ * The Class PowerUp.
+ */
 public class PowerUp extends Entity
 {
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.scenes.scene2d.Actor#act(float)
+     */
     @Override
     public void act(float delta)
     {
         _stateTime += delta;
     }
 
+    /**
+     * Instantiates a new power up.
+     *
+     * @param guid the guid
+     * @param anim the animation
+     */
     public PowerUp(int guid, Animation anim)
     {
         super(Entity.TYPE_POWER_UP, guid);
@@ -27,10 +39,18 @@ public class PowerUp extends Entity
         BoundRect.setHeight(Constants.POWER_UP_HEIGHT);
     }
 
+    /** The state time. */
     private float _stateTime;
-    public static TextureRegion Regions[][];
-    public Animation _animation = null;
 
+    /** The texture regions. */
+    public static TextureRegion Regions[][];
+
+    /** The animation. */
+    private Animation _animation = null;
+
+    /* (non-Javadoc)
+     * @see pt.up.fe.lpoo.bombermen.Entity#draw(com.badlogic.gdx.graphics.g2d.SpriteBatch, float)
+     */
     @Override
     public void draw(SpriteBatch batch, float parentAlpha)
     {

@@ -10,37 +10,74 @@ import pt.up.fe.lpoo.bombermen.messages.Message;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_DISCONNECT;
 import pt.up.fe.lpoo.bombermen.messages.SMSG_PING;
 
+/**
+ * The Class ClientHandler.
+ */
 public class ClientHandler
 {
+
+    /**
+     * Stop the handler.
+     */
     public void Stop()
     {
         ClientSender.Send(new SMSG_DISCONNECT());
         ClientReceiver.Finish();
     }
 
+    /** The Guid. */
     public final int Guid;
+
+    /** The socket. */
     private Socket _socket;
+
+    /** The server. */
     private final BombermenServer _server;
+
+    /** Sstill connected. */
     private boolean _stillConnected = true;
+
+    /** The timer. */
     private int _timer = 0;
 
+    /** The time ping sent. */
     private long _timePingSent;
+
+    /** The ping. */
     private long _ping = 0;
 
+    /**
+     * Gets the ip.
+     *
+     * @return the string
+     */
     public String GetIp()
     {
         return _socket.getInetAddress().getHostAddress();
     }
 
+    /** The Client sender. */
     public final Sender<Message> ClientSender;
 
+    /**
+     * The Class ServerReceiver.
+     */
     public class ServerReceiver extends Receiver<Message>
     {
+
+        /**
+         * Instantiates a new server receiver.
+         *
+         * @param socket the socket
+         */
         public ServerReceiver(Socket socket)
         {
             super(socket);
         }
 
+        /* (non-Javadoc)
+         * @see pt.up.fe.lpoo.bombermen.Receiver#run()
+         */
         @Override
         public void run()
         {
@@ -83,8 +120,16 @@ public class ClientHandler
 
     };
 
+    /** The Client receiver. */
     public final Receiver<Message> ClientReceiver;
 
+    /**
+     * Instantiates a new client handler.
+     *
+     * @param guid the guid
+     * @param socket the socket
+     * @param server the server
+     */
     public ClientHandler(int guid, Socket socket, BombermenServer server)
     {
         Guid = guid;
@@ -94,27 +139,48 @@ public class ClientHandler
         ClientReceiver = new ServerReceiver(_socket);
     }
 
+    /**
+     * Checks if is still connected.
+     *
+     * @return true, if successful
+     */
     public boolean IsStillConnected()
     {
         return _stillConnected;
     }
 
+    /**
+     * Gets the ping.
+     *
+     * @return the long
+     */
     public long GetPing()
     {
         return _ping;
     }
 
+    /**
+     * On ping sent.
+     */
     public void OnPingSent()
     {
         _timePingSent = System.currentTimeMillis();
     }
 
+    /**
+     * On ping received.
+     */
     public void OnPingReceived()
     {
         _ping = System.currentTimeMillis() - _timePingSent;
         _ping /= 2;
     }
 
+    /**
+     * Update.
+     *
+     * @param diff the diff
+     */
     public void Update(int diff)
     {
         _timer += diff;

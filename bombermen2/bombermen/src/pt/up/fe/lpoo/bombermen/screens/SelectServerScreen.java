@@ -32,21 +32,38 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+/**
+ * The Class SelectServerScreen.
+ */
 public class SelectServerScreen implements Screen
 {
+
+    /** The game. */
     private Bombermen _game;
 
     // Actors
+    /** The background image. */
     private Image _backgroundImage;
+
+    /** The ui group. */
     private Group _uiGroup;
 
+    /**
+     * Instantiates a new select server screen.
+     *
+     * @param game the game
+     */
     public SelectServerScreen(Bombermen game)
     {
         _game = game;
     }
 
+    /** The changed. */
     boolean changed = false;
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#render(float)
+     */
     @Override
     public void render(float delta)
     {
@@ -57,6 +74,9 @@ public class SelectServerScreen implements Screen
         _game.GetStage().draw();
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#resize(int, int)
+     */
     @Override
     public void resize(int width, int height)
     {
@@ -64,6 +84,9 @@ public class SelectServerScreen implements Screen
         _game.GetStage().getCamera().translate(-_game.GetStage().getGutterWidth(), -_game.GetStage().getGutterHeight(), 0);
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#show()
+     */
     @Override
     public void show()
     {
@@ -256,6 +279,9 @@ public class SelectServerScreen implements Screen
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#hide()
+     */
     @Override
     public void hide()
     {
@@ -263,21 +289,37 @@ public class SelectServerScreen implements Screen
         _backgroundImage.remove();
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#pause()
+     */
     @Override
     public void pause()
     {
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#resume()
+     */
     @Override
     public void resume()
     {
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#dispose()
+     */
     @Override
     public void dispose()
     {
     }
 
+    /**
+     * Gets the server name and players.
+     *
+     * @param ip the ip
+     * @param nameList the name list
+     * @param playerList the player list
+     */
     private void GetServerNameAndPlayers(String ip, final List nameList, final List playerList)
     {
         String name = "unknown";
@@ -287,6 +329,12 @@ public class SelectServerScreen implements Screen
         AddItem(playerList, players);
     }
 
+    /**
+     * Adds the item.
+     *
+     * @param list the list
+     * @param newItem the new item
+     */
     private void AddItem(final List list, String newItem)
     {
         String[] currItems = list.getItems();

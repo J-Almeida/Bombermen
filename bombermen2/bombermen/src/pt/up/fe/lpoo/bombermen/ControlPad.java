@@ -8,14 +8,29 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 
+/**
+ * ControlPad for Android
+ */
 public class ControlPad implements Disposable
 {
+    /** The Constant PLACE_BOMB. */
     public static final int PLACE_BOMB = 4;
+
+    /** The pad texture. */
     private Texture _padTexture;
+
+    /** The bomb button texture. */
     private Texture _bombButtonTexture;
+
+    /** The pad sprite. */
     private Sprite _padSprite;
+
+    /** The bomb button sprite. */
     private Sprite _bombButtonSprite;
 
+    /**
+     * Instantiates a new control pad.
+     */
     public ControlPad()
     {
         _padTexture = Assets.GetTexture("dpad");
@@ -30,16 +45,32 @@ public class ControlPad implements Disposable
         _bombButtonSprite.setPosition(Constants.DEFAULT_WIDTH - _bombButtonTexture.getWidth(), 0);
     }
 
+    /**
+     * Gets the width.
+     *
+     * @return the float
+     */
     public float GetWidth()
     {
         return _padSprite.getWidth();
     }
 
+    /**
+     * Gets the height.
+     *
+     * @return the float
+     */
     public float GetHeight()
     {
         return _padSprite.getHeight();
     }
 
+    /**
+     * Sets the size.
+     *
+     * @param width the width
+     * @param height the height
+     */
     public void SetSize(float width, float height)
     {
         _padSprite.setSize(width, height);
@@ -47,11 +78,23 @@ public class ControlPad implements Disposable
         _bombButtonSprite.setPosition(Constants.DEFAULT_WIDTH - _bombButtonSprite.getWidth(), 0);
     }
 
+    /**
+     * Change size.
+     *
+     * @param dW the d w
+     * @param dH the d h
+     */
     public void ChangeSize(float dW, float dH)
     {
         SetSize(_padSprite.getWidth() + dW, _padSprite.getHeight() + dH);
     }
 
+    /**
+     * Click.
+     *
+     * @param pos the pos
+     * @return the int
+     */
     public int Click(Vector3 pos)
     {
         if (_padSprite.getBoundingRectangle().contains(pos.x, pos.y))
@@ -75,12 +118,20 @@ public class ControlPad implements Disposable
         return Direction.NONE;
     }
 
+    /**
+     * Draw.
+     *
+     * @param spriteBatch the sprite batch
+     */
     public void draw(SpriteBatch spriteBatch)
     {
         _padSprite.draw(spriteBatch);
         _bombButtonSprite.draw(spriteBatch);
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.utils.Disposable#dispose()
+     */
     @Override
     public void dispose()
     {

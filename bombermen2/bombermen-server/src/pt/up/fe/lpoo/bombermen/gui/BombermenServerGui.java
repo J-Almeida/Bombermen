@@ -46,8 +46,15 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
+/**
+ * The Class BombermenServerGui.
+ */
 public class BombermenServerGui extends JFrame implements ClientListener
 {
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#finalize()
+     */
     @Override
     protected void finalize() throws Throwable
     {
@@ -55,12 +62,16 @@ public class BombermenServerGui extends JFrame implements ClientListener
         super.finalize();
     }
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
+    /** The content pane. */
     private JPanel contentPane;
 
     /**
      * Launch the application.
+     *
+     * @param args the arguments
      */
     public static void main(String[] args)
     {
@@ -82,6 +93,12 @@ public class BombermenServerGui extends JFrame implements ClientListener
         });
     }
 
+    /**
+     * Gets the ip.
+     *
+     * @return the ip
+     * @throws Exception the exception
+     */
     public static String getIp() throws Exception
     {
         URL whatismyip = new URL("http://checkip.amazonaws.com");
@@ -108,6 +125,11 @@ public class BombermenServerGui extends JFrame implements ClientListener
         }
     }
 
+    /**
+     * Update text area.
+     *
+     * @param text the text
+     */
     private void updateTextArea(final String text)
     {
         SwingUtilities.invokeLater(new Runnable()
@@ -120,6 +142,9 @@ public class BombermenServerGui extends JFrame implements ClientListener
         });
     }
 
+    /**
+     * Redirect system streams.
+     */
     private void redirectSystemStreams()
     {
         OutputStream out = new OutputStream()
@@ -147,16 +172,30 @@ public class BombermenServerGui extends JFrame implements ClientListener
         System.setErr(new PrintStream(out, true));
     }
 
+    /** The Server. */
     private BombermenServer Server;
+
+    /** The Server thread. */
     private Thread ServerThread;
+
+    /** The Server running. */
     private boolean ServerRunning = false;
+
+    /** The cmb box map. */
     private Choice cmbBoxMap;
 
+    /** The background color. */
     private static Color backgroundColor = new Color(240, 240, 240);
+
+    /** The txt console out. */
     private final JTextArea txtConsoleOut;
 
+    /** The lst clients. */
     private final List lstClients;
 
+    /**
+     * Stop.
+     */
     private void Stop()
     {
         Server.Stop();
@@ -169,7 +208,7 @@ public class BombermenServerGui extends JFrame implements ClientListener
     /**
      * Create the frame.
      *
-     * @throws Exception
+     * @throws Exception the exception
      */
     public BombermenServerGui() throws Exception
     {
@@ -367,12 +406,18 @@ public class BombermenServerGui extends JFrame implements ClientListener
         redirectSystemStreams();
     }
 
+    /* (non-Javadoc)
+     * @see pt.up.fe.lpoo.bombermen.ClientListener#AddClient(pt.up.fe.lpoo.bombermen.ClientHandler)
+     */
     @Override
     public void AddClient(ClientHandler ch)
     {
         lstClients.add(Integer.toString(ch.Guid) + " - Ping: " + ch.GetIp() + " - " + ch.GetPing() + " ms");
     }
 
+    /* (non-Javadoc)
+     * @see pt.up.fe.lpoo.bombermen.ClientListener#RemoveClient(int)
+     */
     @Override
     public void RemoveClient(int guid)
     {
@@ -388,6 +433,9 @@ public class BombermenServerGui extends JFrame implements ClientListener
         lstClients.remove(i);
     }
 
+    /* (non-Javadoc)
+     * @see pt.up.fe.lpoo.bombermen.ClientListener#UpdateClient(int)
+     */
     @Override
     public void UpdateClient(int guid)
     {

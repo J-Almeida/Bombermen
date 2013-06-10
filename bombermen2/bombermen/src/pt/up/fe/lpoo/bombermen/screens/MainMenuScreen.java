@@ -22,19 +22,35 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+/**
+ * The Class MainMenuScreen.
+ */
 public class MainMenuScreen implements Screen
 {
+
+    /** The game. */
     private Bombermen _game;
 
     // Actors
+    /** The background image. */
     private Image _backgroundImage;
+
+    /** The ui group. */
     private Group _uiGroup;
 
+    /**
+     * Instantiates a new main menu screen.
+     *
+     * @param game the game
+     */
     public MainMenuScreen(Bombermen game)
     {
         _game = game;
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#render(float)
+     */
     @Override
     public void render(float delta)
     {
@@ -45,6 +61,9 @@ public class MainMenuScreen implements Screen
         _game.GetStage().draw();
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#resize(int, int)
+     */
     @Override
     public void resize(int width, int height)
     {
@@ -52,6 +71,9 @@ public class MainMenuScreen implements Screen
         _game.GetStage().getCamera().translate(-_game.GetStage().getGutterWidth(), -_game.GetStage().getGutterHeight(), 0);
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#show()
+     */
     @Override
     public void show()
     {
@@ -152,6 +174,9 @@ public class MainMenuScreen implements Screen
         _game.GetStage().addActor(_uiGroup);
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#hide()
+     */
     @Override
     public void hide()
     {
@@ -159,16 +184,25 @@ public class MainMenuScreen implements Screen
         _backgroundImage.remove();
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#pause()
+     */
     @Override
     public void pause()
     {
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#resume()
+     */
     @Override
     public void resume()
     {
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#dispose()
+     */
     @Override
     public void dispose()
     {

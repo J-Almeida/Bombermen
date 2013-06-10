@@ -9,38 +9,87 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 
+/**
+ * The Class Input.
+ */
 public class Input implements InputProcessor
 {
+    /** The Constant A_UP. */
     public static final int A_UP = 0;
+
+    /** The Constant A_DOWN. */
     public static final int A_DOWN = 1;
+
+    /** The Constant A_LEFT. */
     public static final int A_LEFT = 2;
+
+    /** The Constant A_RIGHT. */
     public static final int A_RIGHT = 3;
+
+    /** The Constant A_BOMB. */
     public static final int A_BOMB = 4;
+
+    /** The Constant A_NUM_OF_ACTIONS. */
     public static final int A_NUM_OF_ACTIONS = 5;
 
+    /** The active actions. */
     private boolean[] _activeActions = { false, false, false, false };
 
+    /**
+     * The Interface Commands.
+     */
     public interface Commands
     {
+
+        /**
+         * Execute action.
+         *
+         * @param action the action
+         * @param val the val
+         */
         void ExecuteAction(int action, boolean val);
     }
 
+    /** The commands. */
     private Commands _commands;
+
+    /** The camera. */
     private Camera _camera;
+
+    /** The control pad. */
     private ControlPad _controlPad = null;
+
+    /** The temp vector. */
     private Vector3 _tempVector = new Vector3();
 
+    /**
+     * Sets the control pad.
+     *
+     * @param controlPad the control pad
+     */
     public void SetControlPad(ControlPad controlPad)
     {
         _controlPad = controlPad;
     }
 
+    /**
+     * Instantiates a new input.
+     *
+     * @param commands the commands
+     * @param camera the camera
+     */
     public Input(Commands commands, Camera camera)
     {
         _commands = commands;
         _camera = camera;
     }
 
+    /**
+     * Convert keycode.
+     *
+     * @param keycode the keycode
+     * @return the int
+     */
     private static int ConvertKeycode(int keycode)
     {
         switch (Settings.Keys)
@@ -83,6 +132,9 @@ public class Input implements InputProcessor
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.InputProcessor#keyDown(int)
+     */
     @Override
     public boolean keyDown(int keycode)
     {
@@ -115,6 +167,9 @@ public class Input implements InputProcessor
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.InputProcessor#keyUp(int)
+     */
     @Override
     public boolean keyUp(int keycode)
     {
@@ -140,12 +195,18 @@ public class Input implements InputProcessor
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.InputProcessor#keyTyped(char)
+     */
     @Override
     public boolean keyTyped(char character)
     {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.InputProcessor#touchDown(int, int, int, int)
+     */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button)
     {
@@ -187,6 +248,9 @@ public class Input implements InputProcessor
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.InputProcessor#touchUp(int, int, int, int)
+     */
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button)
     {
@@ -208,18 +272,27 @@ public class Input implements InputProcessor
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.InputProcessor#touchDragged(int, int, int)
+     */
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer)
     {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.InputProcessor#mouseMoved(int, int)
+     */
     @Override
     public boolean mouseMoved(int screenX, int screenY)
     {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.InputProcessor#scrolled(int)
+     */
     @Override
     public boolean scrolled(int amount)
     {

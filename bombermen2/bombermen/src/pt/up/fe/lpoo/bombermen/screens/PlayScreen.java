@@ -22,29 +22,64 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
+/**
+ * The Class PlayScreen.
+ */
 public class PlayScreen implements Screen
 {
+
+    /** The game. */
     private Bombermen _game;
+
+    /** The game impl. */
     public static Game _gameImpl;
+
+    /** The ip. */
     private String _ip;
+
+    /** The port. */
     private int _port;
+
+    /** The socket. */
     private Socket _socket;
+
+    /** The input. */
     private Input _input;
+
+    /** The control pad. */
     private ControlPad _controlPad;
+
+    /** The fps logger. */
     private FPSLogger _fpsLogger;
+
+    /** The name. */
     private String _name;
 
+    /**
+     * Instantiates a new play screen.
+     *
+     * @param game the game
+     */
     public PlayScreen(Bombermen game)
     {
         _game = game;
     }
 
+    /** The offset min x. */
     private static float offsetMinX = 0;
+
+    /** The offset min y. */
     private static float offsetMinY = 0;
 
+    /** The old cam x. */
     private float _oldCamX = 0;
+
+    /** The old cam y. */
     private float _oldCamY = 0;
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#render(float)
+     */
     @Override
     public void render(float delta)
     {
@@ -86,6 +121,9 @@ public class PlayScreen implements Screen
         _fpsLogger.log();
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#resize(int, int)
+     */
     @Override
     public void resize(int width, int height)
     {
@@ -93,6 +131,9 @@ public class PlayScreen implements Screen
         _game.GetStage().getCamera().translate(-_game.GetStage().getGutterWidth(), -_game.GetStage().getGutterHeight(), 0);
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#show()
+     */
     @Override
     public void show()
     {
@@ -145,41 +186,74 @@ public class PlayScreen implements Screen
         Assets.PlayMusic("bgm_02", true); // todo: move me somewhere else
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#hide()
+     */
     @Override
     public void hide()
     {
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#pause()
+     */
     @Override
     public void pause()
     {
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#resume()
+     */
     @Override
     public void resume()
     {
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.Screen#dispose()
+     */
     @Override
     public void dispose()
     {
     }
 
+    /**
+     * Sets the server ip address.
+     *
+     * @param ip the ip
+     */
     public void SetServerIPAddress(String ip)
     {
         _ip = ip;
     }
 
+    /**
+     * Sets the server port.
+     *
+     * @param port the port
+     */
     public void SetServerPort(int port)
     {
         _port = port;
     }
 
+    /**
+     * Sets the player name.
+     *
+     * @param name the name
+     */
     public void SetPlayerName(String name)
     {
         _name = name;
     }
 
+    /**
+     * Connect.
+     *
+     * @return the socket
+     * @throws GdxRuntimeException the gdx runtime exception
+     */
     public Socket Connect() throws GdxRuntimeException
     {
         _socket = Gdx.net.newClientSocket(Protocol.TCP, _ip, _port, null);

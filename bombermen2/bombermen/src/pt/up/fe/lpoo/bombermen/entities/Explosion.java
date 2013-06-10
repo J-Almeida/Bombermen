@@ -8,15 +8,33 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/**
+ * The Class Explosion.
+ */
 public class Explosion extends Entity
 {
+    /** The texture regions. */
     public static TextureRegion Regions[][] = null;
 
+    /** The direction. */
     private int _direction;
+
+    /** The end. */
     private boolean _end;
+
+    /** The intensity. */
     private int _intensity;
+
+    /** The explosion timer. */
     private int _explosionTimer;
 
+    /**
+     * Instantiates a new explosion.
+     *
+     * @param guid the guid
+     * @param direction the direction
+     * @param end the end
+     */
     public Explosion(int guid, int direction, boolean end)
     {
         super(Entity.TYPE_EXPLOSION, guid);
@@ -30,6 +48,9 @@ public class Explosion extends Entity
         BoundRect.setHeight(Constants.EXPLOSION_HEIGHT);
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.scenes.scene2d.Actor#act(float)
+     */
     @Override
     public void act(float delta)
     {
@@ -59,6 +80,9 @@ public class Explosion extends Entity
             remove();
     }
 
+    /* (non-Javadoc)
+     * @see pt.up.fe.lpoo.bombermen.Entity#draw(com.badlogic.gdx.graphics.g2d.SpriteBatch, float)
+     */
     @Override
     public void draw(SpriteBatch batch, float parentAlpha)
     {

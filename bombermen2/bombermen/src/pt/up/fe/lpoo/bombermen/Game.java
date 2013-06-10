@@ -31,29 +31,58 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
+/**
+ * The Class Game - world
+ */
 public class Game implements Input.Commands, Disposable
 {
+    /** The current player guid. */
     private int _playerGuid = -1;
 
+    /** The map width. */
     private int _mapWidth = 0;
+
+    /** The map height. */
     private int _mapHeight = 0;
 
+    /**
+     * Gets the map width.
+     *
+     * @return the int
+     */
     public int GetMapWidth()
     {
         return _mapWidth;
     }
 
+    /**
+     * Gets the map height.
+     *
+     * @return the int
+     */
     public int GetMapHeight()
     {
         return _mapHeight;
     }
 
+    /**
+     * Gets the current player.
+     *
+     * @return the player
+     */
     public Player GetCurrentPlayer()
     {
         Entity e = GetEntity(_playerGuid);
         return e == null ? null : e.ToPlayer();
     }
 
+    /**
+     * Instantiates a new game.
+     *
+     * @param stage the stage
+     * @param s the socket
+     * @param playerName the player name
+     */
     public Game(Stage stage, Socket s, String playerName)
     {
         _stage = stage;
@@ -63,13 +92,24 @@ public class Game implements Input.Commands, Disposable
         _sender.Send(new CMSG_JOIN(playerName));
     }
 
+    /**
+     * Adds the entity.
+     *
+     * @param entity the entity
+     */
     public void AddEntity(final Entity entity)
     {
         _stage.addActor(entity);
     }
 
+    /** The entities. */
     private Array<Entity> _entities = new Array<Entity>();
 
+    /**
+     * Gets the entities.
+     *
+     * @return the array
+     */
     public Array<Entity> GetEntities()
     {
         _entities.clear();
@@ -82,6 +122,12 @@ public class Game implements Input.Commands, Disposable
         return _entities;
     }
 
+    /**
+     * Gets the entity.
+     *
+     * @param guid the guid
+     * @return the entity
+     */
     public Entity GetEntity(int guid)
     {
         for (Actor a : _stage.getActors())
@@ -94,26 +140,50 @@ public class Game implements Input.Commands, Disposable
         return null;
     }
 
+    /**
+     * Removes the entity.
+     *
+     * @param guid the guid
+     */
     public void RemoveEntity(int guid)
     {
         Entity e = GetEntity(guid);
         if (e != null) RemoveEntity(e);
     }
 
+    /**
+     * Removes the entity.
+     *
+     * @param entity the entity
+     */
     public void RemoveEntity(Entity entity)
     {
         entity.remove();
     }
 
+    /**
+     * Gets the sender.
+     *
+     * @return the sender
+     */
     public Sender<Message> GetSender()
     {
         return _sender;
     }
 
+    /** The receiver. */
     private Receiver<Message> _receiver;
+
+    /** The sender. */
     private Sender<Message> _sender;
+
+    /** The socket. */
     private Socket _socket;
+
+    /** The stage. */
     private Stage _stage;
+
+    /** The message handler. */
     private ClientMessageHandler _messageHandler = new ClientMessageHandler()
     {
         @Override
@@ -254,6 +324,9 @@ public class Game implements Input.Commands, Disposable
         }
     };
 
+    /* (non-Javadoc)
+     * @see pt.up.fe.lpoo.bombermen.Input.Commands#ExecuteAction(int, boolean)
+     */
     @Override
     public void ExecuteAction(int action, boolean val)
     {
@@ -277,15 +350,22 @@ public class Game implements Input.Commands, Disposable
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.badlogic.gdx.utils.Disposable#dispose()
+     */
     @Override
     public void dispose()
     {
         _socket.dispose();
     }
 
+    /**
+     * Update, process messages from the server
+     */
     public void Update(/* int diff */)
     {
-        if (_receiver != null) while (!_receiver.IsEmpty())
-            _messageHandler.HandleMessage(_receiver.Poll());
+        if (_receiver != null)
+            while (!_receiver.IsEmpty())
+                _messageHandler.HandleMessage(_receiver.Poll());
     }
 }
