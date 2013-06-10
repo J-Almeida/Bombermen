@@ -76,8 +76,7 @@ public class MapLoader
         {
             char[] chars = lines.get(y).toCharArray();
 
-            if (chars.length > _maxWidth)
-                _maxWidth = chars.length;
+            if (chars.length > _maxWidth) _maxWidth = chars.length;
 
             for (int x = 0; x < chars.length; ++x)
             {

@@ -63,6 +63,7 @@ public abstract class Entity extends Actor
     {
         return _guid;
     }
+
     public boolean IsPlayer()
     {
         return _type == TYPE_PLAYER;

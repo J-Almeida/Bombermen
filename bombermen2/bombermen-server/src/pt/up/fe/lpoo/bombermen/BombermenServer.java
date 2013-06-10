@@ -376,8 +376,7 @@ public class BombermenServer implements Runnable
             {
                 e.printStackTrace();
             }
-        }
-        while (_running);
+        } while (_running);
     }
 
     public void SendAll(Message msg)

@@ -93,20 +93,19 @@ public class SelectServerScreen implements Screen
         });
         _uiGroup.addActor(b);
 
-
-        final List serverNamesList = new List(new String[] { }, skin);
+        final List serverNamesList = new List(new String[] {}, skin);
         serverNamesList.setPosition(150, 350);
         serverNamesList.pack();
         _uiGroup.addActor(serverNamesList);
 
-        final List ipsList = new List(new String[] { }, skin);
+        final List ipsList = new List(new String[] {}, skin);
         ipsList.setPosition(330, 350 - ipsList.getHeight() / 2);
         ipsList.setSelection("");
         ipsList.setTouchable(Touchable.disabled);
         ipsList.pack();
         _uiGroup.addActor(ipsList);
 
-        final List playersList = new List(new String[] { }, skin);
+        final List playersList = new List(new String[] {}, skin);
         playersList.setPosition(550, 350);
         playersList.setSelection("");
         playersList.setTouchable(Touchable.disabled);
@@ -139,8 +138,7 @@ public class SelectServerScreen implements Screen
             @Override
             public boolean acceptChar(TextField textField, char key)
             {
-                if (!Character.isDigit(key) && key != '.' && key != ':')
-                    return false;
+                if (!Character.isDigit(key) && key != '.' && key != ':') return false;
 
                 return true;
             }
@@ -208,9 +206,9 @@ public class SelectServerScreen implements Screen
             public void changed(ChangeEvent event, Actor actor)
             {
                 Assets.PlaySound("menu_select");
-                
+
                 final TextField playerNameField = new TextField("", skin);
-                
+
                 final Dialog d = new Dialog("Name", skin);
                 d.add(playerNameField);
                 d.add();

@@ -174,7 +174,7 @@ public class PlayScreen implements Screen
     {
         _port = port;
     }
-    
+
     public void SetPlayerName(String name)
     {
         _name = name;

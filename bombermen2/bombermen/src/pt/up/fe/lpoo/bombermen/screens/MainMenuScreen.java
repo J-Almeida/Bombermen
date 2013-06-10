@@ -116,7 +116,7 @@ public class MainMenuScreen implements Screen
                     dialog.text("Could not launch server process.\nDetails printed to console.");
                     dialog.button("Okay");
                     dialog.pack();
-                    dialog.setPosition(800/2 - dialog.getWidth() / 2, 480/2 - dialog.getHeight() / 2);
+                    dialog.setPosition(800 / 2 - dialog.getWidth() / 2, 480 / 2 - dialog.getHeight() / 2);
                     _game.GetStage().addActor(dialog);
 
                     e.printStackTrace();
@@ -146,8 +146,7 @@ public class MainMenuScreen implements Screen
             }
         });
 
-        if (Gdx.app.getType() != ApplicationType.Desktop)
-            createServerButton.setDisabled(true);
+        if (Gdx.app.getType() != ApplicationType.Desktop) createServerButton.setDisabled(true);
 
         _uiGroup.addAction(sequence(alpha(0), fadeIn(1)));
         _game.GetStage().addActor(_uiGroup);

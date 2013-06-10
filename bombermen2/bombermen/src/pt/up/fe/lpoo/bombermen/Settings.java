@@ -44,8 +44,7 @@ public final class Settings
         for (int i = 0; i < Constants.MAX_SERVERS_STORED; ++i)
         {
             String s = prefs.getString("server" + i, null);
-            if (s != null)
-                SavedServers.put("server" + i, s);
+            if (s != null) SavedServers.put("server" + i, s);
         }
     }
 

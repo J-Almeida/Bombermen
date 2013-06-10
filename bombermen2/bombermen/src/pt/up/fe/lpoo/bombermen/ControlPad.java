@@ -70,10 +70,7 @@ public class ControlPad implements Disposable
             }
             else if (y1 > y2 && y1 < (2 * y2)) return x1 > x2 ? Direction.EAST : Direction.WEST;
         }
-        else if (_bombButtonSprite.getBoundingRectangle().contains(pos.x, pos.y))
-        {
-            return PLACE_BOMB;
-        }
+        else if (_bombButtonSprite.getBoundingRectangle().contains(pos.x, pos.y)) { return PLACE_BOMB; }
 
         return Direction.NONE;
     }

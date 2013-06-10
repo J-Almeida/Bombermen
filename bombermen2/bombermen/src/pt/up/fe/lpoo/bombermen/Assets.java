@@ -33,8 +33,7 @@ public class Assets
     {
         _musicVolume = volume;
         for (Music m : _musics.values())
-            if (m.isPlaying())
-                m.setVolume(volume);
+            if (m.isPlaying()) m.setVolume(volume);
     }
 
     public static Sound PlaySound(String name)
@@ -51,8 +50,7 @@ public class Assets
         m.setVolume(_musicVolume);
         m.play();
 
-        if (!_musics.containsKey(name))
-            _musics.put(name, m);
+        if (!_musics.containsKey(name)) _musics.put(name, m);
 
         return m;
     }

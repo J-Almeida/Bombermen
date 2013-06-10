@@ -39,9 +39,6 @@ public class SettingsScreen implements Screen
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-        //hide();
-        //show();
-
         _game.GetStage().act(delta);
         _game.GetStage().draw();
     }
@@ -70,7 +67,7 @@ public class SettingsScreen implements Screen
             @Override
             public void changed(ChangeEvent event, Actor actor)
             {
-                Assets.ChangeSoundVolume(((Slider)actor).getValue());
+                Assets.ChangeSoundVolume(((Slider) actor).getValue());
                 Settings.SoundVolume = Assets.GetMusicVolume();
             }
         });
@@ -82,7 +79,7 @@ public class SettingsScreen implements Screen
             @Override
             public void changed(ChangeEvent event, Actor actor)
             {
-                Assets.ChangeMusicVolume(((Slider)actor).getValue());
+                Assets.ChangeMusicVolume(((Slider) actor).getValue());
                 Settings.MusicVolume = Assets.GetMusicVolume();
             }
         });
@@ -94,18 +91,18 @@ public class SettingsScreen implements Screen
             @Override
             public void changed(ChangeEvent event, Actor actor)
             {
-                Settings.Fullscreen = ((CheckBox)actor).isChecked();
+                Settings.Fullscreen = ((CheckBox) actor).isChecked();
                 Gdx.graphics.setDisplayMode(Constants.DEFAULT_WIDTH, Constants.DEFAULT_HEIGHT, Settings.Fullscreen);
             }
         });
 
-        SelectBox keysBox = new SelectBox(new String[] { "W/A/S/D", "I/J/K/L", "arrow keys"}, _game.GetSkin());
+        SelectBox keysBox = new SelectBox(new String[] { "W/A/S/D", "I/J/K/L", "arrow keys" }, _game.GetSkin());
         keysBox.addListener(new ChangeListener()
         {
             @Override
             public void changed(ChangeEvent event, Actor actor)
             {
-                Settings.Keys = ((SelectBox)actor).getSelectionIndex();
+                Settings.Keys = ((SelectBox) actor).getSelectionIndex();
             }
         });
 
