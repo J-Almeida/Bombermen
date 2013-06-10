@@ -54,6 +54,14 @@ public class Wall extends Entity
     public static TextureRegion Regions[][];
 
     /**
+     * @return number of hitpoints, can be negative for undestroyable walls
+     */
+    public int GetHitPoints()
+    {
+        return _hitPoints;
+    }
+
+    /**
      * Checks if is undestroyable.
      *
      * @return true, if successful

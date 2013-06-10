@@ -544,16 +544,16 @@ public class BombermenServer implements Runnable
         SendAll(new SMSG_SCORE(guid, newScore));
     }
 
-	public final ArrayList<Vector2> getPlayersPositions() {
-		return _playersPositions;
-	}
+    public final ArrayList<Vector2> getPlayersPositions() {
+        return _playersPositions;
+    }
 
-	public int getMapWidth() {
-		return _builder.GetMaxWidth();
-	}
-	
-	public int getMapHeight() {
-		return _builder.GetMaxHeight();
-	}
-	
+    public int getMapWidth() {
+        return _builder.GetMaxWidth();
+    }
+
+    public int getMapHeight() {
+        return _builder.GetMaxHeight();
+    }
+
 }

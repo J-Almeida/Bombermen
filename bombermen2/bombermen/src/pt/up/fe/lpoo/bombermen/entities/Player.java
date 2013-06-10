@@ -63,7 +63,7 @@ public class Player extends Entity
     public static Animation[] Animations = { null, null, null, null };
 
     /** The font to draw player name and score. */
-    private static BitmapFont font = new BitmapFont();
+    public static BitmapFont font;
 
     /**
      * Sets the moving.

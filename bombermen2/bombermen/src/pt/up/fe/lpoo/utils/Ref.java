@@ -1,7 +1,7 @@
 package pt.up.fe.lpoo.utils;
 
 /**
- * The Class Ref.
+ * Wrapper for passing value types by reference, sort of...
  *
  * @param <T> the generic type
  */
@@ -12,7 +12,7 @@ public class Ref<T>
     private T value;
 
     /**
-     * Instantiates a new ref.
+     * Instantiates a new reference.
      *
      * @param value the value
      */
@@ -22,7 +22,7 @@ public class Ref<T>
     }
 
     /**
-     * Gets the.
+     * Gets the value.
      *
      * @return the t
      */
@@ -32,7 +32,7 @@ public class Ref<T>
     }
 
     /**
-     * Sets the.
+     * Sets the value.
      *
      * @param other the other
      */

@@ -111,9 +111,9 @@ public class Bomb extends Entity
         batch.draw(Animation.getKeyFrame(_stateTime, true), getX(), getY(), getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
-    
+
     public int getCreatorGuid() {
-    	return _creatorGuid;
+        return _creatorGuid;
     }
-    
+
 }
