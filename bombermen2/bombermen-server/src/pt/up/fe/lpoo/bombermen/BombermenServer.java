@@ -319,7 +319,14 @@ public class BombermenServer implements Runnable
             {
                 System.out.println("Place bomb message received from " + guid + " : " + msg);
 
-                final Player p = _entities.get(guid).ToPlayer();
+                final Entity e = _entities.get(guid);
+                if (e == null)
+                {
+                    System.out.println("CMSG_PLACE_BOMB: invalid guid entity (" + guid + ")");
+                    return;
+                }
+                
+                final Player p = e.ToPlayer();
                 if (p == null)
                 {
                     System.out.println("Player sent unknown guid (" + guid + "). Ignored.");
