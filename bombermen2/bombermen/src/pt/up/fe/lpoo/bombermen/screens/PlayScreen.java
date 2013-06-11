@@ -108,6 +108,12 @@ public class PlayScreen implements Screen
             if (camY > offsetMaxY)
                 camY = offsetMaxY;
             else if (camY < offsetMinY) camY = offsetMinY;
+            
+            if (_gameImpl.GetMapWidth() * Constants.CELL_SIZE <= Constants.DEFAULT_WIDTH)
+                camX = -(Constants.DEFAULT_WIDTH - _gameImpl.GetMapWidth() * Constants.CELL_SIZE) / 2;
+            
+            if (_gameImpl.GetMapHeight() * Constants.CELL_SIZE <= Constants.DEFAULT_HEIGHT)
+                camY = -(Constants.DEFAULT_HEIGHT - _gameImpl.GetMapHeight() * Constants.CELL_SIZE) / 2;
 
             _oldCamX = camX;
             _oldCamY = camY;
