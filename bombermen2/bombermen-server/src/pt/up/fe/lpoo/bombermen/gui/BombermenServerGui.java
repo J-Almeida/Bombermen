@@ -99,15 +99,19 @@ public class BombermenServerGui extends JFrame implements ClientListener
      * @return the ip
      * @throws Exception the exception
      */
-    public static String getIp() throws Exception
+    public static String getIp()
     {
-        URL whatismyip = new URL("http://checkip.amazonaws.com");
         BufferedReader in = null;
         try
         {
+            URL whatismyip = new URL("http://checkip.amazonaws.com");
             in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
             String ip = in.readLine();
             return ip;
+        }
+        catch (Exception e)
+        {
+            return "(unknown)";
         }
         finally
         {
